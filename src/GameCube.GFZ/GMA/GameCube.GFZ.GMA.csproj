@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
-    <ProjectReference Include="..\GameCube.GX\GameCube.GX.csproj" />
-    <ProjectReference Include="..\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
-    <ProjectReference Include="..\Manifold.IO\Manifold.IO.csproj" />
-    <ProjectReference Include="..\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
+    <ProjectReference Include="..\..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\..\..\..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.csproj" />
   </ItemGroup>
 
 </Project>

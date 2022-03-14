@@ -7,12 +7,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GameCube.GX\GameCube.GX.csproj" />
-    <ProjectReference Include="..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
-    <ProjectReference Include="..\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
-    <ProjectReference Include="..\Manifold.IO\Manifold.IO.csproj" />
-    <ProjectReference Include="..\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
+    <Compile Remove="Camera\**" />
+    <Compile Remove="CarData\**" />
+    <Compile Remove="Cheats\**" />
+    <Compile Remove="FMI\**" />
+    <Compile Remove="Ghosts\**" />
+    <Compile Remove="GMA\**" />
+    <Compile Remove="LZ\**" />
+    <Compile Remove="Stage\**" />
+    <EmbeddedResource Remove="Camera\**" />
+    <EmbeddedResource Remove="CarData\**" />
+    <EmbeddedResource Remove="Cheats\**" />
+    <EmbeddedResource Remove="FMI\**" />
+    <EmbeddedResource Remove="Ghosts\**" />
+    <EmbeddedResource Remove="GMA\**" />
+    <EmbeddedResource Remove="LZ\**" />
+    <EmbeddedResource Remove="Stage\**" />
+    <None Remove="Camera\**" />
+    <None Remove="CarData\**" />
+    <None Remove="Cheats\**" />
+    <None Remove="FMI\**" />
+    <None Remove="Ghosts\**" />
+    <None Remove="GMA\**" />
+    <None Remove="LZ\**" />
+    <None Remove="Stage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
+    <ProjectReference Include="..\..\..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\..\..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
   </ItemGroup>
 
 </Project>
