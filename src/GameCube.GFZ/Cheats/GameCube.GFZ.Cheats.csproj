@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameCube.Cheats\GameCube.Cheats.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
+    <ProjectReference Include="..\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\Manifold\Manifold.csproj" />
+  </ItemGroup>
+
+</Project>

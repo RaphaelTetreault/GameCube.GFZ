@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameCube.GX\GameCube.GX.csproj" />
+    <ProjectReference Include="..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
+    <ProjectReference Include="..\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
+    <ProjectReference Include="..\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
+  </ItemGroup>
+
+</Project>
