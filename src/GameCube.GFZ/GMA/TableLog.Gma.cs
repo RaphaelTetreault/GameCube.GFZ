@@ -28,7 +28,7 @@ namespace GameCube.GFZ.GMA
 
         public static void PrintGcmf(Gma[] gmas, string outputFileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(outputFileName))
+            using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
                 // Write header
                 writer.WriteNextCol("FileName");
@@ -82,7 +82,7 @@ namespace GameCube.GFZ.GMA
 
         public static void PrintTextureConfigs(Gma[] gmas, string outputFileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(outputFileName))
+            using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
                 // Write header
                 writer.WriteNextCol("FileName");
@@ -136,7 +136,7 @@ namespace GameCube.GFZ.GMA
 
         public static void PrintMaterials(Gma[] gmas, string outputFileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(outputFileName))
+            using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
                 // Write header
                 writer.WriteNextCol("FileName");

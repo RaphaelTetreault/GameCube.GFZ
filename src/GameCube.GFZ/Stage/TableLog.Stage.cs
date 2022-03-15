@@ -39,7 +39,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeTrackKeyablesAll(Scene[] scenes, string filename)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(filename))
+            using (var writer = new StreamWriter(File.Create(filename)))
             {
                 // Write header
                 writer.WriteNextCol("FileName");
@@ -86,7 +86,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeTrackKeyables(Scene[] scenes, string filename, int keyablesSet)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(filename))
+            using (var writer = new StreamWriter(File.Create(filename)))
             {
                 // Write header
                 writer.WriteNextCol("FileName");
@@ -179,7 +179,7 @@ namespace GameCube.GFZ.Stage
         private static int s_order;
         public static void AnalyzeTrackSegments(Scene[] scenes, string filename)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(filename))
+            using (var writer = new StreamWriter(File.Create(filename)))
             {
                 writer.WriteNextCol("Filename");
                 writer.WriteNextCol("Order");
@@ -287,7 +287,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeAnimationClips(Scene[] scenes, string filename)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(filename))
+            using (var writer = new StreamWriter(File.Create(filename)))
             {
                 // Write header
                 writer.WriteNextCol("File Path");
@@ -345,7 +345,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeGameObjectAnimationClipIndex(Scene[] scenes, string filename, int index)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(filename))
+            using (var writer = new StreamWriter(File.Create(filename)))
             {
                 // Write header
                 writer.WriteNextCol("File Path");
@@ -423,7 +423,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSceneObjectDynamic(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -476,7 +476,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeTextureMetadata(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -519,7 +519,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSkeletalAnimator(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -581,7 +581,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeColliderGeometryTri(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -670,7 +670,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeColliderGeometryQuad(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -774,7 +774,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeHeaders(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -912,7 +912,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeArcadeCheckpointTriggers(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -958,7 +958,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeCourseMetadataTriggers(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1004,7 +1004,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeStoryObjectTrigger(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1058,7 +1058,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeUnknownTrigger(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1113,7 +1113,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeVisualEffectTriggers(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1165,7 +1165,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeFogCurves(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1224,7 +1224,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeFog(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1278,7 +1278,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSceneObjectTransforms(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1342,7 +1342,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeTrackNodes(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1421,7 +1421,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeStaticColliderMeshes(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1483,7 +1483,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSceneObjectLODs(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1546,7 +1546,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSceneObjects(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1605,7 +1605,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSceneObjectsAndLODs(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1668,7 +1668,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeGeneralData(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1708,7 +1708,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeSurfaceAttributeAreas(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
@@ -1759,7 +1759,7 @@ namespace GameCube.GFZ.Stage
 
         public static void AnalyzeUnknownCollider(Scene[] scenes, string fileName)
         {
-            using (var writer = AnalyzerUtility.OpenWriter(fileName))
+            using (var writer = new StreamWriter(File.Create(fileName)))
             {
                 // Write header
                 writer.WriteNextCol("File");
