@@ -125,7 +125,7 @@ namespace GameCube.GFZ.Stage
 
         public void ValidateReferences()
         {
-            AssertBin.ReferencePointer(StoryObjectPath, Story2BoulderPathPtr);
+            Assert.ReferencePointer(StoryObjectPath, Story2BoulderPathPtr);
         }
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")

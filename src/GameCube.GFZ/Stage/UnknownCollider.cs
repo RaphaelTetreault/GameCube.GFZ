@@ -67,7 +67,7 @@ namespace GameCube.GFZ.Stage
 
         public void ValidateReferences()
         {
-            AssertBin.ReferencePointer(sceneObject, sceneObjectPtr);
+            Assert.ReferencePointer(sceneObject, sceneObjectPtr);
         }
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")

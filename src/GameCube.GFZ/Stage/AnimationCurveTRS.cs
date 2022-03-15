@@ -120,7 +120,7 @@ namespace GameCube.GFZ.Stage
 
                 // Only assert if there are keyables
                 if (animCurve.Length != 0)
-                    AssertBin.ReferencePointer(animCurve, pointer);
+                    Assert.ReferencePointer(animCurve, pointer);
             }
         }
 

@@ -197,8 +197,8 @@ namespace GameCube.GFZ.Stage
             }
 
             // Make sure references and pointers line up right
-            AssertBin.ReferencePointer(animationCurveTRS, animationCurvesTrsPtr);
-            AssertBin.ReferencePointer(trackCorner, trackCornerPtr);
+            Assert.ReferencePointer(animationCurveTRS, animationCurvesTrsPtr);
+            Assert.ReferencePointer(trackCorner, trackCornerPtr);
 
             // 2021/12/21: NOT SURE ABOUT THIS, FAILS ON ST43
             // 2022/01/23: looks like if there are 2 nodes side-by-side and one beneath one of the

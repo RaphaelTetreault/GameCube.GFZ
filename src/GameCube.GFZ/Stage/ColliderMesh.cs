@@ -54,8 +54,8 @@ namespace GameCube.GFZ.Stage
         // METHODS
         public void ValidateReferences()
         {
-            AssertBin.ReferencePointer(Tris, TrisPtr);
-            AssertBin.ReferencePointer(Quads, QuadsPtr);
+            Assert.ReferencePointer(Tris, TrisPtr);
+            Assert.ReferencePointer(Quads, QuadsPtr);
 
             // SANITY CHECK
             // Make sure counts line up

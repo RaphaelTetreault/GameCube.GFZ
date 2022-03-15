@@ -98,8 +98,8 @@ namespace GameCube.GFZ.Stage
             Assert.IsTrue(LODs != null);
             Assert.IsTrue(lodsPtr.IsNotNull);
             // Assert that instance/pointer is correct
-            AssertBin.ReferencePointer(LODs, lodsPtr);
-            AssertBin.ReferencePointer(colliderMesh, colliderGeometryPtr);
+            Assert.ReferencePointer(LODs, lodsPtr);
+            Assert.ReferencePointer(colliderMesh, colliderGeometryPtr);
         }
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")

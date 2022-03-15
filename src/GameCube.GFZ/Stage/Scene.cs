@@ -1253,28 +1253,28 @@ namespace GameCube.GFZ.Stage
             Assert.IsTrue(CheckpointGridPtr.IsNotNull);
 
             // Ensure existing structures pointers were resolved correctly
-            AssertBin.ReferencePointer(trackNodes, TrackNodesPtr);
-            AssertBin.ReferencePointer(embeddedPropertyAreas, EmbeddedTrackPropertyAreasPtr);
-            AssertBin.ReferencePointer(trackMinHeight, TrackMinHeightPtr);
+            Assert.ReferencePointer(trackNodes, TrackNodesPtr);
+            Assert.ReferencePointer(embeddedPropertyAreas, EmbeddedTrackPropertyAreasPtr);
+            Assert.ReferencePointer(trackMinHeight, TrackMinHeightPtr);
             if (dynamicSceneObjects.Length > 0)
-                AssertBin.ReferencePointer(dynamicSceneObjects, new ArrayPointer(DynamicSceneObjectCount, DynamicSceneObjectsPtr));
+                Assert.ReferencePointer(dynamicSceneObjects, new ArrayPointer(DynamicSceneObjectCount, DynamicSceneObjectsPtr));
             if (sceneObjects.Length > 0)
-                AssertBin.ReferencePointer(sceneObjects, SceneObjectsPtr);
-            AssertBin.ReferencePointer(staticSceneObjects, StaticSceneObjectsPtr);
+                Assert.ReferencePointer(sceneObjects, SceneObjectsPtr);
+            Assert.ReferencePointer(staticSceneObjects, StaticSceneObjectsPtr);
             if (unknownColliders.Length > 0)
-                AssertBin.ReferencePointer(unknownColliders, UnknownCollidersPtr);
-            AssertBin.ReferencePointer(fogCurves, FogCurvesPtr);
-            AssertBin.ReferencePointer(fog, FogPtr);
-            AssertBin.ReferencePointer(trackLength, TrackLengthPtr);
+                Assert.ReferencePointer(unknownColliders, UnknownCollidersPtr);
+            Assert.ReferencePointer(fogCurves, FogCurvesPtr);
+            Assert.ReferencePointer(fog, FogPtr);
+            Assert.ReferencePointer(trackLength, TrackLengthPtr);
             if (cullOverrideTriggers.Length > 0)
-                AssertBin.ReferencePointer(cullOverrideTriggers, UnknownTriggersPtr);
+                Assert.ReferencePointer(cullOverrideTriggers, UnknownTriggersPtr);
             if (miscellaneousTriggers.Length > 0)
-                AssertBin.ReferencePointer(miscellaneousTriggers, MiscellaneousTriggersPtr);
+                Assert.ReferencePointer(miscellaneousTriggers, MiscellaneousTriggersPtr);
             if (timeExtensionTriggers.Length > 0)
-                AssertBin.ReferencePointer(timeExtensionTriggers, TimeExtensionTriggersPtr);
+                Assert.ReferencePointer(timeExtensionTriggers, TimeExtensionTriggersPtr);
             if (storyObjectTriggers.Length > 0)
-                AssertBin.ReferencePointer(storyObjectTriggers, StoryObjectTriggersPtr);
-            AssertBin.ReferencePointer(trackCheckpointGrid, CheckpointGridPtr);
+                Assert.ReferencePointer(storyObjectTriggers, StoryObjectTriggersPtr);
+            Assert.ReferencePointer(trackCheckpointGrid, CheckpointGridPtr);
         }
 
         /// <summary>

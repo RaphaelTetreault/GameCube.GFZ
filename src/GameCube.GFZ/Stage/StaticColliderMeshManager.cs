@@ -262,7 +262,7 @@ namespace GameCube.GFZ.Stage
             // TRIS
             if (ColliderTris.Length > 0)
             {
-                AssertBin.ValidateReferencePointer(ColliderTris, StaticColliderTrisPtr);
+                Assert.ValidateReferencePointer(ColliderTris, StaticColliderTrisPtr);
 
                 // Ensure that we have at least a list to point to tris
                 int listCount = 0;
@@ -273,7 +273,7 @@ namespace GameCube.GFZ.Stage
             // QUADS
             if (ColliderQuads != null && ColliderQuads.Length > 0)
             {
-                AssertBin.ValidateReferencePointer(ColliderQuads, StaticColliderQuadsPtr);
+                Assert.ValidateReferencePointer(ColliderQuads, StaticColliderQuadsPtr);
 
                 // Ensure that we have at least a list to point to quads
                 int listCount = 0;
@@ -285,8 +285,8 @@ namespace GameCube.GFZ.Stage
             // Grids
             for (int i = 0; i < SurfaceCount; i++)
             {
-                AssertBin.ReferencePointer(TriMeshGrids[i], TriMeshGridPtrs[i]);
-                AssertBin.ReferencePointer(QuadMeshGrids[i], QuadMeshGridPtrs[i]);
+                Assert.ReferencePointer(TriMeshGrids[i], TriMeshGridPtrs[i]);
+                Assert.ReferencePointer(QuadMeshGrids[i], QuadMeshGridPtrs[i]);
             }
         }
 

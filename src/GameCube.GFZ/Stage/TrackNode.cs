@@ -77,8 +77,8 @@ namespace GameCube.GFZ.Stage
         public void ValidateReferences()
         {
             // Validate pointer instance relationship
-            AssertBin.ValidateReferencePointer(checkpoints, checkpointsPtr);
-            AssertBin.ReferencePointer(segment, segmentPtr);
+            Assert.ValidateReferencePointer(checkpoints, checkpointsPtr);
+            Assert.ReferencePointer(segment, segmentPtr);
 
             // This type should never have any nulls
             Assert.IsTrue(checkpointsPtr.IsNotNull);

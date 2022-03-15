@@ -171,7 +171,7 @@ namespace GameCube.GFZ.Stage
                 var pointer = indexListPtrs[i];
 
                 if (indexList.Length != 0)
-                    AssertBin.ReferencePointer(indexList, pointer);
+                    Assert.ReferencePointer(indexList, pointer);
             }
         }
 

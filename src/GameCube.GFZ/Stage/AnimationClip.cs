@@ -101,7 +101,7 @@ namespace GameCube.GFZ.Stage
             foreach (var curve in curves)
             {
                 Assert.IsTrue(curve != null);
-                AssertBin.ReferencePointer(curve.AnimationCurve, curve.AnimationCurvePtr);
+                Assert.ReferencePointer(curve.AnimationCurve, curve.AnimationCurvePtr);
             }
         }
 

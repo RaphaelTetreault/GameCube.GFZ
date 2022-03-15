@@ -84,7 +84,7 @@ namespace GameCube.GFZ.Stage
             // 2022/01/19: Since this is a wrapper class, check if the curve pointer
             // for the collection (wehich points to the base item [0]) is the same
             // as what the array pointer points to.
-            AssertBin.ReferencePointer(animationCurve, animationCurvePtr);
+            Assert.ReferencePointer(animationCurve, animationCurvePtr);
             // Ensure that we have the same amount of keyables as we say we do.
             if (animationCurve != null)
                 Assert.IsTrue(animationCurve.KeyableAttributes.Length == animationCurvePtr.length);

@@ -80,7 +80,7 @@ namespace GameCube.GFZ.Stage
             for (int i = 0; i < kCount; i++)
             {
                 // reference can be to float2(0, 0)
-                AssertBin.ReferencePointer(fields[i], fieldPtrs[i]);
+                Assert.ReferencePointer(fields[i], fieldPtrs[i]);
 
                 //if (fields[i] != null)
                 //    Assert.IsTrue(fields[i].x != 0 && fields[i].y != 0);

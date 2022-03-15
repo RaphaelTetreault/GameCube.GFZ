@@ -75,7 +75,7 @@ namespace GameCube.GFZ.Stage
             // This pointer CANNOT be null and must refer to an object name.
 
             Assert.IsTrue(name != null); // true null only, name can be string.Empty
-            AssertBin.ReferencePointer(name, lodNamePtr); // 2022/01/25: must always have instance, ptr!
+            Assert.ReferencePointer(name, lodNamePtr); // 2022/01/25: must always have instance, ptr!
 
             // Constants
             Assert.IsTrue(zero_0x00 == 0);
