@@ -8,7 +8,7 @@ namespace GameCube.GFZ.CarData
     [Serializable]
     public class CarData :
         IBinarySerializable,
-        IFileType
+        IBinaryFileType
     {
         // CONSTANTS
         // Numbers of things
@@ -151,6 +151,8 @@ namespace GameCube.GFZ.CarData
 
         // Properties
         public string FileName { get; set; }
+
+        public Endianness Endianness => Endianness.LittleEndian;
 
         public string FileExtension => "";
 
@@ -386,8 +388,6 @@ namespace GameCube.GFZ.CarData
 
         public void Deserialize(BinaryReader reader)
         {
-            BinaryIoUtility.PushEndianness(Endianness.LittleEndian);
-
             reader.ReadX(ref RedGazelle);
             reader.ReadX(ref WhiteCat);
             reader.ReadX(ref GoldenFox);
@@ -520,21 +520,14 @@ namespace GameCube.GFZ.CarData
             reader.ReadX(ref Crown_77);
             reader.ReadX(ref Triple_Z);
 
-            BinaryIoUtility.PushEndianness(Endianness.LittleEndian);
-            {
-                // 2022/01/28: I may have broken this. Used to be for-loop
-                // manually assigning each value from length-init array.
-                reader.ReadX(ref partsInternalNames, kPartsInternalTable);
-            }
-            BinaryIoUtility.PopEndianness();
+            // 2022/01/28: I may have broken this. Used to be for-loop
+            // manually assigning each value from length-init array.
+            reader.ReadX(ref partsInternalNames, kPartsInternalTable);
 
-            BinaryIoUtility.PopEndianness();
         }
 
         public void Serialize(BinaryWriter writer)
         {
-            BinaryIoUtility.PushEndianness(Endianness.BigEndian);
-
             // Machines
             writer.WriteX(RedGazelle);
             writer.WriteX(WhiteCat);
@@ -667,8 +660,6 @@ namespace GameCube.GFZ.CarData
 
             // Custom parts names
             writer.WriteX(partsInternalNames);
-
-            BinaryIoUtility.PopEndianness();
         }
 
     }

@@ -18,7 +18,7 @@ namespace GameCube.GFZ.Stage
     public sealed class Scene :
         IBinaryAddressable,
         IBinarySerializable,
-        IFileType,
+        IBinaryFileType,
         IHasReference,
         ITextPrintable
     {
@@ -100,6 +100,8 @@ namespace GameCube.GFZ.Stage
         /// The course's name.
         /// </summary>
         public string CourseName { get; set; }
+
+        public Endianness Endianness => Endianness.BigEndian;
 
         /// <summary>
         /// The file extension for Scene (COLI_COURSE##). There is none.
@@ -230,8 +232,6 @@ namespace GameCube.GFZ.Stage
 
         public void Deserialize(BinaryReader reader)
         {
-            BinaryIoUtility.PushEndianness(Endianness.BigEndian);
-
             // CAPTURE METADATA
             FileSize = (int)reader.BaseStream.Length;
             // Store the stage index, can solve venue and course name from this using hashes
@@ -404,7 +404,7 @@ namespace GameCube.GFZ.Stage
                 }
                 // Save, order by name (alphabetical)
                 SceneObjectNames = sceneObjectNamesDict.Values.ToArray();
-                SceneObjectNames = SceneObjectNames.OrderBy(x => x.value).ToArray();
+                SceneObjectNames = SceneObjectNames.OrderBy(x => x.Value).ToArray();
             }
 
             // DESERIALIZE TRACK SEGMENTS
@@ -442,15 +442,11 @@ namespace GameCube.GFZ.Stage
                 }
                 AllTrackSegments = allTrackSegmentsList.ToArray();
             }
-
-            BinaryIoUtility.PopEndianness();
         }
 
 
         public void Serialize(BinaryWriter writer)
         {
-            BinaryIoUtility.PushEndianness(Endianness.BigEndian);
-
             // Write header. At first, pointers will be null or broken.
             SerializeHeader(writer);
 
@@ -922,8 +918,6 @@ namespace GameCube.GFZ.Stage
 
             //
             FileSize = (int)writer.BaseStream.Length;
-
-            BinaryIoUtility.PopEndianness();
         }
 
         /// <summary>
