@@ -82,34 +82,34 @@ namespace GameCube.GFZ.Stage
                 Precomputed2 / 3f;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref dotProduct);
-                reader.ReadX(ref normal);
-                reader.ReadX(ref vertex0);
-                reader.ReadX(ref vertex1);
-                reader.ReadX(ref vertex2);
-                reader.ReadX(ref precomputed0);
-                reader.ReadX(ref precomputed1);
-                reader.ReadX(ref precomputed2);
+                reader.Read(ref dotProduct);
+                reader.Read(ref normal);
+                reader.Read(ref vertex0);
+                reader.Read(ref vertex1);
+                reader.Read(ref vertex2);
+                reader.Read(ref precomputed0);
+                reader.Read(ref precomputed1);
+                reader.Read(ref precomputed2);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(dotProduct);
-                writer.WriteX(normal);
-                writer.WriteX(vertex0);
-                writer.WriteX(vertex1);
-                writer.WriteX(vertex2);
-                writer.WriteX(precomputed0);
-                writer.WriteX(precomputed1);
-                writer.WriteX(precomputed2);
+                writer.Write(dotProduct);
+                writer.Write(normal);
+                writer.Write(vertex0);
+                writer.Write(vertex1);
+                writer.Write(vertex2);
+                writer.Write(precomputed0);
+                writer.Write(precomputed1);
+                writer.Write(precomputed2);
             }
             this.RecordEndAddress(writer);
         }

@@ -24,22 +24,22 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref u);
-                reader.ReadX(ref v);
+                reader.Read(ref u);
+                reader.Read(ref v);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(u);
-                writer.WriteX(v);
+                writer.Write(u);
+                writer.Write(v);
             }
             this.RecordEndAddress(writer);
         }

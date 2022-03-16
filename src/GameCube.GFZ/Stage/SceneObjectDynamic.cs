@@ -53,42 +53,42 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk0x00);
-                reader.ReadX(ref unk0x04);
-                reader.ReadX(ref sceneObjectPtr);
-                reader.ReadX(ref transformTRXS);
-                reader.ReadX(ref zero_0x2C);
-                reader.ReadX(ref animationClipPtr);
-                reader.ReadX(ref textureScrollPtr);
-                reader.ReadX(ref skeletalAnimatorPtr);
-                reader.ReadX(ref transformMatrix3x4Ptr);
+                reader.Read(ref unk0x00);
+                reader.Read(ref unk0x04);
+                reader.Read(ref sceneObjectPtr);
+                reader.Read(ref transformTRXS);
+                reader.Read(ref zero_0x2C);
+                reader.Read(ref animationClipPtr);
+                reader.Read(ref textureScrollPtr);
+                reader.Read(ref skeletalAnimatorPtr);
+                reader.Read(ref transformMatrix3x4Ptr);
             }
             this.RecordEndAddress(reader);
             {
                 //
                 reader.JumpToAddress(SceneObjectPtr);
-                reader.ReadX(ref sceneObject);
+                reader.Read(ref sceneObject);
 
                 if (AnimationClipPtr.IsNotNull)
                 {
                     reader.JumpToAddress(AnimationClipPtr);
-                    reader.ReadX(ref animationClip);
+                    reader.Read(ref animationClip);
                 }
 
                 if (TextureScrollPtr.IsNotNull)
                 {
                     reader.JumpToAddress(TextureScrollPtr);
-                    reader.ReadX(ref textureScroll);
+                    reader.Read(ref textureScroll);
                 }
 
                 if (SkeletalAnimatorPtr.IsNotNull)
                 {
                     reader.JumpToAddress(SkeletalAnimatorPtr);
-                    reader.ReadX(ref skeletalAnimator);
+                    reader.Read(ref skeletalAnimator);
                 }
 
                 // 1518 objects without a transform
@@ -97,7 +97,7 @@ namespace GameCube.GFZ.Stage
                 if (TransformMatrix3x4Ptr.IsNotNull)
                 {
                     reader.JumpToAddress(TransformMatrix3x4Ptr);
-                    reader.ReadX(ref transformMatrix3x4);
+                    reader.Read(ref transformMatrix3x4);
                 }
 
                 // Assert pointer and the like
@@ -107,7 +107,7 @@ namespace GameCube.GFZ.Stage
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // Get pointers from refered instances
@@ -119,15 +119,15 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(unk0x00);
-                writer.WriteX(unk0x04);
-                writer.WriteX(sceneObjectPtr);
-                writer.WriteX(transformTRXS);
-                writer.WriteX(zero_0x2C);
-                writer.WriteX(animationClipPtr);
-                writer.WriteX(textureScrollPtr);
-                writer.WriteX(skeletalAnimatorPtr);
-                writer.WriteX(transformMatrix3x4Ptr);
+                writer.Write(unk0x00);
+                writer.Write(unk0x04);
+                writer.Write(sceneObjectPtr);
+                writer.Write(transformTRXS);
+                writer.Write(zero_0x2C);
+                writer.Write(animationClipPtr);
+                writer.Write(textureScrollPtr);
+                writer.Write(skeletalAnimatorPtr);
+                writer.Write(transformMatrix3x4Ptr);
             }
             this.RecordEndAddress(writer);
         }

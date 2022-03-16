@@ -33,29 +33,29 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref sceneObjectPtr);
+                reader.Read(ref sceneObjectPtr);
             }
             this.RecordEndAddress(reader);
             {
                 Assert.IsTrue(sceneObjectPtr.IsNotNull);
                 reader.JumpToAddress(sceneObjectPtr);
-                reader.ReadX(ref sceneObject);
+                reader.Read(ref sceneObject);
             }
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 sceneObjectPtr = sceneObject.GetPointer();
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(sceneObjectPtr);
+                writer.Write(sceneObjectPtr);
             }
             this.RecordEndAddress(writer);
 

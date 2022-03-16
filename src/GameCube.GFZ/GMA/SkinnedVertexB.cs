@@ -33,16 +33,16 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref position);
-                reader.ReadX(ref normal);
-                reader.ReadX(ref textureUV0);
-                reader.ReadX(ref textureUV1);
-                reader.ReadX(ref zero0x28);
-                reader.ReadX(ref zero0x2C);
+                reader.Read(ref position);
+                reader.Read(ref normal);
+                reader.Read(ref textureUV0);
+                reader.Read(ref textureUV1);
+                reader.Read(ref zero0x28);
+                reader.Read(ref zero0x2C);
                 color0.Deserialize(reader);
                 color1.Deserialize(reader);
                 color2.Deserialize(reader);
@@ -55,7 +55,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(zero0x28 == 0);
@@ -63,16 +63,16 @@ namespace GameCube.GFZ.GMA
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(position);
-                writer.WriteX(normal);
-                writer.WriteX(textureUV0);
-                writer.WriteX(textureUV1);
-                writer.WriteX(zero0x28);
-                writer.WriteX(zero0x2C);
-                writer.WriteX(color0);
-                writer.WriteX(color1);
-                writer.WriteX(color2);
-                writer.WriteX(color3);
+                writer.Write(position);
+                writer.Write(normal);
+                writer.Write(textureUV0);
+                writer.Write(textureUV1);
+                writer.Write(zero0x28);
+                writer.Write(zero0x2C);
+                writer.Write(color0);
+                writer.Write(color1);
+                writer.Write(color2);
+                writer.Write(color3);
             }
             this.RecordEndAddress(writer);
         }

@@ -32,7 +32,7 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
@@ -40,7 +40,7 @@ namespace GameCube.GFZ.Stage
                 while (true)
                 {
                     // Read next value
-                    var value = reader.ReadX_UInt16();
+                    var value = reader.ReadUInt16();
                     // Break loop, don't add value if terminator
                     if (value == kUshortArrayTerminator)
                     {
@@ -54,7 +54,7 @@ namespace GameCube.GFZ.Stage
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
@@ -67,10 +67,10 @@ namespace GameCube.GFZ.Stage
                         // Write each index
                         foreach (var index in indexes)
                         {
-                            writer.WriteX(index);
+                            writer.Write(index);
                         }
                         // Write terminating character
-                        writer.WriteX(kUshortArrayTerminator);
+                        writer.Write(kUshortArrayTerminator);
                     }
                     this.RecordEndAddress(writer);
                 }

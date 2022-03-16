@@ -88,7 +88,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             {
                 // Initialize ArrayPointer2D with constant size, manually deserialized later
@@ -96,11 +96,11 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk_0x00);
-                reader.ReadX(ref unk_0x04);
-                reader.ReadX(ref unk_0x08);
-                reader.ReadX(ref unk_0x0C);
-                reader.ReadX(ref unk_0x10);
+                reader.Read(ref unk_0x00);
+                reader.Read(ref unk_0x04);
+                reader.Read(ref unk_0x08);
+                reader.Read(ref unk_0x0C);
+                reader.Read(ref unk_0x10);
                 collisionArrayPtr2D.Deserialize(reader);
             }
             this.RecordEndAddress(reader);
@@ -108,19 +108,19 @@ namespace GameCube.GFZ.Stage
                 if (TrisPtr.IsNotNull)
                 {
                     reader.JumpToAddress(TrisPtr);
-                    reader.ReadX(ref tris, TrisPtr.length);
+                    reader.Read(ref tris, TrisPtr.length);
                 }
 
                 if (QuadsPtr.IsNotNull)
                 {
                     reader.JumpToAddress(QuadsPtr);
-                    reader.ReadX(ref quads, QuadsPtr.length);
+                    reader.Read(ref quads, QuadsPtr.length);
                 }
             }
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 //
@@ -129,12 +129,12 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(unk_0x00);
-                writer.WriteX(unk_0x04);
-                writer.WriteX(unk_0x08);
-                writer.WriteX(unk_0x0C);
-                writer.WriteX(unk_0x10);
-                writer.WriteX(collisionArrayPtr2D);
+                writer.Write(unk_0x00);
+                writer.Write(unk_0x04);
+                writer.Write(unk_0x08);
+                writer.Write(unk_0x0C);
+                writer.Write(unk_0x10);
+                writer.Write(collisionArrayPtr2D);
             }
             this.RecordEndAddress(writer);
 

@@ -21,24 +21,24 @@ namespace GameCube.GFZ.FMI
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref position);
-                reader.ReadX(ref unk_0x0C);
-                reader.ReadX(ref animType);
+                reader.Read(ref position);
+                reader.Read(ref unk_0x0C);
+                reader.Read(ref animType);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(position);
-                writer.WriteX(unk_0x0C);
-                writer.WriteX(animType);
+                writer.Write(position);
+                writer.Write(unk_0x0C);
+                writer.Write(animType);
             }
             this.RecordEndAddress(writer);
         }

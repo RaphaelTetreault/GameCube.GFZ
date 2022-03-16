@@ -91,30 +91,30 @@ namespace GameCube.GFZ.Stage
             return (center, scale);
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref left);
-                reader.ReadX(ref top);
-                reader.ReadX(ref subdivisionWidth);
-                reader.ReadX(ref subdivisionLength);
-                reader.ReadX(ref numSubdivisionsX);
-                reader.ReadX(ref numSubdivisionsZ);
+                reader.Read(ref left);
+                reader.Read(ref top);
+                reader.Read(ref subdivisionWidth);
+                reader.Read(ref subdivisionLength);
+                reader.Read(ref numSubdivisionsX);
+                reader.Read(ref numSubdivisionsZ);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(left);
-                writer.WriteX(top);
-                writer.WriteX(subdivisionWidth);
-                writer.WriteX(subdivisionLength);
-                writer.WriteX(numSubdivisionsX);
-                writer.WriteX(numSubdivisionsZ);
+                writer.Write(left);
+                writer.Write(top);
+                writer.Write(subdivisionWidth);
+                writer.Write(subdivisionLength);
+                writer.Write(numSubdivisionsX);
+                writer.Write(numSubdivisionsZ);
             }
             this.RecordEndAddress(writer);
         }

@@ -87,21 +87,21 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref magic);
-                reader.ReadX(ref attributes);
-                reader.ReadX(ref boundingSphere);
-                reader.ReadX(ref textureCount);
-                reader.ReadX(ref opaqueMaterialCount);
-                reader.ReadX(ref translucidMaterialCount);
-                reader.ReadX(ref boneCount);
-                reader.ReadX(ref zero0x1F);
-                reader.ReadX(ref gcmfTexturesSize);
-                reader.ReadX(ref zero0x24);
-                reader.ReadX(ref boneIndices);
+                reader.Read(ref magic);
+                reader.Read(ref attributes);
+                reader.Read(ref boundingSphere);
+                reader.Read(ref textureCount);
+                reader.Read(ref opaqueMaterialCount);
+                reader.Read(ref translucidMaterialCount);
+                reader.Read(ref boneCount);
+                reader.Read(ref zero0x1F);
+                reader.Read(ref gcmfTexturesSize);
+                reader.Read(ref zero0x24);
+                reader.Read(ref boneIndices);
             }
             this.RecordEndAddress(reader);
             {
@@ -119,18 +119,18 @@ namespace GameCube.GFZ.GMA
                 textureConfigs = new TextureConfig[textureCount];
                 for (int i = 0; i < textureConfigs.Length; i++)
                 {
-                    reader.ReadX(ref textureConfigs[i]);
+                    reader.Read(ref textureConfigs[i]);
                     reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
                 // Read in bones. If 'transformMatrixCount' is 0, nothing happens
-                reader.ReadX(ref bones, boneCount);
+                reader.Read(ref bones, boneCount);
                 reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                 // Check GCMF attributes; some types has special data embedded
                 if (IsSkinnedModel || IsPhysicsDrivenModel)
                 {
-                    reader.ReadX(ref skinnedVertexDescriptor);
+                    reader.Read(ref skinnedVertexDescriptor);
                     reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                     // Get base pointer for skinned data offsets
@@ -156,7 +156,7 @@ namespace GameCube.GFZ.GMA
                     {
                         var address = SkinnedDataBaseAddress + skinnedVertexDescriptor.SkinnedVerticesAPtrOffset;
                         reader.JumpToAddress(address);
-                        reader.ReadX(ref skinnedVerticesA, skinnedVertexDescriptor.SkinnedVerticesACount);
+                        reader.Read(ref skinnedVerticesA, skinnedVertexDescriptor.SkinnedVerticesACount);
                         // Redundant since the FIFO alignment is the same size as the structure (0x20)
                         //reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
@@ -165,7 +165,7 @@ namespace GameCube.GFZ.GMA
                     {
                         var address = SkinnedDataBaseAddress + skinnedVertexDescriptor.UnkBoneIndicesPtrOffset;
                         reader.JumpToAddress(address);
-                        reader.ReadX(ref unkBoneIndices, BoneCount);
+                        reader.Read(ref unkBoneIndices, BoneCount);
                         reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
                 }
@@ -177,7 +177,7 @@ namespace GameCube.GFZ.GMA
                     {
                         var address = SkinnedDataBaseAddress + skinnedVertexDescriptor.SkinnedVerticesBPtrOffset;
                         reader.JumpToAddress(address);
-                        reader.ReadX(ref skinnedVerticesB, skinnedVertexDescriptor.SkinnedVerticesBCount);
+                        reader.Read(ref skinnedVerticesB, skinnedVertexDescriptor.SkinnedVerticesBCount);
                         reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
 
@@ -208,7 +208,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 boneCount = (byte)Bones.Length;
@@ -216,17 +216,17 @@ namespace GameCube.GFZ.GMA
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(kMagic);
-                writer.WriteX(attributes);
-                writer.WriteX(boundingSphere);
-                writer.WriteX(textureCount);
-                writer.WriteX(opaqueMaterialCount);
-                writer.WriteX(translucidMaterialCount);
-                writer.WriteX(boneCount);
-                writer.WriteX(zero0x1F);
-                writer.WriteX(gcmfTexturesSize);
-                writer.WriteX(zero0x24);
-                writer.WriteX(boneIndices);
+                writer.Write(kMagic);
+                writer.Write(attributes);
+                writer.Write(boundingSphere);
+                writer.Write(textureCount);
+                writer.Write(opaqueMaterialCount);
+                writer.Write(translucidMaterialCount);
+                writer.Write(boneCount);
+                writer.Write(zero0x1F);
+                writer.Write(gcmfTexturesSize);
+                writer.Write(zero0x24);
+                writer.Write(boneIndices);
             }
             this.RecordEndAddress(writer);
             {
@@ -235,23 +235,23 @@ namespace GameCube.GFZ.GMA
                 //
                 foreach (var textureConfig in textureConfigs)
                 {
-                    writer.WriteX(textureConfig);
+                    writer.Write(textureConfig);
                     writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
                 //
-                writer.WriteX(bones);
+                writer.Write(bones);
                 writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
 
                 // Write garbage/blank on first pass
                 if (IsSkinnedModel || IsPhysicsDrivenModel)
                 {
-                    writer.WriteX(skinnedVertexDescriptor);
+                    writer.Write(skinnedVertexDescriptor);
                     writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
                 //
-                writer.WriteX(submeshes);
+                writer.Write(submeshes);
                 writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
 
 
@@ -265,7 +265,7 @@ namespace GameCube.GFZ.GMA
 
                     // (#1) Write this data first (always has lowest offset)
                     Pointer SkinnedVerticesBPtr = writer.GetPositionAsPointer();
-                    writer.WriteX(skinnedVerticesB);
+                    writer.Write(skinnedVerticesB);
                     writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
 
                     // (#2) This data will be empty / [0] when 'IsPhysicsDrivenModel'
@@ -273,7 +273,7 @@ namespace GameCube.GFZ.GMA
                     Pointer SkinnedVerticesAPtr = writer.GetPositionAsPointer();
                     if (skinnedVerticesA is not null)
                     {
-                        writer.WriteX(skinnedVerticesA);
+                        writer.Write(skinnedVerticesA);
                         writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN); // redundant
                     }
 
@@ -281,13 +281,13 @@ namespace GameCube.GFZ.GMA
                     Pointer unkBoneIndicesPtr = writer.GetPositionAsPointer();
                     if (UnkBoneIndices is not null)
                     {
-                        writer.WriteX(UnkBoneIndices);
+                        writer.Write(UnkBoneIndices);
                         writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
                     }
 
                     // (#4) Lastly, write the skin-bone bindings
                     Pointer SkinBoneBindingsPtr = writer.GetPositionAsPointer();
-                    writer.WriteX(skinBoneBindings);
+                    writer.Write(skinBoneBindings);
                     writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
 
                     // Second pass: rewrite data, getting correct count and offsets
@@ -302,7 +302,7 @@ namespace GameCube.GFZ.GMA
 
                     // Jump to previous address, overwrite
                     writer.JumpToAddress(basePtr);
-                    writer.WriteX(skinnedVertexDescriptor);
+                    writer.Write(skinnedVertexDescriptor);
                 }
             }
         }

@@ -41,21 +41,21 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk0x00);
-                reader.ReadX(ref mipmapSetting);
-                reader.ReadX(ref wrapMode);
-                reader.ReadX(ref tplTextureIndex);
-                reader.ReadX(ref unk0x06);
-                reader.ReadX(ref anisotropicFilter);
-                reader.ReadX(ref zero0x08);
-                reader.ReadX(ref unk0x0C);
-                reader.ReadX(ref isSwappableTexture);
-                reader.ReadX(ref configIndex);
-                reader.ReadX(ref unk0x10);
+                reader.Read(ref unk0x00);
+                reader.Read(ref mipmapSetting);
+                reader.Read(ref wrapMode);
+                reader.Read(ref tplTextureIndex);
+                reader.Read(ref unk0x06);
+                reader.Read(ref anisotropicFilter);
+                reader.Read(ref zero0x08);
+                reader.Read(ref unk0x0C);
+                reader.Read(ref isSwappableTexture);
+                reader.Read(ref configIndex);
+                reader.Read(ref unk0x10);
             }
             this.RecordEndAddress(reader);
             {
@@ -63,24 +63,24 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(zero0x08 == 0);
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(unk0x00);
-                writer.WriteX(mipmapSetting);
-                writer.WriteX(wrapMode);
-                writer.WriteX(tplTextureIndex);
-                writer.WriteX(unk0x06);
-                writer.WriteX(anisotropicFilter);
-                writer.WriteX(zero0x08);
-                writer.WriteX(unk0x0C);
-                writer.WriteX(isSwappableTexture);
-                writer.WriteX(configIndex);
-                writer.WriteX(unk0x10);
+                writer.Write(unk0x00);
+                writer.Write(mipmapSetting);
+                writer.Write(wrapMode);
+                writer.Write(tplTextureIndex);
+                writer.Write(unk0x06);
+                writer.Write(anisotropicFilter);
+                writer.Write(zero0x08);
+                writer.Write(unk0x0C);
+                writer.Write(isSwappableTexture);
+                writer.Write(configIndex);
+                writer.Write(unk0x10);
             }
             this.RecordEndAddress(writer);
         }

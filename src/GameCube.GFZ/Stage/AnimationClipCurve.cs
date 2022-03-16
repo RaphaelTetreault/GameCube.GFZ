@@ -36,15 +36,15 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk_0x00);
-                reader.ReadX(ref unk_0x04);
-                reader.ReadX(ref unk_0x08);
-                reader.ReadX(ref unk_0x0C);
-                reader.ReadX(ref animationCurvePtr);
+                reader.Read(ref unk_0x00);
+                reader.Read(ref unk_0x04);
+                reader.Read(ref unk_0x08);
+                reader.Read(ref unk_0x0C);
+                reader.Read(ref animationCurvePtr);
             }
             this.RecordEndAddress(reader);
             {
@@ -58,7 +58,7 @@ namespace GameCube.GFZ.Stage
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // Make sure to serialize this in ColiScene!
@@ -70,11 +70,11 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(unk_0x00);
-                writer.WriteX(unk_0x04);
-                writer.WriteX(unk_0x08);
-                writer.WriteX(unk_0x0C);
-                writer.WriteX(animationCurvePtr);
+                writer.Write(unk_0x00);
+                writer.Write(unk_0x04);
+                writer.Write(unk_0x08);
+                writer.Write(unk_0x0C);
+                writer.Write(animationCurvePtr);
             }
             this.RecordEndAddress(writer);
         }

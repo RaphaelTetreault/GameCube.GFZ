@@ -98,12 +98,12 @@ namespace GameCube.GFZ.Stage
             return largestIndex;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             // Read index arrays
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref indexListPtrs, Count);
+                reader.Read(ref indexListPtrs, Count);
             }
             this.RecordEndAddress(reader);
             {
@@ -133,7 +133,7 @@ namespace GameCube.GFZ.Stage
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // Ensure we have the correct amount of lists before indexing
@@ -153,7 +153,7 @@ namespace GameCube.GFZ.Stage
                 for (int ptrIndex = 0; ptrIndex < indexListPtrs.Length; ptrIndex++)
                 {
                     var ptr = indexListPtrs[ptrIndex];
-                    writer.WriteX(ptr);
+                    writer.Write(ptr);
                 }
             }
             this.RecordEndAddress(writer);

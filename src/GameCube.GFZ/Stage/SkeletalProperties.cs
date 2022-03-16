@@ -35,17 +35,17 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk_0x00);
-                reader.ReadX(ref unk_0x04);
-                reader.ReadX(ref unk_0x08);
-                reader.ReadX(ref zero_0x0C);
-                reader.ReadX(ref zero_0x10);
-                reader.ReadX(ref zero_0x14);
-                reader.ReadX(ref zero_0x18);
+                reader.Read(ref unk_0x00);
+                reader.Read(ref unk_0x04);
+                reader.Read(ref unk_0x08);
+                reader.Read(ref zero_0x0C);
+                reader.Read(ref zero_0x10);
+                reader.Read(ref zero_0x14);
+                reader.Read(ref zero_0x18);
             }
             this.RecordEndAddress(reader);
             {
@@ -56,17 +56,17 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(unk_0x00);
-                writer.WriteX(unk_0x04);
-                writer.WriteX(unk_0x08);
-                writer.WriteX(zero_0x0C);
-                writer.WriteX(zero_0x10);
-                writer.WriteX(zero_0x14);
-                writer.WriteX(zero_0x18);
+                writer.Write(unk_0x00);
+                writer.Write(unk_0x04);
+                writer.Write(unk_0x08);
+                writer.Write(zero_0x0C);
+                writer.Write(zero_0x10);
+                writer.Write(zero_0x14);
+                writer.Write(zero_0x18);
             }
             this.RecordEndAddress(writer);
         }

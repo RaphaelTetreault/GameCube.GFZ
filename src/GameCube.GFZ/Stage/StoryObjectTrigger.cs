@@ -79,18 +79,18 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref zero_0x00);
-                reader.ReadX(ref boulderGroupOrderIndex);
-                reader.ReadX(ref boulderGroupAndDifficulty);
-                reader.ReadX(ref story2BoulderScale);
-                reader.ReadX(ref story2BoulderPathPtr);
-                reader.ReadX(ref scale);
-                reader.ReadX(ref rotation);
-                reader.ReadX(ref position);
+                reader.Read(ref zero_0x00);
+                reader.Read(ref boulderGroupOrderIndex);
+                reader.Read(ref boulderGroupAndDifficulty);
+                reader.Read(ref story2BoulderScale);
+                reader.Read(ref story2BoulderPathPtr);
+                reader.Read(ref scale);
+                reader.Read(ref rotation);
+                reader.Read(ref position);
             }
             this.RecordEndAddress(reader);
             {
@@ -98,27 +98,27 @@ namespace GameCube.GFZ.Stage
                 {
                     // Read array pointer
                     reader.JumpToAddress(story2BoulderPathPtr);
-                    reader.ReadX(ref storyObjectPath);
+                    reader.Read(ref storyObjectPath);
                 }
             }
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 story2BoulderPathPtr = storyObjectPath.GetPointer();
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(zero_0x00);
-                writer.WriteX(boulderGroupOrderIndex);
-                writer.WriteX(boulderGroupAndDifficulty);
-                writer.WriteX(story2BoulderScale);
-                writer.WriteX(story2BoulderPathPtr);
-                writer.WriteX(scale);
-                writer.WriteX(rotation);
-                writer.WriteX(position);
+                writer.Write(zero_0x00);
+                writer.Write(boulderGroupOrderIndex);
+                writer.Write(boulderGroupAndDifficulty);
+                writer.Write(story2BoulderScale);
+                writer.Write(story2BoulderPathPtr);
+                writer.Write(scale);
+                writer.Write(rotation);
+                writer.Write(position);
             }
             this.RecordEndAddress(writer);
         }

@@ -25,11 +25,11 @@ namespace GameCube.GFZ.CarData
             0x35, 0x00,
         };
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             // Read what should be padding
             var buffer = new byte[0];
-            reader.ReadX(ref buffer, PaddingCount);
+            reader.Read(ref buffer, PaddingCount);
 
             // Assert padding
             var expectedValue = Padding;
@@ -39,7 +39,7 @@ namespace GameCube.GFZ.CarData
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             writer.Write(Padding);
         }

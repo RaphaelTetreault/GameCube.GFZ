@@ -37,34 +37,34 @@ namespace GameCube.GFZ.FMI
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref unk_0x00);
-                reader.ReadX(ref unk_0x01);
-                reader.ReadX(ref animationCount);
-                reader.ReadX(ref exhaustCount);
-                reader.ReadX(ref unk_0x04);
-                reader.ReadX(ref unk_0x05);
-                reader.ReadX(ref unk_0x06);
-                reader.ReadX(ref unk_0x07);
-                reader.ReadX(ref unk_0x08);
+                reader.Read(ref unk_0x00);
+                reader.Read(ref unk_0x01);
+                reader.Read(ref animationCount);
+                reader.Read(ref exhaustCount);
+                reader.Read(ref unk_0x04);
+                reader.Read(ref unk_0x05);
+                reader.Read(ref unk_0x06);
+                reader.Read(ref unk_0x07);
+                reader.Read(ref unk_0x08);
             }
             this.RecordEndAddress(reader);
             {
                 reader.BaseStream.Seek(kParticlesAbsPtr, SeekOrigin.Begin);
-                reader.ReadX(ref particles, animationCount);
+                reader.Read(ref particles, animationCount);
 
                 reader.BaseStream.Seek(kAnimationAbsPtr, SeekOrigin.Begin);
-                reader.ReadX(ref animations, exhaustCount);
+                reader.Read(ref animations, exhaustCount);
 
                 // TODO: read names
             }
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             throw new NotImplementedException();
         }

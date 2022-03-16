@@ -137,27 +137,27 @@ namespace GameCube.GFZ.Stage
             throw new NotImplementedException();
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             var countSurfaceTypes = SurfaceCount;
 
             // Deserialize values
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref zeroes_group1, kZeroesGroup1);
-                reader.ReadX(ref staticColliderTrisPtr);
-                reader.ReadX(ref triMeshGridPtrs, countSurfaceTypes);
-                reader.ReadX(ref meshGridXZ);
-                reader.ReadX(ref staticColliderQuadsPtr);
-                reader.ReadX(ref quadMeshGridPtrs, countSurfaceTypes);
-                reader.ReadX(ref zeroes_group2, kZeroesGroup2);
-                reader.ReadX(ref unknownCollidersPtr);
-                reader.ReadX(ref staticSceneObjectsPtr);
-                reader.ReadX(ref zeroes_group3, kZeroesGroup3);
-                reader.ReadX(ref boundingSpherePtr);
-                reader.ReadX(ref zeroes_group4, kZeroesGroup4);
-                reader.ReadX(ref unk_float);
-                reader.ReadX(ref zeroes_group5, kZeroesGroup5);
+                reader.Read(ref zeroes_group1, kZeroesGroup1);
+                reader.Read(ref staticColliderTrisPtr);
+                reader.Read(ref triMeshGridPtrs, countSurfaceTypes);
+                reader.Read(ref meshGridXZ);
+                reader.Read(ref staticColliderQuadsPtr);
+                reader.Read(ref quadMeshGridPtrs, countSurfaceTypes);
+                reader.Read(ref zeroes_group2, kZeroesGroup2);
+                reader.Read(ref unknownCollidersPtr);
+                reader.Read(ref staticSceneObjectsPtr);
+                reader.Read(ref zeroes_group3, kZeroesGroup3);
+                reader.Read(ref boundingSpherePtr);
+                reader.Read(ref zeroes_group4, kZeroesGroup4);
+                reader.Read(ref unk_float);
+                reader.Read(ref zeroes_group5, kZeroesGroup5);
             }
             this.RecordEndAddress(reader);
             {
@@ -187,12 +187,12 @@ namespace GameCube.GFZ.Stage
                     // Triangles
                     var triIndexesPointer = triMeshGridPtrs[i];
                     reader.JumpToAddress(triIndexesPointer);
-                    reader.ReadX(ref triMeshGrids[i]);
+                    reader.Read(ref triMeshGrids[i]);
 
                     // Quads
                     var quadPointer = quadMeshGridPtrs[i];
                     reader.JumpToAddress(quadPointer);
-                    reader.ReadX(ref quadMeshGrids[i]);
+                    reader.Read(ref quadMeshGrids[i]);
                 }
 
                 // Find out how many tris and quads this structure has. There is no direct reference available,
@@ -206,20 +206,20 @@ namespace GameCube.GFZ.Stage
                 }
 
                 reader.JumpToAddress(staticColliderTrisPtr);
-                reader.ReadX(ref colliderTris, numTriVerts);
+                reader.Read(ref colliderTris, numTriVerts);
 
                 reader.JumpToAddress(staticColliderQuadsPtr);
-                reader.ReadX(ref colliderQuads, numQuadVerts);
+                reader.Read(ref colliderQuads, numQuadVerts);
 
                 reader.JumpToAddress(boundingSpherePtr);
-                reader.ReadX(ref boundingSphere);
+                reader.Read(ref boundingSphere);
 
                 // I don't read the StaticSceneObjects and UnknownColliders since it's easier to assign the
                 // reference in the main Scene class directly and saves some deserialization time.
             }
             this.SetReaderToEndAddress(reader);
         }
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // POINTERS
@@ -237,20 +237,20 @@ namespace GameCube.GFZ.Stage
             this.RecordStartAddress(writer);
             {
                 // Write empty int array for unknown
-                writer.WriteX(new byte[kZeroesGroup1]);
-                writer.WriteX(staticColliderTrisPtr);
-                writer.WriteX(triMeshGridPtrs);
-                writer.WriteX(meshGridXZ);
-                writer.WriteX(staticColliderQuadsPtr);
-                writer.WriteX(quadMeshGridPtrs);
-                writer.WriteX(new byte[kZeroesGroup2]);
-                writer.WriteX(unknownCollidersPtr);
-                writer.WriteX(staticSceneObjectsPtr);
-                writer.WriteX(new byte[kZeroesGroup3]);
-                writer.WriteX(boundingSpherePtr);
-                writer.WriteX(new byte[kZeroesGroup4]);
-                writer.WriteX(unk_float);
-                writer.WriteX(new byte[kZeroesGroup5]);
+                writer.Write(new byte[kZeroesGroup1]);
+                writer.Write(staticColliderTrisPtr);
+                writer.Write(triMeshGridPtrs);
+                writer.Write(meshGridXZ);
+                writer.Write(staticColliderQuadsPtr);
+                writer.Write(quadMeshGridPtrs);
+                writer.Write(new byte[kZeroesGroup2]);
+                writer.Write(unknownCollidersPtr);
+                writer.Write(staticSceneObjectsPtr);
+                writer.Write(new byte[kZeroesGroup3]);
+                writer.Write(boundingSpherePtr);
+                writer.Write(new byte[kZeroesGroup4]);
+                writer.Write(unk_float);
+                writer.Write(new byte[kZeroesGroup5]);
             }
             this.RecordEndAddress(writer);
         }

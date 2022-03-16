@@ -33,16 +33,16 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref transform);
-                reader.ReadX(ref width);
-                reader.ReadX(ref const_0x34);
-                reader.ReadX(ref zero_0x35);
-                reader.ReadX(ref perimeterOptions);
-                reader.ReadX(ref zero_0x37);
+                reader.Read(ref transform);
+                reader.Read(ref width);
+                reader.Read(ref const_0x34);
+                reader.Read(ref zero_0x35);
+                reader.Read(ref perimeterOptions);
+                reader.Read(ref zero_0x37);
             }
             this.RecordEndAddress(reader);
             {
@@ -52,7 +52,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(Transform != null);
@@ -62,12 +62,12 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(transform);
-                writer.WriteX(width);
-                writer.WriteX(const_0x34);
-                writer.WriteX(zero_0x35);
-                writer.WriteX(perimeterOptions);
-                writer.WriteX(zero_0x37);
+                writer.Write(transform);
+                writer.Write(width);
+                writer.Write(const_0x34);
+                writer.Write(zero_0x35);
+                writer.Write(perimeterOptions);
+                writer.Write(zero_0x37);
             }
             this.RecordEndAddress(writer);
         }

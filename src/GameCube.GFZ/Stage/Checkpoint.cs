@@ -131,20 +131,20 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref curveTimeStart);
-                reader.ReadX(ref curveTimeEnd);
-                reader.ReadX(ref planeStart);
-                reader.ReadX(ref planeEnd);
-                reader.ReadX(ref startDistance);
-                reader.ReadX(ref endDistance);
-                reader.ReadX(ref trackWidth);
-                reader.ReadX(ref connectToTrackIn);
-                reader.ReadX(ref connectToTrackOut);
-                reader.ReadX(ref zero_0x4E);
+                reader.Read(ref curveTimeStart);
+                reader.Read(ref curveTimeEnd);
+                reader.Read(ref planeStart);
+                reader.Read(ref planeEnd);
+                reader.Read(ref startDistance);
+                reader.Read(ref endDistance);
+                reader.Read(ref trackWidth);
+                reader.Read(ref connectToTrackIn);
+                reader.Read(ref connectToTrackOut);
+                reader.Read(ref zero_0x4E);
             }
             this.RecordEndAddress(reader);
             {
@@ -152,20 +152,20 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(curveTimeStart);
-                writer.WriteX(curveTimeEnd);
-                writer.WriteX(planeStart);
-                writer.WriteX(planeEnd);
-                writer.WriteX(startDistance);
-                writer.WriteX(endDistance);
-                writer.WriteX(trackWidth);
-                writer.WriteX(connectToTrackIn);
-                writer.WriteX(connectToTrackOut);
-                writer.WriteX(zero_0x4E);
+                writer.Write(curveTimeStart);
+                writer.Write(curveTimeEnd);
+                writer.Write(planeStart);
+                writer.Write(planeEnd);
+                writer.Write(startDistance);
+                writer.Write(endDistance);
+                writer.Write(trackWidth);
+                writer.Write(connectToTrackIn);
+                writer.Write(connectToTrackOut);
+                writer.Write(zero_0x4E);
             }
             this.RecordEndAddress(writer);
         }

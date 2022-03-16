@@ -55,14 +55,14 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
                 //
-                reader.ReadX(ref material);
-                reader.ReadX(ref primaryDisplayListDescriptor);
-                reader.ReadX(ref unknown);
+                reader.Read(ref material);
+                reader.Read(ref primaryDisplayListDescriptor);
+                reader.Read(ref unknown);
                 reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
                 int endAddress = reader.GetPositionAsPointer().address;
@@ -92,7 +92,7 @@ namespace GameCube.GFZ.GMA
 
                 if (RenderSecondary)
                 {
-                    reader.ReadX(ref secondaryDisplayListDescriptor);
+                    reader.Read(ref secondaryDisplayListDescriptor);
                     reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
                     endAddress = new Pointer(reader.BaseStream.Position).address;
 
@@ -112,7 +112,7 @@ namespace GameCube.GFZ.GMA
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             // Reset the render flags based on instance data
             material.DisplayListRenderFlags =
@@ -129,9 +129,9 @@ namespace GameCube.GFZ.GMA
 
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(material);
-                writer.WriteX(primaryDisplayListDescriptor);
-                writer.WriteX(unknown);
+                writer.Write(material);
+                writer.Write(primaryDisplayListDescriptor);
+                writer.Write(unknown);
                 writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
 
                 if (RenderPrimaryOpaque)
@@ -143,7 +143,7 @@ namespace GameCube.GFZ.GMA
 
                 if (RenderSecondary)
                 {
-                    writer.WriteX(secondaryDisplayListDescriptor);
+                    writer.Write(secondaryDisplayListDescriptor);
                     writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
 
                     if (RenderSecondaryOpaque)
@@ -160,20 +160,20 @@ namespace GameCube.GFZ.GMA
                 primaryDisplayListDescriptor.OpaqueMaterialSize = pdlOpaque.Size;
                 primaryDisplayListDescriptor.TranslucidMaterialSize = pdlTranslucid.Size;
                 writer.JumpToAddress(primaryDisplayListDescriptor.AddressRange.startAddress);
-                writer.WriteX(primaryDisplayListDescriptor);
+                writer.Write(primaryDisplayListDescriptor);
 
                 if (RenderSecondary)
                 {
                     secondaryDisplayListDescriptor.OpaqueMaterialSize = sdlOpaque.Size;
                     secondaryDisplayListDescriptor.TranslucidMaterialSize = sdlTranslucid.Size;
                     writer.JumpToAddress(secondaryDisplayListDescriptor.AddressRange.startAddress);
-                    writer.WriteX(secondaryDisplayListDescriptor);
+                    writer.Write(secondaryDisplayListDescriptor);
                 }
             }
             this.SetWriterToEndAddress(writer);
         }
 
-        private DisplayList[] ReadDisplayLists(BinaryReader reader, int endAddress)
+        private DisplayList[] ReadDisplayLists(EndianBinaryReader reader, int endAddress)
         {
             var displayLists = new List<DisplayList>();
 
@@ -197,13 +197,13 @@ namespace GameCube.GFZ.GMA
             return displayLists.ToArray();
         }
 
-        private void WriteDisplayLists(BinaryWriter writer, DisplayList[] displayLists, out AddressRange addressRange)
+        private void WriteDisplayLists(EndianBinaryWriter writer, DisplayList[] displayLists, out AddressRange addressRange)
         {
             addressRange = new AddressRange();
             addressRange.RecordStartAddress(writer);
             {
-                writer.WriteX(GX_NOP);
-                writer.WriteX(displayLists);
+                writer.Write(GX_NOP);
+                writer.Write(displayLists);
                 writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
             }
             addressRange.RecordEndAddress(writer);

@@ -1,6 +1,4 @@
-﻿using Manifold;
-using Manifold.IO;
-using System.IO;
+﻿using Manifold.IO;
 
 namespace GameCube.GFZ.GMA
 {
@@ -29,23 +27,23 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref indexes, kIndexCount);
+                reader.Read(ref indexes, kIndexCount);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(indexes.Length == kIndexCount);
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(indexes);
+                writer.Write(indexes);
             }
             this.RecordEndAddress(writer);
         }

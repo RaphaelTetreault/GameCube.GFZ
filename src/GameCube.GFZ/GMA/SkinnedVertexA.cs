@@ -31,24 +31,24 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref position);
-                reader.ReadX(ref normal);
-                reader.ReadX(ref textureUV0);
+                reader.Read(ref position);
+                reader.Read(ref normal);
+                reader.Read(ref textureUV0);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(position);
-                writer.WriteX(normal);
-                writer.WriteX(textureUV0);
+                writer.Write(position);
+                writer.Write(normal);
+                writer.Write(textureUV0);
             }
             this.RecordEndAddress(writer);
         }

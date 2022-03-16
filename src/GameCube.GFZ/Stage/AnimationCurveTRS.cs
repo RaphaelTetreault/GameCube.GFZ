@@ -52,7 +52,7 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
@@ -85,7 +85,7 @@ namespace GameCube.GFZ.Stage
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // Ensure we have the correct amount of animation curves before indexing
@@ -100,7 +100,7 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(animationCurvesPtr2D );
+                writer.Write(animationCurvesPtr2D );
             }
             this.RecordEndAddress(writer);
         }

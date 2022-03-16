@@ -388,14 +388,14 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref interpolation);
-                reader.ReadX(ref fogRange);
-                reader.ReadX(ref colorRGB);
-                reader.ReadX(ref zero0x18);
+                reader.Read(ref interpolation);
+                reader.Read(ref fogRange);
+                reader.Read(ref colorRGB);
+                reader.Read(ref zero0x18);
             }
             this.RecordEndAddress(reader);
             {
@@ -403,17 +403,17 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(zero0x18.Equals(float3.zero));
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(Interpolation);
-                writer.WriteX(FogRange);
-                writer.WriteX(ColorRGB);
-                writer.WriteX(zero0x18);
+                writer.Write(Interpolation);
+                writer.Write(FogRange);
+                writer.Write(ColorRGB);
+                writer.Write(zero0x18);
             }
             this.RecordEndAddress(writer);
         }

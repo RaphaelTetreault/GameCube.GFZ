@@ -25,27 +25,27 @@ namespace GameCube.GFZ.StaffGhost
         public string FileName { get; set; }
         public string TimeDisplay { get => timeDisplay; set => timeDisplay = value; }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             byte temp = 0;
-            reader.ReadX(ref temp);
+            reader.Read(ref temp);
             machineID = (MachineID)temp;
 
-            reader.ReadX(ref temp);
+            reader.Read(ref temp);
             courseID = (CourseIndexGX)temp;
 
-            reader.ReadX(ref unk_1, 6);
-            reader.ReadX(ref username);
+            reader.Read(ref unk_1, 6);
+            reader.Read(ref username);
 
             reader.BaseStream.Seek(0x24, SeekOrigin.Begin);
-            reader.ReadX(ref timeMinutes);
-            reader.ReadX(ref timeSeconds);
-            reader.ReadX(ref timeMilliseconds);
+            reader.Read(ref timeMinutes);
+            reader.Read(ref timeSeconds);
+            reader.Read(ref timeMilliseconds);
 
             timeDisplay = $"{timeMinutes:0}\'{timeSeconds:00}\"{timeMilliseconds:000}";
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             throw new System.NotImplementedException();
         }

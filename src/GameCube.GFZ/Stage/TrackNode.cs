@@ -38,18 +38,18 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref checkpointsPtr);
-                reader.ReadX(ref segmentPtr);
+                reader.Read(ref checkpointsPtr);
+                reader.Read(ref segmentPtr);
             }
             this.RecordEndAddress(reader);
             {
                 // Get point
                 reader.JumpToAddress(checkpointsPtr);
-                reader.ReadX(ref checkpoints, checkpointsPtr.length);
+                reader.Read(ref checkpoints, checkpointsPtr.length);
 
                 // Get transform
                 // NOTE: since this data is referenced many times, I instead
@@ -60,7 +60,7 @@ namespace GameCube.GFZ.Stage
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 checkpointsPtr = checkpoints.GetArrayPointer();
@@ -68,8 +68,8 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(checkpointsPtr);
-                writer.WriteX(segmentPtr);
+                writer.Write(checkpointsPtr);
+                writer.Write(segmentPtr);
             }
             this.RecordEndAddress(writer);
         }

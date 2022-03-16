@@ -23,25 +23,25 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref count);
-                reader.ReadX(ref verticePtrOffsets, count);
+                reader.Read(ref count);
+                reader.Read(ref verticePtrOffsets, count);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 // TODO: assign offsets here? (similar to getting pointers)
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(Count);
-                writer.WriteX(verticePtrOffsets);
+                writer.Write(Count);
+                writer.Write(verticePtrOffsets);
             }
             this.RecordEndAddress(writer);
             {

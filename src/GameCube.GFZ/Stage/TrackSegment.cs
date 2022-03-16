@@ -71,41 +71,41 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref segmentType);
-                reader.ReadX(ref embeddedPropertyType);
-                reader.ReadX(ref perimeterFlags);
-                reader.ReadX(ref pipeCylinderFlags);
-                reader.ReadX(ref animationCurvesTrsPtr);
-                reader.ReadX(ref trackCornerPtr);
-                reader.ReadX(ref childrenPtr);
-                reader.ReadX(ref localScale);
-                reader.ReadX(ref localRotation);
-                reader.ReadX(ref localPosition);
-                reader.ReadX(ref unk_0x38);
-                reader.ReadX(ref unk_0x39);
-                reader.ReadX(ref unk_0x3A);
-                reader.ReadX(ref unk_0x3B);
-                reader.ReadX(ref railHeightRight);
-                reader.ReadX(ref railHeightLeft);
-                reader.ReadX(ref zero_0x44);
-                reader.ReadX(ref zero_0x48);
-                reader.ReadX(ref branchIndex);
+                reader.Read(ref segmentType);
+                reader.Read(ref embeddedPropertyType);
+                reader.Read(ref perimeterFlags);
+                reader.Read(ref pipeCylinderFlags);
+                reader.Read(ref animationCurvesTrsPtr);
+                reader.Read(ref trackCornerPtr);
+                reader.Read(ref childrenPtr);
+                reader.Read(ref localScale);
+                reader.Read(ref localRotation);
+                reader.Read(ref localPosition);
+                reader.Read(ref unk_0x38);
+                reader.Read(ref unk_0x39);
+                reader.Read(ref unk_0x3A);
+                reader.Read(ref unk_0x3B);
+                reader.Read(ref railHeightRight);
+                reader.Read(ref railHeightLeft);
+                reader.Read(ref zero_0x44);
+                reader.Read(ref zero_0x48);
+                reader.Read(ref branchIndex);
             }
             this.RecordEndAddress(reader);
             {
                 // Read animation curves
                 reader.JumpToAddress(animationCurvesTrsPtr);
-                reader.ReadX(ref animationCurveTRS);
+                reader.Read(ref animationCurveTRS);
 
                 // Read corner transform
                 if (trackCornerPtr.IsNotNull)
                 {
                     reader.JumpToAddress(trackCornerPtr);
-                    reader.ReadX(ref trackCorner);
+                    reader.Read(ref trackCorner);
                 }
 
                 // Assertions
@@ -126,14 +126,14 @@ namespace GameCube.GFZ.Stage
         /// </summary>
         /// <param name="reader">The reader to deserialize children from. Must be same used to deserialize this instance.</param>
         /// <returns>All children of this instance. Result can be of size 0. Result will not be null.</returns>
-        private void DeserializeChildrenRecursively(BinaryReader reader, int depth = 0)
+        private void DeserializeChildrenRecursively(EndianBinaryReader reader, int depth = 0)
         {
             var children = new TrackSegment[0];
             if (childrenPtr.IsNotNull)
             {
                 // NOTE: children are always sequential (ArrayPointer)
                 reader.JumpToAddress(childrenPtr);
-                reader.ReadX(ref children, childrenPtr.length);
+                reader.Read(ref children, childrenPtr.length);
             }
 
             this.children = children;
@@ -146,7 +146,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 animationCurvesTrsPtr = animationCurveTRS.GetPointer();
@@ -155,25 +155,25 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(segmentType);
-                writer.WriteX(embeddedPropertyType);
-                writer.WriteX(perimeterFlags);
-                writer.WriteX(pipeCylinderFlags);
-                writer.WriteX(animationCurvesTrsPtr);
-                writer.WriteX(trackCornerPtr);
-                writer.WriteX(childrenPtr);
-                writer.WriteX(localScale);
-                writer.WriteX(localRotation);
-                writer.WriteX(localPosition);
-                writer.WriteX(unk_0x38);
-                writer.WriteX(unk_0x39);
-                writer.WriteX(unk_0x3A);
-                writer.WriteX(unk_0x3B);
-                writer.WriteX(railHeightRight);
-                writer.WriteX(railHeightLeft);
-                writer.WriteX(zero_0x44);
-                writer.WriteX(zero_0x48);
-                writer.WriteX(branchIndex);
+                writer.Write(segmentType);
+                writer.Write(embeddedPropertyType);
+                writer.Write(perimeterFlags);
+                writer.Write(pipeCylinderFlags);
+                writer.Write(animationCurvesTrsPtr);
+                writer.Write(trackCornerPtr);
+                writer.Write(childrenPtr);
+                writer.Write(localScale);
+                writer.Write(localRotation);
+                writer.Write(localPosition);
+                writer.Write(unk_0x38);
+                writer.Write(unk_0x39);
+                writer.Write(unk_0x3A);
+                writer.Write(unk_0x3B);
+                writer.Write(railHeightRight);
+                writer.Write(railHeightLeft);
+                writer.Write(zero_0x44);
+                writer.Write(zero_0x48);
+                writer.Write(branchIndex);
             }
             this.RecordEndAddress(writer);
         }

@@ -30,28 +30,28 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref skinnedVertexBCount);
-                reader.ReadX(ref skinnedVerticesAPtrOffset);
-                reader.ReadX(ref skinnedVerticesBPtrOffset);
-                reader.ReadX(ref skinBoneBindingsPtrOffset);
-                reader.ReadX(ref unkBoneIndicesPtrOffset);
+                reader.Read(ref skinnedVertexBCount);
+                reader.Read(ref skinnedVerticesAPtrOffset);
+                reader.Read(ref skinnedVerticesBPtrOffset);
+                reader.Read(ref skinBoneBindingsPtrOffset);
+                reader.Read(ref unkBoneIndicesPtrOffset);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(skinnedVertexBCount);
-                writer.WriteX(skinnedVerticesAPtrOffset);
-                writer.WriteX(skinnedVerticesBPtrOffset);
-                writer.WriteX(skinBoneBindingsPtrOffset);
-                writer.WriteX(unkBoneIndicesPtrOffset);
+                writer.Write(skinnedVertexBCount);
+                writer.Write(skinnedVerticesAPtrOffset);
+                writer.Write(skinnedVerticesBPtrOffset);
+                writer.Write(skinBoneBindingsPtrOffset);
+                writer.Write(unkBoneIndicesPtrOffset);
             }
             this.RecordEndAddress(writer);
         }

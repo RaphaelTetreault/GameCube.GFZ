@@ -31,7 +31,7 @@ namespace GameCube.GFZ
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             // The data is stored as rows
             float4 row0 = new float4();
@@ -43,9 +43,9 @@ namespace GameCube.GFZ
             this.RecordStartAddress(reader);
             {
                 // Read rows
-                reader.ReadX(ref row0);
-                reader.ReadX(ref row1);
-                reader.ReadX(ref row2);
+                reader.Read(ref row0);
+                reader.Read(ref row1);
+                reader.Read(ref row2);
             }
             this.RecordEndAddress(reader);
             {
@@ -56,7 +56,7 @@ namespace GameCube.GFZ
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
@@ -67,9 +67,9 @@ namespace GameCube.GFZ
                 var row2 = matrixTransposed.c2;
 
                 // Write rows
-                writer.WriteX(row0);
-                writer.WriteX(row1);
-                writer.WriteX(row2);
+                writer.Write(row0);
+                writer.Write(row1);
+                writer.Write(row2);
             }
             this.RecordEndAddress(writer);
         }

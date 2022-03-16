@@ -51,26 +51,26 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref zero0x00);
-                reader.ReadX(ref unk0x02);
-                reader.ReadX(ref unk0x03);
+                reader.Read(ref zero0x00);
+                reader.Read(ref unk0x02);
+                reader.Read(ref unk0x03);
                 color0.Deserialize(reader);
                 color1.Deserialize(reader);
                 color2.Deserialize(reader);
-                reader.ReadX(ref unk0x10);
-                reader.ReadX(ref unk0x11);
-                reader.ReadX(ref textureCount);
-                reader.ReadX(ref displayListRenderFlags);
-                reader.ReadX(ref unk0x14);
-                reader.ReadX(ref unk0x15);
-                reader.ReadX(ref textureIndex0);
-                reader.ReadX(ref textureIndex1);
-                reader.ReadX(ref textureIndex2);
-                reader.ReadX(ref vertexAttributes);
+                reader.Read(ref unk0x10);
+                reader.Read(ref unk0x11);
+                reader.Read(ref textureCount);
+                reader.Read(ref displayListRenderFlags);
+                reader.Read(ref unk0x14);
+                reader.Read(ref unk0x15);
+                reader.Read(ref textureIndex0);
+                reader.Read(ref textureIndex1);
+                reader.Read(ref textureIndex2);
+                reader.Read(ref vertexAttributes);
             }
             this.RecordEndAddress(reader);
             {
@@ -78,7 +78,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 Assert.IsTrue(zero0x00 == 0);
@@ -88,22 +88,22 @@ namespace GameCube.GFZ.GMA
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(zero0x00);
-                writer.WriteX(unk0x02);
-                writer.WriteX(unk0x03);
-                writer.WriteX(color0);
-                writer.WriteX(color1);
-                writer.WriteX(color2);
-                writer.WriteX(unk0x10);
-                writer.WriteX(unk0x11);
-                writer.WriteX(textureCount);
-                writer.WriteX(displayListRenderFlags);
-                writer.WriteX(unk0x14);
-                writer.WriteX(unk0x15);
-                writer.WriteX(textureIndex0);
-                writer.WriteX(textureIndex1);
-                writer.WriteX(textureIndex2);
-                writer.WriteX(vertexAttributes);
+                writer.Write(zero0x00);
+                writer.Write(unk0x02);
+                writer.Write(unk0x03);
+                writer.Write(color0);
+                writer.Write(color1);
+                writer.Write(color2);
+                writer.Write(unk0x10);
+                writer.Write(unk0x11);
+                writer.Write(textureCount);
+                writer.Write(displayListRenderFlags);
+                writer.Write(unk0x14);
+                writer.Write(unk0x15);
+                writer.Write(textureIndex0);
+                writer.Write(textureIndex1);
+                writer.Write(textureIndex2);
+                writer.Write(vertexAttributes);
             }
             this.RecordEndAddress(writer);
         }

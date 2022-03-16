@@ -51,28 +51,28 @@ namespace GameCube.GFZ.Stage
             return newInstance;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref position);
-                reader.ReadX(ref compressedRotation);
-                reader.ReadX(ref unknownOption);
-                reader.ReadX(ref objectActiveOverride);
-                reader.ReadX(ref scale);
+                reader.Read(ref position);
+                reader.Read(ref compressedRotation);
+                reader.Read(ref unknownOption);
+                reader.Read(ref objectActiveOverride);
+                reader.Read(ref scale);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(position);
-                writer.WriteX(compressedRotation);
-                writer.WriteX(unknownOption);
-                writer.WriteX(objectActiveOverride);
-                writer.WriteX(scale);
+                writer.Write(position);
+                writer.Write(compressedRotation);
+                writer.Write(unknownOption);
+                writer.Write(objectActiveOverride);
+                writer.Write(scale);
             }
             this.RecordEndAddress(writer);
         }

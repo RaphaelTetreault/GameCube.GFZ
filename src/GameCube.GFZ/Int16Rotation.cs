@@ -92,17 +92,17 @@ namespace GameCube.GFZ
             return result;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
-            reader.ReadX(ref binary);
+            reader.Read(ref binary);
             
             // Property assigns values to other backing types.
             Degrees = ShortToDegrees(binary);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
-            writer.WriteX(binary);
+            writer.Write(binary);
         }
 
         public override string ToString()

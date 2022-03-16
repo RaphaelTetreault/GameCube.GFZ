@@ -1,6 +1,5 @@
 ﻿using Manifold;
 using Manifold.IO;
-using System.IO;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ
@@ -20,25 +19,25 @@ namespace GameCube.GFZ
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             var addressRange = new AddressRange();
             addressRange.RecordStartAddress(reader);
             {
-                reader.ReadX(ref origin);
-                reader.ReadX(ref radius);
+                reader.Read(ref origin);
+                reader.Read(ref radius);
             }
             addressRange.RecordEndAddress(reader);
             AddressRange = addressRange;
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             var addressRange = new AddressRange();
             addressRange.RecordStartAddress(writer);
             {
-                writer.WriteX(origin);
-                writer.WriteX(radius);
+                writer.Write(origin);
+                writer.Write(radius);
             }
             addressRange.RecordEndAddress(writer);
             AddressRange = addressRange;

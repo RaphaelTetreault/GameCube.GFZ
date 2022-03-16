@@ -62,17 +62,17 @@ namespace GameCube.GFZ.Camera
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref cameraPosition);
-                reader.ReadX(ref lookAtPosition);
-                reader.ReadX(ref fieldOfView);
-                reader.ReadX(ref rotationRoll);
-                reader.ReadX(ref zero_0x1E);
-                reader.ReadX(ref interpolation);
-                reader.ReadX(ref zero_0x22);
+                reader.Read(ref cameraPosition);
+                reader.Read(ref lookAtPosition);
+                reader.Read(ref fieldOfView);
+                reader.Read(ref rotationRoll);
+                reader.Read(ref zero_0x1E);
+                reader.Read(ref interpolation);
+                reader.Read(ref zero_0x22);
             }
             this.RecordEndAddress(reader);
 
@@ -81,17 +81,17 @@ namespace GameCube.GFZ.Camera
             Assert.IsTrue(Zero_0x22 == 0);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(cameraPosition);
-                writer.WriteX(lookAtPosition);
-                writer.WriteX(fieldOfView);
-                writer.WriteX(rotationRoll);
-                writer.WriteX(zero_0x1E);
-                writer.WriteX(interpolation);
-                writer.WriteX(zero_0x22);
+                writer.Write(cameraPosition);
+                writer.Write(lookAtPosition);
+                writer.Write(fieldOfView);
+                writer.Write(rotationRoll);
+                writer.Write(zero_0x1E);
+                writer.Write(interpolation);
+                writer.Write(zero_0x22);
             }
             this.RecordEndAddress(writer);
         }

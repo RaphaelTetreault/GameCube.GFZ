@@ -25,21 +25,21 @@ namespace GameCube.GFZ.Camera
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             // Figure out how many camera pans are in this file
             var nPans = (int)(reader.BaseStream.Length / CameraPan.kStructureSize);
             
             // Read that many structures out of the file
-            reader.ReadX(ref pans, nPans);
+            reader.Read(ref pans, nPans);
 
             // Sanity check. We should be at the end of the stream
             Assert.IsTrue(reader.BaseStream.IsAtEndOfStream());
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
-            writer.WriteX(pans);
+            writer.Write(pans);
         }
 
     }

@@ -86,80 +86,80 @@ namespace GameCube.GFZ.CarData
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref namePtr);
-                reader.ReadX(ref weight);
-                reader.ReadX(ref acceleration);
-                reader.ReadX(ref maxSpeed);
-                reader.ReadX(ref grip1);
-                reader.ReadX(ref grip3);
-                reader.ReadX(ref turnTension);
-                reader.ReadX(ref driftAcceleration);
-                reader.ReadX(ref turnMovement);
-                reader.ReadX(ref strafeTurn);
-                reader.ReadX(ref strafe);
-                reader.ReadX(ref turnReaction);
-                reader.ReadX(ref grip2);
-                reader.ReadX(ref boostStrength);
-                reader.ReadX(ref boostDuration);
-                reader.ReadX(ref turnDeceleration);
-                reader.ReadX(ref drag);
-                reader.ReadX(ref body);
-                reader.ReadX(ref unk_0x48);
-                reader.ReadX(ref unk_0x49);
-                reader.ReadX(ref zero_0x4A);
-                reader.ReadX(ref cameraReorientation);
-                reader.ReadX(ref cameraRepositioning);
-                reader.ReadX(ref tiltFrontRight);
-                reader.ReadX(ref tiltFrontLeft);
-                reader.ReadX(ref tiltBackRight);
-                reader.ReadX(ref tiltBackLeft);
-                reader.ReadX(ref wallCollisionFrontRight);
-                reader.ReadX(ref wallCollisionFrontLeft);
-                reader.ReadX(ref wallCollisionBackRight);
-                reader.ReadX(ref wallCollisionBackLeft);
+                reader.Read(ref namePtr);
+                reader.Read(ref weight);
+                reader.Read(ref acceleration);
+                reader.Read(ref maxSpeed);
+                reader.Read(ref grip1);
+                reader.Read(ref grip3);
+                reader.Read(ref turnTension);
+                reader.Read(ref driftAcceleration);
+                reader.Read(ref turnMovement);
+                reader.Read(ref strafeTurn);
+                reader.Read(ref strafe);
+                reader.Read(ref turnReaction);
+                reader.Read(ref grip2);
+                reader.Read(ref boostStrength);
+                reader.Read(ref boostDuration);
+                reader.Read(ref turnDeceleration);
+                reader.Read(ref drag);
+                reader.Read(ref body);
+                reader.Read(ref unk_0x48);
+                reader.Read(ref unk_0x49);
+                reader.Read(ref zero_0x4A);
+                reader.Read(ref cameraReorientation);
+                reader.Read(ref cameraRepositioning);
+                reader.Read(ref tiltFrontRight);
+                reader.Read(ref tiltFrontLeft);
+                reader.Read(ref tiltBackRight);
+                reader.Read(ref tiltBackLeft);
+                reader.Read(ref wallCollisionFrontRight);
+                reader.Read(ref wallCollisionFrontLeft);
+                reader.Read(ref wallCollisionBackRight);
+                reader.Read(ref wallCollisionBackLeft);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(namePtr);
-                writer.WriteX(weight);
-                writer.WriteX(acceleration);
-                writer.WriteX(maxSpeed);
-                writer.WriteX(grip1);
-                writer.WriteX(grip3);
-                writer.WriteX(turnTension);
-                writer.WriteX(driftAcceleration);
-                writer.WriteX(turnMovement);
-                writer.WriteX(strafeTurn);
-                writer.WriteX(strafe);
-                writer.WriteX(turnReaction);
-                writer.WriteX(grip2);
-                writer.WriteX(boostStrength);
-                writer.WriteX(boostDuration);
-                writer.WriteX(turnDeceleration);
-                writer.WriteX(drag);
-                writer.WriteX(body);
-                writer.WriteX(unk_0x48);
-                writer.WriteX(unk_0x49);
-                writer.WriteX(zero_0x4A);
-                writer.WriteX(cameraReorientation);
-                writer.WriteX(cameraRepositioning);
-                writer.WriteX(tiltFrontRight);
-                writer.WriteX(tiltFrontLeft);
-                writer.WriteX(tiltBackRight);
-                writer.WriteX(tiltBackLeft);
-                writer.WriteX(wallCollisionFrontRight);
-                writer.WriteX(wallCollisionFrontLeft);
-                writer.WriteX(wallCollisionBackRight);
-                writer.WriteX(wallCollisionBackLeft);
+                writer.Write(namePtr);
+                writer.Write(weight);
+                writer.Write(acceleration);
+                writer.Write(maxSpeed);
+                writer.Write(grip1);
+                writer.Write(grip3);
+                writer.Write(turnTension);
+                writer.Write(driftAcceleration);
+                writer.Write(turnMovement);
+                writer.Write(strafeTurn);
+                writer.Write(strafe);
+                writer.Write(turnReaction);
+                writer.Write(grip2);
+                writer.Write(boostStrength);
+                writer.Write(boostDuration);
+                writer.Write(turnDeceleration);
+                writer.Write(drag);
+                writer.Write(body);
+                writer.Write(unk_0x48);
+                writer.Write(unk_0x49);
+                writer.Write(zero_0x4A);
+                writer.Write(cameraReorientation);
+                writer.Write(cameraRepositioning);
+                writer.Write(tiltFrontRight);
+                writer.Write(tiltFrontLeft);
+                writer.Write(tiltBackRight);
+                writer.Write(tiltBackLeft);
+                writer.Write(wallCollisionFrontRight);
+                writer.Write(wallCollisionFrontLeft);
+                writer.Write(wallCollisionBackRight);
+                writer.Write(wallCollisionBackLeft);
             }
             this.RecordEndAddress(writer);
         }

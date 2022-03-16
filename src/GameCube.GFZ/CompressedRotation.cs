@@ -131,21 +131,21 @@ namespace GameCube.GFZ
             return decomposedEulers;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
-            reader.ReadX(ref x);
-            reader.ReadX(ref y);
-            reader.ReadX(ref z);
+            reader.Read(ref x);
+            reader.Read(ref y);
+            reader.Read(ref z);
 
             // Initializes quaternion and euler properties
             ComputeProperties();
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
-            writer.WriteX(x);
-            writer.WriteX(y);
-            writer.WriteX(z);
+            writer.Write(x);
+            writer.Write(y);
+            writer.Write(z);
         }
 
         private void ComputeProperties()

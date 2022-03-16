@@ -53,31 +53,31 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref lodRenderFlags);
-                reader.ReadX(ref lodsPtr);
-                reader.ReadX(ref colliderGeometryPtr);
+                reader.Read(ref lodRenderFlags);
+                reader.Read(ref lodsPtr);
+                reader.Read(ref colliderGeometryPtr);
             }
             this.RecordEndAddress(reader);
             {
                 Assert.IsTrue(lodsPtr.IsNotNull);
                 reader.JumpToAddress(lodsPtr);
-                reader.ReadX(ref lods, lodsPtr.length);
+                reader.Read(ref lods, lodsPtr.length);
 
                 // Collision is not required, load only if pointer is not null
                 if (colliderGeometryPtr.IsNotNull)
                 {
                     reader.JumpToAddress(colliderGeometryPtr);
-                    reader.ReadX(ref colliderMesh);
+                    reader.Read(ref colliderMesh);
                 }
             }
             this.SetReaderToEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             {
                 lodsPtr = LODs.GetArrayPointer();
@@ -85,9 +85,9 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(lodRenderFlags);
-                writer.WriteX(lodsPtr);
-                writer.WriteX(colliderGeometryPtr);
+                writer.Write(lodRenderFlags);
+                writer.Write(lodsPtr);
+                writer.Write(colliderGeometryPtr);
             }
             this.RecordEndAddress(writer);
         }

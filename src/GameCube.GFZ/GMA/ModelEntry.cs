@@ -29,22 +29,22 @@ namespace GameCube.GFZ.GMA
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref gcmfPtrOffset);
-                reader.ReadX(ref namePtrOffset);
+                reader.Read(ref gcmfPtrOffset);
+                reader.Read(ref namePtrOffset);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(GcmfRelPtr);
-                writer.WriteX(NameRelPtr);
+                writer.Write(GcmfRelPtr);
+                writer.Write(NameRelPtr);
             }
             this.RecordEndAddress(writer);
         }

@@ -55,15 +55,15 @@ namespace GameCube.GFZ.Camera
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref frameCount);
-                reader.ReadX(ref lerpSpeed);
-                reader.ReadX(ref zeroes0x08, kZeroes0x08);
-                reader.ReadX(ref from);
-                reader.ReadX(ref to);
+                reader.Read(ref frameCount);
+                reader.Read(ref lerpSpeed);
+                reader.Read(ref zeroes0x08, kZeroes0x08);
+                reader.Read(ref from);
+                reader.Read(ref to);
             }
             this.RecordEndAddress(reader);
 
@@ -72,15 +72,15 @@ namespace GameCube.GFZ.Camera
                 Assert.IsTrue(@byte == 0);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(frameCount);
-                writer.WriteX(lerpSpeed);
-                writer.WriteX(new byte[kZeroes0x08]);
-                writer.WriteX(from);
-                writer.WriteX(to);
+                writer.Write(frameCount);
+                writer.Write(lerpSpeed);
+                writer.Write(new byte[kZeroes0x08]);
+                writer.Write(from);
+                writer.Write(to);
             }
             this.RecordEndAddress(writer);
         }

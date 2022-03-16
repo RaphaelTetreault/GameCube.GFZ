@@ -22,16 +22,16 @@ namespace GameCube.GFZ.Stage
             this.far = far;
         }
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
-            reader.ReadX(ref near);
-            reader.ReadX(ref far);
+            reader.Read(ref near);
+            reader.Read(ref far);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
-            writer.WriteX(near);
-            writer.WriteX(far);
+            writer.Write(near);
+            writer.Write(far);
         }
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")

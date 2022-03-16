@@ -21,7 +21,7 @@ namespace GameCube.GFZ.GMA
         public Gcmf Gcmf { get => gcmf; set => gcmf = value; }
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             // Pointers are assigned from outside the class.
             // If not set, Deserialize() is not expected to be called.
@@ -29,10 +29,10 @@ namespace GameCube.GFZ.GMA
             Assert.IsTrue(NamePtr.IsNotNull);
 
             reader.JumpToAddress(NamePtr);
-            reader.ReadX(ref name);
+            reader.Read(ref name);
 
             reader.JumpToAddress(GcmfPtr);
-            reader.ReadX(ref gcmf);
+            reader.Read(ref gcmf);
         }
 
     }

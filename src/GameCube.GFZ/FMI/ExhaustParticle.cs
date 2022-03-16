@@ -28,32 +28,32 @@ namespace GameCube.GFZ.FMI
 
 
         // METHODS
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                reader.ReadX(ref position);
-                reader.ReadX(ref unk_0x0C);
-                reader.ReadX(ref unk_0x10);
-                reader.ReadX(ref scaleMin);
-                reader.ReadX(ref scaleMax);
-                reader.ReadX(ref colorMin);
-                reader.ReadX(ref colorMax);
+                reader.Read(ref position);
+                reader.Read(ref unk_0x0C);
+                reader.Read(ref unk_0x10);
+                reader.Read(ref scaleMin);
+                reader.Read(ref scaleMax);
+                reader.Read(ref colorMin);
+                reader.Read(ref colorMax);
             }
             this.RecordEndAddress(reader);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
             {
-                writer.WriteX(position);
-                writer.WriteX(unk_0x0C);
-                writer.WriteX(unk_0x10);
-                writer.WriteX(scaleMin);
-                writer.WriteX(scaleMax);
-                writer.WriteX(colorMin);
-                writer.WriteX(colorMax);
+                writer.Write(position);
+                writer.Write(unk_0x0C);
+                writer.Write(unk_0x10);
+                writer.Write(scaleMin);
+                writer.Write(scaleMax);
+                writer.Write(colorMin);
+                writer.Write(colorMax);
             }
             this.RecordEndAddress(writer);
         }

@@ -24,18 +24,18 @@ namespace GameCube.GFZ.Stage
         public float3 origin;
 
 
-        public void Deserialize(BinaryReader reader)
+        public void Deserialize(EndianBinaryReader reader)
         {
-            reader.ReadX(ref dotProduct);
-            reader.ReadX(ref normal);
-            reader.ReadX(ref origin);
+            reader.Read(ref dotProduct);
+            reader.Read(ref normal);
+            reader.Read(ref origin);
         }
 
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(EndianBinaryWriter writer)
         {
-            writer.WriteX(dotProduct);
-            writer.WriteX(normal);
-            writer.WriteX(origin);
+            writer.Write(dotProduct);
+            writer.Write(normal);
+            writer.Write(origin);
         }
 
         /// <summary>
