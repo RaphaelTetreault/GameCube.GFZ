@@ -1,0 +1,16 @@
+{
+    "name": "GameCube.GFZ.LZ",
+    "rootNamespace": "GameCube.GFZ.LZ",
+    "references": [
+        "GUID:778bce0d54a0b4b4ca77a7c382b9512c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

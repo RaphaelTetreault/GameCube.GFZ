@@ -34,6 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="GameCube.GFZ.asmdef" />
+    <None Remove="GameCube.GFZ.asmdef.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
     <ProjectReference Include="..\..\..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />

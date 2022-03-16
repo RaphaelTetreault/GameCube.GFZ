@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="GameCube.GFZ.LZ.asmdef" />
+    <None Remove="GameCube.GFZ.LZ.asmdef.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
   </ItemGroup>
 

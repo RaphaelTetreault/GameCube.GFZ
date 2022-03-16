@@ -1,0 +1,19 @@
+{
+    "name": "GameCube.GFZ.Cheats",
+    "rootNamespace": "GameCube.GFZ.Cheats",
+    "references": [
+        "GUID:ee2ebd8a9ca5c4a4f896a38ce64ca0dd",
+        "GUID:d1cbd686be6267941ac177c4588fdab9",
+        "GUID:f1bb3b9088c546b46bbe048191ae40eb",
+        "GUID:1ec25e8a214ccbb48b100892bce825d3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
