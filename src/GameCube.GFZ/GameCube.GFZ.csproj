@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
-    <ProjectReference Include="..\..\..\GxUtils\GxUtils\LibGxFormat\LibGxFormat.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />

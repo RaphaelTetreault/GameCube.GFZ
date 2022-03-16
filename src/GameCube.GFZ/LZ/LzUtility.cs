@@ -1,5 +1,5 @@
-﻿using LibGxFormat;
-using LibGxFormat.Lz;
+﻿using GameCube.AmusementVision;
+using GameCube.AmusementVision.LZ;
 using System.Collections.Generic;
 using System.IO;
 
