@@ -13,6 +13,8 @@ namespace GameCube.GFZ.GMA
         IHasReference,
         IBinaryFileType
     {
+        public const Endianness endianness = Endianness.BigEndian;
+
         // FIELDS
         private int modelsCount;
         private Offset modelBasePtrOffset;
@@ -23,7 +25,7 @@ namespace GameCube.GFZ.GMA
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public Endianness Endianness => Endianness.BigEndian;
+        public Endianness Endianness => endianness;
         public string FileExtension => ".gma";
         public string FileName { get; set; }
         public int ModelsCount { get => modelsCount; set => modelsCount = value; }

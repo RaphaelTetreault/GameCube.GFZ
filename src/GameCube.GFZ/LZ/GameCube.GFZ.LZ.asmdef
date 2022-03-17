@@ -2,7 +2,8 @@
     "name": "GameCube.GFZ.LZ",
     "rootNamespace": "GameCube.GFZ.LZ",
     "references": [
-        "GUID:778bce0d54a0b4b4ca77a7c382b9512c"
+        "GUID:3e78d913fbb481e44a3f618e5c6ea0ce",
+        "GUID:5696f77a2eb59c74692b52fe6dfee505"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

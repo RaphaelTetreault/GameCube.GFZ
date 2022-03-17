@@ -23,6 +23,7 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // CONSTANTS
+        public const Endianness endianness = Endianness.BigEndian;
         public const int kSizeOfZeroes0x20 = 0x14; // 20
         public const int kSizeOfZeroes0x28 = 0x20; // 32
         public const int kSizeOfZeroes0xD8 = 0x10; // 16
@@ -101,7 +102,7 @@ namespace GameCube.GFZ.Stage
         /// </summary>
         public string CourseName { get; set; }
 
-        public Endianness Endianness => Endianness.BigEndian;
+        public Endianness Endianness => endianness;
 
         /// <summary>
         /// The file extension for Scene (COLI_COURSE##). There is none.
