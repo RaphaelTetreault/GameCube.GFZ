@@ -40,7 +40,7 @@ namespace GameCube.GFZ.Stage
         // REFERENCE FIELDS
         private AnimationCurveTRS animationCurveTRS;
         private TrackCorner trackCorner;
-        private TrackSegment[] children;
+        private TrackSegment[] children = new TrackSegment[0];
 
 
         // PROPERTIES

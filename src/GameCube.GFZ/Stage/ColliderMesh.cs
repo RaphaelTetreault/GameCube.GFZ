@@ -31,19 +31,25 @@ namespace GameCube.GFZ.Stage
         private uint unk_0x08;
         private uint unk_0x0C;
         private uint unk_0x10;
-        private ArrayPointer2D collisionArrayPtr2D;
+        private ArrayPointer2D collisionArrayPtr2D = new ArrayPointer2D(kTotalIndices);
         // REFERENCE FIELDS
         private ColliderTriangle[] tris;
         private ColliderQuad[] quads;
 
 
+        private void HotFix()
+        {
+            if (collisionArrayPtr2D.Length != kTotalIndices)
+                collisionArrayPtr2D = new ArrayPointer2D(kTotalIndices);
+        }
+
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public ArrayPointer2D CollisionArrayPtr2D { get => collisionArrayPtr2D; set => collisionArrayPtr2D = value; }
         public ColliderTriangle[] Tris { get => tris; set => tris = value; }
-        public ArrayPointer TrisPtr { get => collisionArrayPtr2D[kTriIndex]; set => collisionArrayPtr2D[kTriIndex] = value; }
+        public ArrayPointer TrisPtr { get { HotFix(); return collisionArrayPtr2D[kTriIndex]; } set => collisionArrayPtr2D[kTriIndex] = value; }
         public ColliderQuad[] Quads { get => quads; set => quads = value; }
-        public ArrayPointer QuadsPtr { get => collisionArrayPtr2D[kQuadIndex]; set => collisionArrayPtr2D[kQuadIndex] = value; }
+        public ArrayPointer QuadsPtr { get { HotFix(); return collisionArrayPtr2D[kQuadIndex]; } set => collisionArrayPtr2D[kQuadIndex] = value; }
         public uint Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
         public uint Unk_0x04 { get => unk_0x04; set => unk_0x04 = value; }
         public uint Unk_0x08 { get => unk_0x08; set => unk_0x08 = value; }
@@ -123,6 +129,7 @@ namespace GameCube.GFZ.Stage
         public void Serialize(EndianBinaryWriter writer)
         {
             {
+                Assert.IsTrue(collisionArrayPtr2D.Length == kTotalIndices);
                 //
                 TrisPtr = tris.GetArrayPointer();
                 QuadsPtr = quads.GetArrayPointer();

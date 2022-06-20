@@ -621,9 +621,9 @@ namespace GameCube.GFZ.Stage
                     int gameObjectIndex = 0;
                     foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
                     {
-                        if (dynamicSceneObject.SceneObject.ColliderMesh == null)
-                            continue;
-                        if (dynamicSceneObject.SceneObject.ColliderMesh.Tris.Length == 0)
+                        if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
+                            dynamicSceneObject.SceneObject.ColliderMesh.Tris is null ||
+                            dynamicSceneObject.SceneObject.ColliderMesh.Tris.Length == 0)
                             continue;
 
                         int triIndex = 0;
@@ -716,9 +716,9 @@ namespace GameCube.GFZ.Stage
                     int gameObjectIndex = 0;
                     foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
                     {
-                        if (dynamicSceneObject.SceneObject.ColliderMesh == null)
-                            continue;
-                        if (dynamicSceneObject.SceneObject.ColliderMesh.Quads.Length == 0)
+                        if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
+                            dynamicSceneObject.SceneObject.ColliderMesh.Quads is null ||
+                            dynamicSceneObject.SceneObject.ColliderMesh.Quads.Length == 0)
                             continue;
 
                         int quadIndex = 0;

@@ -5,8 +5,7 @@
     /// </summary>
     public enum SerializeFormat
     {
-        InvalidFormat,
-        AX,
-        GX,
+        AX = 2,
+        GX = 1,
     }
 }

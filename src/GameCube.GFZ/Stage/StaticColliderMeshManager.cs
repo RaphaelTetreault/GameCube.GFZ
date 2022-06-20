@@ -93,7 +93,7 @@ namespace GameCube.GFZ.Stage
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
-        public SerializeFormat SerializeFormat { get; set; } = SerializeFormat.InvalidFormat;
+        public SerializeFormat SerializeFormat { get; set; } = 0;
         public int SurfaceCount
         {
             get
@@ -106,11 +106,8 @@ namespace GameCube.GFZ.Stage
                     case SerializeFormat.GX:
                         return kCountGxSurfaceTypes;
 
-                    case SerializeFormat.InvalidFormat:
-                        throw new ArgumentException("Invalid serialization format!");
-
                     default:
-                        throw new NotImplementedException();
+                        throw new ArgumentException($"Invalid serialization format '{SerializeFormat}'.");
                 }
             }
         }
@@ -201,8 +198,8 @@ namespace GameCube.GFZ.Stage
                 int numQuadVerts = 0;
                 for (int i = 0; i < countSurfaceTypes; i++)
                 {
-                    numTriVerts = math.max(triMeshGrids[i].LargestIndex, numTriVerts);
-                    numQuadVerts = math.max(quadMeshGrids[i].LargestIndex, numQuadVerts);
+                    numTriVerts = math.max(triMeshGrids[i].IndexesLength, numTriVerts);
+                    numQuadVerts = math.max(quadMeshGrids[i].IndexesLength, numQuadVerts);
                 }
 
                 reader.JumpToAddress(staticColliderTrisPtr);

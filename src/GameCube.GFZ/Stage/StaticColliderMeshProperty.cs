@@ -26,7 +26,7 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a dash plate.
         /// </summary>
-        boost, // TODO: rename as dash. Will break scene gen based on name.
+        dash,
 
         /// <summary>
         /// Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a jump plate.

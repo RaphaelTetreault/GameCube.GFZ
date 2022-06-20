@@ -335,7 +335,7 @@ namespace GameCube.GFZ.Stage
 
             // UNMANGLE SHARED REFERENCES
             {
-                /*/
+                /*
                     Problem
                     
                     Due to how the scene data is configured, there are a few data types which share
@@ -351,7 +351,7 @@ namespace GameCube.GFZ.Stage
                     address of the data. If we come across another structure that has the same pointer as
                     a previous structure, we can assign the same reference to it. This relinks shared data
                     types in memory here in C# land.
-                /*/
+                */
 
                 // Keep a dictionary of each shared reference type
                 var sceneObjectsDict = new Dictionary<Pointer, SceneObject>();
@@ -410,18 +410,18 @@ namespace GameCube.GFZ.Stage
 
             // DESERIALIZE TRACK SEGMENTS
             {
-                /*/
-                Unlike any other data type in the scene structure, TrackSegments are referenced
-                by many other instances. A single track can have about a dozen track segments
-                total, with perhaps a single root segment, referenced by hundreds TrackNodes.
-                If we were to let each TrackNode deserialize it's own recursive tree, it would
-                take quite a long time for redundant data.
+                /*
+                    Unlike any other data type in the scene structure, TrackSegments are referenced
+                    by many other instances. A single track can have about a dozen track segments
+                    total, with perhaps a single root segment, referenced by hundreds TrackNodes.
+                    If we were to let each TrackNode deserialize it's own recursive tree, it would
+                    take quite a long time for redundant data.
 
-                The approach taken here is to not let the data type itself deserialize the
-                TrackSegment. Instead, it deserializes the pointers only. We can then, after
-                deserializing all TrackNodes, find all unique instances and recursively
-                deserialize them only once, sharing the C# reference afterwards.
-                /*/
+                    The approach taken here is to not let the data type itself deserialize the
+                    TrackSegment. Instead, it deserializes the pointers only. We can then, after
+                    deserializing all TrackNodes, find all unique instances and recursively
+                    deserialize them only once, sharing the C# reference afterwards.
+                */
 
                 // ROOT TRACK SEGMENTS
                 // These root segments are the ones pointed at by all nodes.
@@ -461,7 +461,7 @@ namespace GameCube.GFZ.Stage
 
                 // 0x24
                 // Resulting pointer should be 0xF8 or 0xFC for AX or GX, respectively.
-                writer.Write(trackMinHeight);
+                writer.Write<IBinarySerializable>(trackMinHeight);
                 TrackMinHeightPtr = trackMinHeight.GetPointer();
 
                 // The pointers written by the last 2 calls should create a valid AX or GX file header.
@@ -499,7 +499,7 @@ namespace GameCube.GFZ.Stage
                 writer.InlineDesc(SerializeVerbose, 0x90 + offset, trackLength);
                 writer.CommentLineWide("Length:", trackLength.Value.ToString("0.00"), SerializeVerbose);
                 writer.CommentNewLine(SerializeVerbose, '-');
-                writer.Write(trackLength);
+                writer.Write<IBinarySerializable>(trackLength);
 
                 // The actual track data
                 {
@@ -641,7 +641,7 @@ namespace GameCube.GFZ.Stage
             writer.CommentNewLine(SerializeVerbose, '-');
             foreach (var sceneObjectName in SceneObjectNames)
             {
-                writer.Write(sceneObjectName);
+                writer.Write<IBinarySerializable>(sceneObjectName);
                 //writer.AlignTo(4);
             }
 
@@ -1157,7 +1157,7 @@ namespace GameCube.GFZ.Stage
                 // Refresh metadata
                 IsFileAX = Format == SerializeFormat.AX;
                 IsFileGX = Format == SerializeFormat.GX;
-                Assert.IsFalse(Format == SerializeFormat.InvalidFormat);
+                Assert.IsTrue(Format == SerializeFormat.AX || Format == SerializeFormat.GX);
 
                 // UPDATE POINTERS AND COUNTS
                 // Track and stage data
