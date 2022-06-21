@@ -111,7 +111,7 @@ namespace GameCube.GFZ.Stage
             // Write the main structure on one line
             builder.AppendLineIndented(indent, indentLevel, PrintSingleLine());
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, animationCurve);
+            builder.AppendMultiLineIndented(indent, indentLevel, animationCurve);
         }
 
     }

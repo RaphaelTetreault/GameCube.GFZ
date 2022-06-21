@@ -298,21 +298,21 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(ColliderQuads)}[{ColliderQuads.Length}]");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(StaticSceneObjects)}[{StaticSceneObjects.Length}]");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(UnknownColliders)}[{UnknownColliders.Length}]");
-            builder.AppendLineIndented(indent, indentLevel, meshGridXZ);
-            builder.AppendLineIndented(indent, indentLevel, boundingSphere);
+            builder.AppendMultiLineIndented(indent, indentLevel, meshGridXZ);
+            builder.AppendMultiLineIndented(indent, indentLevel, boundingSphere);
 
             int index = 0;
             foreach (var triMeshGrid in triMeshGrids)
             {
-                builder.AppendLineIndented(indent, indentLevel, $"[{index++}] {nameof(TriMeshGrids)}");
-                builder.AppendLineIndented(indent, indentLevel, triMeshGrid);
+                builder.AppendLineIndented(indent, indentLevel, $"[{index++,2}] {nameof(TriMeshGrids)}");
+                builder.AppendMultiLineIndented(indent, indentLevel, triMeshGrid);
             }
 
             index = 0;
             foreach (var quadMeshGrid in quadMeshGrids)
             {
-                builder.AppendLineIndented(indent, indentLevel, $"[{index++}] {nameof(quadMeshGrid)}");
-                builder.AppendLineIndented(indent, indentLevel, quadMeshGrid);
+                builder.AppendLineIndented(indent, indentLevel, $"[{index++,2}] {nameof(QuadMeshGrids)}");
+                builder.AppendMultiLineIndented(indent, indentLevel, quadMeshGrid);
             }
         }
 

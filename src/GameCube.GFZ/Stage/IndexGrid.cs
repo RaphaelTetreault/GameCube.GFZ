@@ -183,16 +183,19 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(SubdivisionsZ)}: {SubdivisionsZ}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Count)}: {Count}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(LargestIndex)}: {LargestIndex}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(indexLists)}[{Count}]");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(IndexLists)}[{Count}]");
             indentLevel++;
+
             int index = 0;
             foreach (var indexList in indexLists)
             {
                 // Write a little header with an [index] marker
-                builder.AppendLineIndented(indent, indentLevel, $"[{index}] {indexList.PrintSingleLine()}");
-                // Write all the values from the index list
-                builder.AppendLineIndented(indent, indentLevel+1, indexList);
-                index++;
+                builder.AppendRepeat(indent, indentLevel);
+                builder.Append($"[{index++, 3}] {indexList.PrintSingleLine()}\t");
+                // Write all the values from the index list consecutively
+                foreach (var value in indexList.Indexes)
+                    builder.Append($" {value, 5},");
+                builder.AppendLine();
             }
         }
 

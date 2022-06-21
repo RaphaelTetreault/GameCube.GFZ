@@ -436,6 +436,7 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Interpolation)}: {Interpolation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(FogRange)}: {FogRange}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(ColorRGB)}(r:{ColorRGB.x}, g:{ColorRGB.y}, b:{ColorRGB.z})");
+            indentLevel--;
         }
 
         public string PrintSingleLine()

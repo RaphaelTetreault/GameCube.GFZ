@@ -71,17 +71,20 @@ namespace GameCube.GFZ.Stage
 
         public string PrintSingleLine()
         {
-            // Prints all values on single line, limits float precision
-            return
-                $"{nameof(KeyableAttribute)}" +
-                $"({nameof(EaseMode)}: {EaseMode}," +
-                $" {nameof(Time)}: {Time:0.###}," +
-                $" {nameof(Value)}: {Value:0.###}," +
-                $" {nameof(TangentIn)}: {TangentIn:0.##}," +
-                $" {nameof(TangentOut)}: {TangentOut:0.##})";
+            return $"{nameof(KeyableAttribute)}({PrintKeyableCondensed()})";
         }
 
         public override string ToString() => PrintSingleLine();
 
+        public string PrintKeyableCondensed()
+        {
+            // Prints all values on single line, limits float precision
+            return
+                $"{nameof(EaseMode)}: {EaseMode}, " +
+                $"{nameof(Time)}: {Time,6:##0.000}, " +
+                $"{nameof(Value)}: {Value,8:####0.000}, " +
+                $"{nameof(TangentIn)}: {TangentIn,8:####0.000}, " +
+                $"{nameof(TangentOut)}: {TangentOut,8:####0.000}";
+        }
     }
 }

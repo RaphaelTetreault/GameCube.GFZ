@@ -110,14 +110,17 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"Has {nameof(ColliderMesh)}: {ColliderMesh is not null}");
             if (colliderMesh is not null)
             {
-                builder.AppendLineIndented(indent, indentLevel, ColliderMesh);
+                builder.AppendMultiLineIndented(indent, indentLevel, ColliderMesh);
             }
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(LODs)}[{LODs.Length}]");
             indentLevel++;
             int index = 0;
             foreach (var lod in LODs)
             {
-                builder.AppendLineIndented(indent, indentLevel, $"[{index}] {lod.Name}, {lod.LodDistance}");
+                builder.AppendLineIndented(indent, indentLevel,
+                    $"[{index}]\t" +
+                    $"{nameof(lod.Name)}: {lod.Name}, " +
+                    $"{nameof(lod.LodDistance)}: {lod.LodDistance}");
             }
         }
 

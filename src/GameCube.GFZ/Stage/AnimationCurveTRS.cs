@@ -128,24 +128,15 @@ namespace GameCube.GFZ.Stage
         {
             builder.AppendLineIndented(indent, indentLevel, nameof(AnimationCurveTRS));
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, nameof(PositionX));
-            builder.AppendLineIndented(indent, indentLevel + 1, PositionX);
-            builder.AppendLineIndented(indent, indentLevel, nameof(PositionY));
-            builder.AppendLineIndented(indent, indentLevel + 1, PositionY);
-            builder.AppendLineIndented(indent, indentLevel, nameof(PositionZ));
-            builder.AppendLineIndented(indent, indentLevel + 1, PositionZ);
-            builder.AppendLineIndented(indent, indentLevel, nameof(RotationX));
-            builder.AppendLineIndented(indent, indentLevel + 1, RotationX);
-            builder.AppendLineIndented(indent, indentLevel, nameof(RotationY));
-            builder.AppendLineIndented(indent, indentLevel + 1, RotationY);
-            builder.AppendLineIndented(indent, indentLevel, nameof(RotationZ));
-            builder.AppendLineIndented(indent, indentLevel + 1, RotationZ);
-            builder.AppendLineIndented(indent, indentLevel, nameof(ScaleX));
-            builder.AppendLineIndented(indent, indentLevel + 1, ScaleX);
-            builder.AppendLineIndented(indent, indentLevel, nameof(ScaleZ));
-            builder.AppendLineIndented(indent, indentLevel + 1, ScaleZ);
-            builder.AppendLineIndented(indent, indentLevel, nameof(ScaleZ));
-            builder.AppendLineIndented(indent, indentLevel + 1, ScaleZ);
+            WriteKeyables(builder, PositionX, nameof(PositionX), indentLevel, indent);
+            WriteKeyables(builder, PositionY, nameof(PositionY), indentLevel, indent);
+            WriteKeyables(builder, PositionZ, nameof(PositionZ), indentLevel, indent);
+            WriteKeyables(builder, RotationX, nameof(RotationX), indentLevel, indent);
+            WriteKeyables(builder, RotationY, nameof(RotationY), indentLevel, indent);
+            WriteKeyables(builder, RotationZ, nameof(RotationZ), indentLevel, indent);
+            WriteKeyables(builder, ScaleX, nameof(ScaleX), indentLevel, indent);
+            WriteKeyables(builder, ScaleY, nameof(ScaleY), indentLevel, indent);
+            WriteKeyables(builder, ScaleZ, nameof(ScaleZ), indentLevel, indent);
         }
 
         public string PrintSingleLine()
@@ -155,5 +146,15 @@ namespace GameCube.GFZ.Stage
 
         public override string ToString() => PrintSingleLine();
 
+        private void WriteKeyables(System.Text.StringBuilder builder, AnimationCurve curve, string heading, int indentLevel = 0, string indent = "\t")
+        {
+            builder.AppendLineIndented(indent, indentLevel, $"{heading}[{curve.Length}]");
+            int index = 0;
+            foreach (var keyableAttribute in curve.KeyableAttributes)
+            {
+                var keyableInfoCondensed = $"[{index,3}] {keyableAttribute.PrintKeyableCondensed()}";
+                builder.AppendLineIndented(indent, indentLevel + 1, keyableInfoCondensed);
+            }
+        }
     }
 }

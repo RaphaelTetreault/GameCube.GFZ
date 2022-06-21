@@ -139,7 +139,7 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroup)}: {BoulderGroup}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Difficulty)}: {Difficulty}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Story2BoulderScale)}: {Story2BoulderScale}");
-            builder.AppendLineIndented(indent, indentLevel, StoryObjectPath);
+            builder.AppendMultiLineIndented(indent, indentLevel, StoryObjectPath);
         }
 
         public string PrintSingleLine()

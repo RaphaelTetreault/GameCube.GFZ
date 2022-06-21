@@ -148,7 +148,8 @@ namespace GameCube.GFZ.Stage
 
                 var prefix = $"{labels[i]} [{i:00}/{curves.Length}]";
                 builder.AppendLineIndented(indent, indentLevel, prefix);
-                builder.AppendLineIndented(indent, indentLevel + 1, animClipCurve);
+                builder.AppendLineIndented(indent, indentLevel + 1, animClipCurve.PrintSingleLine());
+                builder.AppendMultiLineIndented(indent, indentLevel + 1, animClipCurve.AnimationCurve);
             }
         }
 

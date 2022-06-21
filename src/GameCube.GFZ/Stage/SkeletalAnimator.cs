@@ -74,7 +74,7 @@ namespace GameCube.GFZ.Stage
         {
             builder.AppendLineIndented(indent, indentLevel, PrintSingleLine());
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, properties);
+            builder.AppendMultiLineIndented(indent, indentLevel, properties);
         }
 
         public string PrintSingleLine()

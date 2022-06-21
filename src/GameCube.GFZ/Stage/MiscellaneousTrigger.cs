@@ -64,7 +64,7 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, nameof(MiscellaneousTrigger));
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(metadataType)}: {metadataType}");
-            builder.AppendLineIndented(indent, indentLevel, transform);
+            builder.AppendMultiLineIndented(indent, indentLevel, transform);
         }
 
         public string PrintSingleLine()

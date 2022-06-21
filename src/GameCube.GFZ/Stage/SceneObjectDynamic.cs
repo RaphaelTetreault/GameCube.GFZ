@@ -158,12 +158,12 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Name)}: {Name}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Unk0x00)}: {Unk0x00}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Unk0x04)}: {Unk0x04}");
-            builder.AppendLineIndented(indent, indentLevel, transformTRXS);
-            builder.AppendLineIndented(indent, indentLevel, sceneObject);
-            builder.AppendLineIndented(indent, indentLevel, animationClip);
-            builder.AppendLineIndented(indent, indentLevel, textureScroll);
-            builder.AppendLineIndented(indent, indentLevel, skeletalAnimator);
-            builder.AppendLineIndented(indent, indentLevel, transformMatrix3x4);
+            builder.AppendMultiLineIndented(indent, indentLevel, transformTRXS);
+            builder.AppendMultiLineIndented(indent, indentLevel, sceneObject);
+            builder.AppendMultiLineIndented(indent, indentLevel, animationClip);
+            builder.AppendMultiLineIndented(indent, indentLevel, textureScroll);
+            builder.AppendMultiLineIndented(indent, indentLevel, skeletalAnimator);
+            builder.AppendMultiLineIndented(indent, indentLevel, transformMatrix3x4);
         }
 
         public string PrintSingleLine()

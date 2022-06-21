@@ -57,7 +57,7 @@ namespace GameCube.GFZ.Stage
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Animation)}: {Animation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(VisualEffect)}: {VisualEffect}");
-            builder.AppendLineIndented(indent, indentLevel, Transform);
+            builder.AppendMultiLineIndented(indent, indentLevel, Transform);
         }
 
         public string PrintSingleLine()

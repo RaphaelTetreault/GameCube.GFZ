@@ -103,17 +103,16 @@ namespace GameCube.GFZ.Stage
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {
             int lengthKeyables = keyableAttributes.Length;
-            var stringBuilder = new System.Text.StringBuilder();
 
             // Print overview of the animation curve
-            stringBuilder.AppendLineIndented(indent, indentLevel, PrintSingleLine());
+            builder.AppendLineIndented(indent, indentLevel, PrintSingleLine());
             indentLevel++;
             // Then print each keyable (single line) on their own line
             for (int i = 0; i < lengthKeyables; i++)
             {
                 var keyable = keyableAttributes[i];
-                var keyableText = keyable.PrintSingleLine();
-                stringBuilder.AppendLineIndented(indent, indentLevel, $"[{i}]\t {keyableText}");
+                var keyableText = keyable.PrintKeyableCondensed();
+                builder.AppendLineIndented(indent, indentLevel, $"[{i}]\t {keyableText}");
             }
         }
     }

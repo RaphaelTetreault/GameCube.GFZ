@@ -46,6 +46,7 @@ namespace GameCube.GFZ.Stage
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public int Depth { get; set; }
+        public string OrderIndentifier { get; set; } = string.Empty;
         public bool IsRoot { get; set; }
         public TrackSegment Parent { get; set; }
         public TrackSegmentType SegmentType { get => segmentType; set => segmentType = value; }
@@ -114,8 +115,9 @@ namespace GameCube.GFZ.Stage
 
                 // We are a root segment if out depth is 0
                 IsRoot = Depth == 0;
+                OrderIndentifier = "Root";
 
-                DeserializeChildrenRecursively(reader);
+                DeserializeChildrenRecursively(reader, Depth);
             }
             this.SetReaderToEndAddress(reader);
         }
@@ -126,7 +128,7 @@ namespace GameCube.GFZ.Stage
         /// </summary>
         /// <param name="reader">The reader to deserialize children from. Must be same used to deserialize this instance.</param>
         /// <returns>All children of this instance. Result can be of size 0. Result will not be null.</returns>
-        private void DeserializeChildrenRecursively(EndianBinaryReader reader, int depth = 0)
+        private void DeserializeChildrenRecursively(EndianBinaryReader reader, int depth)
         {
             var children = new TrackSegment[0];
             if (childrenPtr.IsNotNull)
@@ -138,11 +140,13 @@ namespace GameCube.GFZ.Stage
 
             this.children = children;
 
+            int childIndex = 0;
             foreach (var child in children)
             {
                 child.Parent = this;
                 child.Depth = depth + 1;
-                child.DeserializeChildrenRecursively(reader);
+                child.OrderIndentifier = $"{OrderIndentifier}.{childIndex++}";
+                child.DeserializeChildrenRecursively(reader, child.Depth);
             }
         }
 
@@ -292,8 +296,11 @@ namespace GameCube.GFZ.Stage
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {         
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(TrackSegment)} ({nameof(Depth)}: {Depth})");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(TrackSegment)} [{OrderIndentifier}]");
             indentLevel++;
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Depth)}: {Depth}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(OrderIndentifier)}: {OrderIndentifier}");
+
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(segmentType)}: {segmentType}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(embeddedPropertyType)}: {embeddedPropertyType}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(perimeterFlags)}: {perimeterFlags}");
@@ -319,7 +326,7 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(railHeightLeft)}: {railHeightLeft}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(branchIndex)}: {branchIndex}");
             //
-            builder.AppendLineIndented(indent, indentLevel, TrackCorner);
+            builder.AppendMultiLineIndented(indent, indentLevel, TrackCorner);
         }
 
         public string PrintSingleLine()

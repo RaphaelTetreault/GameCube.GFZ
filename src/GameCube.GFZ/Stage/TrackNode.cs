@@ -87,12 +87,15 @@ namespace GameCube.GFZ.Stage
 
         public string PrintSingleLine()
         {
-            return $"{nameof(TrackNode)}({Checkpoints}[{checkpoints.Length}])";
+            return $"{nameof(TrackNode)}({nameof(Checkpoints)}[{checkpoints.Length}])";
         }
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {
             builder.AppendLineIndented(indent, indentLevel, PrintSingleLine());
+            //builder.AppendRepeat(indent, indentLevel);
+            //builder.Append(PrintSingleLine());
+            //builder.AppendLine();
         }
 
         public override string ToString() => PrintSingleLine();
