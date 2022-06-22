@@ -12,6 +12,7 @@ namespace GameCube.GFZ.Stage
         public static readonly string tsvGeneralData = $"General Data.tsv";
         public static readonly string tsvTrackKeyablesAll = $"Track Keyables All.tsv";
         public static readonly string tsvTrackSegment = $"{nameof(TrackSegment)}.tsv";
+        //public static readonly string tsvTrackSegmentCurves = $"{nameof(TrackSegment)}-{nameof(AnimationCurveTRS)}.tsv";
         public static readonly string tsvSurfaceAttributeArea = $"{nameof(EmbeddedTrackPropertyArea)}.tsv";
         public static readonly string tsvTrackNode = $"{nameof(TrackNode)}.tsv";
         public static readonly string tsvSceneObject = $"{nameof(SceneObject)}.tsv";
@@ -186,6 +187,17 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Root Index");
                 writer.WriteNextCol("Transform Depth");
                 writer.WriteNextCol("Address");
+                //
+                writer.WriteNextCol("PosX");
+                writer.WriteNextCol("PosY");
+                writer.WriteNextCol("PosZ");
+                writer.WriteNextCol("RotX");
+                writer.WriteNextCol("RotY");
+                writer.WriteNextCol("RotZ");
+                writer.WriteNextCol("SclX");
+                writer.WriteNextCol("SclY");
+                writer.WriteNextCol("SclZ");
+                //
                 writer.WriteNextCol(nameof(TrackSegment.SegmentType));
                 writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
                 writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
@@ -250,6 +262,17 @@ namespace GameCube.GFZ.Stage
             writer.WriteNextCol($"[{index}/{total}]");
             writer.WriteNextCol($"{depth}");
             writer.WriteNextCol(trackTransform.AddressRange.PrintStartAddress());
+            //
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionX.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionY.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionZ.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationX.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationY.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationZ.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleX.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleY.Length);
+            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleZ.Length);
+            //
             writer.WriteNextCol(trackTransform.SegmentType);
             writer.WriteNextCol(trackTransform.EmbeddedPropertyType);
             writer.WriteNextCol(trackTransform.PerimeterFlags);

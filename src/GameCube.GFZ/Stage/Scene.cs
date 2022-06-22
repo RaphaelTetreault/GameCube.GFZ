@@ -1435,12 +1435,10 @@ namespace GameCube.GFZ.Stage
             builder.AppendRepeat('-', lengthDivider);
             builder.AppendLine();
             builder.AppendLineIndented(indent, indentLevel, $"COLLIDER DATA");
-            {
-                indentLevel++;
-                builder.AppendMultiLineIndented(indent, indentLevel, staticColliderMeshManager);
-                indentLevel--;
-            }
+            indentLevel++;
+            builder.AppendMultiLineIndented(indent, indentLevel + 1, staticColliderMeshManager);
 
+            //
             builder.AppendRepeat('-', lengthDivider);
             builder.AppendLine();
             builder.AppendLineIndented(indent, indentLevel, $"SCENE OBJECTS");

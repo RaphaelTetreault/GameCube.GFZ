@@ -98,6 +98,18 @@ namespace GameCube.GFZ.Stage
             return largestIndex;
         }
 
+        private ushort TotalNonZeroLists()
+        {
+            ushort count = 0;
+            foreach (var indexList in indexLists)
+            {
+                if (indexList.Length > 0)
+                    count++;
+            }
+
+            return count;
+        }
+
         public void Deserialize(EndianBinaryReader reader)
         {
             // Read index arrays
@@ -177,26 +189,33 @@ namespace GameCube.GFZ.Stage
 
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {
+            var countNonZeroLists = TotalNonZeroLists();
+
             builder.AppendLineIndented(indent, indentLevel, GetType().Name);
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(SubdivisionsX)}: {SubdivisionsX}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(SubdivisionsZ)}: {SubdivisionsZ}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Count)}: {Count}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(LargestIndex)}: {LargestIndex}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(IndexLists)}[{Count}]");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(IndexLists)}[{Count}] (Non-zero index lists: {countNonZeroLists})");
             indentLevel++;
 
-            int index = 0;
-            foreach (var indexList in indexLists)
+            for (int i = 0; i < indexLists.Length; i++)
             {
+                var indexList = indexLists[i];
+                if (indexList.Length == 0)
+                    continue;
+
                 // Write a little header with an [index] marker
                 builder.AppendRepeat(indent, indentLevel);
-                builder.Append($"[{index++, 3}] {indexList.PrintSingleLine()}\t");
+                // Print "IndexList[A][B]", A = 64 or 256 (grid size), B = number of indexes in group
+                builder.Append($"{nameof(IndexList)}[{i}][{indexList.Length}]".PadRight(16) + "\t");
                 // Write all the values from the index list consecutively
                 foreach (var value in indexList.Indexes)
-                    builder.Append($" {value, 5},");
+                    builder.Append($" {value,5},");
                 builder.AppendLine();
             }
+
         }
 
         public string PrintSingleLine()

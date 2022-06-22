@@ -304,7 +304,6 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(segmentType)}: {segmentType}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(embeddedPropertyType)}: {embeddedPropertyType}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(perimeterFlags)}: {perimeterFlags}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(segmentType)}: {segmentType}");
             ////
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(animationCurvesTrsPtr)}: {animationCurvesTrsPtr}");
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(trackCornerPtr)}: {trackCornerPtr}");

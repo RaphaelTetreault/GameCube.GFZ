@@ -24,7 +24,7 @@ namespace GameCube.GFZ.Stage
 
 
         // FIELDS
-        private ArrayPointer2D animationCurvesPtr2D  = new ArrayPointer2D(kCurveCount);
+        private ArrayPointer2D animationCurvesPtr2D = new ArrayPointer2D(kCurveCount);
         // REFERENCE FIELDS
         private AnimationCurve[] animationCurves = new AnimationCurve[0];
 
@@ -39,7 +39,15 @@ namespace GameCube.GFZ.Stage
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public AnimationCurve[] AnimationCurves { get => animationCurves; set => animationCurves = value; }
-        public ArrayPointer2D AnimationCurvesPtr2D { get => animationCurvesPtr2D ; set => animationCurvesPtr2D  = value; }
+        public AnimationCurve[] AnimationCurvesOrderedPRS
+        {
+            get => new AnimationCurve[]{
+                PositionX, PositionY, PositionZ,
+                RotationX, RotationY, RotationZ,
+                ScaleX, ScaleY, ScaleZ,
+            };
+        }
+        public ArrayPointer2D AnimationCurvesPtr2D { get => animationCurvesPtr2D; set => animationCurvesPtr2D = value; }
         public AnimationCurve PositionX { get => AnimationCurves[6]; set => AnimationCurves[6] = value; }
         public AnimationCurve PositionY { get => AnimationCurves[7]; set => AnimationCurves[7] = value; }
         public AnimationCurve PositionZ { get => AnimationCurves[8]; set => AnimationCurves[8] = value; }
@@ -56,7 +64,7 @@ namespace GameCube.GFZ.Stage
         {
             this.RecordStartAddress(reader);
             {
-                animationCurvesPtr2D .Deserialize(reader);
+                animationCurvesPtr2D.Deserialize(reader);
             }
             this.RecordEndAddress(reader);
             {
@@ -65,7 +73,7 @@ namespace GameCube.GFZ.Stage
 
                 for (int i = 0; i < AnimationCurves.Length; i++)
                 {
-                    var arrayPointer = animationCurvesPtr2D .ArrayPointers[i];
+                    var arrayPointer = animationCurvesPtr2D.ArrayPointers[i];
                     if (arrayPointer.IsNotNull)
                     {
                         // Deserialization is done to instance with properties set through constructor.
@@ -96,11 +104,11 @@ namespace GameCube.GFZ.Stage
                 for (int i = 0; i < pointers.Length; i++)
                     pointers[i] = AnimationCurves[i].GetArrayPointer();
 
-                animationCurvesPtr2D  = new ArrayPointer2D(pointers);
+                animationCurvesPtr2D = new ArrayPointer2D(pointers);
             }
             this.RecordStartAddress(writer);
             {
-                writer.Write(animationCurvesPtr2D );
+                writer.Write(animationCurvesPtr2D);
             }
             this.RecordEndAddress(writer);
         }
@@ -152,7 +160,7 @@ namespace GameCube.GFZ.Stage
             int index = 0;
             foreach (var keyableAttribute in curve.KeyableAttributes)
             {
-                var keyableInfoCondensed = $"[{index,3}] {keyableAttribute.PrintKeyableCondensed()}";
+                var keyableInfoCondensed = $"[{index++,3}] {keyableAttribute.PrintKeyableCondensed()}";
                 builder.AppendLineIndented(indent, indentLevel + 1, keyableInfoCondensed);
             }
         }
