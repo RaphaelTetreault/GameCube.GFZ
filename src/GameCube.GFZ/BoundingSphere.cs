@@ -54,7 +54,7 @@ namespace GameCube.GFZ
 
         public string PrintSingleLine()
         {
-            return nameof(BoundingSphere);
+            return $"{nameof(BoundingSphere)}({nameof(origin)}: {origin}, {nameof(radius)}: {radius})";
         }
 
         public override string ToString() => PrintSingleLine();

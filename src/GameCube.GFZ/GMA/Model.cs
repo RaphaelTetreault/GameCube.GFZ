@@ -20,6 +20,13 @@ namespace GameCube.GFZ.GMA
         public ShiftJisCString Name { get => name; set => name = value; }
         public Gcmf Gcmf { get => gcmf; set => gcmf = value; }
 
+        // METADATA
+        /// <summary>
+        /// Indicates the deserialized index from it's original GMA. Useful for
+        /// debug printing model index.
+        /// </summary>
+        public string DebugIndex { get; set; }
+
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
         {

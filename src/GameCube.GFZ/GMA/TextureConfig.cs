@@ -19,11 +19,11 @@ namespace GameCube.GFZ.GMA
         private TexFlags0x06 unk0x06;
         private GXAnisotropy anisotropicFilter;
         private uint zero0x08;
-        private TexFlags0x0C unk0x0C;
+        private byte unk0x0C; // 2022/06/23: all possible values 0-256. 0 is most common (~50%).
         private bool isSwappableTexture; // perhaps a "cache texture" flag
         private ushort configIndex;
-        private TexFlags0x10 unk0x10;
-
+        private ushort zero0x10;
+        private TexFlags0x10 unk0x12;
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
@@ -34,10 +34,11 @@ namespace GameCube.GFZ.GMA
         public TexFlags0x06 Unk0x06 { get => unk0x06; set => unk0x06 = value; }
         public GXAnisotropy AnisotropicFilter { get => anisotropicFilter; set => anisotropicFilter = value; }
         public uint Zero0x08 { get => zero0x08; set => zero0x08 = value; }
-        public TexFlags0x0C Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
+        public byte Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
         public bool IsSwappableTexture { get => isSwappableTexture; set => isSwappableTexture = value; }
         public ushort ConfigIndex { get => configIndex; set => configIndex = value; }
-        public TexFlags0x10 Unk0x10 { get => unk0x10; set => unk0x10 = value; }
+        public ushort Zero0x10 { get => zero0x10; set => zero0x10 = value; }
+        public TexFlags0x10 Unk0x12 { get => unk0x12; set => unk0x12 = value; }
 
 
         // METHODS
@@ -55,11 +56,13 @@ namespace GameCube.GFZ.GMA
                 reader.Read(ref unk0x0C);
                 reader.Read(ref isSwappableTexture);
                 reader.Read(ref configIndex);
-                reader.Read(ref unk0x10);
+                reader.Read(ref zero0x10);
+                reader.Read(ref unk0x12);
             }
             this.RecordEndAddress(reader);
             {
                 Assert.IsTrue(zero0x08 == 0);
+                Assert.IsTrue(zero0x10 == 0);
             }
         }
 
@@ -67,6 +70,7 @@ namespace GameCube.GFZ.GMA
         {
             {
                 Assert.IsTrue(zero0x08 == 0);
+                Assert.IsTrue(zero0x10 == 0);
             }
             this.RecordStartAddress(writer);
             {
@@ -80,7 +84,8 @@ namespace GameCube.GFZ.GMA
                 writer.Write(unk0x0C);
                 writer.Write(isSwappableTexture);
                 writer.Write(configIndex);
-                writer.Write(unk0x10);
+                writer.Write(zero0x10);
+                writer.Write(unk0x12);
             }
             this.RecordEndAddress(writer);
         }

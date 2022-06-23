@@ -4,7 +4,7 @@ namespace GameCube.GFZ.GMA
     /// 
     /// </summary>
     [System.Flags]
-    public enum TexFlags0x10 : uint
+    public enum TexFlags0x10 : ushort
     {
         /// <summary>
         /// 
@@ -45,5 +45,45 @@ namespace GameCube.GFZ.GMA
         /// 
         /// </summary>
         unk7 = 1 << 7,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk8 = 1 << 8,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk9 = 1 << 9,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk10 = 1 << 10,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk11 = 1 << 11,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk12 = 1 << 12,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk13 = 1 << 13,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk14 = 1 << 14,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        unk15 = 1 << 15,
     }
 }

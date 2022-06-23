@@ -27,7 +27,6 @@ namespace GameCube.GFZ.GMA
         public bool IsNull { get => gcmfPtrOffset == -1 && NameRelPtr == 0; }
         public bool IsNotNull { get => !IsNull; }
 
-
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
         {

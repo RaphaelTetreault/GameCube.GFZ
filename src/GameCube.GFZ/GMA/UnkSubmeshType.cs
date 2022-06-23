@@ -14,7 +14,7 @@ namespace GameCube.GFZ.GMA
         // FIELDS
         private float3 origin;
         private uint unk0x0C;
-        private UnkFlags0x10 unk0x10;
+        private UnkFlags0x10 unk0x10; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
 
 
         // PROPERTIES

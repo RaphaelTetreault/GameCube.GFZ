@@ -58,6 +58,7 @@ namespace GameCube.GFZ.GMA
                 {
                     GcmfPtr = modelEntry.GcmfPtr,
                     NamePtr = modelEntry.NamePtr,
+                    DebugIndex = $"[{i}/{ModelsCount}]",
                 };
                 model.Deserialize(reader);
                 modelList.Add(model);
@@ -70,6 +71,7 @@ namespace GameCube.GFZ.GMA
             // Collect all names and GCMF values from Models
             var modelNames = new List<ShiftJisCString>();
             var modelGCMFs = new List<Gcmf>();
+            int index = 0;
             foreach (var model in models)
             {
                 if (model is null)
@@ -77,6 +79,7 @@ namespace GameCube.GFZ.GMA
 
                 modelNames.Add(model.Name);
                 modelGCMFs.Add(model.Gcmf);
+                model.DebugIndex = $"[{index++}/{ModelsCount}]";
             }
 
             // Write GCMFs to a memory stream, collect their pointer

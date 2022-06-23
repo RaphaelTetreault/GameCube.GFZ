@@ -25,9 +25,9 @@ namespace GameCube.GFZ.GMA
         ENABLE_UV_SCROLL = 1 << 1,
 
         /// <summary>
-        /// Unused
+        /// 
         /// </summary>
-        //UNUSED_FLAG_2 = 1 << 2,
+        UNK_FLAG_2 = 1 << 2,
 
         /// <summary>
         /// 7 occurences total. (st21,lz.gma, [75,76,77/130] guide_light*, [1/6])
