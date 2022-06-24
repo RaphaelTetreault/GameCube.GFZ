@@ -161,7 +161,7 @@ namespace GameCube.GFZ.Stage
                 // ASSERTIONS
                 {
                     // Not a needed struct, but existing data is never null.
-                    Assert.IsTrue(BoundingSpherePtr.IsNotNull, $"{BoundingSpherePtr}");
+                    //Assert.IsTrue(BoundingSpherePtr.IsNotNull, $"{nameof(BoundingSphere)} {BoundingSpherePtr}");
 
                     // Assert that all of this other bytes are empty
                     for (int i = 0; i < kZeroesGroup1; i++)
