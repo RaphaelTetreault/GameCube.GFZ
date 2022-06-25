@@ -4,27 +4,30 @@ namespace GameCube.GFZ.GMA
     /// 
     /// </summary>
     [System.Flags]
-    public enum MatFlags0x02 : byte
+    public enum MatFlags0x02 : ushort
     {
         /// <summary>
         /// 
         /// </summary>
-        unk0 = 1 << 0,
+        unlit = 1 << 0,
+
+        /// <summary>
+        /// All faces of the associated display lists render on both sides.
+        /// </summary>
+        /// <remarks>
+        /// Knowledge from GXUtils.
+        /// </remarks>
+        doubleSidedFaces = 1 << 1,
 
         /// <summary>
         /// 
         /// </summary>
-        unk1 = 1 << 1,
+        noFog = 1 << 2,
 
         /// <summary>
         /// 
         /// </summary>
-        unk2 = 1 << 2,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        unk3 = 1 << 3,
+        customMaterialUseAmbientColor = 1 << 3,
 
         /// <summary>
         /// 
@@ -34,16 +37,32 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// 
         /// </summary>
-        unk5 = 1 << 5,
+        customBlendSource = 1 << 5,
 
         /// <summary>
         /// 
         /// </summary>
-        unk6 = 1 << 6,
+        customBlendDestination = 1 << 6,
 
         /// <summary>
         /// 
         /// </summary>
-        unk7 = 1 << 7,
+        simpleMaterial = 1 << 7,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// IIRC not used in GFZ, from SMB decomp.
+        /// </remarks>
+        vertexColors = 1 << 8,
+
+        /// <summary>
+        /// Data at address 0x3C is non-null.
+        /// </summary>
+        /// <remarks>
+        /// 2022-06-24: verified on single occurence.
+        /// </remarks>
+        hasAlphaFlags0x3C = 1 << 9, // 0x0200
     }
 }

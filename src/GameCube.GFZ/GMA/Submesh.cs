@@ -2,7 +2,6 @@
 using Manifold;
 using Manifold.IO;
 using System.Collections.Generic;
-using System.IO;
 
 namespace GameCube.GFZ.GMA
 {
@@ -44,15 +43,15 @@ namespace GameCube.GFZ.GMA
         public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
         public DisplayList[] PrimaryDisplayListsOpaque { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
         public DisplayList[] PrimaryDisplayListsTranslucid { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
-        public bool RenderPrimaryOpaque => material.DisplayListRenderFlags.HasFlag(DisplayListRenderFlags.renderPrimaryOpaque);
-        public bool RenderPrimaryTranslucid => material.DisplayListRenderFlags.HasFlag(DisplayListRenderFlags.renderPrimaryTranslucid);
-        public bool RenderSecondary => RenderSecondaryOpaque || RenderSecondaryTranslucid;
-        public bool RenderSecondaryOpaque => material.DisplayListRenderFlags.HasFlag(DisplayListRenderFlags.renderSecondaryOpaque);
-        public bool RenderSecondaryTranslucid => material.DisplayListRenderFlags.HasFlag(DisplayListRenderFlags.renderSecondaryTranslucid);
+        public bool RenderPrimaryFrontFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.PrimaryFrontCull);
+        public bool RenderPrimaryBackFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.PrimaryBackCull);
+        public bool RenderSecondary => RenderSecondaryFrontFaceCull || RenderSecondaryBackFaceCull;
+        public bool RenderSecondaryFrontFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.SecondaryFrontCull);
+        public bool RenderSecondaryBackFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.SecondaryBackCull);
         public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
         public DisplayList[] SecondaryDisplayListsOpaque { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
         public DisplayList[] SecondaryDisplayListsTranslucid { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
-
+        public UnkSubmeshType Unknown { get => unknown; set => unknown = value; }
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
@@ -78,13 +77,13 @@ namespace GameCube.GFZ.GMA
                     return;
                 }
 
-                if (RenderPrimaryOpaque)
+                if (RenderPrimaryFrontFaceCull)
                 {
                     endAddress += primaryDisplayListDescriptor.OpaqueMaterialSize;
                     primaryDisplayListsOpaque = ReadDisplayLists(reader, endAddress);
                 }
 
-                if (RenderPrimaryTranslucid)
+                if (RenderPrimaryBackFaceCull)
                 {
                     endAddress += primaryDisplayListDescriptor.TranslucidMaterialSize;
                     primaryDisplayListsTranslucid = ReadDisplayLists(reader, endAddress);
@@ -96,13 +95,13 @@ namespace GameCube.GFZ.GMA
                     reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
                     endAddress = new Pointer(reader.BaseStream.Position).address;
 
-                    if (RenderSecondaryOpaque)
+                    if (RenderSecondaryFrontFaceCull)
                     {
                         endAddress += secondaryDisplayListDescriptor.OpaqueMaterialSize;
                         secondaryDisplayListsOpaque = ReadDisplayLists(reader, endAddress);
                     }
 
-                    if (RenderSecondaryTranslucid)
+                    if (RenderSecondaryBackFaceCull)
                     {
                         endAddress += secondaryDisplayListDescriptor.TranslucidMaterialSize;
                         secondaryDisplayListsTranslucid = ReadDisplayLists(reader, endAddress);
@@ -115,11 +114,11 @@ namespace GameCube.GFZ.GMA
         public void Serialize(EndianBinaryWriter writer)
         {
             // Reset the render flags based on instance data
-            material.DisplayListRenderFlags =
-                (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListRenderFlags.renderPrimaryOpaque) |
-                (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListRenderFlags.renderPrimaryTranslucid) |
-                (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListRenderFlags.renderSecondaryOpaque) |
-                (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListRenderFlags.renderSecondaryTranslucid);
+            material.DisplayListFlags =
+                (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListFlags.PrimaryFrontCull) |
+                (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListFlags.PrimaryBackCull) |
+                (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListFlags.SecondaryFrontCull) |
+                (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListFlags.SecondaryBackCull);
 
             // Temp variables to store ranges that display lists are serialized at, used to get size on disk
             var pdlOpaque = new AddressRange();
@@ -134,10 +133,10 @@ namespace GameCube.GFZ.GMA
                 writer.Write(unknown);
                 writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
 
-                if (RenderPrimaryOpaque)
+                if (RenderPrimaryFrontFaceCull)
                     WriteDisplayLists(writer, primaryDisplayListsOpaque, out pdlOpaque);
 
-                if (RenderPrimaryTranslucid)
+                if (RenderPrimaryBackFaceCull)
                     WriteDisplayLists(writer, primaryDisplayListsTranslucid, out pdlTranslucid);
 
 
@@ -146,10 +145,10 @@ namespace GameCube.GFZ.GMA
                     writer.Write(secondaryDisplayListDescriptor);
                     writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
 
-                    if (RenderSecondaryOpaque)
+                    if (RenderSecondaryFrontFaceCull)
                         WriteDisplayLists(writer, secondaryDisplayListsOpaque, out sdlOpaque);
 
-                    if (RenderSecondaryTranslucid)
+                    if (RenderSecondaryBackFaceCull)
                         WriteDisplayLists(writer, secondaryDisplayListsTranslucid, out sdlTranslucid);
                 }
 

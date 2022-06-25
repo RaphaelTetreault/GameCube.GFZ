@@ -3,47 +3,36 @@ namespace GameCube.GFZ.GMA
     /// <summary>
     /// 
     /// </summary>
+    /// <remarks>
+    /// 2019/04/23 - All GFZ values 0, 17, 18, 20, 36, 48
+    /// From SMB decomp: 0xF bitmask for src blend factor, 0xF0 for dst blend factor
+    /// </remarks>
     [System.Flags]
-    public enum MatFlags0x03 : byte
+    public enum BlendFactors : uint
     {
         /// <summary>
         /// 
         /// </summary>
-        unk0 = 1 << 0,
+        unk0 = 1 << 0, // 0x01
 
         /// <summary>
         /// 
         /// </summary>
-        unk1 = 1 << 1,
+        unk1 = 1 << 1, // 0x02
 
         /// <summary>
         /// 
         /// </summary>
-        unk2 = 1 << 2,
+        unk2 = 1 << 2, // 0x04
 
         /// <summary>
         /// 
         /// </summary>
-        unk3 = 1 << 3,
+        unk4 = 1 << 4, // 0x16
 
         /// <summary>
         /// 
         /// </summary>
-        unk4 = 1 << 4,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        unk5 = 1 << 5,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        unk6 = 1 << 6,
-
-        /// <summary>
-        /// 
-        /// </summary>
-        unk7 = 1 << 7,
+        unk5 = 1 << 5, // 0x32
     }
 }

@@ -99,7 +99,7 @@ namespace GameCube.GFZ.GMA
             for (int i = 0; i < modelGCMFs.Count; i++)
             {
                 var name = modelNames[i];
-                nameWriter.Write(name);
+                nameWriter.Write<IBinarySerializable>(name);
                 nameOffsets[i] = name.GetPointer().address;
             }
             nameWriter.SeekBegin();

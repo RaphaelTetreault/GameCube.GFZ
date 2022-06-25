@@ -7,6 +7,9 @@ namespace GameCube.GFZ.GMA
     /// <summary>
     /// Configures how a texcture is meant to be processed by the GameCube GX.
     /// </summary>
+    /// <remarks>
+    /// SMB decomp: GMATevLayer
+    /// </remarks>
     public class TextureConfig :
         IBinaryAddressable,
         IBinarySerializable
@@ -16,9 +19,9 @@ namespace GameCube.GFZ.GMA
         private MipmapSetting mipmapSetting;
         private TextureWrapMode wrapMode;
         private ushort tplTextureIndex;
-        private TexFlags0x06 unk0x06;
+        private sbyte lodBias;
         private GXAnisotropy anisotropicFilter;
-        private uint zero0x08;
+        private uint zero0x08; // GXTexObj*, ei: ptr
         private byte unk0x0C; // 2022/06/23: all possible values 0-256. 0 is most common (~50%).
         private bool isSwappableTexture; // perhaps a "cache texture" flag
         private ushort configIndex;
@@ -31,7 +34,7 @@ namespace GameCube.GFZ.GMA
         public MipmapSetting MipmapSetting { get => mipmapSetting; set => mipmapSetting = value; }
         public TextureWrapMode WrapMode { get => wrapMode; set => wrapMode = value; }
         public ushort TplTextureIndex { get => tplTextureIndex; set => tplTextureIndex = value; }
-        public TexFlags0x06 Unk0x06 { get => unk0x06; set => unk0x06 = value; }
+        public sbyte LodBias { get => lodBias; set => lodBias = value; }
         public GXAnisotropy AnisotropicFilter { get => anisotropicFilter; set => anisotropicFilter = value; }
         public uint Zero0x08 { get => zero0x08; set => zero0x08 = value; }
         public byte Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
@@ -50,7 +53,7 @@ namespace GameCube.GFZ.GMA
                 reader.Read(ref mipmapSetting);
                 reader.Read(ref wrapMode);
                 reader.Read(ref tplTextureIndex);
-                reader.Read(ref unk0x06);
+                reader.Read(ref lodBias);
                 reader.Read(ref anisotropicFilter);
                 reader.Read(ref zero0x08);
                 reader.Read(ref unk0x0C);
@@ -78,7 +81,7 @@ namespace GameCube.GFZ.GMA
                 writer.Write(mipmapSetting);
                 writer.Write(wrapMode);
                 writer.Write(tplTextureIndex);
-                writer.Write(unk0x06);
+                writer.Write(lodBias);
                 writer.Write(anisotropicFilter);
                 writer.Write(zero0x08);
                 writer.Write(unk0x0C);

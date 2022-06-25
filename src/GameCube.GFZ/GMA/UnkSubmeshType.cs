@@ -13,15 +13,15 @@ namespace GameCube.GFZ.GMA
     {
         // FIELDS
         private float3 origin;
-        private uint unk0x0C;
-        private UnkFlags0x10 unk0x10; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
+        private float unk0x0C; // if flags at 0x02 are set with bit 9, value exists. All values: 0f, 1f.
+        private BlendFactors unk0x10; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public float3 Origin { get => origin; set => origin = value; }
-        public uint Unk0x3C { get => unk0x0C; set => unk0x0C = value; }
-        public UnkFlags0x10 Unk0x40 { get => unk0x10; set => unk0x10 = value; }
+        public float Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
+        public BlendFactors Unk0x10 { get => unk0x10; set => unk0x10 = value; }
 
 
         // METHODS

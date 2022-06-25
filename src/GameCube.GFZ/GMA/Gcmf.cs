@@ -29,7 +29,7 @@ namespace GameCube.GFZ.GMA
         private ushort translucidMaterialCount;
         private byte boneCount;
         private byte zero0x1F;
-        private uint gcmfTexturesSize;
+        private Offset submeshOffsetPtr;
         private uint zero0x24;
         private BoneIndexes8 boneIndices;
         private TextureConfig[] textureConfigs = new TextureConfig[0];
@@ -74,7 +74,7 @@ namespace GameCube.GFZ.GMA
         public ushort OpaqueMaterialCount { get => opaqueMaterialCount; set => opaqueMaterialCount = value; }
         public ushort TranslucidMaterialCount { get => translucidMaterialCount; set => translucidMaterialCount = value; }
         public byte BoneCount { get => boneCount; set => boneCount = value; }
-        public uint GcmfTexturesSize { get => gcmfTexturesSize; set => gcmfTexturesSize = value; }
+        public Offset SubmeshOffsetPtr { get => submeshOffsetPtr; set => submeshOffsetPtr = value; }
         public BoneIndexes8 BoneIndices { get => boneIndices; set => boneIndices = value; }
         public TransformMatrix3x4[] Bones { get => bones; set => bones = value; }
         public TextureConfig[] TextureConfigs { get => textureConfigs; set => textureConfigs = value; }
@@ -99,7 +99,7 @@ namespace GameCube.GFZ.GMA
                 reader.Read(ref translucidMaterialCount);
                 reader.Read(ref boneCount);
                 reader.Read(ref zero0x1F);
-                reader.Read(ref gcmfTexturesSize);
+                reader.Read(ref submeshOffsetPtr);
                 reader.Read(ref zero0x24);
                 reader.Read(ref boneIndices);
             }
@@ -112,6 +112,10 @@ namespace GameCube.GFZ.GMA
                 Assert.IsTrue(magic == kMagic);
                 Assert.IsTrue(zero0x1F == 0);
                 Assert.IsTrue(zero0x24 == 0);
+
+                var submeshStart = AddressRange.startAddress + submeshOffsetPtr;
+                if (!Submeshes.IsNullOrEmpty())
+                    Assert.IsTrue(submeshStart == Submeshes[0].AddressRange.startAddress);
             }
             // Deserialize other structures
             {
@@ -192,6 +196,9 @@ namespace GameCube.GFZ.GMA
                         // checked to work (no non-zero data unread from any file) since that first int of
                         // the type (which is the count) must be none zero to declare the array's size.
                         //
+                        // Basically, what we want is to read so long as the 32bit value is not zero but
+                        // also between 0-256 (8-bit non-zero).
+                        //
                         // To do this with a single Peek call, we have to handle the case of 0 correctly.
                         // If we subtract by 1, 0 underflows and becomes an invalid index. To check if a max
                         // index of 255 is valid (which is now 254 due to the -1), we check for less than 255.
@@ -210,9 +217,33 @@ namespace GameCube.GFZ.GMA
 
         public void Serialize(EndianBinaryWriter writer)
         {
+            //
+            Pointer submeshOffsetPtrPatchAddress;
+
             {
+                // Update counts
                 boneCount = (byte)Bones.Length;
-                // TODO: calc gcmf texture size!
+                textureCount = (ushort)textureConfigs.Length;
+
+                //
+                opaqueMaterialCount = 0; // (ushort)submeshes.Length;
+                translucidMaterialCount = 0;
+                for (int i = 0; i < submeshes.Length; i++)
+                {
+                    var submesh = submeshes[i];
+
+                    // Seems to be actually really close!
+                    var isTranslucid =
+                        submesh.Material.Unk0x14 != -1 ||
+                        submesh.Material.Alpha < 255;
+
+                    if (isTranslucid)
+                        translucidMaterialCount++;
+                    else
+                        opaqueMaterialCount++;
+                }
+
+                // See start and end of function for submeshOffsetPtr
             }
             this.RecordStartAddress(writer);
             {
@@ -224,7 +255,8 @@ namespace GameCube.GFZ.GMA
                 writer.Write(translucidMaterialCount);
                 writer.Write(boneCount);
                 writer.Write(zero0x1F);
-                writer.Write(gcmfTexturesSize);
+                submeshOffsetPtrPatchAddress = writer.GetPositionAsPointer();
+                writer.Write(submeshOffsetPtr);
                 writer.Write(zero0x24);
                 writer.Write(boneIndices);
             }
@@ -304,6 +336,18 @@ namespace GameCube.GFZ.GMA
                     writer.JumpToAddress(basePtr);
                     writer.Write(skinnedVertexDescriptor);
                 }
+
+                //
+                if (!submeshes.IsNullOrEmpty())
+                {
+                    var endAddress = writer.GetPositionAsPointer();
+                    submeshOffsetPtr = submeshes[0].AddressRange.startAddress - AddressRange.startAddress;
+                    writer.JumpToAddress(submeshOffsetPtrPatchAddress);
+                    writer.Write(submeshOffsetPtr);
+                    writer.JumpToAddress(endAddress);
+                }
+
+
             }
         }
 

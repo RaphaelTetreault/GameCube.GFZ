@@ -43,7 +43,7 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol(nameof(Gcmf.OpaqueMaterialCount));
                 writer.WriteNextCol(nameof(Gcmf.TranslucidMaterialCount));
                 writer.WriteNextCol(nameof(Gcmf.BoneCount));
-                writer.WriteNextCol(nameof(Gcmf.GcmfTexturesSize));
+                writer.WriteNextCol(nameof(Gcmf.SubmeshOffsetPtr));
                 writer.WriteNextCol(nameof(Gcmf.SkinnedVertexDescriptor));
                 writer.WriteNextCol(nameof(Gcmf.Submeshes));
                 writer.WriteNextCol(nameof(Gcmf.SkinnedVerticesA));
@@ -70,7 +70,7 @@ namespace GameCube.GFZ.GMA
                         writer.WriteNextCol(gcmf.OpaqueMaterialCount);
                         writer.WriteNextCol(gcmf.TranslucidMaterialCount);
                         writer.WriteNextCol(gcmf.BoneCount);
-                        writer.WriteNextCol(gcmf.GcmfTexturesSize);
+                        writer.WriteNextCol(gcmf.SubmeshOffsetPtr);
                         writer.WriteNextCol(gcmf.SkinnedVertexDescriptor is not null);
                         writer.WriteNextCol(gcmf.Submeshes.Length);
                         writer.WriteNextCol(gcmf.SkinnedVerticesA.Length);
@@ -99,7 +99,7 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol(nameof(TextureConfig.MipmapSetting));
                 writer.WriteNextCol(nameof(TextureConfig.WrapMode));
                 writer.WriteNextCol(nameof(TextureConfig.TplTextureIndex));
-                writer.WriteNextCol(nameof(TextureConfig.Unk0x06));
+                writer.WriteNextCol(nameof(TextureConfig.LodBias));
                 writer.WriteNextCol(nameof(TextureConfig.AnisotropicFilter));
                 writer.WriteNextCol(nameof(TextureConfig.Unk0x0C));
                 writer.WriteNextCol(nameof(TextureConfig.IsSwappableTexture));
@@ -125,7 +125,7 @@ namespace GameCube.GFZ.GMA
                             writer.WriteNextCol(textureConfif.MipmapSetting);
                             writer.WriteNextCol(textureConfif.WrapMode);
                             writer.WriteNextCol(textureConfif.TplTextureIndex);
-                            writer.WriteNextCol(textureConfif.Unk0x06);
+                            writer.WriteNextCol(textureConfif.LodBias);
                             writer.WriteNextCol(textureConfif.AnisotropicFilter);
                             writer.WriteNextCol(textureConfif.Unk0x0C);
                             writer.WriteNextCol(textureConfif.IsSwappableTexture);
@@ -152,20 +152,21 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol("Debug Index");
                 writer.WriteNextCol("Material Index");
                 writer.WriteNextCol(nameof(Material.Unk0x02));
-                writer.WriteNextCol(nameof(Material.Unk0x03));
                 writer.WriteNextCol(nameof(Material.MaterialColor));
                 writer.WriteNextCol(nameof(Material.AmbientColor));
                 writer.WriteNextCol(nameof(Material.SpecularColor));
                 writer.WriteNextCol(nameof(Material.Unk0x10));
-                writer.WriteNextCol(nameof(Material.Unk0x11));
+                writer.WriteNextCol(nameof(Material.Alpha));
                 writer.WriteNextCol(nameof(Material.TextureCount));
-                writer.WriteNextCol(nameof(Material.DisplayListRenderFlags));
-                writer.WriteNextCol(nameof(Material.UnkIncrementalIndex));
+                writer.WriteNextCol(nameof(Material.DisplayListFlags));
+                writer.WriteNextCol(nameof(Material.Unk0x14));
                 writer.WriteNextCol(nameof(Material.Unk0x15));
                 writer.WriteNextCol(nameof(Material.TextureIndex0));
                 writer.WriteNextCol(nameof(Material.TextureIndex1));
                 writer.WriteNextCol(nameof(Material.TextureIndex2));
                 writer.WriteNextCol(nameof(Material.VertexAttributes));
+                writer.WriteNextCol(nameof(UnkSubmeshType.Unk0x0C));
+                writer.WriteNextCol(nameof(UnkSubmeshType.Unk0x10));
                 writer.WriteNextRow();
 
                 foreach (var gma in gmas)
@@ -183,20 +184,21 @@ namespace GameCube.GFZ.GMA
                             writer.WriteNextCol(model.DebugIndex);
                             writer.WriteNextCol(submeshIndex++);
                             writer.WriteNextCol(submesh.Material.Unk0x02);
-                            writer.WriteNextCol(submesh.Material.Unk0x03);
                             writer.WriteNextCol(submesh.Material.MaterialColor);
                             writer.WriteNextCol(submesh.Material.AmbientColor);
                             writer.WriteNextCol(submesh.Material.SpecularColor);
                             writer.WriteNextCol(submesh.Material.Unk0x10);
-                            writer.WriteNextCol(submesh.Material.Unk0x11);
+                            writer.WriteNextCol(submesh.Material.Alpha);
                             writer.WriteNextCol(submesh.Material.TextureCount);
-                            writer.WriteNextCol(submesh.Material.DisplayListRenderFlags);
-                            writer.WriteNextCol(submesh.Material.UnkIncrementalIndex);
+                            writer.WriteNextCol(submesh.Material.DisplayListFlags);
+                            writer.WriteNextCol(submesh.Material.Unk0x14);
                             writer.WriteNextCol(submesh.Material.Unk0x15);
                             writer.WriteNextCol(submesh.Material.TextureIndex0);
                             writer.WriteNextCol(submesh.Material.TextureIndex1);
                             writer.WriteNextCol(submesh.Material.TextureIndex2);
                             writer.WriteNextCol(submesh.Material.VertexAttributes);
+                            writer.WriteNextCol(submesh.Unknown.Unk0x0C);
+                            writer.WriteNextCol(submesh.Unknown.Unk0x10);
                             writer.WriteNextRow();
                         }
                         modelIndex++;

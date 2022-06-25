@@ -9,14 +9,19 @@ namespace GameCube.GFZ.GMA
     /// Notes:
     /// Combinations: 4&5 (x1986), 1&3 (x7), 1&4 (x1)
     /// Flags used: 1, 3, 4, 5, 6
+    /// See: https://github.com/camthesaxman/smb-decomp/blob/master/src/gma.h
+    /// Hoowever, looks like the games differ here.
     /// </remarks>
     [Flags]
     public enum TexFlags0x00 : ushort
     {
         /// <summary>
-        /// Unused
+        /// 
         /// </summary>
-        UNUSED_FLAG_0 = 1 << 0,
+        /// <remarks>
+        /// Unused in GFZ, from SMB.
+        /// </remarks>
+        unused0 = 1 << 0,
 
         /// <summary>
         /// Based on st24 models, uv scroll. Scroll values stored in TextureScroll class
@@ -27,31 +32,41 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// 
         /// </summary>
-        UNK_FLAG_2 = 1 << 2,
+        unk2 = 1 << 2,
 
         /// <summary>
         /// 7 occurences total. (st21,lz.gma, [75,76,77/130] guide_light*, [1/6])
         /// </summary>
-        UNK_FLAG_3 = 1 << 3,
+        unk3 = 1 << 3,
 
         /// <summary>
         /// Appears to be used whenever tex is for bg reflections
         /// </summary>
-        UNK_FLAG_4 = 1 << 4,
+        unk4 = 1 << 4,
 
         /// <summary>
         /// ..?
         /// </summary>
-        UNK_FLAG_5 = 1 << 5,
+        unk5 = 1 << 5,
 
         /// <summary>
         /// Appears to be used whenever tex is for bg reflections
         /// </summary>
-        UNK_FLAG_6 = 1 << 6,
+        unk6 = 1 << 6,
 
         /// <summary>
         /// Unused
         /// </summary>
-        //UNUSED_FLAG_7 = 1 << 7,
+        unused7 = 1 << 7,
+
+        // Checking to see if these are used
+        unk8 = 1 << 8,
+        unk9 = 1 << 9,
+        unk10 = 1 << 10,
+        unk11 = 1 << 11,
+        unk12 = 1 << 12,
+        unk13 = 1 << 13,
+        unk14 = 1 << 14,
+        unk15 = 1 << 15,
     }
 }
