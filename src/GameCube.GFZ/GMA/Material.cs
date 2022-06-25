@@ -19,7 +19,7 @@ namespace GameCube.GFZ.GMA
         private GXColor ambientColor = new GXColor(ComponentType.GX_RGBA8);
         private GXColor specularColor = new GXColor(ComponentType.GX_RGBA8);
         private MatFlags0x10 unk0x10;
-        private byte alpha;
+        private byte alpha = 255;
         private byte textureCount; // tev layer count
         private DisplayListFlags displayListFlags;
         private sbyte unkIncrementalIndex = -1; // 0xFF. Mainly -1 (3/4 of data). Index => previous material's index for same model.

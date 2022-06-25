@@ -31,7 +31,7 @@ namespace GameCube.GFZ.GMA
         private byte zero0x1F;
         private Offset submeshOffsetPtr;
         private uint zero0x24;
-        private BoneIndexes8 boneIndices;
+        private BoneIndexes8 boneIndices = new BoneIndexes8();
         private TextureConfig[] textureConfigs = new TextureConfig[0];
         private TransformMatrix3x4[] bones = new TransformMatrix3x4[0];
         private SkinnedVertexDescriptor skinnedVertexDescriptor;

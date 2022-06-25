@@ -4,7 +4,7 @@ using System.IO;
 namespace GameCube.GFZ.GMA
 {
     /// <summary>
-    /// Defines the size of opaque and translucide display lists and (presumably)
+    /// Defines the size of display lists and (presumably)
     /// the matrix indexes associate with it.
     /// </summary>
     /// <remarks>
@@ -15,16 +15,16 @@ namespace GameCube.GFZ.GMA
         IBinarySerializable
     {
         // FIELDS
-        private BoneIndexes8 boneIndices;
-        private int opaqueMaterialDisplayListSize;
-        private int translucidMaterialDisplayListSize;
+        private BoneIndexes8 boneIndices = new BoneIndexes8();
+        private int frontFaceCullingDisplayListSize;
+        private int backtFaceCullingDisplayListSize;
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public int OpaqueMaterialSize { get => opaqueMaterialDisplayListSize; set => opaqueMaterialDisplayListSize = value; }
+        public int FrontFaceCullingDisplayListSize { get => frontFaceCullingDisplayListSize; set => frontFaceCullingDisplayListSize = value; }
         public BoneIndexes8 BoneIndices { get => boneIndices; set => boneIndices = value; }
-        public int TranslucidMaterialSize { get => translucidMaterialDisplayListSize; set => translucidMaterialDisplayListSize = value; }
+        public int BackFaceCullingDisplayListSize { get => backtFaceCullingDisplayListSize; set => backtFaceCullingDisplayListSize = value; }
 
 
         // METHODS
@@ -33,8 +33,8 @@ namespace GameCube.GFZ.GMA
             this.RecordStartAddress(reader);
             {
                 reader.Read(ref boneIndices);
-                reader.Read(ref opaqueMaterialDisplayListSize);
-                reader.Read(ref translucidMaterialDisplayListSize);
+                reader.Read(ref frontFaceCullingDisplayListSize);
+                reader.Read(ref backtFaceCullingDisplayListSize);
             }
             this.RecordEndAddress(reader);
         }
@@ -44,8 +44,8 @@ namespace GameCube.GFZ.GMA
             this.RecordStartAddress(writer);
             {
                 writer.Write(boneIndices);
-                writer.Write(opaqueMaterialDisplayListSize);
-                writer.Write(translucidMaterialDisplayListSize);
+                writer.Write(frontFaceCullingDisplayListSize);
+                writer.Write(backtFaceCullingDisplayListSize);
             }
             this.RecordEndAddress(writer);
         }

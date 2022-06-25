@@ -17,6 +17,13 @@ namespace GameCube.GFZ
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
 
+        public BoundingSphere(float3 origin, float radius)
+        {
+            AddressRange = new AddressRange();
+            this.origin = origin;
+            this.radius = radius;
+        }
+
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
