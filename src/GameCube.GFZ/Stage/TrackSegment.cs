@@ -28,10 +28,8 @@ namespace GameCube.GFZ.Stage
         private float3 localScale;
         private float3 localRotation;
         private float3 localPosition;
-        private byte unk_0x38; // mixed flags
-        private byte unk_0x39; // exclusive flags
-        private byte unk_0x3A; // mixed flags
-        private byte unk_0x3B; // mixed flags
+        private ushort root_unk_0x38; // Combined, might be cull flags
+        private ushort root_unk_0x3A; // Combined, might be cull flags
         private float railHeightRight;
         private float railHeightLeft;
         private uint zero_0x44; // zero confirmed
@@ -59,10 +57,8 @@ namespace GameCube.GFZ.Stage
         public float3 LocalScale { get => localScale; set => localScale = value; }
         public float3 LocalRotation { get => localRotation; set => localRotation = value; }
         public float3 LocalPosition { get => localPosition; set => localPosition = value; }
-        public byte Unk_0x38 { get => unk_0x38; set => unk_0x38 = value; }
-        public byte Unk_0x39 { get => unk_0x39; set => unk_0x39 = value; }
-        public byte Unk_0x3A { get => unk_0x3A; set => unk_0x3A = value; }
-        public byte Unk_0x3B { get => unk_0x3B; set => unk_0x3B = value; }
+        public ushort Root_unk_0x38 { get => root_unk_0x38; set => root_unk_0x38 = value; }
+        public ushort Root_unk_0x3A { get => root_unk_0x3A; set => root_unk_0x3A = value; }
         public float RailHeightRight { get => railHeightRight; set => railHeightRight = value; }
         public float RailHeightLeft { get => railHeightLeft; set => railHeightLeft = value; }
         public int BranchIndex { get => branchIndex; set => branchIndex = value; }
@@ -86,10 +82,8 @@ namespace GameCube.GFZ.Stage
                 reader.Read(ref localScale);
                 reader.Read(ref localRotation);
                 reader.Read(ref localPosition);
-                reader.Read(ref unk_0x38);
-                reader.Read(ref unk_0x39);
-                reader.Read(ref unk_0x3A);
-                reader.Read(ref unk_0x3B);
+                reader.Read(ref root_unk_0x38);
+                reader.Read(ref root_unk_0x3A);
                 reader.Read(ref railHeightRight);
                 reader.Read(ref railHeightLeft);
                 reader.Read(ref zero_0x44);
@@ -169,10 +163,8 @@ namespace GameCube.GFZ.Stage
                 writer.Write(localScale);
                 writer.Write(localRotation);
                 writer.Write(localPosition);
-                writer.Write(unk_0x38);
-                writer.Write(unk_0x39);
-                writer.Write(unk_0x3A);
-                writer.Write(unk_0x3B);
+                writer.Write(root_unk_0x38);
+                writer.Write(root_unk_0x3A);
                 writer.Write(railHeightRight);
                 writer.Write(railHeightLeft);
                 writer.Write(zero_0x44);
@@ -313,10 +305,8 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(localRotation)}: {localRotation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(localPosition)}: {localPosition}");
             //
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x38)}: {unk_0x38}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x39)}: {unk_0x39}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x3A)}: {unk_0x3A}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x3B)}: {unk_0x3B}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x38)}: {root_unk_0x38,5}, {root_unk_0x38:x4}, {root_unk_0x38:b16}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x3A)}: {root_unk_0x3A,5}, {root_unk_0x3A:x4}, {root_unk_0x3A:b16}");
             //
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(zero_0x44)}: {zero_0x44}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(zero_0x48)}: {zero_0x48}");

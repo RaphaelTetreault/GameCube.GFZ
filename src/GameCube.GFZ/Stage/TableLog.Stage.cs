@@ -50,8 +50,8 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
                 writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
                 writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x38));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x3A));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
 
                 writer.WriteNextCol("TrackTransform Index");
                 writer.WriteNextCol("Keyable /9");
@@ -97,8 +97,8 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
                 writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
                 writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x38));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x3A));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
 
                 writer.WriteNextCol("TrackTransform Index");
                 writer.WriteNextCol("Keyable /9");
@@ -157,8 +157,8 @@ namespace GameCube.GFZ.Stage
             writer.WriteNextCol(tt.EmbeddedPropertyType);
             writer.WriteNextCol(tt.PerimeterFlags);
             writer.WriteNextCol(tt.PipeCylinderFlags);
-            writer.WriteNextCol(tt.Unk_0x38);
-            writer.WriteNextCol(tt.Unk_0x3A);
+            writer.WriteNextCol(tt.Root_unk_0x38);
+            writer.WriteNextCol(tt.Root_unk_0x3A);
 
             writer.WriteNextCol(trackTransformIndex);
             writer.WriteNextCol(keyablesSet);
@@ -208,16 +208,17 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(TrackSegment.LocalScale));
                 writer.WriteNextCol(nameof(TrackSegment.LocalRotation));
                 writer.WriteNextCol(nameof(TrackSegment.LocalPosition));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x38));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x39));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x3A));
-                writer.WriteNextCol(nameof(TrackSegment.Unk_0x3B));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
+                writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
                 writer.WriteNextCol(nameof(TrackSegment.RailHeightRight));
                 writer.WriteNextCol(nameof(TrackSegment.RailHeightLeft));
-                //writer.WriteNextCol(nameof(TrackSegment.zero_0x44));
-                //writer.WriteNextCol(nameof(TrackSegment.zero_0x48));
                 writer.WriteNextCol(nameof(TrackSegment.BranchIndex));
                 writer.WriteNextCol();
+                writer.WriteNextColNicify(nameof(TrackCorner.Transform.Position));
+                writer.WriteNextColNicify(nameof(TrackCorner.Transform.Rotation));
+                writer.WriteNextColNicify(nameof(TrackCorner.Transform.Scale));
                 writer.WriteNextColNicify(nameof(TrackCorner.Width));
                 writer.WriteNextColNicify(nameof(TrackCorner.PerimeterOptions));
                 //
@@ -283,19 +284,20 @@ namespace GameCube.GFZ.Stage
             writer.WriteNextCol(trackTransform.LocalScale);
             writer.WriteNextCol(trackTransform.LocalRotation);
             writer.WriteNextCol(trackTransform.LocalPosition);
-            writer.WriteNextCol(trackTransform.Unk_0x38);
-            writer.WriteNextCol(trackTransform.Unk_0x39);
-            writer.WriteNextCol(trackTransform.Unk_0x3A);
-            writer.WriteNextCol(trackTransform.Unk_0x3B);
+            writer.WriteNextCol(trackTransform.Root_unk_0x38);
+            writer.WriteNextCol($"0x{trackTransform.Root_unk_0x38:x4}");
+            writer.WriteNextCol(trackTransform.Root_unk_0x3A);
+            writer.WriteNextCol($"0x{trackTransform.Root_unk_0x3A:x4}");
             writer.WriteNextCol(trackTransform.RailHeightRight);
             writer.WriteNextCol(trackTransform.RailHeightLeft);
-            //writer.WriteNextCol(trackTransform.zero_0x44);
-            //writer.WriteNextCol(trackTransform.zero_0x48);
             writer.WriteNextCol(trackTransform.BranchIndex);
             //
             if (trackTransform.TrackCornerPtr.IsNotNull)
             {
                 writer.WriteNextCol();
+                writer.WriteNextCol(trackTransform.TrackCorner.Transform.Position);
+                writer.WriteNextCol(trackTransform.TrackCorner.Transform.RotationEuler);
+                writer.WriteNextCol(trackTransform.TrackCorner.Transform.Scale);
                 writer.WriteNextCol(trackTransform.TrackCorner.Width);
                 writer.WriteNextCol(trackTransform.TrackCorner.PerimeterOptions);
             }
@@ -856,6 +858,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.NumSubdivisionsZ));
                 // 
                 //writer.WriteNextCol(nameof(Scene.zeroes0xD8));
+                writer.WriteNextCol(nameof(Scene.trackMinHeight));
                 writer.WriteNextRow();
 
                 foreach (var scene in scenes)
@@ -876,7 +879,7 @@ namespace GameCube.GFZ.Stage
                     writer.WriteNextCol(scene.StaticColliderMeshManagerPtr.PrintAddress);
                     //writer.WriteNextCol(scene.zeroes0x20Ptr.PrintAddress);
                     writer.WriteNextCol(scene.TrackMinHeightPtr.PrintAddress);
-                    writer.WriteNextCol(0);// coliHeader.zero_0x28);
+                    //writer.WriteNextCol(0);// coliHeader.zero_0x28);
                     writer.WriteNextCol(scene.DynamicSceneObjectCount);
                     if (scene.IsFileGX)
                     {
@@ -922,7 +925,7 @@ namespace GameCube.GFZ.Stage
                     writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsX);
                     writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsZ);
                     //
-                    writer.WriteNextCol(0);// coliHeader.zero_0xD8);
+                    //writer.WriteNextCol(0);// coliHeader.zero_0xD8);
                     writer.WriteNextCol(scene.trackMinHeight.Value);
                     writer.WriteNextRow();
                 }
