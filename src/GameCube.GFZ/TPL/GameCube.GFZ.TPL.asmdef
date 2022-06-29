@@ -1,0 +1,18 @@
+{
+    "name": "GameCube.GFZ.TPL",
+    "rootNamespace": "GameCube.GFZ.TPL",
+    "references": [
+        "GUID:9f607135da52806468dafb63fccd6a4b",
+        "GUID:f1bb3b9088c546b46bbe048191ae40eb",
+        "GUID:1ec25e8a214ccbb48b100892bce825d3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
