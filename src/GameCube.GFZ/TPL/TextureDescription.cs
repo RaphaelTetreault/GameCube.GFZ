@@ -20,10 +20,17 @@ namespace GameCube.GFZ.TPL
         private bool isNull; 
         private TextureFormat textureFormat; // 1 byte
         private Pointer texturePtr;
-        private int width;
-        private int height;
+        private ushort width;
+        private ushort height;
         private ushort mipmapCount;
         private ushort const_0x1234;
+
+        public bool IsNull => isNull;
+        public TextureFormat TextureFormat => textureFormat;
+        public Pointer TexturePtr => texturePtr;
+        public ushort Width => width;
+        public ushort Height => height;
+        public ushort MipmapCount => mipmapCount;
 
 
         public AddressRange AddressRange { get; set; }
@@ -48,7 +55,7 @@ namespace GameCube.GFZ.TPL
             }
             this.RecordEndAddress(reader);
             {
-                Assert.IsTrue(const_zero == 0);
+                //Assert.IsTrue(const_zero == 0);
                 Assert.IsTrue(const_0x1234 == k0x1234);
             }
         }

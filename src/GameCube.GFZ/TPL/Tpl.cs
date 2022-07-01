@@ -13,8 +13,9 @@ namespace GameCube.GFZ.TPL
         IBinaryFileType,
         IBinarySerializable
     {
-        private Pointer textureDescriptionsEndPtr;
+        private int textureDescriptionsCount;
         private TextureDescription[] textureDescriptions;
+        private List<Texture> textures = new List<Texture>();
 
         public Endianness Endianness => Endianness.BigEndian;
         public string FileExtension => ".tpl";
@@ -22,16 +23,36 @@ namespace GameCube.GFZ.TPL
 
         public int TextureDescriptionsSize { get; set; }
         public int NumTextures { get; set; }
+        public Texture[] Textures => textures.ToArray();
 
         public void Deserialize(EndianBinaryReader reader)
         {
-            reader.Read(ref textureDescriptionsEndPtr);
-            TextureDescriptionsSize = textureDescriptionsEndPtr.address - 4; // 4 bytes
-            NumTextures = TextureDescriptionsSize / TextureDescription.Size;
-            reader.Read(ref textureDescriptions, NumTextures);
-            // TODO
-            // read padding GX aligned incremental
+            reader.Read(ref textureDescriptionsCount);
+            TextureDescriptionsSize = textureDescriptionsCount; // 4 bytes
+            reader.Read(ref textureDescriptions, TextureDescriptionsSize);
 
+            foreach (var textureDescription in textureDescriptions)
+            {
+                if (textureDescription.IsNull)
+                    continue;
+
+                var encoding = Encoding.GetEncoding(textureDescription.TextureFormat);
+                int blocksW = textureDescription.Width / encoding.BlockWidth;
+                int blocksH = textureDescription.Height / encoding.BlockHeight;
+
+                reader.JumpToAddress(textureDescription.TexturePtr);
+
+                if (encoding.IsDirect)
+                {
+                    var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksW, blocksH, encoding);
+                    var texture = Texture.FromDirectBlocks(directBlocks, blocksW, blocksH);
+                    textures.Add(texture);
+                }
+                if (encoding.IsIndirect)
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         public void Serialize(EndianBinaryWriter writer)
