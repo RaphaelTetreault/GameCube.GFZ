@@ -27,7 +27,7 @@ namespace GameCube.GFZ.GMA
         private short textureIndex0 = -1; // 0xFFFF // tevLayerIdxs[3] - Up to 3 indices into model's tev layer list. -1 means end of list
         private short textureIndex1 = -1; // 0xFFFF
         private short textureIndex2 = -1; // 0xFFFF
-        private GXAttributes vertexAttributes;
+        private AttributeFlags vertexAttributes;
 
 
         // PROPERTIES
@@ -45,7 +45,7 @@ namespace GameCube.GFZ.GMA
         public short TextureIndex0 { get => textureIndex0; set => textureIndex0 = value; }
         public short TextureIndex1 { get => textureIndex1; set => textureIndex1 = value; }
         public short TextureIndex2 { get => textureIndex2; set => textureIndex2 = value; }
-        public GXAttributes VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
+        public AttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
 
 
         // METHODS

@@ -136,7 +136,7 @@ namespace GameCube.GFZ.Stage
         {
             // This pointer CANNOT be null and must refer to an object.
             Assert.IsTrue(SceneObject != null);
-            Assert.IsTrue(SceneObjectPtr.IsNotNull);
+            Assert.IsTrue(SceneObjectPtr.IsNotNull, $"{Name}: {sceneObjectPtr.PrintAddress}");
             Assert.ReferencePointer(SceneObject, SceneObjectPtr);
             // This should always exist
             Assert.IsTrue(TransformTRXS != null);

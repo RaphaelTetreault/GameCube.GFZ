@@ -1267,7 +1267,7 @@ namespace GameCube.GFZ.Stage
                 Assert.ReferencePointer(dynamicSceneObjects, new ArrayPointer(DynamicSceneObjectCount, DynamicSceneObjectsPtr));
             if (sceneObjects.Length > 0)
                 Assert.ReferencePointer(sceneObjects, SceneObjectsPtr);
-            Assert.ReferencePointer(staticSceneObjects, StaticSceneObjectsPtr);
+            //Assert.ReferencePointer(staticSceneObjects, StaticSceneObjectsPtr);
             if (unknownColliders.Length > 0)
                 Assert.ReferencePointer(unknownColliders, UnknownCollidersPtr);
             Assert.ReferencePointer(fogCurves, FogCurvesPtr);
