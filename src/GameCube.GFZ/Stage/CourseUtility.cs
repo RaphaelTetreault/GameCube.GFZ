@@ -1,4 +1,4 @@
-﻿namespace GameCube.GFZ
+﻿namespace GameCube.GFZ.Stage
 {
     public static class CourseUtility
     {

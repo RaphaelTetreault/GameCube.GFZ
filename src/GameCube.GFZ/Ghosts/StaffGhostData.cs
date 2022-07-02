@@ -13,8 +13,8 @@ namespace GameCube.GFZ.StaffGhost
 
 
         // FIELDS
-        public MachineID machineID; // 0x00
-        public CourseIndexGX courseID; // 0x01
+        public byte machineID; // 0x00
+        public byte courseID; // 0x01
         public byte[] unk_1; // size: 6
         public ShiftJisCString username; // 0x08
         public byte timeMinutes; // 0x24
@@ -27,13 +27,8 @@ namespace GameCube.GFZ.StaffGhost
 
         public void Deserialize(EndianBinaryReader reader)
         {
-            byte temp = 0;
-            reader.Read(ref temp);
-            machineID = (MachineID)temp;
-
-            reader.Read(ref temp);
-            courseID = (CourseIndexGX)temp;
-
+            reader.Read(ref machineID);
+            reader.Read(ref courseID);
             reader.Read(ref unk_1, 6);
             reader.Read(ref username);
 

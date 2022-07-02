@@ -25,9 +25,9 @@ namespace GameCube.GFZ.Stage
         private Pointer animationCurvesTrsPtr;
         private Pointer trackCornerPtr;
         private ArrayPointer childrenPtr;
-        private float3 localScale;
-        private float3 localRotation;
-        private float3 localPosition;
+        private float3 localScale = new float3(1, 1, 1);
+        private float3 localRotation = new float3(0, 0, 0);
+        private float3 localPosition = new float3(0, 0, 0);
         private ushort root_unk_0x38; // Combined, might be cull flags
         private ushort root_unk_0x3A; // Combined, might be cull flags
         private float railHeightRight;
@@ -36,7 +36,7 @@ namespace GameCube.GFZ.Stage
         private uint zero_0x48; // zero confirmed
         private int branchIndex; // 0, 1, 2, 3
         // REFERENCE FIELDS
-        private AnimationCurveTRS animationCurveTRS;
+        private AnimationCurveTRS animationCurveTRS = new AnimationCurveTRS();
         private TrackCorner trackCorner;
         private TrackSegment[] children = new TrackSegment[0];
 
@@ -66,6 +66,21 @@ namespace GameCube.GFZ.Stage
         public TrackCorner TrackCorner { get => trackCorner; set => trackCorner = value; }
         public TrackSegment[] Children { get => children; set => children = value; }
 
+
+        public void SetRails(float leftHeight, float rightHeight)
+        {
+            RailHeightLeft = leftHeight > 0f ? leftHeight : 0f;
+            RailHeightRight = rightHeight > 0f ? rightHeight : 0f;
+
+            // Clear rail height bits
+            PerimeterFlags = (TrackPerimeterFlags)((byte)PerimeterFlags & ~0b_0000_1100);
+
+            // Set based on parameters
+            if (RailHeightLeft > 0f)
+                PerimeterFlags |= TrackPerimeterFlags.hasRailHeightLeft;
+            if (RailHeightRight > 0f)
+                PerimeterFlags |= TrackPerimeterFlags.hasRailHeightRight;
+        }
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)

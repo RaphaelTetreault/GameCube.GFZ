@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace GameCube.GFZ
+namespace GameCube.GFZ.Stage
 {
     /// <summary>
     /// 

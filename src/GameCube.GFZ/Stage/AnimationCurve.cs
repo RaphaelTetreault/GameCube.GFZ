@@ -18,7 +18,7 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private KeyableAttribute[] keyableAttributes;
+        private KeyableAttribute[] keyableAttributes = new KeyableAttribute[0];
 
 
         // CONSTRUCTORS

@@ -26,7 +26,10 @@ namespace GameCube.GFZ.Stage
         // FIELDS
         private ArrayPointer2D animationCurvesPtr2D = new ArrayPointer2D(kCurveCount);
         // REFERENCE FIELDS
-        private AnimationCurve[] animationCurves = new AnimationCurve[0];
+        private AnimationCurve[] animationCurves = new AnimationCurve[kCurveCount]
+        {
+            new(), new(), new(), new(), new(), new(), new(), new(), new(),
+        };
 
 
         // INDEXERS

@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel;
 
-namespace GameCube.GFZ
+namespace GameCube.GFZ.CarData
 {
     /// <summary>
-    /// The name of each machine. Enum order is internal order in AX/GX ROM.
+    /// The name of each machine. Enum order is machine number.
     /// </summary>
-    public enum MachineID
+    public enum MachineName
     {
+        [Description("Dark Schneider")]
+        DarkSchneider = 0,
         [Description("Red Gazelle")]
-        RedGazelle = 0,
+        RedGazelle,
         [Description("White Cat")]
         WhiteCat,
         [Description("Golden Fox")]
@@ -67,8 +69,6 @@ namespace GameCube.GFZ
         CrazyBear,
         [Description("Black Bull")]
         BlackBull,
-        [Description("Dark Schneider")]
-        DarkSchneider,
         [Description("Fat Shark")]
         FatShark,
         [Description("Cosmic Dolphin")]
