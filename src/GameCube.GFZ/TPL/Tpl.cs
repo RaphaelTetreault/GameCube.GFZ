@@ -13,7 +13,7 @@ namespace GameCube.GFZ.TPL
     {
         private int textureDescriptionsCount;
         private TextureDescription[] textureDescriptions;
-        private readonly TextureSeries[] textureSeries;
+        private TextureSeries[] textureSeries;
 
         public Endianness Endianness => Endianness.BigEndian;
         public string FileExtension => ".tpl";
@@ -21,13 +21,14 @@ namespace GameCube.GFZ.TPL
 
         public TextureDescription[] TextureDescriptions => textureDescriptions;
         public TextureSeries[] TextureSeries => textureSeries;
-
+        private static readonly TextureColor Magenta = new TextureColor(255, 0, 255);
 
         public void Deserialize(EndianBinaryReader reader)
         {
             // Read `count` texture descriptions
             reader.Read(ref textureDescriptionsCount);
             reader.Read(ref textureDescriptions, textureDescriptionsCount);
+            textureSeries = new TextureSeries[textureDescriptionsCount];
 
             // File has padding after descriptions that increment continuously.
             int paddingLength = (int)StreamExtensions.GetLengthOfAlignment(reader.BaseStream, GXUtility.GX_FIFO_ALIGN);
@@ -98,6 +99,16 @@ namespace GameCube.GFZ.TPL
 
             for (int i = 0; i < textureSeries.TextureData.Length; i++)
             {
+                // Some textures have invalid mipmap sizes. Prevent them from doing anything.
+                bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
+                if (isInvalidTextureSize)
+                {
+                    textureSeries[i].Texture = new Texture(1, 1, Magenta, textureDescription.TextureFormat);
+                    pixelWidth >>= 1;
+                    pixelHeight >>= 1;
+                    continue;
+                }
+
                 // Get how many blocks to read (width and height separated)
                 int widthBlocks = (int)Math.Ceiling((double)pixelWidth / encoding.BlockWidth);
                 int heightBlocks = (int)Math.Ceiling((double)pixelHeight / encoding.BlockHeight);
@@ -107,9 +118,6 @@ namespace GameCube.GFZ.TPL
                 bool canReadRequiredBlocks = (totalBlocksRead + blocksRequired) <= totalBlocksEncoded;
                 if (!canReadRequiredBlocks)
                 {
-                    // Color used for invalid parts of texture
-                    var magenta = new TextureColor(255, 0, 255);
-
                     // See how many blocks remain in the stream.
                     int blocksInStream = totalBlocksEncoded - totalBlocksRead;
                     bool canReadMoreBlocks = blocksInStream > 0;
@@ -119,13 +127,13 @@ namespace GameCube.GFZ.TPL
                         var invalidDirectBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksInStream, encoding);
                         totalBlocksRead += blocksRequired;
                         // Create an invalid texture. Unset pixels will be magenta.
-                        var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, widthBlocks, heightBlocks, magenta);
+                        var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, widthBlocks, heightBlocks, Magenta);
                         textureSeries[i].Texture = Texture.Crop(invalidTexture, pixelWidth, pixelHeight);
                     }
                     else
                     {
                         // If no more blocks to read, make fully magenta texture.
-                        textureSeries[i].Texture = new Texture(pixelWidth, pixelHeight, magenta, textureDescription.TextureFormat);
+                        textureSeries[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureDescription.TextureFormat);
                     }
                     textureSeries[i].IsValid = false;
 
@@ -133,11 +141,13 @@ namespace GameCube.GFZ.TPL
                     pixelHeight >>= 1;
                     continue;
                 }
-
+               
                 // If we succeed, proceed to deserialize blocks for texture.
                 //var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksW, blocksH, encoding);
                 var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksRequired, encoding);
+                Assert.IsTrue(blocksRequired != 0);
                 Assert.IsTrue(directBlocks.Length == blocksRequired);
+                Assert.IsTrue(widthBlocks*heightBlocks == blocksRequired);
                 totalBlocksRead += blocksRequired;
 
                 // Make new texture. Crop it to width/height on occasions where pixel width or height

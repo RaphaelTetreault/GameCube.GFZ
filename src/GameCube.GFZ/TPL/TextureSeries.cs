@@ -15,6 +15,8 @@
         public TextureSeries(int numTextures = 0)
         {
             TextureData = new TextureData[numTextures];
+            for (int i = 0; i < TextureData.Length; i++)
+                TextureData[i] = new TextureData();
         }
     }
 }
