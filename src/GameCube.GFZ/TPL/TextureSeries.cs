@@ -1,8 +1,11 @@
-﻿namespace GameCube.GFZ.TPL
+﻿using Manifold.IO;
+
+namespace GameCube.GFZ.TPL
 {
     public class TextureSeries
     {
         public TextureData[] TextureData { get; internal set; }
+        public AddressRange AddressRange { get; internal set; }
 
         public TextureData this[int i]
         {

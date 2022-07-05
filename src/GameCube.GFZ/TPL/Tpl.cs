@@ -21,6 +21,7 @@ namespace GameCube.GFZ.TPL
 
         public TextureDescription[] TextureDescriptions => textureDescriptions;
         public TextureSeries[] TextureSeries => textureSeries;
+
         private static readonly TextureColor Magenta = new TextureColor(255, 0, 255);
 
         public void Deserialize(EndianBinaryReader reader)
@@ -60,6 +61,12 @@ namespace GameCube.GFZ.TPL
                 // Read the texture series.
                 reader.JumpToAddress(textureDescription.TexturePtr);
                 textureSeries[i] = ReadDirectTextureSeries(reader, textureDescription, encoding);
+                // Record some useful metadata about this texture
+                textureSeries[i].AddressRange = new AddressRange()
+                {
+                    startAddress = textureDescription.TexturePtr,
+                    endAddress = reader.GetPositionAsPointer(),
+                };
             }
         }
 
