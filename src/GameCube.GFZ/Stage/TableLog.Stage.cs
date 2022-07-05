@@ -1376,14 +1376,14 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Track Point");
                 writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeStart));
                 writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeEnd));
-                writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.dotProduct));
+                writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.distance));
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".x");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".y");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".z");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".x");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".y");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".z");
-                writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.dotProduct));
+                writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.distance));
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".x");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".y");
                 writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".z");
@@ -1414,14 +1414,14 @@ namespace GameCube.GFZ.Stage
 
                             writer.WriteNextCol(trackPoint.CurveTimeStart);
                             writer.WriteNextCol(trackPoint.CurveTimeEnd);
-                            writer.WriteNextCol(trackPoint.PlaneStart.dotProduct);
+                            writer.WriteNextCol(trackPoint.PlaneStart.distance);
                             writer.WriteNextCol(trackPoint.PlaneStart.normal.x);
                             writer.WriteNextCol(trackPoint.PlaneStart.normal.y);
                             writer.WriteNextCol(trackPoint.PlaneStart.normal.z);
                             writer.WriteNextCol(trackPoint.PlaneStart.origin.x);
                             writer.WriteNextCol(trackPoint.PlaneStart.origin.y);
                             writer.WriteNextCol(trackPoint.PlaneStart.origin.z);
-                            writer.WriteNextCol(trackPoint.PlaneEnd.dotProduct);
+                            writer.WriteNextCol(trackPoint.PlaneEnd.distance);
                             writer.WriteNextCol(trackPoint.PlaneEnd.normal.x);
                             writer.WriteNextCol(trackPoint.PlaneEnd.normal.y);
                             writer.WriteNextCol(trackPoint.PlaneEnd.normal.z);

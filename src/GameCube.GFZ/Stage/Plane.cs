@@ -13,7 +13,7 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// The dot product of this plane. 'dot(direction, position)'
         /// </summary>
-        public float dotProduct;
+        public float distance;
         /// <summary>
         /// The facing direction of this plane.
         /// </summary>
@@ -26,14 +26,14 @@ namespace GameCube.GFZ.Stage
 
         public void Deserialize(EndianBinaryReader reader)
         {
-            reader.Read(ref dotProduct);
+            reader.Read(ref distance);
             reader.Read(ref normal);
             reader.Read(ref origin);
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
-            writer.Write(dotProduct);
+            writer.Write(distance);
             writer.Write(normal);
             writer.Write(origin);
         }
@@ -49,7 +49,7 @@ namespace GameCube.GFZ.Stage
                 normal.z * origin.z;
 
             // dot product is inverted
-            this.dotProduct = -dotProduct;
+            this.distance = -dotProduct;
         }
 
         public Plane GetMirror()
@@ -60,7 +60,7 @@ namespace GameCube.GFZ.Stage
         public static Plane GetPlaneMirrored(Plane plane)
         {
             var mirroredPlane = new Plane();
-            mirroredPlane.dotProduct = -plane.dotProduct;
+            mirroredPlane.distance = -plane.distance;
             mirroredPlane.normal = -plane.normal;
             mirroredPlane.origin = plane.origin;
             return mirroredPlane;
@@ -72,7 +72,7 @@ namespace GameCube.GFZ.Stage
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(origin)}: {origin}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(normal)}: {normal}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(dotProduct)}: {dotProduct}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(distance)}: {distance}");
         }
 
         public string PrintSingleLine()
