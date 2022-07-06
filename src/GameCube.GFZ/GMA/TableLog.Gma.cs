@@ -151,7 +151,7 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol("Model Index");
                 writer.WriteNextCol("Debug Index");
                 writer.WriteNextCol("Material Index");
-                writer.WriteNextCol(nameof(Material.Unk0x02));
+                writer.WriteNextCol(nameof(Submesh.RenderFlags));
                 writer.WriteNextCol(nameof(Material.MaterialColor));
                 writer.WriteNextCol(nameof(Material.AmbientColor));
                 writer.WriteNextCol(nameof(Material.SpecularColor));
@@ -164,9 +164,9 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol(nameof(Material.TextureIndex0));
                 writer.WriteNextCol(nameof(Material.TextureIndex1));
                 writer.WriteNextCol(nameof(Material.TextureIndex2));
-                writer.WriteNextCol(nameof(Material.VertexAttributes));
-                writer.WriteNextCol(nameof(UnkSubmeshType.Unk0x0C));
-                writer.WriteNextCol(nameof(UnkSubmeshType.Unk0x10));
+                writer.WriteNextCol(nameof(Submesh.VertexAttributes));
+                writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
+                writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x10));
                 writer.WriteNextRow();
 
                 foreach (var gma in gmas)
@@ -183,7 +183,7 @@ namespace GameCube.GFZ.GMA
                             writer.WriteNextCol(modelIndex);
                             writer.WriteNextCol(model.DebugIndex);
                             writer.WriteNextCol(submeshIndex++);
-                            writer.WriteNextCol(submesh.Material.Unk0x02);
+                            writer.WriteNextCol(submesh.RenderFlags);
                             writer.WriteNextCol(submesh.Material.MaterialColor);
                             writer.WriteNextCol(submesh.Material.AmbientColor);
                             writer.WriteNextCol(submesh.Material.SpecularColor);
@@ -196,7 +196,7 @@ namespace GameCube.GFZ.GMA
                             writer.WriteNextCol(submesh.Material.TextureIndex0);
                             writer.WriteNextCol(submesh.Material.TextureIndex1);
                             writer.WriteNextCol(submesh.Material.TextureIndex2);
-                            writer.WriteNextCol(submesh.Material.VertexAttributes);
+                            writer.WriteNextCol(submesh.VertexAttributes);
                             writer.WriteNextCol(submesh.Unknown.Unk0x0C);
                             writer.WriteNextCol(submesh.Unknown.Unk0x10);
                             writer.WriteNextRow();

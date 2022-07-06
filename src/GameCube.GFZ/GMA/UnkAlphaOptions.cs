@@ -1,5 +1,4 @@
 ﻿using Manifold.IO;
-using System.IO;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ.GMA
@@ -7,13 +6,13 @@ namespace GameCube.GFZ.GMA
     /// <summary>
     /// 
     /// </summary>
-    public class UnkSubmeshType :
+    public class UnkAlphaOptions :
         IBinaryAddressable,
         IBinarySerializable
     {
         // FIELDS
         private float3 origin;
-        private float unk0x0C; // if flags at 0x02 are set with bit 9, value exists. All values: 0f, 1f.
+        private float unk0x0C; // if GCMF flags at 0x00 are set with bit 9, this value exists. All values: 0f, 1f.
         private BlendFactors unk0x10; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
 
 

@@ -3,8 +3,11 @@ namespace GameCube.GFZ.GMA
     /// <summary>
     /// 
     /// </summary>
+    /// <remarks>
+    /// See: RenderFlags: https://github.com/bobjrsenior/GxUtils/blob/master/GxUtils/LibGxFormat/Gma/GcmfMesh.cs
+    /// </remarks>
     [System.Flags]
-    public enum MatFlags0x02 : ushort
+    public enum RenderFlags : uint
     {
         /// <summary>
         /// 

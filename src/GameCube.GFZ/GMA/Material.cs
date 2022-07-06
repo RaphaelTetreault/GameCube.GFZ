@@ -12,9 +12,7 @@ namespace GameCube.GFZ.GMA
         IBinaryAddressable,
         IBinarySerializable
     {
-        // FIELDS
-        private ushort zero0x00; //2
-        private MatFlags0x02 unk0x02; // <- See: RenderFlags: https://github.com/bobjrsenior/GxUtils/blob/master/GxUtils/LibGxFormat/Gma/GcmfMesh.cs
+        // FIELDS    
         private GXColor materialColor = new GXColor(ComponentType.GX_RGBA8);
         private GXColor ambientColor = new GXColor(ComponentType.GX_RGBA8);
         private GXColor specularColor = new GXColor(ComponentType.GX_RGBA8);
@@ -27,12 +25,9 @@ namespace GameCube.GFZ.GMA
         private short textureIndex0 = -1; // 0xFFFF // tevLayerIdxs[3] - Up to 3 indices into model's tev layer list. -1 means end of list
         private short textureIndex1 = -1; // 0xFFFF
         private short textureIndex2 = -1; // 0xFFFF
-        private AttributeFlags vertexAttributes;
-
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public MatFlags0x02 Unk0x02 { get => unk0x02; set => unk0x02 = value; }
         public GXColor MaterialColor { get => materialColor; set => materialColor = value; }
         public GXColor AmbientColor { get => ambientColor; set => ambientColor = value; }
         public GXColor SpecularColor { get => specularColor; set => specularColor = value; }
@@ -45,7 +40,6 @@ namespace GameCube.GFZ.GMA
         public short TextureIndex0 { get => textureIndex0; set => textureIndex0 = value; }
         public short TextureIndex1 { get => textureIndex1; set => textureIndex1 = value; }
         public short TextureIndex2 { get => textureIndex2; set => textureIndex2 = value; }
-        public AttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
 
 
         // METHODS
@@ -53,8 +47,6 @@ namespace GameCube.GFZ.GMA
         {
             this.RecordStartAddress(reader);
             {
-                reader.Read(ref zero0x00);
-                reader.Read(ref unk0x02);
                 materialColor.Deserialize(reader);
                 ambientColor.Deserialize(reader);
                 specularColor.Deserialize(reader);
@@ -67,26 +59,19 @@ namespace GameCube.GFZ.GMA
                 reader.Read(ref textureIndex0);
                 reader.Read(ref textureIndex1);
                 reader.Read(ref textureIndex2);
-                reader.Read(ref vertexAttributes);
             }
             this.RecordEndAddress(reader);
-            {
-                Assert.IsTrue(zero0x00 == 0);
-            }
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             {
-                Assert.IsTrue(zero0x00 == 0);
                 Assert.IsTrue(materialColor.ComponentType == ComponentType.GX_RGBA8);
                 Assert.IsTrue(ambientColor.ComponentType == ComponentType.GX_RGBA8);
                 Assert.IsTrue(specularColor.ComponentType == ComponentType.GX_RGBA8);
             }
             this.RecordStartAddress(writer);
             {
-                writer.Write(zero0x00);
-                writer.Write(unk0x02);
                 writer.Write(materialColor);
                 writer.Write(ambientColor);
                 writer.Write(specularColor);
@@ -99,7 +84,6 @@ namespace GameCube.GFZ.GMA
                 writer.Write(textureIndex0);
                 writer.Write(textureIndex1);
                 writer.Write(textureIndex2);
-                writer.Write(vertexAttributes);
             }
             this.RecordEndAddress(writer);
         }

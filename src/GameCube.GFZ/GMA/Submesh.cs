@@ -19,9 +19,11 @@ namespace GameCube.GFZ.GMA
         private GcmfAttributes attributes;
 
         // FIELDS
+        private RenderFlags renderFlags;
         private Material material = new Material();
+        private AttributeFlags vertexAttributes;
         private DisplayListDescriptor primaryDisplayListDescriptor = new DisplayListDescriptor();
-        private UnkSubmeshType unknown = new UnkSubmeshType();
+        private UnkAlphaOptions unknownAlphaOptions = new UnkAlphaOptions();
         private DisplayList[] primaryDisplayListsOpaque;
         private DisplayList[] primaryDisplayListsTranslucid;
         private DisplayListDescriptor secondaryDisplayListDescriptor;
@@ -39,7 +41,10 @@ namespace GameCube.GFZ.GMA
         public bool IsPhysicsDrivenModel => attributes.HasFlag(GcmfAttributes.isEffectiveModel);
         public bool IsSkinnedModel => attributes.HasFlag(GcmfAttributes.isSkinModel);
         public bool IsStitchingModel => attributes.HasFlag(GcmfAttributes.isStitchingModel);
+        //
+        public RenderFlags RenderFlags { get => renderFlags; set => renderFlags = value; }
         public Material Material { get => material; set => material = value; }
+        public AttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
         public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
         public DisplayList[] PrimaryDisplayListsOpaque { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
         public DisplayList[] PrimaryDisplayListsTranslucid { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
@@ -51,17 +56,19 @@ namespace GameCube.GFZ.GMA
         public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
         public DisplayList[] SecondaryDisplayListsOpaque { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
         public DisplayList[] SecondaryDisplayListsTranslucid { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
-        public UnkSubmeshType Unknown { get => unknown; set => unknown = value; }
+        public UnkAlphaOptions Unknown { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
             {
-                //
+                //Read
+                reader.Read(ref renderFlags);
                 reader.Read(ref material);
+                reader.Read(ref vertexAttributes);
                 reader.Read(ref primaryDisplayListDescriptor);
-                reader.Read(ref unknown);
+                reader.Read(ref unknownAlphaOptions);
                 reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
                 int endAddress = reader.GetPositionAsPointer().address;
@@ -128,9 +135,11 @@ namespace GameCube.GFZ.GMA
 
             this.RecordStartAddress(writer);
             {
+                writer.Write(renderFlags);
                 writer.Write(material);
+                writer.Write(vertexAttributes);
                 writer.Write(primaryDisplayListDescriptor);
-                writer.Write(unknown);
+                writer.Write(unknownAlphaOptions);
                 writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
 
                 if (RenderPrimaryFrontFaceCull)
@@ -187,7 +196,7 @@ namespace GameCube.GFZ.GMA
                 if (isAtEnd || isFifoPadding)
                     break;
 
-                var displayList = new DisplayList(material.VertexAttributes, GfzGX.VAT);
+                var displayList = new DisplayList(vertexAttributes, GfzGX.VAT);
                 displayList.Deserialize(reader);
                 displayLists.Add(displayList);
             }
