@@ -11,11 +11,13 @@ namespace GameCube.GFZ.TPL
         IBinaryFileType,
         IBinarySerializable
     {
+        public const Endianness endianness = Endianness.BigEndian;
+
         private int textureDescriptionsCount;
         private TextureDescription[] textureDescriptions;
         private TextureSeries[] textureSeries;
 
-        public Endianness Endianness => Endianness.BigEndian;
+        public Endianness Endianness => endianness;
         public string FileExtension => ".tpl";
         public string FileName { get; set; }
 

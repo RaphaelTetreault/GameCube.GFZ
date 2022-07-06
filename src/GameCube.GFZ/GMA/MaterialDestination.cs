@@ -4,7 +4,7 @@ namespace GameCube.GFZ.GMA
     /// Flags indicating which display list(s) are serialized.
     /// </summary>
     [System.Flags]
-    public enum DisplayListFlags : byte
+    public enum MaterialDestination : byte
     {
         /// <summary>
         /// If set, indicates that the submesh has a primary front-face-culling display list.

@@ -22,6 +22,13 @@ namespace GameCube.GFZ.Stage
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
 
+        public TextureScrollField() { }
+        public TextureScrollField(float u, float v)
+        {
+            this.u = u;
+            this.v = v;
+        }
+
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)

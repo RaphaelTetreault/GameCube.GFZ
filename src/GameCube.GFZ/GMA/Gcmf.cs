@@ -32,7 +32,7 @@ namespace GameCube.GFZ.GMA
         private Offset submeshOffsetPtr;
         private uint zero0x24;
         private BoneIndexes8 boneIndices = new BoneIndexes8();
-        private TextureConfig[] textureConfigs = new TextureConfig[0];
+        private TevLayer[] tevLayers = new TevLayer[0];
         private TransformMatrix3x4[] bones = new TransformMatrix3x4[0];
         private SkinnedVertexDescriptor skinnedVertexDescriptor;
         private Submesh[] submeshes = new Submesh[0];
@@ -70,14 +70,14 @@ namespace GameCube.GFZ.GMA
 
         public GcmfAttributes Attributes { get => attributes; set => attributes = value; }
         public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
-        public ushort TextureCount { get => textureCount; set => textureCount = value; }
+        public ushort TextureConfigsCount { get => textureCount; set => textureCount = value; }
         public ushort OpaqueMaterialCount { get => opaqueMaterialCount; set => opaqueMaterialCount = value; }
         public ushort TranslucidMaterialCount { get => translucidMaterialCount; set => translucidMaterialCount = value; }
         public byte BoneCount { get => boneCount; set => boneCount = value; }
         public Offset SubmeshOffsetPtr { get => submeshOffsetPtr; set => submeshOffsetPtr = value; }
         public BoneIndexes8 BoneIndices { get => boneIndices; set => boneIndices = value; }
         public TransformMatrix3x4[] Bones { get => bones; set => bones = value; }
-        public TextureConfig[] TextureConfigs { get => textureConfigs; set => textureConfigs = value; }
+        public TevLayer[] TevLayers { get => tevLayers; set => tevLayers = value; }
         public SkinnedVertexDescriptor SkinnedVertexDescriptor { get => skinnedVertexDescriptor; set => skinnedVertexDescriptor = value; }
         public Submesh[] Submeshes { get => submeshes; set => submeshes = value; }
         public SkinnedVertexA[] SkinnedVerticesA { get => skinnedVerticesA; set => skinnedVerticesA = value; }
@@ -120,10 +120,10 @@ namespace GameCube.GFZ.GMA
             // Deserialize other structures
             {
                 // Read in texture configs. Between each, align for GX FIFO
-                textureConfigs = new TextureConfig[textureCount];
-                for (int i = 0; i < textureConfigs.Length; i++)
+                tevLayers = new TevLayer[textureCount];
+                for (int i = 0; i < tevLayers.Length; i++)
                 {
-                    reader.Read(ref textureConfigs[i]);
+                    reader.Read(ref tevLayers[i]);
                     reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
@@ -223,7 +223,7 @@ namespace GameCube.GFZ.GMA
             {
                 // Update counts
                 boneCount = (byte)Bones.Length;
-                textureCount = (ushort)textureConfigs.Length;
+                textureCount = (ushort)tevLayers.Length;
 
                 //
                 opaqueMaterialCount = 0; // (ushort)submeshes.Length;
@@ -234,7 +234,7 @@ namespace GameCube.GFZ.GMA
 
                     // Seems to be actually really close!
                     var isTranslucid =
-                        submesh.Material.Unk0x14 != -1 ||
+                        submesh.Material.UnkAlpha0x14 != -1 ||
                         submesh.Material.Alpha < 255;
 
                     if (isTranslucid)
@@ -265,7 +265,7 @@ namespace GameCube.GFZ.GMA
                 writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
 
                 //
-                foreach (var textureConfig in textureConfigs)
+                foreach (var textureConfig in tevLayers)
                 {
                     writer.Write(textureConfig);
                     writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);

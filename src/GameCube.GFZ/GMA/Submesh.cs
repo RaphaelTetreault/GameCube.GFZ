@@ -48,15 +48,15 @@ namespace GameCube.GFZ.GMA
         public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
         public DisplayList[] PrimaryDisplayListsOpaque { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
         public DisplayList[] PrimaryDisplayListsTranslucid { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
-        public bool RenderPrimaryFrontFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.PrimaryFrontCull);
-        public bool RenderPrimaryBackFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.PrimaryBackCull);
+        public bool RenderPrimaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryFrontCull);
+        public bool RenderPrimaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryBackCull);
         public bool RenderSecondary => RenderSecondaryFrontFaceCull || RenderSecondaryBackFaceCull;
-        public bool RenderSecondaryFrontFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.SecondaryFrontCull);
-        public bool RenderSecondaryBackFaceCull => material.DisplayListFlags.HasFlag(DisplayListFlags.SecondaryBackCull);
+        public bool RenderSecondaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryFrontCull);
+        public bool RenderSecondaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryBackCull);
         public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
         public DisplayList[] SecondaryDisplayListsOpaque { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
         public DisplayList[] SecondaryDisplayListsTranslucid { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
-        public UnkAlphaOptions Unknown { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
+        public UnkAlphaOptions UnkAlphaOptions { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
@@ -121,11 +121,11 @@ namespace GameCube.GFZ.GMA
         public void Serialize(EndianBinaryWriter writer)
         {
             // Reset the render flags based on instance data
-            material.DisplayListFlags =
-                (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListFlags.PrimaryFrontCull) |
-                (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListFlags.PrimaryBackCull) |
-                (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : DisplayListFlags.SecondaryFrontCull) |
-                (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : DisplayListFlags.SecondaryBackCull);
+            material.MaterialDestination =
+                (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : MaterialDestination.PrimaryFrontCull) |
+                (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : MaterialDestination.PrimaryBackCull) |
+                (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : MaterialDestination.SecondaryFrontCull) |
+                (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : MaterialDestination.SecondaryBackCull);
 
             // Temp variables to store ranges that display lists are serialized at, used to get size on disk
             var pdlffc = new AddressRange();
