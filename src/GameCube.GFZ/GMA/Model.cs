@@ -13,7 +13,7 @@ namespace GameCube.GFZ.GMA
         // FIELDS
         private ShiftJisCString name;
         private Gcmf gcmf;
-        
+
         // PROPERTIES
         public Pointer GcmfPtr { get; set; }
         public Pointer NamePtr { get; set; }
@@ -26,6 +26,16 @@ namespace GameCube.GFZ.GMA
         /// debug printing model index.
         /// </summary>
         public string DebugIndex { get; set; }
+
+
+        public Model() { }
+        public Model(string name, Gcmf gcmf)
+        {
+            this.name = name;
+            this.gcmf = gcmf;
+        }
+
+
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)

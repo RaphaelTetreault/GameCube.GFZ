@@ -351,5 +351,15 @@ namespace GameCube.GFZ.GMA
             }
         }
 
+
+        //
+
+        public void PatchTevLayerIndexes()
+        {
+            for (ushort i = 0; i < tevLayers.Length; i++)
+            {
+                tevLayers[i].TevLayerIndex = i;
+            }
+        }
     }
 }
