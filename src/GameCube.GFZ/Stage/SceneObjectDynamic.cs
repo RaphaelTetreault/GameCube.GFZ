@@ -19,7 +19,7 @@ namespace GameCube.GFZ.Stage
         private int unk0x00; // rendering? 
         private int unk0x04; // LOD Flags? -1 = no LOD/no-disable, otherwise flags.
         private Pointer sceneObjectPtr;
-        private TransformTRXS transformTRXS = new TransformTRXS();
+        private TransformTRXS transformTRXS = new();
         private int zero_0x2C; // null ptr?
         private Pointer animationClipPtr;
         private Pointer textureScrollPtr;
@@ -35,7 +35,7 @@ namespace GameCube.GFZ.Stage
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public string Name => SceneObject.Name;
+        public ShiftJisCString Name => SceneObject.Name;
 
         public int Unk0x00 { get => unk0x00; set => unk0x00 = value; }
         public int Unk0x04 { get => unk0x04; set => unk0x04 = value; }

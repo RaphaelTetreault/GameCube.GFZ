@@ -21,7 +21,7 @@ namespace GameCube.GFZ.GMA
 
 
         // FIELDS
-        private uint magic;
+        private uint magic = kMagic;
         private GcmfAttributes attributes;
         private BoundingSphere boundingSphere;
         private ushort textureCount;

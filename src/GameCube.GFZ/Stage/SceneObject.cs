@@ -43,11 +43,11 @@ namespace GameCube.GFZ.Stage
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public string Name => lods[0].Name;
+        public ShiftJisCString Name => lods[0].Name;
         public SceneObjectLOD PrimaryLOD => lods[0];
         public SceneObjectLOD[] LODs { get => lods; set => lods = value; }
         public ColliderMesh ColliderMesh { get => colliderMesh; set => colliderMesh = value; }
-        public Pointer ColliderGeometryPtr { get => colliderGeometryPtr; set => colliderGeometryPtr = value; }
+        public Pointer ColliderMeshPtr { get => colliderGeometryPtr; set => colliderGeometryPtr = value; }
         public ArrayPointer LodsPtr { get => lodsPtr; set => lodsPtr = value; }
         public LodRenderFlags LodRenderFlags { get => lodRenderFlags; set => lodRenderFlags = value; }
 

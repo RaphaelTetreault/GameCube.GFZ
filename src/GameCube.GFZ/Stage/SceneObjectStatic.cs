@@ -26,7 +26,7 @@ namespace GameCube.GFZ.Stage
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public string Name => SceneObject.Name;
+        public ShiftJisCString Name => SceneObject.Name;
 
         public SceneObject SceneObject { get => sceneObject; set => sceneObject = value; }
         public Pointer SceneObjectPtr { get => sceneObjectPtr; set => sceneObjectPtr = value; }

@@ -172,12 +172,12 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// An array of all the scene object names.
         /// </summary>
-        public ShiftJisCString[] SceneObjectNames { get; set; }
+        public List<ShiftJisCString> SceneObjectNames { get; set; } = new();
 
         /// <summary>
         /// An array of all the scene objecy LODs.
         /// </summary>
-        public SceneObjectLOD[] SceneObjectLODs { get; set; }
+        public List<SceneObjectLOD> SceneObjectLODs { get; set; } = new();
 
 
         public ViewRange UnkRange0x00 { get => unkRange0x00; set => unkRange0x00 = value; }
@@ -387,16 +387,16 @@ namespace GameCube.GFZ.Stage
                 // TEMP DEBUGGING
                 // Copy over the LOD instances into it's own array
                 {
-                    var sceneObjectLODs = new List<SceneObjectLOD>();
+                    //var sceneObjectLODs = new List<SceneObjectLOD>();
                     for (int i = 0; i < sceneObjects.Length; i++)
                     {
                         var sceneObject = sceneObjects[i];
                         for (int j = 0; j < sceneObject.LODs.Length; j++)
                         {
-                            sceneObjectLODs.Add(sceneObject.LODs[j]);
+                            SceneObjectLODs.Add(sceneObject.LODs[j]);
                         }
                     }
-                    this.SceneObjectLODs = sceneObjectLODs.OrderBy(x => x.AddressRange.startAddress).ToArray();
+                    SceneObjectLODs = SceneObjectLODs.OrderBy(x => x.AddressRange.startAddress).ToList();
                 }
 
                 // Get all unique name instances
@@ -410,8 +410,8 @@ namespace GameCube.GFZ.Stage
                     }
                 }
                 // Save, order by name (alphabetical)
-                SceneObjectNames = sceneObjectNamesDict.Values.ToArray();
-                SceneObjectNames = SceneObjectNames.OrderBy(x => x.Value).ToArray();
+                SceneObjectNames = sceneObjectNamesDict.Values.OrderBy(x => x.Value).ToList();
+                //SceneObjectNames = SceneObjectNames.OrderBy(x => x.Value).ToArray();
             }
 
             // DESERIALIZE TRACK SEGMENTS
@@ -653,7 +653,7 @@ namespace GameCube.GFZ.Stage
 
             // SCENE OBJECTS
             writer.InlineComment(SerializeVerbose, nameof(SceneObjectLOD));
-            writer.Write(SceneObjectLODs);
+            writer.Write(SceneObjectLODs.ToArray());
 
             // SCENE OBJECT TEMPLATES
             writer.InlineDesc(SerializeVerbose, 0x68 + offset, sceneObjects); // <<<<

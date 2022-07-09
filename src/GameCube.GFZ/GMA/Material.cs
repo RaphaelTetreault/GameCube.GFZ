@@ -13,15 +13,15 @@ namespace GameCube.GFZ.GMA
         IBinarySerializable
     {
         // FIELDS    
-        private GXColor materialColor = new GXColor(ComponentType.GX_RGBA8);
-        private GXColor ambientColor = new GXColor(ComponentType.GX_RGBA8);
-        private GXColor specularColor = new GXColor(ComponentType.GX_RGBA8);
-        private MatFlags0x10 unk0x10;
+        private GXColor materialColor = new GXColor(0xFFFFFFFF, ComponentType.GX_RGBA8);
+        private GXColor ambientColor = new GXColor(0xFFFFFFFF, ComponentType.GX_RGBA8);
+        private GXColor specularColor = new GXColor(0x00000000, ComponentType.GX_RGBA8);
+        private MatFlags0x10 unk0x10 = 0; // 2022/07/08: maybe tells GPU how to use color? Fails on non-textured objects. (TEV?)
         private byte alpha = 255;
-        private byte tevLayerCount;
-        private MaterialDestination materialDestination;
+        private byte tevLayerCount = 0;
+        private MaterialDestination materialDestination = 0;
         private sbyte unkAlpha0x14 = -1; // 0xFF. Mainly -1 (3/4 of data). Index => previous material's index for same model.
-        private MatFlags0x15 unk0x15;
+        private MatFlags0x15 unk0x15 = 0;
         private short tevLayerIndex0 = -1; // 0xFFFF
         private short tevLayerIndex1 = -1; // 0xFFFF
         private short tevLayerIndex2 = -1; // 0xFFFF

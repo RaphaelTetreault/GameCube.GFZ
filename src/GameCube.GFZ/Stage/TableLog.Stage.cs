@@ -1585,7 +1585,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Object Type");
                 writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
                 writer.WriteNextCol(nameof(SceneObject.LodsPtr));
-                writer.WriteNextCol(nameof(SceneObject.ColliderGeometryPtr));
+                writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
                 //
                 writer.WriteNextRow();
 
@@ -1620,7 +1620,7 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(sceneObject.category);
                         writer.WriteNextCol(sceneObject.sir.LodRenderFlags);
                         writer.WriteNextCol(sceneObject.sir.LodsPtr);
-                        writer.WriteNextCol(sceneObject.sir.ColliderGeometryPtr);
+                        writer.WriteNextCol(sceneObject.sir.ColliderMeshPtr);
                         //
                         writer.WriteNextRow();
                     }
@@ -1644,7 +1644,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
                 writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Len");
                 writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Adr");
-                writer.WriteNextCol(nameof(SceneObject.ColliderGeometryPtr));
+                writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
                 writer.WriteNextCol(nameof(SceneObjectLOD) + " IDX");
                 //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
                 writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
@@ -1676,7 +1676,7 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(template.LodRenderFlags);
                             writer.WriteNextCol(template.LodsPtr.length);
                             writer.WriteNextCol(template.LodsPtr.PrintAddress);
-                            writer.WriteNextCol(template.ColliderGeometryPtr);
+                            writer.WriteNextCol(template.ColliderMeshPtr);
                             writer.WriteNextCol($"[{++index}/{length}]");
                             //writer.WriteNextCol(sceneObject.zero_0x00);
                             writer.WriteNextCol(sceneObject.LodNamePtr);

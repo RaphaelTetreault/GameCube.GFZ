@@ -17,7 +17,7 @@ namespace GameCube.GFZ
         ITextPrintable
     {
         // "FIELDS" as reconstructed for ease of use (it's really 3 rows x 4 columns)
-        private float4x4 matrix;
+        private float4x4 matrix = float4x4.TRS(new(), new(), new float3(1, 1, 1));
 
 
         // PROPERTIES

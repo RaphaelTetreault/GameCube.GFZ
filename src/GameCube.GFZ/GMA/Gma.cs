@@ -144,5 +144,13 @@ namespace GameCube.GFZ.GMA
         {
             throw new NotImplementedException();
         }
+
+        public string[] GetAllModelNames()
+        {
+            var modelNames = new string[models.Length];
+            for (int i = 0; i < models.Length; i++)
+                modelNames[i] = models[i].Name;
+            return modelNames;
+        }
     }
 }

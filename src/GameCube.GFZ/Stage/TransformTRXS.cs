@@ -23,7 +23,7 @@ namespace GameCube.GFZ.Stage
         private CompressedRotation compressedRotation;
         private UnknownTransformOption unknownOption;
         private ObjectActiveOverride objectActiveOverride;
-        private float3 scale;
+        private float3 scale = new float3(1,1,1);
 
 
         // PROPERTIES
