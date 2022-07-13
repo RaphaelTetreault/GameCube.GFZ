@@ -435,7 +435,7 @@ namespace GameCube.GFZ.Stage
                 foreach (var trackNode in trackNodes)
                 {
                     var segment = GetSharedSerializable(reader, trackNode.SegmentPtr, rootTrackSegmentDict);
-                    trackNode.Segment = segment;
+                    trackNode.RootSegment = segment;
                 }
                 RootTrackSegments = rootTrackSegmentDict.Values.ToArray();
 
@@ -1000,14 +1000,14 @@ namespace GameCube.GFZ.Stage
             {
                 list.Add(trackNode);
                 list.AddRange(trackNode.Checkpoints);
-                list.Add(trackNode.Segment);
-                list.Add(trackNode.Segment.AnimationCurveTRS);
-                list.AddRange(trackNode.Segment.AnimationCurveTRS.AnimationCurves);
-                foreach (var anim in trackNode.Segment.AnimationCurveTRS.AnimationCurves) // null?
+                list.Add(trackNode.RootSegment);
+                list.Add(trackNode.RootSegment.AnimationCurveTRS);
+                list.AddRange(trackNode.RootSegment.AnimationCurveTRS.AnimationCurves);
+                foreach (var anim in trackNode.RootSegment.AnimationCurveTRS.AnimationCurves) // null?
                     list.AddRange(anim.KeyableAttributes);
-                list.Add(trackNode.Segment.TrackCorner);
-                if (trackNode.Segment.TrackCorner != null)
-                    list.Add(trackNode.Segment.TrackCorner.Transform);
+                list.Add(trackNode.RootSegment.TrackCorner);
+                if (trackNode.RootSegment.TrackCorner != null)
+                    list.Add(trackNode.RootSegment.TrackCorner.Transform);
             }
 
             list.AddRange(embeddedPropertyAreas);

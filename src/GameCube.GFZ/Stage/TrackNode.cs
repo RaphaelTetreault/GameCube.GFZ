@@ -33,7 +33,7 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
         public Checkpoint[] Checkpoints { get => checkpoints; set => checkpoints = value; }
         public ArrayPointer CheckpointsPtr { get => checkpointsPtr; set => checkpointsPtr = value; }
-        public TrackSegment Segment { get => segment; set => segment = value; }
+        public TrackSegment RootSegment { get => segment; set => segment = value; }
         public Pointer SegmentPtr { get => segmentPtr; set => segmentPtr = value; }
 
 
