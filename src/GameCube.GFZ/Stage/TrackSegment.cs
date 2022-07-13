@@ -18,7 +18,7 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private TrackSegmentType segmentType;
+        private TrackSegmentType segmentType = TrackSegmentType.IsMatrix;
         private TrackEmbeddedPropertyType embeddedPropertyType;
         private TrackPerimeterFlags perimeterFlags;
         private TrackPipeCylinderFlags pipeCylinderFlags;
@@ -320,8 +320,8 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(localRotation)}: {localRotation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(localPosition)}: {localPosition}");
             //
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x38)}: {root_unk_0x38,5}, {root_unk_0x38:x4}, {root_unk_0x38:b16}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x3A)}: {root_unk_0x3A,5}, {root_unk_0x3A:x4}, {root_unk_0x3A:b16}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x38)}: {root_unk_0x38,5}, {root_unk_0x38:x4}, {Convert.ToString(root_unk_0x38, 2).PadLeft(16, '0')}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(root_unk_0x3A)}: {root_unk_0x3A,5}, {root_unk_0x3A:x4}, {Convert.ToString(root_unk_0x38, 2).PadLeft(16, '0')}");
             //
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(zero_0x44)}: {zero_0x44}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(zero_0x48)}: {zero_0x48}");

@@ -127,7 +127,7 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// The course index as indicated by the file name COLI_COURSE## where ## is the index.
         /// </summary>
-        public int CourseIndex { get; private set; }
+        public int CourseIndex { get; set; }
 
         /// <summary>
         /// Returns true if this Scene is in F-Zero AX format.
