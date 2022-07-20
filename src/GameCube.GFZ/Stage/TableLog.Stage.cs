@@ -205,9 +205,9 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol(nameof(TrackSegment.AnimationCurvesTrsPtr));
                 writer.WriteNextCol(nameof(TrackSegment.TrackCornerPtr));
                 writer.WriteNextCol(nameof(TrackSegment.ChildrenPtr));
-                writer.WriteNextCol(nameof(TrackSegment.LocalScale));
-                writer.WriteNextCol(nameof(TrackSegment.LocalRotation));
-                writer.WriteNextCol(nameof(TrackSegment.LocalPosition));
+                writer.WriteNextCol(nameof(TrackSegment.FallbackScale));
+                writer.WriteNextCol(nameof(TrackSegment.FallbackRotation));
+                writer.WriteNextCol(nameof(TrackSegment.FallbackPosition));
                 writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
                 writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
                 writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
@@ -281,9 +281,9 @@ namespace GameCube.GFZ.Stage
             writer.WriteNextCol(trackTransform.AnimationCurvesTrsPtr);
             writer.WriteNextCol(trackTransform.TrackCornerPtr);
             writer.WriteNextCol(trackTransform.ChildrenPtr);
-            writer.WriteNextCol(trackTransform.LocalScale);
-            writer.WriteNextCol(trackTransform.LocalRotation);
-            writer.WriteNextCol(trackTransform.LocalPosition);
+            writer.WriteNextCol(trackTransform.FallbackScale);
+            writer.WriteNextCol(trackTransform.FallbackRotation);
+            writer.WriteNextCol(trackTransform.FallbackPosition);
             writer.WriteNextCol(trackTransform.Root_unk_0x38);
             writer.WriteNextCol($"0x{trackTransform.Root_unk_0x38:x4}");
             writer.WriteNextCol(trackTransform.Root_unk_0x3A);
