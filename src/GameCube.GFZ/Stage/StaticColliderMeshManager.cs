@@ -52,7 +52,7 @@ namespace GameCube.GFZ.Stage
         private byte[] zeroes_group1;
         private Pointer staticColliderTrisPtr;
         private Pointer[] triMeshGridPtrs; // variable AX/GX
-        private GridXZ meshGridXZ;
+        private GridXZ meshGridXZ = new();
         private Pointer staticColliderQuadsPtr;
         private Pointer[] quadMeshGridPtrs; // variable AX/GX
         private byte[] zeroes_group2;
@@ -131,7 +131,67 @@ namespace GameCube.GFZ.Stage
         // METHODS
         public void ComputeMeshGridXZ()
         {
-            throw new NotImplementedException();
+            // Make sure indexes are within range of tris/quads.
+            for (int i = 0; i < TriMeshGrids.Length; i++)
+            {
+                var triGrid = TriMeshGrids[i];
+
+                if (!triGrid.HasIndexes)
+                    continue;
+
+                bool isValidIndex = triGrid.LargestIndex < ColliderTris.Length;
+                if (!isValidIndex)
+                    throw new ArgumentOutOfRangeException("Specified index is larger than triangle collection!");
+            }
+            for (int i = 0; i < QuadMeshGrids.Length; i++)
+            {
+                var quadGrid = QuadMeshGrids[i];
+
+                if (!quadGrid.HasIndexes)
+                    continue;
+
+                bool isValidIndex = quadGrid.LargestIndex < ColliderTris.Length;
+                if (!isValidIndex)
+                    throw new ArgumentOutOfRangeException("Specified index is larger than quad collection!");
+            }
+
+            // Get min and max XZ values of any checkpoint
+            float3 min = new float3(float.MaxValue, 0, float.MaxValue);
+            float3 max = new float3(float.MinValue, 0, float.MinValue);
+
+            // Iterate over every triangle, get min/maz X and Z coordinates
+            foreach (var tri in ColliderTris)
+            {
+                // MIN
+                min.x = math.min(min.x, tri.GetMinPositionX());
+                min.z = math.min(min.z, tri.GetMinPositionZ());
+                // MAX
+                max.x = math.max(max.x, tri.GetMaxPositionX());
+                max.z = math.max(max.z, tri.GetMaxPositionZ());
+            }
+            // Iterate over every quad, get min/maz X and Z coordinates
+            foreach (var quad in ColliderQuads)
+            {
+                // MIN
+                min.x = math.min(min.x, quad.GetMinPositionX());
+                min.z = math.min(min.z, quad.GetMinPositionZ());
+                // MAX
+                max.x = math.max(max.x, quad.GetMaxPositionX());
+                max.z = math.max(max.z, quad.GetMaxPositionZ());
+            }
+
+            // Compute bounds
+            int subdivisions = StaticColliderMeshGrid.Subdivisions;
+            var bounds = new GridXZ();
+            bounds.NumSubdivisionsX = subdivisions;
+            bounds.NumSubdivisionsZ = subdivisions;
+            bounds.Left = min.x;
+            bounds.Top = max.z;
+            bounds.SubdivisionWidth = (max.x - min.x) / subdivisions; // delta / subdivisions
+            bounds.SubdivisionLength = (max.z - min.z) / subdivisions; // delta / subdivisions
+
+            // Assign
+            meshGridXZ = bounds;
         }
 
         public void Deserialize(EndianBinaryReader reader)

@@ -117,7 +117,6 @@ namespace GameCube.GFZ.Stage
         public float GetMinPositionZ()
         {
             return math.min(PlaneStart.origin.z, PlaneEnd.origin.z);
-
         }
         public float GetMaxPositionX()
         {
@@ -126,7 +125,6 @@ namespace GameCube.GFZ.Stage
         public float GetMaxPositionZ()
         {
             return math.max(PlaneStart.origin.z, PlaneEnd.origin.z);
-
         }
 
 

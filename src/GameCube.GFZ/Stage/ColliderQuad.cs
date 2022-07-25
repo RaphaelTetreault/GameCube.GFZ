@@ -86,6 +86,36 @@ namespace GameCube.GFZ.Stage
                 Precomputed3 / 4f;
         }
 
+        // bounds x/z
+        public float GetMinPositionX()
+        {
+            float min = math.min(vertex0.x, vertex1.x);
+            min = math.min(min, vertex2.x);
+            min = math.min(min, vertex3.x);
+            return min;
+        }
+        public float GetMinPositionZ()
+        {
+            float min = math.min(vertex0.z, vertex1.z);
+            min = math.min(min, vertex2.z);
+            min = math.min(min, vertex3.z);
+            return min;
+        }
+        public float GetMaxPositionX()
+        {
+            float max = math.max(vertex0.x, vertex1.x);
+            max = math.max(max, vertex2.x);
+            max = math.max(max, vertex3.x);
+            return max;
+        }
+        public float GetMaxPositionZ()
+        {
+            float max = math.max(vertex0.z, vertex1.z);
+            max = math.max(max, vertex2.z);
+            max = math.max(max, vertex3.z);
+            return max;
+        }
+
         public void Deserialize(EndianBinaryReader reader)
         {
             this.RecordStartAddress(reader);
