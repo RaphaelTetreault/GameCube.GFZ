@@ -35,6 +35,9 @@ namespace GameCube.GFZ.Stage
         public static readonly string tsvStaticColliderMeshes = $"{nameof(StaticColliderMeshManager)}.tsv";
         public static readonly string tsvUnknownCollider = $"{nameof(UnknownCollider)}.tsv";
 
+        public static readonly string tsvStaticColliderTriangles = $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderTriangle)}s.tsv";
+        public static readonly string tsvStaticColliderQuads= $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderQuad)}s.tsv";
+
 
         #region Track Data / Transforms
 
@@ -1826,6 +1829,158 @@ namespace GameCube.GFZ.Stage
                     }
                     writer.Flush();
                 }
+            }
+        }
+
+
+
+        public static void AnalyzeStaticColliderTriangles(Scene[] scenes, string fileName)
+        {
+            using (var writer = new StreamWriter(File.Create(fileName)))
+            {
+                // Write header
+                writer.WriteNextCol("File");
+                writer.WriteNextCol("Addr");
+                writer.WriteNextCol("Tri Index");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".z");
+                writer.WriteNextRow();
+
+                foreach (var scene in scenes)
+                {
+                    int triIndex = 0;
+                    foreach (var tri in scene.staticColliderMeshManager.ColliderTris)
+                    {
+                        writer.WriteNextCol(scene.FileName);
+                        writer.WriteStartAddress(tri);
+                        writer.WriteNextCol(triIndex++);
+                        writer.WriteNextCol(tri.DotProduct);
+                        writer.WriteNextCol(tri.Normal.x);
+                        writer.WriteNextCol(tri.Normal.y);
+                        writer.WriteNextCol(tri.Normal.z);
+                        writer.WriteNextCol(tri.Vertex0.x);
+                        writer.WriteNextCol(tri.Vertex0.y);
+                        writer.WriteNextCol(tri.Vertex0.z);
+                        writer.WriteNextCol(tri.Vertex1.x);
+                        writer.WriteNextCol(tri.Vertex1.y);
+                        writer.WriteNextCol(tri.Vertex1.z);
+                        writer.WriteNextCol(tri.Vertex2.x);
+                        writer.WriteNextCol(tri.Vertex2.y);
+                        writer.WriteNextCol(tri.Vertex2.z);
+                        writer.WriteNextCol(tri.Precomputed0.x);
+                        writer.WriteNextCol(tri.Precomputed0.y);
+                        writer.WriteNextCol(tri.Precomputed0.z);
+                        writer.WriteNextCol(tri.Precomputed1.x);
+                        writer.WriteNextCol(tri.Precomputed1.y);
+                        writer.WriteNextCol(tri.Precomputed1.z);
+                        writer.WriteNextCol(tri.Precomputed2.x);
+                        writer.WriteNextCol(tri.Precomputed2.y);
+                        writer.WriteNextCol(tri.Precomputed2.z);
+                        writer.WriteNextRow();
+                    }
+                }
+                writer.Flush();
+            }
+        }
+
+        public static void AnalyzeStaticColliderQuads(Scene[] scenes, string fileName)
+        {
+            using (var writer = new StreamWriter(File.Create(fileName)))
+            {
+                // Write header
+                writer.WriteNextCol("File");
+                writer.WriteNextCol("Addr");
+                writer.WriteNextCol("Quad Index");
+                writer.WriteNextColNicify(nameof(ColliderQuad.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".z");
+                writer.WriteNextRow();
+
+                foreach (var scene in scenes)
+                {
+                    int quadIndex = 0;
+                    foreach (var quad in scene.staticColliderMeshManager.ColliderQuads)
+                    {
+                        writer.WriteNextCol(scene.FileName);
+                        writer.WriteStartAddress(quad);
+                        writer.WriteNextCol(quadIndex++);
+                        writer.WriteNextCol(quad.DotProduct);
+                        writer.WriteNextCol(quad.Normal.x);
+                        writer.WriteNextCol(quad.Normal.y);
+                        writer.WriteNextCol(quad.Normal.z);
+                        writer.WriteNextCol(quad.Vertex0.x);
+                        writer.WriteNextCol(quad.Vertex0.y);
+                        writer.WriteNextCol(quad.Vertex0.z);
+                        writer.WriteNextCol(quad.Vertex1.x);
+                        writer.WriteNextCol(quad.Vertex1.y);
+                        writer.WriteNextCol(quad.Vertex1.z);
+                        writer.WriteNextCol(quad.Vertex2.x);
+                        writer.WriteNextCol(quad.Vertex2.y);
+                        writer.WriteNextCol(quad.Vertex2.z);
+                        writer.WriteNextCol(quad.Vertex3.x);
+                        writer.WriteNextCol(quad.Vertex3.y);
+                        writer.WriteNextCol(quad.Vertex3.z);
+                        writer.WriteNextCol(quad.Precomputed0.x);
+                        writer.WriteNextCol(quad.Precomputed0.y);
+                        writer.WriteNextCol(quad.Precomputed0.z);
+                        writer.WriteNextCol(quad.Precomputed1.x);
+                        writer.WriteNextCol(quad.Precomputed1.y);
+                        writer.WriteNextCol(quad.Precomputed1.z);
+                        writer.WriteNextCol(quad.Precomputed2.x);
+                        writer.WriteNextCol(quad.Precomputed2.y);
+                        writer.WriteNextCol(quad.Precomputed2.z);
+                        writer.WriteNextCol(quad.Precomputed3.x);
+                        writer.WriteNextCol(quad.Precomputed3.y);
+                        writer.WriteNextCol(quad.Precomputed3.z);
+                        writer.WriteNextRow();
+                    }
+                }
+                writer.Flush();
             }
         }
 
