@@ -1454,6 +1454,7 @@ namespace GameCube.GFZ.Stage
             {
                 // Write header
                 writer.WriteNextCol("File");
+                writer.WriteNextCol("Addr");
                 writer.WriteNextCol("Index");
                 writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticColliderTrisPtr));
                 writer.WriteNextColNicify(nameof(StaticColliderMeshManager.TriMeshGridPtrs));
@@ -1476,14 +1477,13 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextColNicify(nameof(BoundingSphere.radius));
                 writer.WriteNextRow();
 
-
                 int index = 0;
-
                 foreach (var scene in scenes)
                 {
                     var staticColliderMeshes = scene.staticColliderMeshManager;
 
                     writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
+                    writer.WriteNextCol(staticColliderMeshes.AddressRange.PrintStartAddress());
                     writer.WriteNextCol(index++);
                     writer.WriteNextCol(staticColliderMeshes.StaticColliderTrisPtr.PrintAddress);
                     writer.WriteNextCol(staticColliderMeshes.TriMeshGridPtrs.Length);
