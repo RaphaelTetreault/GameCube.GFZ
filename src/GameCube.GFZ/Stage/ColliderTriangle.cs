@@ -31,7 +31,7 @@ namespace GameCube.GFZ.Stage
         /// <remarks>
         /// The dot product of dot(normal, vertex0/1/2). All result in the same scalar.
         /// </remarks>
-        public float DotProduct { get => dotProduct; set => dotProduct = value; }
+        public float PlaneDistance { get => dotProduct; set => dotProduct = value; }
         public float3 Normal { get => normal; set => normal = value; }
         public float3 Precomputed0 { get => precomputed0; set => precomputed0 = value; }
         public float3 Precomputed1 { get => precomputed1; set => precomputed1 = value; }
@@ -46,16 +46,18 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// Computes and stores the dotProduct of this triangle.
         /// </summary>
-        public void ComputeDotProduct()
+        public void ComputePlaneDistance()
         {
-            // NOTE you can dot any of the vertices you want with
-            //      the normal and will always get the same scalar.
-            float dotProduct =
-                Normal.x * Vertex0.x +
-                Normal.y * Vertex0.y +
-                Normal.z * Vertex0.z;
+            //// NOTE you can dot any of the vertices you want with
+            ////      the normal and will always get the same scalar.
+            //float planeDistance =
+            //    Normal.x * Vertex0.x +
+            //    Normal.y * Vertex0.y +
+            //    Normal.z * Vertex0.z;
 
-            this.DotProduct = dotProduct;
+            //this.PlaneDistance = -planeDistance;
+
+            PlaneDistance = -math.dot(normal, vertex0);
         }
 
         public float3[] GetVerts()
@@ -152,7 +154,7 @@ namespace GameCube.GFZ.Stage
         {
             builder.AppendLineIndented(indent, indentLevel, nameof(ColliderTriangle));
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(DotProduct)}: {DotProduct}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(PlaneDistance)}: {PlaneDistance}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Vertex0)}: {Vertex0}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Vertex1)}: {Vertex1}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Vertex2)}: {Vertex2}");

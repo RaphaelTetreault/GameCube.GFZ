@@ -186,7 +186,7 @@ namespace GameCube.GFZ.Stage
             bounds.NumSubdivisionsX = subdivisions;
             bounds.NumSubdivisionsZ = subdivisions;
             bounds.Left = min.x;
-            bounds.Top = max.z;
+            bounds.Top = min.z;
             bounds.SubdivisionWidth = (max.x - min.x) / subdivisions; // delta / subdivisions
             bounds.SubdivisionLength = (max.z - min.z) / subdivisions; // delta / subdivisions
 

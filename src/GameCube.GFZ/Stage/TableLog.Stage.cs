@@ -447,7 +447,7 @@ namespace GameCube.GFZ.Stage
 
         #endregion
 
-        #region Scene Objects
+        #region Dynamic Scene Objects
 
         public static void AnalyzeSceneObjectDynamic(Scene[] scenes, string fileName)
         {
@@ -457,6 +457,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("File");
                 writer.WriteNextCol("Game Object #");
                 writer.WriteNextCol("Game Object");
+                writer.WriteNextCol("Addr");
                 writer.WriteNextCol(nameof(SceneObjectDynamic.Unk0x00));
                 writer.WriteNextCol(nameof(SceneObjectDynamic.Unk0x00));
                 writer.WriteNextCol(nameof(SceneObjectDynamic.Unk0x04));
@@ -480,6 +481,7 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(scene.FileName);
                         writer.WriteNextCol(sceneObjectIndex);
                         writer.WriteNextCol(sceneObject.Name);
+                        writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
                         writer.WriteNextCol(sceneObject.Unk0x00);
                         writer.WriteNextCol($"0x{sceneObject.Unk0x00:x8}");
                         writer.WriteNextCol(sceneObject.Unk0x04);
@@ -619,7 +621,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Tri Index");
                 writer.WriteNextCol("Addr");
 
-                writer.WriteNextColNicify(nameof(ColliderTriangle.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".z");
@@ -664,7 +666,7 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(triIndex++);
                             writer.WriteStartAddress(tri);
 
-                            writer.WriteNextCol(tri.DotProduct);
+                            writer.WriteNextCol(tri.PlaneDistance);
                             writer.WriteNextCol(tri.Normal.x);
                             writer.WriteNextCol(tri.Normal.y);
                             writer.WriteNextCol(tri.Normal.z);
@@ -1523,6 +1525,7 @@ namespace GameCube.GFZ.Stage
                 //
                 writer.WriteNextCol("name");
                 writer.WriteNextCol("Object Type");
+                writer.WriteNextCol("Addr");
                 //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
                 writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
                 //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x08));
@@ -1537,12 +1540,12 @@ namespace GameCube.GFZ.Stage
                     var isAxGx = scene.IsFileGX ? "GX" : "AX";
 
                     // Get all the scene object references
-                    var objectsList = new List<SceneObjectLOD>();
+                    var sceneObjectLODs = new List<SceneObjectLOD>();
                     foreach (var templateSceneObject in scene.sceneObjects)
                     {
                         var sceneObjects = templateSceneObject.LODs;
                         foreach (var sceneObject in sceneObjects)
-                            objectsList.Add(sceneObject);
+                            sceneObjectLODs.Add(sceneObject);
                     }
                     //foreach (var staticSceneObject in scene.staticSceneObjects)
                     //{
@@ -1552,7 +1555,7 @@ namespace GameCube.GFZ.Stage
                     //}
 
                     // iterate
-                    foreach (var sceneObjectReference in objectsList)
+                    foreach (var sceneObjectLOD in sceneObjectLODs)
                     {
                         writer.WriteNextCol(scene.FileName);
                         writer.WriteNextCol(scene.CourseIndex);
@@ -1560,11 +1563,12 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(courseID);
                         writer.WriteNextCol(isAxGx);
                         //
-                        writer.WriteNextCol(sceneObjectReference.Name);
+                        writer.WriteNextCol(sceneObjectLOD.Name);
+                        writer.WriteNextCol(sceneObjectLOD.AddressRange.PrintStartAddress());
                         //writer.WriteNextCol(sceneObjectReference.zero_0x00);
-                        writer.WriteNextCol(sceneObjectReference.LodNamePtr);
+                        writer.WriteNextCol(sceneObjectLOD.LodNamePtr);
                         //writer.WriteNextCol(sceneObjectReference.zero_0x08);
-                        writer.WriteNextCol(sceneObjectReference.LodDistance);
+                        writer.WriteNextCol(sceneObjectLOD.LodDistance);
                         //
                         writer.WriteNextRow();
                     }
@@ -1586,6 +1590,7 @@ namespace GameCube.GFZ.Stage
                 //
                 writer.WriteNextCol("name");
                 writer.WriteNextCol("Object Type");
+                writer.WriteNextCol("Addr");
                 writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
                 writer.WriteNextCol(nameof(SceneObject.LodsPtr));
                 writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
@@ -1621,6 +1626,7 @@ namespace GameCube.GFZ.Stage
                         //
                         writer.WriteNextCol(sceneObject.sir.PrimaryLOD.Name);
                         writer.WriteNextCol(sceneObject.category);
+                        writer.WriteNextCol(sceneObject.sir.AddressRange.PrintStartAddress());
                         writer.WriteNextCol(sceneObject.sir.LodRenderFlags);
                         writer.WriteNextCol(sceneObject.sir.LodsPtr);
                         writer.WriteNextCol(sceneObject.sir.ColliderMeshPtr);
@@ -1842,7 +1848,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("File");
                 writer.WriteNextCol("Addr");
                 writer.WriteNextCol("Tri Index");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".z");
@@ -1874,7 +1880,7 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(scene.FileName);
                         writer.WriteStartAddress(tri);
                         writer.WriteNextCol(triIndex++);
-                        writer.WriteNextCol(tri.DotProduct);
+                        writer.WriteNextCol(tri.PlaneDistance);
                         writer.WriteNextCol(tri.Normal.x);
                         writer.WriteNextCol(tri.Normal.y);
                         writer.WriteNextCol(tri.Normal.z);

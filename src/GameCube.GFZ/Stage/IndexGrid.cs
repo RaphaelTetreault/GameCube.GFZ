@@ -60,7 +60,11 @@ namespace GameCube.GFZ.Stage
             }
         }
         public Pointer[] IndexListPtrs { get => indexListPtrs; set => indexListPtrs = value; }
-        public IndexList[] IndexLists { get => indexLists; set => indexLists = value; }
+        public IndexList[] IndexLists
+        {
+            get => indexLists;
+            set  { indexLists = value; UpdateHasIndexes(); }
+        }
 
 
         // METHODS
@@ -68,11 +72,19 @@ namespace GameCube.GFZ.Stage
         {
             foreach (var indexList in indexLists)
             {
+                if (indexList is null)
+                    continue;
+
                 if (indexList.Length > 0)
                     return true;
             }
 
             return false;
+        }
+
+        private void UpdateHasIndexes()
+        {
+            HasIndexes = HasAnyIndexes(indexLists);
         }
 
         private ushort GetLargestIndex(IndexList[] indexLists)
