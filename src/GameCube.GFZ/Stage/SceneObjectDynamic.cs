@@ -16,8 +16,8 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private int unk0x00; // rendering? 
-        private int unk0x04; // LOD Flags? -1 = no LOD/no-disable, otherwise flags.
+        private ObjectRenderFlags0x00 unk0x00; // rendering? 
+        private ObjectRenderFlags0x04 unk0x04; // LOD Flags? -1 = no LOD/no-disable, otherwise flags.
         private Pointer sceneObjectPtr;
         private TransformTRXS transformTRXS = new();
         private int zero_0x2C; // null ptr?
@@ -37,8 +37,8 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
         public ShiftJisCString Name => SceneObject.Name;
 
-        public int Unk0x00 { get => unk0x00; set => unk0x00 = value; }
-        public int Unk0x04 { get => unk0x04; set => unk0x04 = value; }
+        public ObjectRenderFlags0x00 Unk0x00 { get => unk0x00; set => unk0x00 = value; }
+        public ObjectRenderFlags0x04 Unk0x04 { get => unk0x04; set => unk0x04 = value; }
         public Pointer SceneObjectPtr { get => sceneObjectPtr; set => sceneObjectPtr = value; }
         public TransformTRXS TransformTRXS { get => transformTRXS; set => transformTRXS = value; }
         public Pointer AnimationClipPtr { get => animationClipPtr; set => animationClipPtr = value; }
