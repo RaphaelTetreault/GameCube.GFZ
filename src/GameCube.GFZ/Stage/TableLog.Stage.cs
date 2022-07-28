@@ -1205,6 +1205,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Course");
                 writer.WriteNextCol("AX/GX");
                 //
+                writer.WriteNextCol("Addr");
                 writer.WriteNextCol("Index");
                 //
                 writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
@@ -1237,6 +1238,7 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(courseID);
                             writer.WriteNextCol(isAxGx);
                             //
+                            writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
                             writer.WriteNextCol($"[{countD1}/{totalD1}]");
                             //
                             writer.WriteNextCol(keyableAttribute.EaseMode);
@@ -1264,6 +1266,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Course");
                 writer.WriteNextCol("AX/GX");
                 //
+                writer.WriteNextCol("Addr");
                 writer.WriteNextCol(nameof(Fog.Interpolation));
                 writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.near));
                 writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.far));
@@ -1288,6 +1291,7 @@ namespace GameCube.GFZ.Stage
                     writer.WriteNextCol(courseID);
                     writer.WriteNextCol(isAxGx);
                     //
+                    writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
                     writer.WriteNextCol(scene.fog.Interpolation);
                     writer.WriteNextCol(scene.fog.FogRange.near);
                     writer.WriteNextCol(scene.fog.FogRange.far);
