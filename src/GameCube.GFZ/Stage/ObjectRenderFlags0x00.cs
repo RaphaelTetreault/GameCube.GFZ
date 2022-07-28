@@ -22,7 +22,7 @@
         hasTextureScroll3 = 1 << 16,
         unk_17 = 1 << 17,
         unk_18 = 1 << 18, // crash?
-        noRenderBehindAlpha = 1 << 19,
+        ReceiveEfbShadow = 1 << 19,
         unk_20 = 1 << 20,
         unk_21 = 1 << 21,
         unk_22 = 1 << 22,
