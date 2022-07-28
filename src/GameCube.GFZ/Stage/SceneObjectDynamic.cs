@@ -16,8 +16,8 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private ObjectRenderFlags0x00 unk0x00; // rendering? 
-        private ObjectRenderFlags0x04 unk0x04; // LOD Flags? -1 = no LOD/no-disable, otherwise flags.
+        private ObjectRenderFlags0x00 unk0x00;
+        private ObjectRenderFlags0x04 unk0x04;
         private Pointer sceneObjectPtr;
         private TransformTRXS transformTRXS = new();
         private int zero_0x2C; // null ptr?

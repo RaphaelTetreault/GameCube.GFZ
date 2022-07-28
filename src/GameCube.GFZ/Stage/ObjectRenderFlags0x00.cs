@@ -6,7 +6,7 @@
         renderObject = 1 << 0,
         unk_RenderObject1 = 1 << 1, // 1 + 2 + 3:
         unk_RenderObject2 = 1 << 2, // some of these enable rendering objects during time-attacke name-enter screen
-        unk_RenderObject3 = 1 << 3, // ...
+        unk_RenderObject3 = 1 << 3, // ... seems like these could influence LOD for multiplayer
         unk_AlphaBlendMode = 1 << 4,
         unk_5 = 1 << 5,
         unk_HideObject1 = 1 << 6,
