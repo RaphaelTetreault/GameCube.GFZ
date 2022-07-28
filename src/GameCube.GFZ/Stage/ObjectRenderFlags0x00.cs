@@ -16,10 +16,10 @@
         unk_ModifyRenderIndex = 1 << 10,
         renderThroughAlpha = 1 << 11,
         unk_12 = 1 << 12,
-        textureScrollBit0 = 1 << 13, // disables
-        textureScrollBit1 = 1 << 14,
-        textureScrollBit2 = 1 << 15,
-        textureScrollBit3 = 1 << 16,
+        hasTextureScroll0 = 1 << 13,
+        hasTextureScroll1 = 1 << 14,
+        hasTextureScroll2 = 1 << 15,
+        hasTextureScroll3 = 1 << 16,
         unk_17 = 1 << 17,
         unk_18 = 1 << 18, // crash?
         noRenderBehindAlpha = 1 << 19,

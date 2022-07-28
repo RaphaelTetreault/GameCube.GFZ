@@ -25,6 +25,7 @@ namespace GameCube.GFZ.Stage
     {
         // CONSTANTS
         public const int kCount = 12;
+        public const int kUsedCount = 4;
 
 
         // FIELDS
