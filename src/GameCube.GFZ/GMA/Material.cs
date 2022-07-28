@@ -88,5 +88,17 @@ namespace GameCube.GFZ.GMA
             this.RecordEndAddress(writer);
         }
 
+        public void OffsetTevLayerIndices(short offset)
+        {
+            if (tevLayerIndex0 >= 0)
+                tevLayerIndex0 += offset;
+
+            if (tevLayerIndex1 >= 0)
+                tevLayerIndex1 += offset;
+
+            if (tevLayerIndex2 >= 0)
+                tevLayerIndex2 += offset;
+        }
+
     }
 }

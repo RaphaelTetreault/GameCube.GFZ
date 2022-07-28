@@ -352,8 +352,9 @@ namespace GameCube.GFZ.GMA
         }
 
 
-        //
-
+        /// <summary>
+        /// Rewrites TEV Layer index for each layer in order.
+        /// </summary>
         public void PatchTevLayerIndexes()
         {
             for (ushort i = 0; i < tevLayers.Length; i++)

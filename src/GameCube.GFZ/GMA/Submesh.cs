@@ -46,16 +46,16 @@ namespace GameCube.GFZ.GMA
         public Material Material { get => material; set => material = value; }
         public AttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
         public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
-        public DisplayList[] PrimaryDisplayListsOpaque { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
-        public DisplayList[] PrimaryDisplayListsTranslucid { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
+        public DisplayList[] PrimaryBackFacing { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
+        public DisplayList[] PrimaryFrontFacing { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
         public bool RenderPrimaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryFrontCull);
         public bool RenderPrimaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryBackCull);
         public bool RenderSecondary => RenderSecondaryFrontFaceCull || RenderSecondaryBackFaceCull;
         public bool RenderSecondaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryFrontCull);
         public bool RenderSecondaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryBackCull);
         public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
-        public DisplayList[] SecondaryDisplayListsOpaque { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
-        public DisplayList[] SecondaryDisplayListsTranslucid { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
+        public DisplayList[] SecondaryBackFacing { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
+        public DisplayList[] SecondaryFrontFacing { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
         public UnkAlphaOptions UnkAlphaOptions { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
 
         // METHODS
