@@ -26,12 +26,12 @@ namespace GameCube.GFZ.TPL
         private ushort const_0x1234;
 
         public bool IsGarbageEntry => const_zero != 0;
-        public bool IsNull => isNull;
-        public TextureFormat TextureFormat => textureFormat;
-        public Pointer TexturePtr => texturePtr;
-        public ushort Width => width;
-        public ushort Height => height;
-        public ushort MipmapLevels => mipmapCount;
+        public bool IsNull { get => isNull; set => isNull = value; }
+        public TextureFormat TextureFormat { get => textureFormat; set => textureFormat = value; }
+        public Pointer TexturePtr { get => texturePtr; set => texturePtr = value; }
+        public ushort Width { get => width; set => width = value; }
+        public ushort Height { get => height; set => height = value; }
+        public ushort MipmapLevels { get => mipmapCount; set => mipmapCount = value; }
 
         /// <summary>
         /// Number of textures supposed to be stored given mipmap levels
@@ -70,7 +70,7 @@ namespace GameCube.GFZ.TPL
         {
             {
                 Assert.IsTrue(const_zero == 0);
-                Assert.IsTrue(const_0x1234 == k0x1234);
+                //Assert.IsTrue(const_0x1234 == k0x1234);
             }
             this.RecordStartAddress(writer);
             {
@@ -81,7 +81,7 @@ namespace GameCube.GFZ.TPL
                 writer.Write(width);
                 writer.Write(height);
                 writer.Write(mipmapCount);
-                writer.Write(const_0x1234);
+                writer.Write(k0x1234);
             }
             this.RecordEndAddress(writer);
         }

@@ -14,7 +14,7 @@
         renderAsBillboarded = 1 << 8,
         renderInScreenSpace = 1 << 9,
         unk_ModifyRenderIndex = 1 << 10,
-        renderThroughAlpha = 1 << 11,
+        alphaNoClipSelf = 1 << 11,
         unk_12 = 1 << 12,
         hasTextureScroll0 = 1 << 13,
         hasTextureScroll1 = 1 << 14,
