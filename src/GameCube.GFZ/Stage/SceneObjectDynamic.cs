@@ -173,5 +173,22 @@ namespace GameCube.GFZ.Stage
 
         public override string ToString() => PrintSingleLine();
 
+        public void AssignTextureScrollFlags()
+        {
+            bool hasTextureScroll0 = textureScroll.Fields[0] is not null;
+            bool hasTextureScroll1 = textureScroll.Fields[1] is not null;
+            bool hasTextureScroll2 = textureScroll.Fields[2] is not null;
+            bool hasTextureScroll3 = textureScroll.Fields[3] is not null;
+
+            if (hasTextureScroll0)
+                unk0x00 |= ObjectRenderFlags0x00.hasTextureScroll0;
+            if (hasTextureScroll1)
+                unk0x00 |= ObjectRenderFlags0x00.hasTextureScroll1;
+            if (hasTextureScroll2)
+                unk0x00 |= ObjectRenderFlags0x00.hasTextureScroll2;
+            if (hasTextureScroll3)
+                unk0x00 |= ObjectRenderFlags0x00.hasTextureScroll3;
+        }
+
     }
 }

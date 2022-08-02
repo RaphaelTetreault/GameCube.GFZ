@@ -23,7 +23,7 @@ namespace GameCube.GFZ.GMA
         doubleSidedFaces = 1 << 1,
 
         /// <summary>
-        /// 
+        /// Do not apply fog to this mesh.
         /// </summary>
         noFog = 1 << 2,
 
@@ -35,17 +35,17 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// 
         /// </summary>
-        unk4 = 1 << 4,
+        perVertexShading = 1 << 4,
 
         /// <summary>
         /// 
         /// </summary>
-        customBlendSource = 1 << 5,
+        screenBlend = 1 << 5,
 
         /// <summary>
         /// 
         /// </summary>
-        customBlendDestination = 1 << 6,
+        additiveBlend = 1 << 6,
 
         /// <summary>
         /// 
@@ -58,10 +58,10 @@ namespace GameCube.GFZ.GMA
         /// <remarks>
         /// IIRC not used in GFZ, from SMB decomp.
         /// </remarks>
-        vertexColors = 1 << 8,
+        //vertexColors = 1 << 8,
 
         /// <summary>
-        /// Data at address 0x3C is non-null.
+        /// Data at address 0x3C is non-zero.
         /// </summary>
         /// <remarks>
         /// 2022-06-24: verified on single occurence.
