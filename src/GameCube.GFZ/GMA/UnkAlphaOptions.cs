@@ -20,7 +20,7 @@ namespace GameCube.GFZ.GMA
         public AddressRange AddressRange { get; set; }
         public float3 Origin { get => origin; set => origin = value; }
         public float Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
-        public BlendFactors Unk0x10 { get => unk0x10; set => unk0x10 = value; }
+        public BlendFactors BlendFactors { get => unk0x10; set => unk0x10 = value; }
 
 
         // METHODS

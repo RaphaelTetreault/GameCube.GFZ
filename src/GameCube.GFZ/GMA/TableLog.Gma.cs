@@ -167,7 +167,7 @@ namespace GameCube.GFZ.GMA
                 writer.WriteNextCol(nameof(Submesh.VertexAttributes));
                 writer.WriteNextCol(nameof(UnkAlphaOptions.Origin));
                 writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
-                writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x10));
+                writer.WriteNextCol(nameof(UnkAlphaOptions.BlendFactors));
                 writer.WriteNextRow();
 
                 foreach (var gma in gmas)
@@ -200,7 +200,7 @@ namespace GameCube.GFZ.GMA
                             writer.WriteNextCol(submesh.VertexAttributes);
                             writer.WriteNextCol(submesh.UnkAlphaOptions.Origin);
                             writer.WriteNextCol(submesh.UnkAlphaOptions.Unk0x0C);
-                            writer.WriteNextCol(submesh.UnkAlphaOptions.Unk0x10);
+                            writer.WriteNextCol(submesh.UnkAlphaOptions.BlendFactors);
                             writer.WriteNextRow();
                         }
                         modelIndex++;

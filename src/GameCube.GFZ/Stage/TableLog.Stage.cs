@@ -483,9 +483,9 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(sceneObject.Name);
                         writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
                         writer.WriteNextCol(sceneObject.Unk0x00);
-                        writer.WriteNextCol($"0x{sceneObject.Unk0x00:x8}");
+                        writer.WriteNextCol($"0x{(uint)sceneObject.Unk0x00:x8}");
                         writer.WriteNextCol(sceneObject.Unk0x04);
-                        writer.WriteNextCol($"0x{sceneObject.Unk0x04:x8}");
+                        writer.WriteNextCol($"0x{(uint)sceneObject.Unk0x04:x8}");
                         writer.WriteNextCol(sceneObject.SceneObjectPtr.PrintAddress);
                         writer.WriteNextCol(sceneObject.TransformTRXS.Position);
                         writer.WriteNextCol(sceneObject.TransformTRXS.RotationEuler);

@@ -7,7 +7,7 @@ namespace GameCube.GFZ.GMA
     public enum TexFlags0x10 : ushort
     {
         /// <summary>
-        /// Maybe an alpha multiply?
+        /// Maybe an alpha multiply on self/mesh?
         /// </summary>
         unk0 = 1 << 0,
 
