@@ -35,7 +35,7 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// Used as alpha mask? (likely?) Perhaps some mip preservation stuff.
         /// </summary>
-        UNK_FLAG_5 = 1 << 5,
+        Unk5_AlphaMultiply = 1 << 5,
         /// <summary>
         /// Total occurences = 3. Only MCSO, on a single geometry set.
         /// </summary>

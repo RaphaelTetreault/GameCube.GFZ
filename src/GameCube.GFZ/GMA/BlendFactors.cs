@@ -23,12 +23,12 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// 
         /// </summary>
-        unk2 = 1 << 2, // 0x04
+        unk2_UseBlendMode = 1 << 2, // 0x04
 
         /// <summary>
         /// 
         /// </summary>
-        unk4 = 1 << 4, // 0x16
+        unk4_UseBlendMode = 1 << 4, // 0x16
 
         /// <summary>
         /// 
