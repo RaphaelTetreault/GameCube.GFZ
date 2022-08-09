@@ -1,5 +1,6 @@
 using GameCube.GX;
 using GameCube.GX.Texture;
+using Manifold;
 using Manifold.IO;
 using System;
 
@@ -57,8 +58,10 @@ namespace GameCube.GFZ.TPL
                 // Assert game uses all power-of-two textures.
                 int isWidthPowerOfTwo = textureDescription.Width % encoding.BlockWidth;
                 int isHeightPowerOfTwo = textureDescription.Height % encoding.BlockHeight;
-                Assert.IsTrue(isWidthPowerOfTwo == 0);
-                Assert.IsTrue(isHeightPowerOfTwo == 0);
+                if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
+                    DebugConsole.Log($"Texture index {i} has size (x:{textureDescription.Width}, y:{textureDescription.Height}). Not a power of two.");
+                //Assert.IsTrue(isWidthPowerOfTwo == 0);
+                //Assert.IsTrue(isHeightPowerOfTwo == 0);
 
                 // Read the texture series.
                 reader.JumpToAddress(textureDescription.TexturePtr);
