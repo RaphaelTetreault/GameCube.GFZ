@@ -59,7 +59,7 @@ namespace GameCube.GFZ.TPL
                 int isWidthPowerOfTwo = textureDescription.Width % encoding.BlockWidth;
                 int isHeightPowerOfTwo = textureDescription.Height % encoding.BlockHeight;
                 if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
-                    DebugConsole.Log($"Texture index {i} has size (x:{textureDescription.Width}, y:{textureDescription.Height}). Not a power of two.");
+                    DebugConsole.Log($"{FileName}.tpl: Texture index {i} has size (x:{textureDescription.Width}, y:{textureDescription.Height}). Not a power of two.");
                 //Assert.IsTrue(isWidthPowerOfTwo == 0);
                 //Assert.IsTrue(isHeightPowerOfTwo == 0);
 
