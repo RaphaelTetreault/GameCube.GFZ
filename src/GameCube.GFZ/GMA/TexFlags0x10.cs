@@ -9,7 +9,7 @@ namespace GameCube.GFZ.GMA
         /// <summary>
         /// Maybe an alpha multiply on self/mesh?
         /// </summary>
-        CheapAlphaOnSelf = 1 << 0,
+        unk0_AlphaScreenSelf = 1 << 0,
 
         /// <summary>
         /// 
