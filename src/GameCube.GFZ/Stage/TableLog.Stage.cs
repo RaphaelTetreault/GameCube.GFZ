@@ -634,15 +634,15 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".z");
 
                 writer.WriteNextRow();
 
@@ -679,15 +679,15 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(tri.Vertex2.x);
                             writer.WriteNextCol(tri.Vertex2.y);
                             writer.WriteNextCol(tri.Vertex2.z);
-                            writer.WriteNextCol(tri.Precomputed0.x);
-                            writer.WriteNextCol(tri.Precomputed0.y);
-                            writer.WriteNextCol(tri.Precomputed0.z);
-                            writer.WriteNextCol(tri.Precomputed1.x);
-                            writer.WriteNextCol(tri.Precomputed1.y);
-                            writer.WriteNextCol(tri.Precomputed1.z);
-                            writer.WriteNextCol(tri.Precomputed2.x);
-                            writer.WriteNextCol(tri.Precomputed2.y);
-                            writer.WriteNextCol(tri.Precomputed2.z);
+                            writer.WriteNextCol(tri.EdgeNormal0.x);
+                            writer.WriteNextCol(tri.EdgeNormal0.y);
+                            writer.WriteNextCol(tri.EdgeNormal0.z);
+                            writer.WriteNextCol(tri.EdgeNormal1.x);
+                            writer.WriteNextCol(tri.EdgeNormal1.y);
+                            writer.WriteNextCol(tri.EdgeNormal1.z);
+                            writer.WriteNextCol(tri.EdgeNormal2.x);
+                            writer.WriteNextCol(tri.EdgeNormal2.y);
+                            writer.WriteNextCol(tri.EdgeNormal2.z);
 
                             writer.WriteNextRow();
                         }
@@ -710,7 +710,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("Quad Index");
                 writer.WriteNextCol("Addr");
 
-                writer.WriteNextColNicify(nameof(ColliderQuad.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".z");
@@ -726,18 +726,18 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".z");
 
                 writer.WriteNextRow();
 
@@ -761,7 +761,7 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(quadIndex++);
                             writer.WriteStartAddress(quad);
 
-                            writer.WriteNextCol(quad.DotProduct);
+                            writer.WriteNextCol(quad.PlaneDistance);
                             writer.WriteNextCol(quad.Normal.x);
                             writer.WriteNextCol(quad.Normal.y);
                             writer.WriteNextCol(quad.Normal.z);
@@ -777,18 +777,18 @@ namespace GameCube.GFZ.Stage
                             writer.WriteNextCol(quad.Vertex3.x);
                             writer.WriteNextCol(quad.Vertex3.y);
                             writer.WriteNextCol(quad.Vertex3.z);
-                            writer.WriteNextCol(quad.Precomputed0.x);
-                            writer.WriteNextCol(quad.Precomputed0.y);
-                            writer.WriteNextCol(quad.Precomputed0.z);
-                            writer.WriteNextCol(quad.Precomputed1.x);
-                            writer.WriteNextCol(quad.Precomputed1.y);
-                            writer.WriteNextCol(quad.Precomputed1.z);
-                            writer.WriteNextCol(quad.Precomputed2.x);
-                            writer.WriteNextCol(quad.Precomputed2.y);
-                            writer.WriteNextCol(quad.Precomputed2.z);
-                            writer.WriteNextCol(quad.Precomputed3.x);
-                            writer.WriteNextCol(quad.Precomputed3.y);
-                            writer.WriteNextCol(quad.Precomputed3.z);
+                            writer.WriteNextCol(quad.EdgeNormal0.x);
+                            writer.WriteNextCol(quad.EdgeNormal0.y);
+                            writer.WriteNextCol(quad.EdgeNormal0.z);
+                            writer.WriteNextCol(quad.EdgeNormal1.x);
+                            writer.WriteNextCol(quad.EdgeNormal1.y);
+                            writer.WriteNextCol(quad.EdgeNormal1.z);
+                            writer.WriteNextCol(quad.EdgeNormal2.x);
+                            writer.WriteNextCol(quad.EdgeNormal2.y);
+                            writer.WriteNextCol(quad.EdgeNormal2.z);
+                            writer.WriteNextCol(quad.EdgeNormal3.x);
+                            writer.WriteNextCol(quad.EdgeNormal3.y);
+                            writer.WriteNextCol(quad.EdgeNormal3.z);
 
                             writer.WriteNextRow();
                         }
@@ -1865,15 +1865,15 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed0) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed1) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderTriangle.Precomputed2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".z");
                 writer.WriteNextRow();
 
                 foreach (var scene in scenes)
@@ -1897,15 +1897,15 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(tri.Vertex2.x);
                         writer.WriteNextCol(tri.Vertex2.y);
                         writer.WriteNextCol(tri.Vertex2.z);
-                        writer.WriteNextCol(tri.Precomputed0.x);
-                        writer.WriteNextCol(tri.Precomputed0.y);
-                        writer.WriteNextCol(tri.Precomputed0.z);
-                        writer.WriteNextCol(tri.Precomputed1.x);
-                        writer.WriteNextCol(tri.Precomputed1.y);
-                        writer.WriteNextCol(tri.Precomputed1.z);
-                        writer.WriteNextCol(tri.Precomputed2.x);
-                        writer.WriteNextCol(tri.Precomputed2.y);
-                        writer.WriteNextCol(tri.Precomputed2.z);
+                        writer.WriteNextCol(tri.EdgeNormal0.x);
+                        writer.WriteNextCol(tri.EdgeNormal0.y);
+                        writer.WriteNextCol(tri.EdgeNormal0.z);
+                        writer.WriteNextCol(tri.EdgeNormal1.x);
+                        writer.WriteNextCol(tri.EdgeNormal1.y);
+                        writer.WriteNextCol(tri.EdgeNormal1.z);
+                        writer.WriteNextCol(tri.EdgeNormal2.x);
+                        writer.WriteNextCol(tri.EdgeNormal2.y);
+                        writer.WriteNextCol(tri.EdgeNormal2.z);
                         writer.WriteNextRow();
                     }
                 }
@@ -1921,7 +1921,7 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextCol("File");
                 writer.WriteNextCol("Addr");
                 writer.WriteNextCol("Quad Index");
-                writer.WriteNextColNicify(nameof(ColliderQuad.DotProduct));
+                writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".z");
@@ -1937,18 +1937,18 @@ namespace GameCube.GFZ.Stage
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".x");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".y");
                 writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed0) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed1) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed2) + ".z");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".x");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".y");
-                writer.WriteNextColNicify(nameof(ColliderQuad.Precomputed3) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".z");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".x");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".y");
+                writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".z");
                 writer.WriteNextRow();
 
                 foreach (var scene in scenes)
@@ -1959,7 +1959,7 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(scene.FileName);
                         writer.WriteStartAddress(quad);
                         writer.WriteNextCol(quadIndex++);
-                        writer.WriteNextCol(quad.DotProduct);
+                        writer.WriteNextCol(quad.PlaneDistance);
                         writer.WriteNextCol(quad.Normal.x);
                         writer.WriteNextCol(quad.Normal.y);
                         writer.WriteNextCol(quad.Normal.z);
@@ -1975,18 +1975,18 @@ namespace GameCube.GFZ.Stage
                         writer.WriteNextCol(quad.Vertex3.x);
                         writer.WriteNextCol(quad.Vertex3.y);
                         writer.WriteNextCol(quad.Vertex3.z);
-                        writer.WriteNextCol(quad.Precomputed0.x);
-                        writer.WriteNextCol(quad.Precomputed0.y);
-                        writer.WriteNextCol(quad.Precomputed0.z);
-                        writer.WriteNextCol(quad.Precomputed1.x);
-                        writer.WriteNextCol(quad.Precomputed1.y);
-                        writer.WriteNextCol(quad.Precomputed1.z);
-                        writer.WriteNextCol(quad.Precomputed2.x);
-                        writer.WriteNextCol(quad.Precomputed2.y);
-                        writer.WriteNextCol(quad.Precomputed2.z);
-                        writer.WriteNextCol(quad.Precomputed3.x);
-                        writer.WriteNextCol(quad.Precomputed3.y);
-                        writer.WriteNextCol(quad.Precomputed3.z);
+                        writer.WriteNextCol(quad.EdgeNormal0.x);
+                        writer.WriteNextCol(quad.EdgeNormal0.y);
+                        writer.WriteNextCol(quad.EdgeNormal0.z);
+                        writer.WriteNextCol(quad.EdgeNormal1.x);
+                        writer.WriteNextCol(quad.EdgeNormal1.y);
+                        writer.WriteNextCol(quad.EdgeNormal1.z);
+                        writer.WriteNextCol(quad.EdgeNormal2.x);
+                        writer.WriteNextCol(quad.EdgeNormal2.y);
+                        writer.WriteNextCol(quad.EdgeNormal2.z);
+                        writer.WriteNextCol(quad.EdgeNormal3.x);
+                        writer.WriteNextCol(quad.EdgeNormal3.y);
+                        writer.WriteNextCol(quad.EdgeNormal3.z);
                         writer.WriteNextRow();
                     }
                 }
