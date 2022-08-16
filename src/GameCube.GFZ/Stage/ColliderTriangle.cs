@@ -86,6 +86,22 @@ namespace GameCube.GFZ.Stage
             edgeNormal2 = math.cross(normal, v2v0);
         }
 
+        public void UpdateNormal()
+        {
+            float3 v0v1 = vertex0 - vertex1; // dir v0 -> v1
+            float3 v0v2 = vertex0 - vertex2; // dir v0 -> v2
+            normal = -math.cross(v0v1, v0v2);
+            normal = math.normalize(normal);
+        }
+
+        public void Update()
+        {
+            // Update nromal first since other data relies on it.
+            UpdateNormal();
+            UpdateEdgeNormals();
+            UpdatePlaneDistance();
+        }
+
         // bounds x/z
         // TODO: deprecate, use different moeth so triangle can go between bounds.
         public float GetMinPositionX()
