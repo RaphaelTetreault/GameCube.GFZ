@@ -31,7 +31,7 @@ namespace GameCube.GFZ.Stage
         // FIELDS
         private Pointer[] fieldPtrs;
         // REFERENCE FIELDS
-        private TextureScrollField[] fields = new TextureScrollField[0];
+        private TextureScrollField[] fields = new TextureScrollField[0]; // could you not init to size 12?
 
 
         // PROPERTIES
