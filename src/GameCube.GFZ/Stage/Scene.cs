@@ -673,33 +673,33 @@ namespace GameCube.GFZ.Stage
             // Scene Object Collider Geo
             //{
             // Grab sub-structures of SceneObjectTemplate
-            var colliderGeometries = new List<ColliderMesh>();
-            var colliderGeoTris = new List<ColliderTriangle>();
-            var colliderGeoQuads = new List<ColliderQuad>();
+            var sceneObjectColliderMeshes = new List<ColliderMesh>();
+            var sceneObjectColliderTriangles = new List<ColliderTriangle>();
+            var sceneObjectColliderQuads = new List<ColliderQuad>();
             foreach (var sceneObject in sceneObjects)
             {
-                var colliderGeo = sceneObject.ColliderMesh;
-                if (colliderGeo != null)
+                var sceneObjectColliderMesh = sceneObject.ColliderMesh;
+                if (sceneObjectColliderMesh != null)
                 {
-                    colliderGeometries.Add(colliderGeo);
+                    sceneObjectColliderMeshes.Add(sceneObjectColliderMesh);
 
-                    if (colliderGeo.TrisPtr.length > 0)
-                        colliderGeoTris.AddRange(colliderGeo.Tris);
+                    if (!sceneObjectColliderMesh.Tris.IsNullOrEmpty())
+                        sceneObjectColliderTriangles.AddRange(sceneObjectColliderMesh.Tris);
 
-                    if (colliderGeo.QuadsPtr.length > 0)
-                        colliderGeoQuads.AddRange(colliderGeo.Quads);
+                    if (!sceneObjectColliderMesh.Quads.IsNullOrEmpty())
+                        sceneObjectColliderQuads.AddRange(sceneObjectColliderMesh.Quads);
                 }
             }
             // Collider Geometry
             writer.InlineComment(SerializeVerbose, nameof(ColliderMesh));
-            foreach (var colliderGeometry in colliderGeometries)
-                writer.Write(colliderGeometry);
+            foreach (var colliderMesh in sceneObjectColliderMeshes)
+                writer.Write(colliderMesh);
             //
             writer.InlineComment(SerializeVerbose, nameof(ColliderMesh), nameof(ColliderTriangle));
-            foreach (var tri in colliderGeoTris)
+            foreach (var tri in sceneObjectColliderTriangles)
                 writer.Write(tri);
             writer.InlineComment(SerializeVerbose, nameof(ColliderMesh), nameof(ColliderQuad));
-            foreach (var quad in colliderGeoQuads)
+            foreach (var quad in sceneObjectColliderQuads)
                 writer.Write(quad);
 
 
@@ -879,7 +879,7 @@ namespace GameCube.GFZ.Stage
                 // Scene Objects
                 hasReferences.AddRange(SceneObjectLODs);
                 hasReferences.AddRange(sceneObjects);
-                hasReferences.AddRange(colliderGeometries);
+                hasReferences.AddRange(sceneObjectColliderMeshes);
                 // Scene Object Statics
                 if (staticSceneObjects != null)
                     hasReferences.AddRange(staticSceneObjects);

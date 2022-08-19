@@ -1,5 +1,6 @@
 ﻿using Manifold;
 using Manifold.IO;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ
@@ -50,7 +51,6 @@ namespace GameCube.GFZ
             AddressRange = addressRange;
         }
 
-
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {
             builder.AppendLineIndented(indent, indentLevel, nameof(BoundingSphere));
@@ -65,6 +65,38 @@ namespace GameCube.GFZ
         }
 
         public override string ToString() => PrintSingleLine();
+
+        public static BoundingSphere CreateBoundingSphereFromPoints(IEnumerable<float3> points, int length)
+        {
+            if (points == null)
+                throw new System.ArgumentNullException(nameof(points));
+            if (length <= 0)
+                throw new System.ArgumentOutOfRangeException(nameof(length));
+
+            float radius = 0;
+            float3 center = new float3();
+            float lengthReciprocal = 1f / length;
+
+            // Find the center of gravity for the point 'cloud'.
+            foreach (var point in points)
+            {
+                float3 pointWeighted = point * lengthReciprocal;
+                center += pointWeighted;
+            }
+
+            // Calculate the radius of the needed sphere (it equals the distance between the center and the point further away).
+            foreach (var point in points)
+            {
+                float3 centerToPoint = point - center;
+                float distance = math.length(centerToPoint);
+
+                if (distance > radius)
+                    radius = distance;
+            }
+
+            return new BoundingSphere(center, radius);
+        }
+
 
     }
 }

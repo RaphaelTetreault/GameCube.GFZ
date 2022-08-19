@@ -27,10 +27,7 @@ namespace GameCube.GFZ.Stage
 
         // FIELDS
         private uint unk_0x00;
-        private float unk_0x04;
-        private float unk_0x08;
-        private float unk_0x0C;
-        private float unk_0x10;
+        private BoundingSphere boundingSphere;
         private ArrayPointer2D collisionArrayPtr2D = new ArrayPointer2D(kTotalIndices);
         // REFERENCE FIELDS
         private ColliderTriangle[] tris;
@@ -40,14 +37,11 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
         public ArrayPointer2D CollisionArrayPtr2D { get => collisionArrayPtr2D; set => collisionArrayPtr2D = value; }
         public ColliderTriangle[] Tris { get => tris; set => tris = value; }
-        public ArrayPointer TrisPtr { get =>  collisionArrayPtr2D[kTriIndex];  set => collisionArrayPtr2D[kTriIndex] = value; }
+        public ArrayPointer TrisPtr { get => collisionArrayPtr2D[kTriIndex]; set => collisionArrayPtr2D[kTriIndex] = value; }
         public ColliderQuad[] Quads { get => quads; set => quads = value; }
-        public ArrayPointer QuadsPtr { get => collisionArrayPtr2D[kQuadIndex];  set => collisionArrayPtr2D[kQuadIndex] = value; }
+        public ArrayPointer QuadsPtr { get => collisionArrayPtr2D[kQuadIndex]; set => collisionArrayPtr2D[kQuadIndex] = value; }
         public uint Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
-        public float Unk_0x04 { get => unk_0x04; set => unk_0x04 = value; }
-        public float Unk_0x08 { get => unk_0x08; set => unk_0x08 = value; }
-        public float Unk_0x0C { get => unk_0x0C; set => unk_0x0C = value; }
-        public float Unk_0x10 { get => unk_0x10; set => unk_0x10 = value; }
+        public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
 
 
         // METHODS
@@ -96,10 +90,7 @@ namespace GameCube.GFZ.Stage
             this.RecordStartAddress(reader);
             {
                 reader.Read(ref unk_0x00);
-                reader.Read(ref unk_0x04);
-                reader.Read(ref unk_0x08);
-                reader.Read(ref unk_0x0C);
-                reader.Read(ref unk_0x10);
+                reader.Read(ref boundingSphere);
                 collisionArrayPtr2D.Deserialize(reader);
             }
             this.RecordEndAddress(reader);
@@ -130,10 +121,7 @@ namespace GameCube.GFZ.Stage
             this.RecordStartAddress(writer);
             {
                 writer.Write(unk_0x00);
-                writer.Write(unk_0x04);
-                writer.Write(unk_0x08);
-                writer.Write(unk_0x0C);
-                writer.Write(unk_0x10);
+                writer.Write(boundingSphere);
                 writer.Write(collisionArrayPtr2D);
             }
             this.RecordEndAddress(writer);
@@ -152,14 +140,13 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, nameof(ColliderMesh));
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x00)}: {unk_0x00}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x04)}: {unk_0x04}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x08)}: {unk_0x08}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x0C)}: {unk_0x0C}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x10)}: {unk_0x10}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(boundingSphere)}: {boundingSphere}");
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(TrisPtr)}: {TrisPtr}");
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(QuadsPtr)}: {QuadsPtr}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Tris)}: {Tris}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Quads)}: {Quads}");
+            int trisLength = tris.IsNullOrEmpty() ? 0 : tris.Length;
+            int quadsLength = quads.IsNullOrEmpty() ? 0 : quads.Length;
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Tris)}: {trisLength} triangles");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Quads)}: {quadsLength} quads");
         }
     }
 }
