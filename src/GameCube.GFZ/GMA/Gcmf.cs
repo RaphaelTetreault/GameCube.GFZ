@@ -191,23 +191,37 @@ namespace GameCube.GFZ.GMA
                         reader.JumpToAddress(address);
                         var bindings = new List<SkinBoneBinding>();
 
-                        // Kinda hacky, but it works. Read so long as the first int of the type is 
-                        // non-zero AND fits in a byte (matrix indexes are a single byte). This has been 
-                        // checked to work (no non-zero data unread from any file) since that first int of
-                        // the type (which is the count) must be none zero to declare the array's size.
-                        //
-                        // Basically, what we want is to read so long as the 32bit value is not zero but
-                        // also between 0-256 (8-bit non-zero).
-                        //
-                        // To do this with a single Peek call, we have to handle the case of 0 correctly.
-                        // If we subtract by 1, 0 underflows and becomes an invalid index. To check if a max
-                        // index of 255 is valid (which is now 254 due to the -1), we check for less than 255.
-                        while (unchecked(reader.PeekUInt() - 1) < byte.MaxValue)
+                        bool hasSkinBoneBinding;
+                        do
                         {
-                            var skinBoneBinding = new SkinBoneBinding();
-                            skinBoneBinding.Deserialize(reader);
-                            bindings.Add(skinBoneBinding);
+                            // Check to see if there is anything left in the stream.
+                            bool canPeek = reader.IsAtEndOfStream();
+                            if (!canPeek)
+                                break;
+
+                            // Kinda hacky, but it works. Read so long as the first int32 of the type is 
+                            // non-zero AND fits in a byte (matrix indexes are a single byte). This has been 
+                            // checked to work (no non-zero data unread from any file) since that first int of
+                            // the type (which is the count) must be none zero to declare the array's size.
+                            //
+                            // Basically, what we want is to read so long as the 32bit value is not zero but
+                            // also between 0-256 (8-bit non-zero).
+                            //
+                            // To do this with a single Peek call, we have to handle the case of 0 correctly.
+                            // If we subtract 0 with 1, 0 underflows and becomes an invalid index -1. To check if a max
+                            // index of 255 is valid (which is now 254 due to the -1), we check for less than 255.
+                            var peekValue = reader.PeekUInt();
+                            hasSkinBoneBinding = unchecked(peekValue - 1) < byte.MaxValue;
+                            if (hasSkinBoneBinding)
+                            {
+                                var skinBoneBinding = new SkinBoneBinding();
+                                skinBoneBinding.Deserialize(reader);
+                                bindings.Add(skinBoneBinding);
+                            }
                         }
+                        while (hasSkinBoneBinding);
+
+                        // Convert list to array, assign, and align stream for future data
                         skinBoneBindings = bindings.ToArray();
                         reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
