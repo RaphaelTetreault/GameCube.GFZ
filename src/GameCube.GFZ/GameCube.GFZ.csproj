@@ -14,7 +14,9 @@
     <Compile Remove="Ghosts\**" />
     <Compile Remove="GMA\**" />
     <Compile Remove="LZ\**" />
+    <Compile Remove="REL\**" />
     <Compile Remove="Stage\**" />
+    <Compile Remove="TPL\**" />
     <EmbeddedResource Remove="Camera\**" />
     <EmbeddedResource Remove="CarData\**" />
     <EmbeddedResource Remove="Cheats\**" />
@@ -22,7 +24,9 @@
     <EmbeddedResource Remove="Ghosts\**" />
     <EmbeddedResource Remove="GMA\**" />
     <EmbeddedResource Remove="LZ\**" />
+    <EmbeddedResource Remove="REL\**" />
     <EmbeddedResource Remove="Stage\**" />
+    <EmbeddedResource Remove="TPL\**" />
     <None Remove="Camera\**" />
     <None Remove="CarData\**" />
     <None Remove="Cheats\**" />
@@ -30,7 +34,9 @@
     <None Remove="Ghosts\**" />
     <None Remove="GMA\**" />
     <None Remove="LZ\**" />
+    <None Remove="REL\**" />
     <None Remove="Stage\**" />
+    <None Remove="TPL\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,9 +47,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
-    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
   </ItemGroup>
 

@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="GameCube.GFZ.FMI.asmdef" />
-    <None Remove="GameCube.GFZ.FMI.asmdef.meta" />
+    <None Remove="GameCube.GFZ.GMA.asmdef" />
+    <None Remove="GameCube.GFZ.GMA.asmdef.meta" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\GameCube.Core\src\GameCube\GX.Texture\GameCube.GX.Texture.csproj" />
+    <ProjectReference Include="..\..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
     <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
     <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />

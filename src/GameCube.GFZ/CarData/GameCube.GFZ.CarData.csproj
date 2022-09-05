@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.csproj" />
   </ItemGroup>

@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\GameCube.Core\src\GameCube\Cheats\GameCube.Cheats.csproj" />
+    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.csproj" />
   </ItemGroup>
 
