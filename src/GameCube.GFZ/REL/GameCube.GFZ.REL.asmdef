@@ -1,0 +1,20 @@
+{
+    "name": "GameCube.GFZ.REL",
+    "rootNamespace": "GameCube.GFZ.REL",
+    "references": [
+        "GUID:3e78d913fbb481e44a3f618e5c6ea0ce",
+        "GUID:5696f77a2eb59c74692b52fe6dfee505",
+        "GUID:f1bb3b9088c546b46bbe048191ae40eb",
+        "GUID:1ec25e8a214ccbb48b100892bce825d3",
+        "GUID:d8b63aba1907145bea998dd612889d6b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

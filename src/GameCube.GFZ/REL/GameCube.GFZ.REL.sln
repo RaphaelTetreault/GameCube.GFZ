@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCube.GFZ.REL", "GameCube.GFZ.REL.csproj", "{DC04D0E8-E840-4A69-8382-268ADF63FE02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCube.AmusementVision", "..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj", "{F20C2E8A-D037-4B2B-9F79-B7BE48C49602}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCube.AmusementVision.LZ", "..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision.LZ\GameCube.AmusementVision.LZ.csproj", "{4A6CD509-6C05-4074-9313-12369D854712}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manifold", "..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj", "{3876E4D6-9759-491B-A1CC-4D0C56DFE84C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manifold.IO", "..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj", "{96A9982D-764B-482C-8B0F-8DFF0C98CD18}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCube.GFZ", "..\GameCube.GFZ.csproj", "{9FB73D69-D216-4960-9E4D-6A1EDF9D1FB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC04D0E8-E840-4A69-8382-268ADF63FE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC04D0E8-E840-4A69-8382-268ADF63FE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC04D0E8-E840-4A69-8382-268ADF63FE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC04D0E8-E840-4A69-8382-268ADF63FE02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20C2E8A-D037-4B2B-9F79-B7BE48C49602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20C2E8A-D037-4B2B-9F79-B7BE48C49602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20C2E8A-D037-4B2B-9F79-B7BE48C49602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20C2E8A-D037-4B2B-9F79-B7BE48C49602}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A6CD509-6C05-4074-9313-12369D854712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A6CD509-6C05-4074-9313-12369D854712}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A6CD509-6C05-4074-9313-12369D854712}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A6CD509-6C05-4074-9313-12369D854712}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3876E4D6-9759-491B-A1CC-4D0C56DFE84C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3876E4D6-9759-491B-A1CC-4D0C56DFE84C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3876E4D6-9759-491B-A1CC-4D0C56DFE84C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3876E4D6-9759-491B-A1CC-4D0C56DFE84C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A9982D-764B-482C-8B0F-8DFF0C98CD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A9982D-764B-482C-8B0F-8DFF0C98CD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A9982D-764B-482C-8B0F-8DFF0C98CD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A9982D-764B-482C-8B0F-8DFF0C98CD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FB73D69-D216-4960-9E4D-6A1EDF9D1FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FB73D69-D216-4960-9E4D-6A1EDF9D1FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FB73D69-D216-4960-9E4D-6A1EDF9D1FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FB73D69-D216-4960-9E4D-6A1EDF9D1FB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02FCB122-F0F9-42E2-BF87-A02622F19BE7}
+	EndGlobalSection
+EndGlobal
