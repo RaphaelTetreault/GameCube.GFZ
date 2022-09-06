@@ -8,6 +8,6 @@ namespace GameCube.GFZ.REL
     /// </summary>
     public class EnemyLineAddressLookupGfzp01 : EnemyLineAddressLookup
     {
-        public override int VenueIndixesU8Address => throw new System.NotImplementedException();
+        public override int VenueIndexesU8Address => throw new System.NotImplementedException();
     }
 }

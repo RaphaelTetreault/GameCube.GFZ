@@ -27,7 +27,7 @@ namespace GameCube.GFZ.REL
 
         public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, Venue venue, byte value)
         {
-            int address = regionLUT.VenueIndixesU8Address + (byte)venue;
+            int address = regionLUT.VenueIndexesU8Address + (byte)venue;
             writer.JumpToAddress(address);
             writer.Write(value);
         }
@@ -35,7 +35,7 @@ namespace GameCube.GFZ.REL
         public static void PatchStageName(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, byte venueIndex, string value)
         {
             const int stride = 16;
-            int address = regionLUT.VenueIndixesU8Address + (venueIndex * stride);
+            int address = regionLUT.VenueIndexesU8Address + (venueIndex * stride);
             writer.JumpToAddress(address);
             writer.Write<ShiftJisCString>(value);
         }

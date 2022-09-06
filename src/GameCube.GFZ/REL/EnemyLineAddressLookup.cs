@@ -8,6 +8,6 @@ namespace GameCube.GFZ.REL
         /// <summary>
         /// This comment is inherited :)
         /// </summary>
-        public abstract int VenueIndixesU8Address { get; }
+        public abstract int VenueIndexesU8Address { get; }
     }
 }
