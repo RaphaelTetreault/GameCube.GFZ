@@ -1,5 +1,6 @@
 using Manifold;
 using Manifold.IO;
+using GameCube.GFZ;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,9 +25,9 @@ namespace GameCube.GFZ.REL
             var enemyLine = EnemyLine.Open(filePath);
         }
 
-        public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, byte venueIndex, byte value)
+        public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, Venue venue, byte value)
         {
-            int address = regionLUT.VenueIndixesU8Address + venueIndex;
+            int address = regionLUT.VenueIndixesU8Address + (byte)venue;
             writer.JumpToAddress(address);
             writer.Write(value);
         }
