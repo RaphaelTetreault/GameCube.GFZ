@@ -229,5 +229,14 @@ namespace GameCube.GFZ.REL
         {
             Line__Decompressed = new MemoryStream(_lineDecompressed);
         }
+
+        public static void SetCustomCourseName(int index, int nameAddress, int offsetStructBase, int offsetBase)
+        {
+            byte[] offset = new byte[4];
+            offset = BitConverter.GetBytes(nameAddress - offsetBase);
+            Array.Reverse(offset);
+            Buffer.BlockCopy(offset, 0, _lineDecompressed, offsetStructBase + index * 0x30, 4);
+            UpdateDecompressed();
+        }
     }
 }
