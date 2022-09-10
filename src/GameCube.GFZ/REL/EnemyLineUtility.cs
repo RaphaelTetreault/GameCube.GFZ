@@ -230,8 +230,13 @@ namespace GameCube.GFZ.REL
             Line__Decompressed = new MemoryStream(_lineDecompressed);
         }
 
-        public static void SetCustomCourseName(int index, int nameAddress, int offsetStructBase, int offsetBase)
+        public static void SetCustomCourseName(uint index, int nameAddress, int offsetStructBase, int offsetBase)
         {
+            if(index > 110)
+            {
+                throw new System.IndexOutOfRangeException();
+            }
+            
             byte[] offset = new byte[4];
             offset = BitConverter.GetBytes(nameAddress - offsetBase);
             Array.Reverse(offset);
