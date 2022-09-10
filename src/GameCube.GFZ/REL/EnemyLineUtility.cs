@@ -254,5 +254,23 @@ namespace GameCube.GFZ.REL
             Buffer.BlockCopy(parameters.ToByteArray(true), 0, _lineDecompressed, minimapParameterBaseAddress + (7 * 4) * (int)index, 4 * 7);
             UpdateDecompressed();
         }
+
+        public static void SetBgmToSlot(uint index, byte trackId, int bgmValueSlotBaseAddress)
+        {
+            if(index > 55)
+            {
+                throw new System.IndexOutOfRangeException();
+            }
+
+            if(trackId > 60 && trackId < 255)
+            {
+                throw new System.ArgumentException("Track ID musst be between 0 and 60, or 255");
+            }
+
+            byte[] buf = new byte[1];
+            buf = BitConverter.GetBytes(trackId);
+            Buffer.BlockCopy(buf, 0, _lineDecompressed, bgmValueSlotBaseAddress + (int)index, 1);
+            UpdateDecompressed();
+        }
     }
 }
