@@ -240,7 +240,18 @@ namespace GameCube.GFZ.REL
             byte[] offset = new byte[4];
             offset = BitConverter.GetBytes(nameAddress - offsetBase);
             Array.Reverse(offset);
-            Buffer.BlockCopy(offset, 0, _lineDecompressed, offsetStructBase + index * 0x30, 4);
+            Buffer.BlockCopy(offset, 0, _lineDecompressed, offsetStructBase + (int)index * 0x30, 4);
+            UpdateDecompressed();
+        }
+
+        public static void SetCustomMinimapParameters(uint index, int minimapParameterBaseAddress, MinimapParameters parameters)
+        {
+            if(index > 45)
+            {
+                throw new System.IndexOutOfRangeException();
+            }
+
+            Buffer.BlockCopy(parameters.ToByteArray(true), 0, _lineDecompressed, minimapParameterBaseAddress + (7 * 4) * (int)index, 4 * 7);
             UpdateDecompressed();
         }
     }
