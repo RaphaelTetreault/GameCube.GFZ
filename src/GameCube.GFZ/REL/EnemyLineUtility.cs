@@ -11,6 +11,8 @@ namespace GameCube.GFZ.REL
     public class EnemyLineUtility
     {
         private static byte[] _lineBinary;
+        private static byte[] _lineDecompressed;
+        public static MemoryStream Line__Decompressed;
         private static BinaryReader _reader;
         private static int lwz(int offset, int src)
         {
@@ -217,5 +219,15 @@ namespace GameCube.GFZ.REL
         public static MemoryStream Decrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
         public static MemoryStream Encrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
 
+        public static void UpdateDecompressed(MemoryStream data)
+        {
+            Line__Decompressed = data;
+            _lineDecompressed = data.ToArray();
+        }
+
+        public static void UpdateDecompressed()
+        {
+            Line__Decompressed = new MemoryStream(_lineDecompressed);
+        }
     }
 }
