@@ -234,7 +234,7 @@ namespace GameCube.GFZ.REL
         {
             if(index > 110)
             {
-                throw new System.IndexOutOfRangeException();
+                throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
             }
             
             byte[] offset = new byte[4];
@@ -248,7 +248,7 @@ namespace GameCube.GFZ.REL
         {
             if(index > 45)
             {
-                throw new System.IndexOutOfRangeException();
+                throw new System.IndexOutOfRangeException("Index must be between 0 and 45");
             }
 
             Buffer.BlockCopy(parameters.ToByteArray(true), 0, _lineDecompressed, minimapParameterBaseAddress + (7 * 4) * (int)index, 4 * 7);
@@ -259,12 +259,12 @@ namespace GameCube.GFZ.REL
         {
             if(index > 55)
             {
-                throw new System.IndexOutOfRangeException();
+                throw new System.IndexOutOfRangeException("Index must be between 0 and 55");
             }
 
-            if(trackId > 60 && trackId < 255)
+            if(trackId > 96 && trackId < 255)
             {
-                throw new System.ArgumentException("Track ID musst be between 0 and 60, or 255");
+                throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
             }
 
             byte[] buf = new byte[1];
