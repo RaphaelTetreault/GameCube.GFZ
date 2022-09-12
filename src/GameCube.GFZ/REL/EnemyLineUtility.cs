@@ -347,5 +347,16 @@ namespace GameCube.GFZ.REL
             writer.JumpToAddress(lookup.CupCourseLutUnk.Address + (int)cup * 0xC);
             writer.Write(courses);
         }
+
+        public static void PatchAxTimer(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, AcCupCourse courseId, byte seconds)
+        {
+            if((byte)courseId > 6)
+            {
+                throw new System.ArgumentException("Invalid Course ID");
+            }
+
+            writer.JumpToAddress(lookup.AxModeCourseTimers.Address + (int)courseId);
+            writer.Write(seconds);
+        }
     }
 }
