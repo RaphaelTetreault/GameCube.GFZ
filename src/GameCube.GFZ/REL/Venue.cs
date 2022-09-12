@@ -1,71 +1,70 @@
 ﻿using System.ComponentModel;
 
-// TODO: implement the correct indices
-// Note: sorted alphabetically
 namespace GameCube.GFZ.REL
 {
     public enum Venue : byte
     {
-        [Description("Aeropolis")]
-        Aeropolis,
-
-        [Description("Big Blue")]
-        BigBlue,
-
-        [Description("Casino Palace")]
-        CasinoPalace,
-
-        [Description("Cosmo Terminal")]
-        CosmoTerminal,
-
-        [Description("Fire Field")]
-        FireField,
-
-        [Description("Green Plant")]
-        GreenPlant,
-
-        [Description("Lightning")]
-        Lightning,
-
         [Description("Null")]
         None,
 
         [Description("Mute City")]
         MuteCity,
 
-        [Description("Mute City (COM)")]
-        MuteCityCOM,
-
-        [Description("Outer Space")]
-        OuterSpace,
-
-        [Description("Phantom Road")]
-        PhantomRoad,
-
         [Description("Port Town")]
         PortTown,
+
+        [Description("Port Town (Story)")]
+        PortTownStory,
+
+        [Description("Big Blue")]
+        BigBlue,
+
+        [Description("Big Blue (Story)")]
+        BigBlueStory,
+
+        [Description("Lightning")]
+        Lightning,
+
+        [Description("Lightning (Story)")]
+        LightningStory,
 
         [Description("Sand Ocean")]
         SandOcean,
 
-        // OTHER
-        [Description("Win")]
-        Win,
+        [Description("Sand Ocean (Story)")]
+        SandOceanStory,
 
-        // STORY
-        [Description("Big Blue (Story)")]
-        StoryBigBlue,
+        [Description("Green Plant")]
+        GreenPlant,
+
+        [Description("Fire Field")]
+        FireField,
 
         [Description("Fire Field (Story)")]
-        StoryFireField,
+        FireFieldStory,
 
-        [Description("Mute City (COM) (Story)")]
-        StoryMuteCityCOM,
+        [Description("Casino Palace")]
+        CasinoPalace,
 
-        [Description("Port Town (Story)")]
-        StoryPortTown,
+        [Description("Outer Space")]
+        OuterSpace,
 
-        [Description("Sand Ocean (Story)")]
-        StorySandOcean,
+        [Description("Aeropolis")]
+        Aeropolis,
+
+        [Description("Cosmo Terminal")]
+        CosmoTerminal,
+
+        [Description("Mute City COM")]
+        Com,
+
+        [Description("Mute City (Story)")]
+        MuteCityStory,
+
+        [Description("Phantom Road")]
+        PhantomRoad,
+
+        [Description("WIN")]
+        Win,
     }
 }
