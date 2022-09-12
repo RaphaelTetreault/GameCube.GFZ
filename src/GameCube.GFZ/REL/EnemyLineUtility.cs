@@ -277,6 +277,21 @@ namespace GameCube.GFZ.REL
             writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + (int)index * 4);
             writer.Write(trackId);
         }
+
+        public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, GameCube.GFZ.REL.Venue venue)
+        {
+            if(index > 110)
+            {
+                throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
+            }
+
+            if((byte)venue > 0x14)
+            {
+                throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
+            }
+
+            writer.JumpToAddress(lookup.SlotVenueDefinitions.Address + (int)index);
+            writer.Write((byte)venue);
         }
     }
 }
