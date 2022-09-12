@@ -287,11 +287,27 @@ namespace GameCube.GFZ.REL
 
             if((byte)venue > 0x14)
             {
-                throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
+                throw new System.ArgumentException("Invalid Venue");
             }
 
             writer.JumpToAddress(lookup.SlotVenueDefinitions.Address + (int)index);
             writer.Write((byte)venue);
+        }
+
+        public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte difficulty)
+        {
+            if(index > 110)
+            {
+                throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
+            }
+
+            if(difficulty > 24)
+            {
+                Debug.LogWarning("More than 24 stars cannot be displayed");
+            }
+
+            writer.JumpToAddress(lookup.CourseSlotDifficulty.Address + (int)index);
+            writer.Write(difficulty);
         }
     }
 }
