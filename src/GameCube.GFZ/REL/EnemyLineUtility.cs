@@ -11,7 +11,7 @@ namespace GameCube.GFZ.REL
     public class EnemyLineUtility
     {
         private static byte[] _lineBinary;
-
+        private static BinaryReader _reader;
         private static int lwz(int offset, int src)
         {
             byte[] data = new byte[4];
