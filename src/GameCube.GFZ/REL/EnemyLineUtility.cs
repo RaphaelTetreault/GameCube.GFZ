@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace GameCube.GFZ.REL
 {
@@ -308,6 +309,43 @@ namespace GameCube.GFZ.REL
 
             writer.JumpToAddress(lookup.CourseSlotDifficulty.Address + (int)index);
             writer.Write(difficulty);
+        }
+
+        public static void PatchCupSlots(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, Cup cup, Int16[] courses)
+        {
+            if(courses.Length < 1 || courses.Length > 6)
+            {
+                throw new System.IndexOutOfRangeException("At least 1 or up to 6 courses must be defined");
+            }
+
+            if((byte)cup > 10)
+            {
+                throw new System.ArgumentException("Invalid Cup");
+            }
+
+            for(int i = 0; i < courses.Length; ++i)
+            {
+                if(courses[i] > 110 || courses[i] < -1)
+                {
+                    throw new System.ArgumentException("Invalid course ID");
+                }
+            }
+
+            if(courses.Length < 6)
+            {
+                do
+                {
+                    courses = courses.Concat(new Int16[] {-1}).ToArray();
+                }
+                while(courses.Length < 6);
+            }
+
+            writer.JumpToAddress(lookup.CupCourseLut.Address + (int)cup * 0xC);
+            writer.Write(courses);
+            writer.JumpToAddress(lookup.CupCourseLutAssets.Address + (int)cup * 0xC);
+            writer.Write(courses);
+            writer.JumpToAddress(lookup.CupCourseLutUnk.Address + (int)cup * 0xC);
+            writer.Write(courses);
         }
     }
 }
