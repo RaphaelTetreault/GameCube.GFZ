@@ -26,6 +26,8 @@ namespace GameCube.GFZ.REL
         public override Information AxModeCourseTimers => new Information(0x1A9390, 6);
         public override int CourseNamePointerOffsetBase => 0x16A180;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
+        public override Information PilotPositions => new Information(0x19E49C, 0x210);
+        public override Information PilotToMachineLut => new Information(0x164498, 0xA4); 
         public EnemyLineInformationLookupGfzj01()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));

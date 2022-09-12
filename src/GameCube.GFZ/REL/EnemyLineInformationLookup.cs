@@ -26,6 +26,8 @@ namespace GameCube.GFZ.REL
         public abstract Information AxModeCourseTimers { get; }
         public abstract int CourseNamePointerOffsetBase { get; }
         public abstract List<CustomizableArea> CourseNameAreas { get; }
+        public abstract Information PilotPositions { get; }
+        public abstract Information PilotToMachineLut { get; }
         //public EnemyLineInformationLookup(){}
     }
 }

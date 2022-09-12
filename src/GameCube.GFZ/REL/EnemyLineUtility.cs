@@ -6,10 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 
 namespace GameCube.GFZ.REL
 {
-    public class EnemyLineUtility
+    
+    public class EnemyLineUtility : MonoBehaviour
     {
         private static byte[] _lineBinary;
         private static BinaryReader _reader;
@@ -206,9 +208,9 @@ namespace GameCube.GFZ.REL
         public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte[] courseName)
         {
             if(index > 110)
-        {
+            {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
-        }
+            }
 
             int newLength = courseName.Length + 4 - (courseName.Length % 4);
             byte[] courseNameExtended = new byte[newLength];
@@ -216,10 +218,10 @@ namespace GameCube.GFZ.REL
 
             Debug.LogError(lookup.CourseNameAreas.Count);
             for(int i =  0; i < lookup.CourseNameAreas.Count; ++i)
-        {
+            {
                 Debug.LogError(lookup.CourseNameAreas[i]);
                 if(lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
-            {
+                {
                     int nameAddress = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
                     writer.JumpToAddress(nameAddress);
                     writer.Write(courseNameExtended);
@@ -232,7 +234,7 @@ namespace GameCube.GFZ.REL
                     return;
                 }
             }
-            
+
             throw new System.IndexOutOfRangeException("No more free space for course names");
         }
 
@@ -358,5 +360,47 @@ namespace GameCube.GFZ.REL
             writer.JumpToAddress(lookup.AxModeCourseTimers.Address + (int)courseId);
             writer.Write(seconds);
         }
+
+        public static void PatchPilotPosition(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, PilotInformation.Pilot id, float[] position)
+        {
+            if(id > PilotInformation.Pilot.Gen)
+            {
+                throw new System.ArgumentException("Invalid Pilot ID");
+            }
+
+            if(position.Length != 3)
+            {
+                throw new System.ArgumentException("Position array must contain 3 elements");
+            }
+
+            writer.JumpToAddress(lookup.PilotPositions.Address + (int)id * 0xc);
+            writer.Write(position);
+        }
+
+        public static void PatchPilotToMachine(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, Machine machine, PilotInformation.Pilot pilot)
+        {            
+            if(pilot > PilotInformation.Pilot.Gen)
+            {
+                throw new System.ArgumentException("Invalid Pilot ID");
+            }
+
+            if(machine > Machine.RainbowPheonix)
+            {
+                throw new System.ArgumentException("Invalid Machine ID");
+            }
+
+            if(pilot > PilotInformation.Pilot.Pheonix)
+            {
+                Debug.LogWarning($"ID: {pilot} will only work with Free Run Races! Different Race Settings will freeze the game!");
+            }
+
+            PatchPilotPosition(writer, lookup, pilot, new PilotInformation().PilotPositions[(int)machine].Position);
+
+            writer.JumpToAddress(lookup.PilotToMachineLut.Address + (int)machine * 4);
+            writer.Write((int)pilot);
+        }
+
+
+
     }
 }
