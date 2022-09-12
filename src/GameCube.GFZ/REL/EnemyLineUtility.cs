@@ -11,9 +11,7 @@ namespace GameCube.GFZ.REL
     public class EnemyLineUtility
     {
         private static byte[] _lineBinary;
-        private static byte[] _lineDecompressed;
-        public static MemoryStream Line__Decompressed;
-        private static BinaryReader _reader;
+
         private static int lwz(int offset, int src)
         {
             byte[] data = new byte[4];
@@ -59,21 +57,6 @@ namespace GameCube.GFZ.REL
             // you can run the menu item to decrypt it to your working dir,
             // then the will be loaded here.
             var enemyLine = EnemyLine.Open(filePath);
-        }
-
-        public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, Venue venue, byte value)
-        {
-            int address = regionLUT.VenueIndexesU8Address + (byte)venue;
-            writer.JumpToAddress(address);
-            writer.Write(value);
-        }
-
-        public static void PatchStageName(EndianBinaryWriter writer, EnemyLineAddressLookup regionLUT, byte venueIndex, string value)
-        {
-            const int stride = 16;
-            int address = regionLUT.VenueIndexesU8Address + (venueIndex * stride);
-            writer.JumpToAddress(address);
-            writer.Write<ShiftJisCString>(value);
         }
 
         public static MemoryStream Crypt(Stream file, bool isJPN)
@@ -219,43 +202,51 @@ namespace GameCube.GFZ.REL
         public static MemoryStream Decrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
         public static MemoryStream Encrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
 
-        public static void UpdateDecompressed(MemoryStream data)
-        {
-            Line__Decompressed = data;
-            _lineDecompressed = data.ToArray();
-        }
-
-        public static void UpdateDecompressed()
-        {
-            Line__Decompressed = new MemoryStream(_lineDecompressed);
-        }
-
-        public static void SetCustomCourseName(uint index, int nameAddress, int offsetStructBase, int offsetBase)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte[] courseName)
         {
             if(index > 110)
-            {
+        {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
-            }
-            
-            byte[] offset = new byte[4];
-            offset = BitConverter.GetBytes(nameAddress - offsetBase);
-            Array.Reverse(offset);
-            Buffer.BlockCopy(offset, 0, _lineDecompressed, offsetStructBase + (int)index * 0x30, 4);
-            UpdateDecompressed();
         }
 
-        public static void SetCustomMinimapParameters(uint index, int minimapParameterBaseAddress, MinimapParameters parameters)
+            int newLength = courseName.Length + 4 - (courseName.Length % 4);
+            byte[] courseNameExtended = new byte[newLength];
+            Buffer.BlockCopy(courseName, 0, courseNameExtended, 0, courseName.Length);
+
+            Debug.LogError(lookup.CourseNameAreas.Count);
+            for(int i =  0; i < lookup.CourseNameAreas.Count; ++i)
+        {
+                Debug.LogError(lookup.CourseNameAreas[i]);
+                if(lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
+            {
+                    int nameAddress = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
+                    writer.JumpToAddress(nameAddress);
+                    writer.Write(courseNameExtended);
+
+                    int indexAddress = lookup.CourseNameOffsetStructs.Address + (int)index * 0x30;
+                    writer.JumpToAddress(indexAddress);
+                    writer.Write(nameAddress - lookup.CourseNamePointerOffsetBase);
+
+                    lookup.CourseNameAreas[i].Occupied += newLength;
+                    return;
+                }
+            }
+            
+            throw new System.IndexOutOfRangeException("No more free space for course names");
+        }
+
+        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, float[] minimapParams)
         {
             if(index > 45)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 45");
             }
 
-            Buffer.BlockCopy(parameters.ToByteArray(true), 0, _lineDecompressed, minimapParameterBaseAddress + (7 * 4) * (int)index, 4 * 7);
-            UpdateDecompressed();
+            writer.JumpToAddress(lookup.CourseMinimapParameterStructs.Address + (7 * 4) * (int)index);
+            writer.Write(minimapParams);
         }
 
-        public static void SetBgmToSlot(uint index, byte trackId, int bgmValueSlotBaseAddress)
+        public static void PatchBgmToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte trackId)
         {
             if(index > 55)
             {
@@ -267,13 +258,11 @@ namespace GameCube.GFZ.REL
                 throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
             }
 
-            byte[] buf = new byte[1];
-            buf = BitConverter.GetBytes(trackId);
-            Buffer.BlockCopy(buf, 0, _lineDecompressed, bgmValueSlotBaseAddress + (int)index, 1);
-            UpdateDecompressed();
+            writer.JumpToAddress(lookup.CourseSlotBgm.Address + (int)index);
+            writer.Write(trackId);
         }
 
-        public static void SetFinalLapBgmToSlot(uint index, byte trackId, int finalLapBgmValueSlotBaseAddress)
+        public static void PatchFinalLapBgmToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte trackId)
         {
             if(index > 45)
             {
@@ -285,10 +274,9 @@ namespace GameCube.GFZ.REL
                 throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
             }
 
-            byte[] buf = new byte[1];
-            buf = BitConverter.GetBytes(trackId);
-            Buffer.BlockCopy(buf, 0, _lineDecompressed, finalLapBgmValueSlotBaseAddress + (int)index * 4, 1);
-            UpdateDecompressed();
+            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + (int)index * 4);
+            writer.Write(trackId);
+        }
         }
     }
 }
