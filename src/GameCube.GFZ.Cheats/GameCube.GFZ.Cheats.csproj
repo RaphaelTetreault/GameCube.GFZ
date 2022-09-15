@@ -12,10 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GameCube.Core\src\GameCube\Cheats\GameCube.Cheats.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\GameCube.GFZ.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.Cheats\GameCube.Cheats.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
   </ItemGroup>
 
 </Project>

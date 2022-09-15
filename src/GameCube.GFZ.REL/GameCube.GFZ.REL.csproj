@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision.LZ\GameCube.AmusementVision.LZ.csproj" />
-    <ProjectReference Include="..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
-    <ProjectReference Include="..\..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
-    <ProjectReference Include="..\GameCube.GFZ.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision.LZ\GameCube.AmusementVision.LZ.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
   </ItemGroup>
 
 </Project>
