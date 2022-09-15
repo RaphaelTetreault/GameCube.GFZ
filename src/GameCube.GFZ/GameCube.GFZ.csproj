@@ -46,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube\GX\GameCube.GX.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.GX\GameCube.GX.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />

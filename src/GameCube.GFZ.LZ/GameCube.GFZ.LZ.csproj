@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision.LZ\GameCube.AmusementVision.LZ.csproj" />
-    <ProjectReference Include="..\..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision.LZ\GameCube.AmusementVision.LZ.csproj" />
+    <ProjectReference Include="..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj" />
   </ItemGroup>
 
 </Project>
