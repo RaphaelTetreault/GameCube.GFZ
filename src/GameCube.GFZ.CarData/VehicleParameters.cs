@@ -14,7 +14,7 @@ namespace GameCube.GFZ.CarData
         IBinaryAddressable
     {
         // FIELDS
-        private Pointer namePtr;
+        private Pointer runtimeNamePtr;
         private float weight;
         private float acceleration;
         private float maxSpeed;
@@ -46,12 +46,12 @@ namespace GameCube.GFZ.CarData
         private float3 wallCollisionBackRight;
         private float3 wallCollisionBackLeft;
         // REFERENCES
-        private ShiftJisCString name;
+        private ShiftJisCString runtimeName;
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public Pointer NamePtr { get => namePtr; set => namePtr = value; }
+        public Pointer RuntimeNamePtr { get => runtimeNamePtr; set => runtimeNamePtr = value; }
         public float Weight { get => weight; set => weight = value; }
         public float Acceleration { get => acceleration; set => acceleration = value; }
         public float MaxSpeed { get => maxSpeed; set => maxSpeed = value; }
@@ -82,7 +82,7 @@ namespace GameCube.GFZ.CarData
         public float3 WallCollisionFrontLeft { get => wallCollisionFrontLeft; set => wallCollisionFrontLeft = value; }
         public float3 WallCollisionBackRight { get => wallCollisionBackRight; set => wallCollisionBackRight = value; }
         public float3 WallCollisionBackLeft { get => wallCollisionBackLeft; set => wallCollisionBackLeft = value; }
-        public ShiftJisCString Name { get => name; set => name = value; }
+        public ShiftJisCString RuntimeName { get => runtimeName; set => runtimeName = value; }
 
 
         // METHODS
@@ -90,7 +90,7 @@ namespace GameCube.GFZ.CarData
         {
             this.RecordStartAddress(reader);
             {
-                reader.Read(ref namePtr);
+                reader.Read(ref runtimeNamePtr);
                 reader.Read(ref weight);
                 reader.Read(ref acceleration);
                 reader.Read(ref maxSpeed);
@@ -129,7 +129,7 @@ namespace GameCube.GFZ.CarData
         {
             this.RecordStartAddress(writer);
             {
-                writer.Write(namePtr);
+                writer.Write(runtimeNamePtr);
                 writer.Write(weight);
                 writer.Write(acceleration);
                 writer.Write(maxSpeed);
