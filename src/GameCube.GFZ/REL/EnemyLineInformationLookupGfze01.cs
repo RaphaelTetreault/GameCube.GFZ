@@ -1,5 +1,3 @@
-using Manifold;
-using Manifold.IO;
 using System.Collections.Generic;
 
 namespace GameCube.GFZ.REL
@@ -9,7 +7,19 @@ namespace GameCube.GFZ.REL
     /// </summary>
     public class EnemyLineInformationLookupGfze01 : EnemyLineInformationLookup
     {
-        public override string FileHashMD5 => "a1790e38cbe17510017689088eab5758";
+        public EnemyLineInformationLookupGfze01()
+        {
+            CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
+            CourseNameAreas.Add(new CustomizableArea(CourseNamesTranslations.Address, CourseNamesTranslations.Size));
+        }
+
+        public const string kFileHashMD5 = "a1790e38cbe17510017689088eab5758";
+        public const string kFileHashMD5_1kb = "";
+
+        public override EnemyLineInformation.GameCode GameCode => EnemyLineInformation.GameCode.GX_E;
+        public override string SourceFile => "enemy_line/line__.bin";
+        public override string WorkingFile => "enemy_line/line__.rel";
+        public override string FileHashMD5 => kFileHashMD5;
         public override Information VenueNames => new Information(0x197F80, 0xA4);
         public override Information SlotVenueDefinitions => new Information(0x1986D4, 111);
         public override Information CourseNamesEnglish => new Information(0x19875C, 0x15C);
@@ -27,11 +37,14 @@ namespace GameCube.GFZ.REL
         public override int CourseNamePointerOffsetBase => 0x16D600;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override Information PilotPositions => new Information(0x1A19C4, 0x210);
-        public override Information PilotToMachineLut => new Information(0x167890, 0xA4); 
-        public EnemyLineInformationLookupGfze01()
-        {
-            CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
-            CourseNameAreas.Add(new CustomizableArea(CourseNamesTranslations.Address, CourseNamesTranslations.Size));
-        }
+        public override Information PilotToMachineLut => new Information(0x167890, 0xA4);
+
+        public override short Salt => unchecked((short)0x180a);
+        public override int Key0 => unchecked((int)0x000cd8f3);
+        public override int Key1 => unchecked((int)0x9b36bb94);
+        public override int Key2 => unchecked((int)0xaf8910be);
+        public override int BlockKey0 => unchecked((int)0x9b370000);
+        public override short BlockKey1 => unchecked((short)0xbb94);
+        public override short BlockKey2 => unchecked((short)0xd8f3);
     }
 }

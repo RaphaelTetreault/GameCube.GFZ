@@ -56,7 +56,7 @@ namespace GameCube.GFZ.REL
         CosmoTerminal,
 
         [Description("Mute City COM")]
-        Com,
+        MuteCityCom,
 
         [Description("Mute City (Story)")]
         MuteCityStory,

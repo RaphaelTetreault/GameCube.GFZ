@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace GameCube.GFZ.REL
 {
-    
     public class EnemyLineUtility : MonoBehaviour
     {
         private static byte[] _lineBinary;
@@ -47,22 +46,7 @@ namespace GameCube.GFZ.REL
             return (int)(((src << shift) | (src >> ((32 - shift) & 31))) & bitMask);
         }
 
-        public static void TestPatchEncrypted(string filePath)
-        {
-            // Gets called with "(source)/enemy_line/line__.bin" if the file exists.
-            var enemyLine = EnemyLine.Open(filePath);
-        }
-        public static void TestPatchDecrypted(string filePath)
-        {
-            // Gets called with "(working)/enemy_line/line__.rel" if the file exists.
-            //
-            // This file needs to be made. Once Crypt() is implemented,
-            // you can run the menu item to decrypt it to your working dir,
-            // then the will be loaded here.
-            var enemyLine = EnemyLine.Open(filePath);
-        }
-
-        public static MemoryStream Crypt(Stream file, bool isJPN)
+        public static MemoryStream Crypt(Stream file, EnemyLineInformationLookup lookup)
         {
             _reader = new BinaryReader(file);
             int fileSize = (int)file.Length;
@@ -70,18 +54,10 @@ namespace GameCube.GFZ.REL
             _lineBinary = new byte[fileSizeExtended];
             _reader.BaseStream.Seek(0, SeekOrigin.Begin);
             _reader.Read(_lineBinary, 0, fileSize);
-            int saltUSA = 0x180a;
-            int saltJPN = 0x0ce0;
-            int salt = 0;
-            int key0USA = 0x000cd8f3;
-            int key0JPN = 0x0004f107;
-            int key0 = isJPN ? key0JPN : key0USA;
-            int key1USA = unchecked ((int)0x9b36bb94);
-            int key1JPN = unchecked ((int)0xb5fb6483);
-            int key1 = isJPN ? key1JPN : key1USA;
-            int key2USA = unchecked ((int)0xaf8910be);
-            int key2JPN = unchecked ((int)0xdeaddead);
-            int key2 = isJPN ? key2JPN : key2USA;
+            int salt = lookup.Salt;
+            int key0 = lookup.Key0;
+            int key1 = lookup.Key1;
+            int key2 = lookup.Key2;
             int r8 = rlwinm(fileSizeExtended, 30, 2, 31);
             int cryptedWords = 0;
             int r11 = 0;
@@ -91,9 +67,9 @@ namespace GameCube.GFZ.REL
             r3 = rlwinm(r3, 29, 3, 31);
 
             for (int i = r3; i > 0; --i)
-            {   //decrypts/encrypts each block of 0x20 bytes in 4-bytes strides
+            {
+                //decrypts/encrypts each block of 0x20 bytes in 4-bytes strides
                 int keyProd = key2 * key1;
-                salt = isJPN ? saltJPN : saltUSA;
                 r3 = lwz(0, rwLocation);
                 int r29 = keyProd + key0;
                 r3 ^= r29;
@@ -177,13 +153,13 @@ namespace GameCube.GFZ.REL
             if (cryptedWords < r8)
             {
                 //set parameters for last block
-                r3 = isJPN ? unchecked ((int)0xb5fb0000) : unchecked ((int)0x9b370000);
+                r3 = lookup.BlockKey0;
                 rwLocation = rlwinm(cryptedWords, 2, 0, 29);
-                r11 = r3 + (isJPN ? unchecked ((short)0x6483) : unchecked ((short)0xbb94));
+                r11 = r3 + lookup.BlockKey1;
                 r3 = 0x000d0000;
                 int r0 = r8 - cryptedWords;
-                r3 += isJPN ? unchecked ((short)0xf107) : unchecked ((short)0xd8f3);
-            
+                r3 += lookup.BlockKey2;
+
                 //crypt last block
                 for (int i = r0; i > 0; --i)
                 {
@@ -200,14 +176,21 @@ namespace GameCube.GFZ.REL
             file = new MemoryStream(_lineBinary);
             var memoryStream = new MemoryStream((int)fileSize);
             file.CopyTo(memoryStream);
+            _reader.Close();
             return memoryStream;
         }
-        public static MemoryStream Decrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
-        public static MemoryStream Encrypt(Stream file, bool isJPN) => Crypt(file, isJPN);
+        public static MemoryStream Decrypt(Stream file, EnemyLineInformationLookup lookup) => Crypt(file, lookup);
+        public static MemoryStream Encrypt(Stream file, EnemyLineInformationLookup lookup) => Crypt(file, lookup);
+
+        private static void ValidateStageIndex(byte index)
+        {
+            if (index > 110)
+                throw new IndexOutOfRangeException("Index must be between 0 and 110");
+        }
 
         public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte[] courseName)
         {
-            if(index > 110)
+            if (index > 110)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
             }
@@ -217,10 +200,10 @@ namespace GameCube.GFZ.REL
             Buffer.BlockCopy(courseName, 0, courseNameExtended, 0, courseName.Length);
 
             Debug.LogError(lookup.CourseNameAreas.Count);
-            for(int i =  0; i < lookup.CourseNameAreas.Count; ++i)
+            for (int i = 0; i < lookup.CourseNameAreas.Count; ++i)
             {
                 Debug.LogError(lookup.CourseNameAreas[i]);
-                if(lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
+                if (lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
                 {
                     int nameAddress = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
                     writer.JumpToAddress(nameAddress);
@@ -237,10 +220,37 @@ namespace GameCube.GFZ.REL
 
             throw new System.IndexOutOfRangeException("No more free space for course names");
         }
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, byte index, CString courseName)
+        {
+            ValidateStageIndex(index);
+
+            int cstringLengthSerialized = (courseName.Length + 4) - (courseName.Length % 4);
+
+            for (int i = 0; i < lookup.CourseNameAreas.Count; ++i)
+            {
+                int spaceTaken = lookup.CourseNameAreas[i].Occupied + cstringLengthSerialized;
+                bool canFit = spaceTaken <= lookup.CourseNameAreas[i].Size;
+                if (canFit)
+                {
+                    Pointer namePtr = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
+                    writer.JumpToAddress(namePtr);
+                    writer.Write<CString>(courseName);
+
+                    Pointer indexPtr = lookup.CourseNameOffsetStructs.Address + (index * 0x30);
+                    writer.JumpToAddress(indexPtr);
+                    writer.Write(namePtr - lookup.CourseNamePointerOffsetBase);
+
+                    lookup.CourseNameAreas[i].Occupied += cstringLengthSerialized;
+                    return;
+                }
+            }
+
+            throw new IndexOutOfRangeException("No more free space for course names");
+        }
 
         public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, float[] minimapParams)
         {
-            if(index > 45)
+            if (index > 45)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 45");
             }
@@ -251,12 +261,12 @@ namespace GameCube.GFZ.REL
 
         public static void PatchBgmToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte trackId)
         {
-            if(index > 55)
+            if (index > 55)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 55");
             }
 
-            if(trackId > 96 && trackId < 255)
+            if (trackId > 96 && trackId < 255)
             {
                 throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
             }
@@ -267,12 +277,12 @@ namespace GameCube.GFZ.REL
 
         public static void PatchFinalLapBgmToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte trackId)
         {
-            if(index > 45)
+            if (index > 45)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 45");
             }
 
-            if(trackId > 96 && trackId < 255)
+            if (trackId > 96 && trackId < 255)
             {
                 throw new System.ArgumentException("Track ID musst be between 0 and 96, or 255");
             }
@@ -283,12 +293,12 @@ namespace GameCube.GFZ.REL
 
         public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, GameCube.GFZ.REL.Venue venue)
         {
-            if(index > 110)
+            if (index > 110)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
             }
 
-            if((byte)venue > 0x14)
+            if ((byte)venue > 0x14)
             {
                 throw new System.ArgumentException("Invalid Venue");
             }
@@ -299,12 +309,12 @@ namespace GameCube.GFZ.REL
 
         public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, uint index, byte difficulty)
         {
-            if(index > 110)
+            if (index > 110)
             {
                 throw new System.IndexOutOfRangeException("Index must be between 0 and 110");
             }
 
-            if(difficulty > 24)
+            if (difficulty > 24)
             {
                 Debug.LogWarning("More than 24 stars cannot be displayed");
             }
@@ -313,33 +323,54 @@ namespace GameCube.GFZ.REL
             writer.Write(difficulty);
         }
 
+        public static void PatchCupSlot(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, Cup cup, short courseIndex)
+        {
+            if (courseIndex > 110 || courseIndex < -1)
+            {
+                throw new ArgumentException("Invalid course ID");
+            }
+
+            // Offset between cups
+            Offset offset = (int)cup * 0xC; // 12
+
+            // Patch stage index in cup
+            writer.JumpToAddress(lookup.CupCourseLut.Address + offset);
+            writer.Write(courseIndex);
+            // Patch index for loading in assets (GMA, TPL)
+            writer.JumpToAddress(lookup.CupCourseLutAssets.Address + offset);
+            writer.Write(courseIndex);
+            // 
+            writer.JumpToAddress(lookup.CupCourseLutUnk.Address + offset);
+            writer.Write(courseIndex);
+        }
+
         public static void PatchCupSlots(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, Cup cup, Int16[] courses)
         {
-            if(courses.Length < 1 || courses.Length > 6)
+            if (courses.Length < 1 || courses.Length > 6)
             {
                 throw new System.IndexOutOfRangeException("At least 1 or up to 6 courses must be defined");
             }
 
-            if((byte)cup > 10)
+            if ((byte)cup > 10)
             {
                 throw new System.ArgumentException("Invalid Cup");
             }
 
-            for(int i = 0; i < courses.Length; ++i)
+            for (int i = 0; i < courses.Length; ++i)
             {
-                if(courses[i] > 110 || courses[i] < -1)
+                if (courses[i] > 110 || courses[i] < -1)
                 {
                     throw new System.ArgumentException("Invalid course ID");
                 }
             }
 
-            if(courses.Length < 6)
+            if (courses.Length < 6)
             {
                 do
                 {
-                    courses = courses.Concat(new Int16[] {-1}).ToArray();
+                    courses = courses.Concat(new Int16[] { -1 }).ToArray();
                 }
-                while(courses.Length < 6);
+                while (courses.Length < 6);
             }
 
             writer.JumpToAddress(lookup.CupCourseLut.Address + (int)cup * 0xC);
@@ -352,7 +383,7 @@ namespace GameCube.GFZ.REL
 
         public static void PatchAxTimer(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, AcCupCourse courseId, byte seconds)
         {
-            if((byte)courseId > 6)
+            if ((byte)courseId > 6)
             {
                 throw new System.ArgumentException("Invalid Course ID");
             }
@@ -363,12 +394,12 @@ namespace GameCube.GFZ.REL
 
         public static void PatchPilotPosition(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, PilotInformation.Pilot id, float[] position)
         {
-            if(id > PilotInformation.Pilot.Gen)
+            if (id > PilotInformation.Pilot.Gen)
             {
                 throw new System.ArgumentException("Invalid Pilot ID");
             }
 
-            if(position.Length != 3)
+            if (position.Length != 3)
             {
                 throw new System.ArgumentException("Position array must contain 3 elements");
             }
@@ -378,18 +409,18 @@ namespace GameCube.GFZ.REL
         }
 
         public static void PatchPilotToMachine(EndianBinaryWriter writer, EnemyLineInformationLookup lookup, Machine machine, PilotInformation.Pilot pilot)
-        {            
-            if(pilot > PilotInformation.Pilot.Gen)
+        {
+            if (pilot > PilotInformation.Pilot.Gen)
             {
                 throw new System.ArgumentException("Invalid Pilot ID");
             }
 
-            if(machine > Machine.RainbowPheonix)
+            if (machine > Machine.RainbowPheonix)
             {
                 throw new System.ArgumentException("Invalid Machine ID");
             }
 
-            if(pilot > PilotInformation.Pilot.Pheonix)
+            if (pilot > PilotInformation.Pilot.Pheonix)
             {
                 Debug.LogWarning($"ID: {pilot} will only work with Free Run Races! Different Race Settings will freeze the game!");
             }

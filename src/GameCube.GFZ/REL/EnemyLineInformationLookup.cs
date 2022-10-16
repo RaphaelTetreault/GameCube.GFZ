@@ -1,4 +1,3 @@
-using Manifold;
 using Manifold.IO;
 using System.Collections.Generic;
 
@@ -6,9 +5,11 @@ namespace GameCube.GFZ.REL
 {
     public abstract class EnemyLineInformationLookup
     {
-        /// <summary>
-        /// This comment is inherited :)
-        /// </summary>
+        public virtual Endianness Endianness => Endianness.BigEndian;
+
+        public abstract EnemyLineInformation.GameCode GameCode { get; }
+        public abstract string SourceFile { get; }
+        public abstract string WorkingFile { get; }
         public abstract string FileHashMD5 { get; }
         public abstract Information VenueNames { get; }
         public abstract Information SlotVenueDefinitions { get; }
@@ -28,6 +29,12 @@ namespace GameCube.GFZ.REL
         public abstract List<CustomizableArea> CourseNameAreas { get; }
         public abstract Information PilotPositions { get; }
         public abstract Information PilotToMachineLut { get; }
-        //public EnemyLineInformationLookup(){}
+        public abstract short Salt { get; }
+        public abstract int Key0 { get; }
+        public abstract int Key1 { get; }
+        public abstract int Key2 { get; }
+        public abstract int BlockKey0 { get; }
+        public abstract short BlockKey1 { get; }
+        public abstract short BlockKey2 { get; }
     }
 }
