@@ -70,10 +70,10 @@ namespace GameCube.GFZ.Stage
             edgeNormal1 = math.cross(normal, v1v2);
             edgeNormal2 = math.cross(normal, v2v3);
             edgeNormal3 = math.cross(normal, v3v0);
-            edgeNormal0  = math.normalize(edgeNormal0);
-            edgeNormal1  = math.normalize(edgeNormal1);
-            edgeNormal2  = math.normalize(edgeNormal2);
-            edgeNormal3  = math.normalize(edgeNormal3);
+            //edgeNormal0  = math.normalize(edgeNormal0);
+            //edgeNormal1  = math.normalize(edgeNormal1);
+            //edgeNormal2  = math.normalize(edgeNormal2);
+            //edgeNormal3  = math.normalize(edgeNormal3);
         }
 
         public void UpdateNormal()
