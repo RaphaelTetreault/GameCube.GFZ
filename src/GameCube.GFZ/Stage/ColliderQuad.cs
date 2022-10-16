@@ -49,11 +49,47 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// Computes and stores the dotProduct of this quadrangle.
         /// </summary>
-        public void UpdateDotProduct()
+        public void UpdatePlaneDistance()
         {
             // NOTE you can dot any of the vertices you want with
             //      the normal and will always get the same scalar.
             PlaneDistance = -math.dot(normal, vertex0);
+        }
+
+        public void UpdateEdgeNormals()
+        {
+            // The edge normal is the cross product between the quad normal and
+            // the direction from seqeuntial vertices. Since the normal can be
+            // flipped, do cross(nrm, dir) if the direction is from, say, v1 to v0,
+            // or cross(dir, nrm) if the direction is from, say, v0 to v1.
+            float3 v0v1 = vertex0 - vertex1;
+            float3 v1v2 = vertex1 - vertex2;
+            float3 v2v3 = vertex2 - vertex3;
+            float3 v3v0 = vertex3 - vertex0;
+            edgeNormal0 = math.cross(normal, v0v1);
+            edgeNormal1 = math.cross(normal, v1v2);
+            edgeNormal2 = math.cross(normal, v2v3);
+            edgeNormal3 = math.cross(normal, v3v0);
+            edgeNormal0  = math.normalize(edgeNormal0);
+            edgeNormal1  = math.normalize(edgeNormal1);
+            edgeNormal2  = math.normalize(edgeNormal2);
+            edgeNormal3  = math.normalize(edgeNormal3);
+        }
+
+        public void UpdateNormal()
+        {
+            float3 v0v1 = vertex0 - vertex1; // dir v0 -> v1
+            float3 v0v2 = vertex0 - vertex2; // dir v0 -> v2
+            normal = -math.cross(v0v1, v0v2);
+            normal = math.normalize(normal);
+        }
+
+        public void Update()
+        {
+            // Update nromal first since other data relies on it.
+            UpdateNormal();
+            UpdateEdgeNormals();
+            UpdatePlaneDistance();
         }
 
         public float3[] GetVertices()
@@ -75,23 +111,6 @@ namespace GameCube.GFZ.Stage
                 Vertex3 * oneQuarter;
             return center;
         }
-
-        public void UpdateEdgeNormals()
-        {
-            // The edge normal is the cross product between the quad normal and
-            // the direction from seqeuntial vertices. Since the normal can be
-            // flipped, do cross(nrm, dir) if the direction is from, say, v1 to v0,
-            // or cross(dir, nrm) if the direction is from, say, v0 to v1.
-            float3 v0v1 = vertex0 - vertex1;
-            float3 v1v2 = vertex1 - vertex2;
-            float3 v2v3 = vertex2 - vertex3;
-            float3 v3v0 = vertex3 - vertex0;
-            edgeNormal0 = math.cross(normal, v0v1);
-            edgeNormal1 = math.cross(normal, v1v2);
-            edgeNormal2 = math.cross(normal, v2v3);
-            edgeNormal3 = math.cross(normal, v3v0);
-        }
-
 
         // bounds x/z
         public float GetMinPositionX()
