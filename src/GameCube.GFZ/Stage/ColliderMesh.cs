@@ -1,7 +1,6 @@
 ﻿using Manifold;
 using Manifold.IO;
 using System;
-using System.IO;
 
 namespace GameCube.GFZ.Stage
 {
@@ -26,7 +25,7 @@ namespace GameCube.GFZ.Stage
         public const int kTotalIndices = 2;
 
         // FIELDS
-        private uint unk_0x00;
+        private ColliderMeshType colliderType;
         private BoundingSphere boundingSphere;
         private ArrayPointer2D collisionArrayPtr2D = new ArrayPointer2D(kTotalIndices);
         // REFERENCE FIELDS
@@ -40,7 +39,7 @@ namespace GameCube.GFZ.Stage
         public ArrayPointer TrisPtr { get => collisionArrayPtr2D[kTriIndex]; set => collisionArrayPtr2D[kTriIndex] = value; }
         public ColliderQuad[] Quads { get => quads; set => quads = value; }
         public ArrayPointer QuadsPtr { get => collisionArrayPtr2D[kQuadIndex]; set => collisionArrayPtr2D[kQuadIndex] = value; }
-        public uint Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
+        public ColliderMeshType ColliderType { get => colliderType; set => colliderType = value; }
         public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
 
 
@@ -89,7 +88,7 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(reader);
             {
-                reader.Read(ref unk_0x00);
+                reader.Read(ref colliderType);
                 reader.Read(ref boundingSphere);
                 collisionArrayPtr2D.Deserialize(reader);
             }
@@ -120,7 +119,7 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordStartAddress(writer);
             {
-                writer.Write(unk_0x00);
+                writer.Write(colliderType);
                 writer.Write(boundingSphere);
                 writer.Write(collisionArrayPtr2D);
             }
@@ -139,7 +138,7 @@ namespace GameCube.GFZ.Stage
         {
             builder.AppendLineIndented(indent, indentLevel, nameof(ColliderMesh));
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_0x00)}: {unk_0x00}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(colliderType)}: {colliderType}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(boundingSphere)}: {boundingSphere}");
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(TrisPtr)}: {TrisPtr}");
             //builder.AppendLineIndented(indent, indentLevel, $"{nameof(QuadsPtr)}: {QuadsPtr}");
