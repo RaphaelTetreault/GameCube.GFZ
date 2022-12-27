@@ -37,8 +37,8 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
         public ShiftJisCString Name => SceneObject.Name;
 
-        public ObjectRenderFlags0x00 Unk0x00 { get => unk0x00; set => unk0x00 = value; }
-        public ObjectRenderFlags0x04 Unk0x04 { get => unk0x04; set => unk0x04 = value; }
+        public ObjectRenderFlags0x00 ObjectRenderFlags0x00 { get => unk0x00; set => unk0x00 = value; }
+        public ObjectRenderFlags0x04 ObjectRenderFlags0x04 { get => unk0x04; set => unk0x04 = value; }
         public Pointer SceneObjectPtr { get => sceneObjectPtr; set => sceneObjectPtr = value; }
         public TransformTRXS TransformTRXS { get => transformTRXS; set => transformTRXS = value; }
         public Pointer AnimationClipPtr { get => animationClipPtr; set => animationClipPtr = value; }
@@ -156,8 +156,8 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, nameof(SceneObjectDynamic));
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Name)}: {Name}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Unk0x00)}: {Unk0x00}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Unk0x04)}: {Unk0x04}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(ObjectRenderFlags0x00)}: {ObjectRenderFlags0x00}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(ObjectRenderFlags0x04)}: {ObjectRenderFlags0x04}");
             builder.AppendMultiLineIndented(indent, indentLevel, transformTRXS);
             builder.AppendMultiLineIndented(indent, indentLevel, sceneObject);
             builder.AppendMultiLineIndented(indent, indentLevel, animationClip);

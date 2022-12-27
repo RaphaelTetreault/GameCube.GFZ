@@ -5,6 +5,7 @@ using Unity.Mathematics;
 
 namespace GameCube.GFZ
 {
+    [System.Serializable]
     public struct BoundingSphere :
         IBinarySerializable,
         IBinaryAddressable,
