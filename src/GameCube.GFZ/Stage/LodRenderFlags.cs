@@ -21,10 +21,14 @@ namespace GameCube.GFZ.Stage
     public enum LodRenderFlags : uint
     {
         none = 0,
-        bit0 = 1 << 0, //   1
-        bit1 = 1 << 1, //   2
-        bit6 = 1 << 6, //  64
-        bit7 = 1 << 7, // 128
-        bit8 = 1 << 8, // 256
+        SmoothTransparentFadeInOut = 1 << 0,
+        unk1_RenderNearOnly = 1 << 1,
+        // 2
+        // 3
+        // 4
+        // 5
+        unk6_SpecialAlpha = 1 << 6,         //  64 -- primarily on dash yellow transparent objects, or other "lights"
+        unk7_SpecialAlphaAddOn = 1 << 7,    // 128 -- seems to be an add-on for above, used exclusively with it.
+        unk8_PhantomRoadCube = 1 << 8,      // 256 -- used exclusively on cubes in Phantom Road
     }
 }

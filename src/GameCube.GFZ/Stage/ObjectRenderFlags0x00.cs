@@ -3,15 +3,15 @@
     [System.Flags]
     public enum ObjectRenderFlags0x00 : uint
     {
-        renderObject = 1 << 0,
-        unk_RenderObject1 = 1 << 1, // 1 + 2 + 3:
-        unk_RenderObject2 = 1 << 2, // some of these enable rendering objects during time-attacke name-enter screen
-        unk_RenderObject3 = 1 << 3, // ... seems like these could influence LOD for multiplayer
+        renderObject1pFullScreen = 1 << 0,
+        renderObject2pSplitScreen = 1 << 1, 
+        renderObject3pSplitScreen = 1 << 2,
+        renderObject4pSplitScreen = 1 << 3,
         unk_AlphaBlendMode = 1 << 4,
         unk_5 = 1 << 5,
         unk_HideObject1 = 1 << 6,
         unk_HideObject2 = 1 << 7,
-        renderAsBillboarded = 1 << 8,
+        renderAsBillboard = 1 << 8,
         renderInScreenSpace = 1 << 9,
         unk_ModifyRenderIndex = 1 << 10,
         alphaNoClipSelf = 1 << 11,
@@ -22,7 +22,7 @@
         hasTextureScroll3 = 1 << 16,
         unk_17 = 1 << 17,
         unk_18 = 1 << 18, // crash?
-        ReceiveEfbShadow = 1 << 19,
+        receiveEfbShadow = 1 << 19,
         unk_20 = 1 << 20,
         unk_21 = 1 << 21,
         unk_22 = 1 << 22,
