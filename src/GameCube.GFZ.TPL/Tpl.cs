@@ -109,7 +109,7 @@ namespace GameCube.GFZ.TPL
             int totalBlocksEncoded = GetTotalBlocksEncoded(textureDescription, encoding);
             int totalBlocksRead = 0;
 
-            for (int i = 0; i < textureSeries.TextureData.Length; i++)
+            for (int i = 0; i < textureSeries.Entries.Length; i++)
             {
                 // Some textures have invalid mipmap sizes. Prevent them from doing anything.
                 bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
