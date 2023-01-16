@@ -6,5 +6,6 @@ namespace GameCube.GFZ.TPL
     {
         public Texture Texture { get; internal set; }
         public bool IsValid { get; internal set; }
+        public bool IsCorrupted => !IsValid;
     }
 }

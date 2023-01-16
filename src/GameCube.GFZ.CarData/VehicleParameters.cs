@@ -1,6 +1,4 @@
 ﻿using Manifold.IO;
-using System;
-using System.IO;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ.CarData
