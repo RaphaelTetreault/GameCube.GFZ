@@ -9,7 +9,7 @@ namespace GameCube.GFZ.TPL
 {
 
     [Serializable]
-    public class TextureDescription :
+    public class TextureSeriesDescription :
         IBinaryAddressable,
         IBinarySerializable
     {
@@ -62,7 +62,7 @@ namespace GameCube.GFZ.TPL
             this.RecordEndAddress(reader);
             {
                 //Assert.IsTrue(const_zero == 0);
-                Assert.IsTrue(const_0x1234 == k0x1234);
+                Assert.IsTrue(const_0x1234 == k0x1234, AddressRange.startAddress.ToString());
             }
         }
 
