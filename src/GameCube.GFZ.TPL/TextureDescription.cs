@@ -28,7 +28,7 @@ namespace GameCube.GFZ.TPL
         public bool IsGarbageEntry => const_zero != 0;
         public bool IsNull { get => isNull; set => isNull = value; }
         public TextureFormat TextureFormat { get => textureFormat; set => textureFormat = value; }
-        public Pointer TexturePtr { get => texturePtr; set => texturePtr = value; }
+        public Pointer TextureSeriesPtr { get => texturePtr; set => texturePtr = value; }
         public ushort Width { get => width; set => width = value; }
         public ushort Height { get => height; set => height = value; }
         public ushort MipmapLevels { get => mipmapCount; set => mipmapCount = value; }

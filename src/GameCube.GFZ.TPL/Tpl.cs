@@ -46,14 +46,14 @@ namespace GameCube.GFZ.TPL
                 if (textureDescription.IsNull)
                     continue;
 
-                // Somet TPLs come with garbage data in the first 0x30 bytes of the file (in the first 4 bytes of affected descriptions).
+                // Some TPLs come with garbage data in the first 0x30 bytes of the file (in the first 4 bytes of affected descriptions).
                 // Make sure the null check above never fails. Otherwise you need to find a different way to check for this garbage.
                 var msg = $"Uncaught garbage entry {FileName} entry {i} addr {textureDescription.AddressRange.PrintStartAddress()}";
                 Assert.IsFalse(textureDescription.IsGarbageEntry, msg);
 
                 // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
                 var encoding = Encoding.GetEncoding(textureDescription.TextureFormat);
-                Assert.IsTrue(encoding.IsDirect, "Encoding is not direct. GFZ does not use (handle?) Indirect modes.");
+                Assert.IsTrue(encoding.IsDirect, "Encoding is not direct. GFZ does not use (handle?) indirect modes.");
 
                 // Assert game uses all power-of-two textures.
                 int isWidthPowerOfTwo = textureDescription.Width % encoding.BlockWidth;
@@ -64,12 +64,12 @@ namespace GameCube.GFZ.TPL
                 //Assert.IsTrue(isHeightPowerOfTwo == 0);
 
                 // Read the texture series.
-                reader.JumpToAddress(textureDescription.TexturePtr);
+                reader.JumpToAddress(textureDescription.TextureSeriesPtr);
                 textureSeries[i] = ReadDirectTextureSeries(reader, textureDescription, encoding);
                 // Record some useful metadata about this texture
                 textureSeries[i].AddressRange = new AddressRange()
                 {
-                    startAddress = textureDescription.TexturePtr,
+                    startAddress = textureDescription.TextureSeriesPtr,
                     endAddress = reader.GetPositionAsPointer(),
                 };
             }
@@ -176,74 +176,86 @@ namespace GameCube.GFZ.TPL
         }
 
         /// <summary>
-        /// GFZ has an error where it computes the number of blocks needed to encode a texture. This method
-        /// provides the amount of blocks the game thinks needed to be encoded for CMPR.
-        /// incorrecly.
+        ///     GFZ has an error where it computes an incorrect number of blocks to encode a texture.
+        ///     This method provides the amount of blocks the game thinks is needed to encoded for CMPR.
         /// </summary>
-        /// <param name="widthPixels"></param>
-        /// <param name="heightPixels"></param>
-        /// <returns></returns>
+        /// <param name="widthPixels">The pixel width of the texture to encode.</param>
+        /// <param name="heightPixels">The pixel height of the texture to encode.</param>
+        /// <returns>
+        ///     The GFZ-specific number of blocks encoded for the texture. This amount may vary
+        ///     from the number of blocks actually needed to encode a correctly formated CMPR image.
+        /// </returns>
+        /// <example>
+        ///     CMPR (BC1/DXT1) has a block size of 8x8 split into quadrants (2x2); in each we have
+        ///     a 4x4 grid of pixels. GFZ incorrectly formats CMPR textures as though it only requires
+        ///     one single 4x4 block. This leads to encoding issues for textures with a width or height
+        ///     that is not divisible by 8 or that has a side less than or equal to 4.
+        ///
+        ///     Examples:
+        ///     Note values in divisions are clamped upwards to fit existing pixels in a block
+        ///     of greater size. ei: 1x1 pixels still takes one 8x8 block, the rest is just padding.
+        ///     
+        ///     Image.
+        ///     Sample A size: 16x16 pixels. (square)
+        ///     Sample B size: 64x4 pixels. (rectangle)
+        ///     
+        ///     CMPR block size is 8x8.
+        ///     A: 16/8 * 16/8 == 2 * 2 == 4 blocks required.
+        ///     B: 64/8 *  4/8 == 8 * 1 == 8 blocks required.
+        ///     
+        ///     GFZ CMPR block size is 4x4
+        ///     A: 16/4 * 16/4 ==  4 * 4 == 16 blocks.
+        ///     B: 64/4 *  4/4 == 16 * 1 == 16 blocks required.
+        ///     However, the game knows this is incorrect and tries to adjust the value.
+        ///     A: 16 blocks / 4 = 4 blocks required (hey, correct!)
+        ///     B: 16 blocks / 4 = 4 blocks (uh-oh, that's half what we need!)
+        ///     
+        ///     Even large textures suffer if "side length" % 8 is less than or equal to 4.
+        ///     Texture size: 60x64 pixels.
+        ///     GC  CMPR: 60/8 * 64/8 == ceil(7.5) * 8 ==  8 *  8 ==              == 64 blocks
+        ///     GFZ CMPR: 60/4 * 64/4 ==               == 15 * 16 == 240/4 blocks == 60 blocks
+        ///     
+        ///     Because of this, GFZ regularly under-allocates space for rectangular CMPR
+        ///     textures. The game calculates the full size it thinks a CMPR with mipmaps
+        ///     will take and set pixel data up until the buffer is full (prematurely) and then
+        ///     stops. This results in the odd behaviour of some mipmaps being only partially
+        ///     written (say, 3/4 of the texture). The rest is either the next texture's data
+        ///     or we hit End-Of-File, which when loaded could be anything else in RAM after it.
+        ///     
+        ///     Below is a breakdown of what a 512x32 texture with mipmaps requires in terms of blocks.
+        ///     You can see the algorithm begin to fail when we get to below 8 pixels in w or h.
+        ///     
+        ///     CMPR 8x8 block requirement
+        ///     pixels      div8    blocks
+        ///     512 x 32 == 64x4 == 256 blocks
+        ///     256 x 16 == 32x2 ==  64 blocks
+        ///     128 x  8 == 16x1 ==  16 blocks
+        ///      64 x  4 ==  8x1 ==   8 blocks
+        ///      32 x  2 ==  4x1 ==   4 blocks
+        ///      16 x  1 ==  2x1 ==   2 blocks
+        ///     TOTAL:              350 blocks
+        ///     
+        ///     GFZ CMPR 4x4 block "requirement"
+        ///     pixels      div4    hackfix   blocks
+        ///     512 x 32 == 128x8 == 512/4 == 256 blocks 
+        ///     256 x 16 ==  64x4 == 256/4 ==  64 blocks
+        ///     128 x  8 ==  32x2 ==  64/4 ==  16 blocks
+        ///      64 x  4 ==  16x1 ==  16/4 ==   4 blocks // 4 blocks less (begins under-allocating here)
+        ///      32 x  2 ==   8x1 ==   8/4 ==   2 blocks // 2 blocks less
+        ///      16 x  1 ==   4x1 ==   4/4 ==   1 block  // 1 block less
+        ///     TOTAL:                        343 blocks // 7 blocks under-allocated
+        /// </example>
         public static int GfzCmprBlocksEncoded(int widthPixels, int heightPixels)
         {
             // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
             // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
-            // quadrant size 4x4 instead.
+            // quadrant size (4, 4) instead.
             int nBlocks4x4 = Encoding.GetTotalBlocksToEncode(widthPixels, heightPixels, 4, 4);
             // The number of blocks we get out is now 4 times the size since we specify a block
             // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
             // terms with other blocks, we divide by 4.
-            int nBlocks8x8 = (int)Math.Ceiling(nBlocks4x4 / (float)4);
+            int nBlocks8x8 = (int)Math.Ceiling(nBlocks4x4 / 4f);
             return nBlocks8x8;
-
-            // Note that this will begin to fail on widths/height below 8 when width and height
-            // are different. Notably this happens with mipmaps.
-
-            // EXAMPLES. Note values in divisions are clamped upwards to fit existing pixels in a block
-            // of greater size. ei: 1x1 pixels still takes one 8x8 block, the rest is just padding.
-            //
-            // Image.
-            // Sample A size: 16x16 pixels. (square)
-            // Sample B size: 64x4 pixels. (rectangle)
-            //
-            // CMPR block size is 8x8.
-            // A: 16/8 * 16/8 == 2 * 2 == 4 blocks required.
-            // B: 64/8 *  4/8 == 8 * 1 == 8 blocks required.
-            //
-            // GFZ CMPR block size is 4x4
-            // A: 16/4 * 16/4 ==  4 * 4 == 16 blocks.
-            // B: 64/4 *  4/4 == 16 * 1 == 16 blocks required.
-            // However, the game knows this is incorrect and tries to adjust the value.
-            // A: 16 blocks / 4 = 4 blocks required (hey, correct!)
-            // B: 16 blocks / 4 = 4 blocks (uh-oh, that's half what we need!)
-            //
-            // Because of this, GFZ regularly under-allocates space for rectangular CMPR
-            // textures. The game calculates the full size it thinks a CMPR with mipmaps
-            // will take and pixel data up until the buffer is full (prematurely) and then
-            // stops. This results in the odd behaviour of some mipmaps being only partially
-            // writting (say, 3/4 of the testure), the the rest is another texture's data.
-            //
-            // Below is a breakdown of what a 512x32 texture would require in terms of blocks.
-            // You can see the algorithm begin to fail when we get to below 8 pixels in w or h.
-            //
-            // CMPR 8x8 block requirement
-            //  pixels  ||    blocks
-            // 512 x 32 == 32x4 == 64 blocks
-            // 256 x 16 == 16x2 == 16 blocks
-            // 128 x  8 ==  8x1 ==  8 blocks
-            //  64 x  4 ==  4x1 ==  4 blocks
-            //  32 x  2 ==  2x1 ==  2 blocks
-            //  16 x  1 ==  1x1 ==  1 block
-            // TOTAL:              95 blocks
-            //
-            // GFZ CMPR 4x4 block "requirement"
-            //  pixels  ||    blocks
-            // 512 x 32 == 64x8 == 256/4 == 64 blocks 
-            // 256 x 16 == 32x4 == 128/4 == 16 blocks
-            // 128 x  8 == 16x2 ==  32/4 ==  8 blocks
-            //  64 x  4 ==  8x1 ==   8/4 ==  2 blocks
-            //  32 x  2 ==  4x1 ==   4/4 ==  1 block
-            //  16 x  1 ==  2x1 ==   1/1 ==  1 block
-            // TOTAL:                       92 blocks
         }
 
         /// <summary>
