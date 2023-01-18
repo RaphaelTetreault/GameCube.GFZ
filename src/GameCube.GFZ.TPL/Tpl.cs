@@ -2,8 +2,6 @@ using GameCube.GX;
 using GameCube.GX.Texture;
 using Manifold;
 using Manifold.IO;
-using System;
-
 
 namespace GameCube.GFZ.TPL
 {
@@ -13,16 +11,17 @@ namespace GameCube.GFZ.TPL
         IBinarySerializable
     {
         public const Endianness endianness = Endianness.BigEndian;
+        public static readonly System.Security.Cryptography.MD5 MD5 = System.Security.Cryptography.MD5.Create();
 
         private int textureDescriptionsCount;
-        private TextureDescription[] textureDescriptions;
-        private TextureSeries[] textureSeries;
+        private TextureSeriesDescription[] textureSeriesDescription = new TextureSeriesDescription[0];
+        private TextureSeries[] textureSeries = new TextureSeries[0];
 
         public Endianness Endianness => endianness;
         public string FileExtension => ".tpl";
-        public string FileName { get; set; }
+        public string FileName { get; set; } = "";
 
-        public TextureDescription[] TextureDescriptions => textureDescriptions;
+        public TextureSeriesDescription[] TextureSeriesDescriptions => textureSeriesDescription;
         public TextureSeries[] TextureSeries => textureSeries;
 
         private static readonly TextureColor Magenta = new TextureColor(255, 0, 255);
@@ -31,7 +30,7 @@ namespace GameCube.GFZ.TPL
         {
             // Read `count` texture descriptions
             reader.Read(ref textureDescriptionsCount);
-            reader.Read(ref textureDescriptions, textureDescriptionsCount);
+            reader.Read(ref textureSeriesDescription, textureDescriptionsCount);
             textureSeries = new TextureSeries[textureDescriptionsCount];
 
             // File has padding after descriptions that increment continuously.
@@ -40,36 +39,34 @@ namespace GameCube.GFZ.TPL
             for (byte i = 0; i < padding.Length; i++)
                 Assert.IsTrue(padding[i] == i);
 
-            for (int i = 0; i < textureDescriptions.Length; i++)
+            for (int i = 0; i < textureSeriesDescription.Length; i++)
             {
-                var textureDescription = textureDescriptions[i];
-                if (textureDescription.IsNull)
+                var textureSeriesDescription = this.textureSeriesDescription[i];
+                if (textureSeriesDescription.IsNull)
                     continue;
 
                 // Some TPLs come with garbage data in the first 0x30 bytes of the file (in the first 4 bytes of affected descriptions).
                 // Make sure the null check above never fails. Otherwise you need to find a different way to check for this garbage.
-                var msg = $"Uncaught garbage entry {FileName} entry {i} addr {textureDescription.AddressRange.PrintStartAddress()}";
-                Assert.IsFalse(textureDescription.IsGarbageEntry, msg);
+                var msg = $"Uncaught garbage entry {FileName} entry {i} addr {textureSeriesDescription.AddressRange.PrintStartAddress()}";
+                Assert.IsFalse(textureSeriesDescription.IsGarbageEntry, msg);
 
                 // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
-                var encoding = Encoding.GetEncoding(textureDescription.TextureFormat);
+                var encoding = Encoding.GetEncoding(textureSeriesDescription.TextureFormat);
                 Assert.IsTrue(encoding.IsDirect, "Encoding is not direct. GFZ does not use (handle?) indirect modes.");
 
                 // Assert game uses all power-of-two textures.
-                int isWidthPowerOfTwo = textureDescription.Width % encoding.BlockWidth;
-                int isHeightPowerOfTwo = textureDescription.Height % encoding.BlockHeight;
+                int isWidthPowerOfTwo = textureSeriesDescription.Width % encoding.BlockWidth;
+                int isHeightPowerOfTwo = textureSeriesDescription.Height % encoding.BlockHeight;
                 if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
-                    DebugConsole.Log($"{FileName}.tpl: Texture index {i} has size (x:{textureDescription.Width}, y:{textureDescription.Height}). Not a power of two.");
-                //Assert.IsTrue(isWidthPowerOfTwo == 0);
-                //Assert.IsTrue(isHeightPowerOfTwo == 0);
+                    DebugConsole.Log($"{FileName}.tpl: Texture index {i} has size (x:{textureSeriesDescription.Width}, y:{textureSeriesDescription.Height}). Not a power of two.");
 
                 // Read the texture series.
-                reader.JumpToAddress(textureDescription.TextureSeriesPtr);
-                textureSeries[i] = ReadDirectTextureSeries(reader, textureDescription, encoding);
+                reader.JumpToAddress(textureSeriesDescription.TextureSeriesPtr);
+                textureSeries[i] = ReadDirectTextureSeries(reader, textureSeriesDescription);
                 // Record some useful metadata about this texture
                 textureSeries[i].AddressRange = new AddressRange()
                 {
-                    startAddress = textureDescription.TextureSeriesPtr,
+                    startAddress = textureSeriesDescription.TextureSeriesPtr,
                     endAddress = reader.GetPositionAsPointer(),
                 };
             }
@@ -77,36 +74,55 @@ namespace GameCube.GFZ.TPL
 
         public void Serialize(EndianBinaryWriter writer)
         {
-            throw new System.NotImplementedException();
+            // Write texture series descriptions
+            writer.Write(TextureSeriesDescriptions.Length);
+            writer.Write(TextureSeriesDescriptions);
+
+            // Write incrementing padding
+            int paddingLength = (int)StreamExtensions.GetLengthOfAlignment(writer.BaseStream, GXUtility.GX_FIFO_ALIGN);
+            for (byte i = 0; i < paddingLength; i++)
+                writer.Write(i);
+
+            // Write each texture of each texture series
+            foreach (var textureSerie in textureSeries)
+            {
+                var directEncoding = DirectEncoding.GetEncoding(textureSerie.Description.TextureFormat);
+                foreach (var entry in textureSerie.Entries)
+                {
+                    var texture = entry.Texture;
+                    var blocks = Texture.CreateTextureDirectColorBlocks(texture, directEncoding);
+                    directEncoding.WriteBlocks(writer, blocks);
+                }
+            }
         }
 
-        /// <summary>
-        /// Create a new texture series that has main texture and mipmaps.
-        /// </summary>
-        /// <param name="texture"></param>
-        /// <param name="numMipmaps"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public static TextureSeries CreateTextureSeries(Texture texture, int numMipmaps)
-        {
-            throw new NotImplementedException();
-        }
+        ///// <summary>
+        ///// Create a new texture series that has main texture and mipmaps.
+        ///// </summary>
+        ///// <param name="texture"></param>
+        ///// <param name="numMipmaps"></param>
+        ///// <returns></returns>
+        ///// <exception cref="NotImplementedException"></exception>
+        //public static TextureSeries CreateTextureSeries(Texture texture, int numMipmaps)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// Reads texture and all associated mipmaps.
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="textureDescription"></param>
+        /// <param name="textureSeriesDescription"></param>
         /// <param name="encoding"></param>
         /// <returns></returns>
-        public static TextureSeries ReadDirectTextureSeries(EndianBinaryReader reader, TextureDescription textureDescription, Encoding encoding)
+        public static TextureSeries ReadDirectTextureSeries(EndianBinaryReader reader, TextureSeriesDescription textureSeriesDescription)
         {
-            int pixelWidth = textureDescription.Width;
-            int pixelHeight = textureDescription.Height;
-            int numTextures = textureDescription.NumberOfTextures;
-            var textureSeries = new TextureSeries(numTextures);
+            var encoding = Encoding.GetEncoding(textureSeriesDescription.TextureFormat);
+            int pixelWidth = textureSeriesDescription.Width;
+            int pixelHeight = textureSeriesDescription.Height;
+            var textureSeries = new TextureSeries(textureSeriesDescription);
 
-            int totalBlocksEncoded = GetTotalBlocksEncoded(textureDescription, encoding);
+            int totalBlocksEncoded = GetTotalBlocksEncodedCount(textureSeriesDescription);
             int totalBlocksRead = 0;
 
             for (int i = 0; i < textureSeries.Entries.Length; i++)
@@ -115,11 +131,15 @@ namespace GameCube.GFZ.TPL
                 bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
                 if (isInvalidTextureSize)
                 {
-                    textureSeries[i].Texture = new Texture(1, 1, Magenta, textureDescription.TextureFormat);
+                    textureSeries[i].Texture = new Texture(1, 1, Magenta, textureSeriesDescription.TextureFormat);
                     pixelWidth >>= 1;
                     pixelHeight >>= 1;
                     continue;
                 }
+
+                //
+                AddressRange textureRange = new AddressRange();
+                textureRange.startAddress = (int)reader.BaseStream.Position;
 
                 // Get how many blocks to read (width and height separated)
                 int widthBlocks = (int)Math.Ceiling((double)pixelWidth / encoding.BlockWidth);
@@ -136,7 +156,7 @@ namespace GameCube.GFZ.TPL
                     if (canReadMoreBlocks)
                     {
                         // Read the remaining blocks
-                        var invalidDirectBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksInStream, encoding);
+                        var invalidDirectBlocks = encoding.ReadBlocks<DirectBlock>(reader, encoding, blocksInStream);
                         totalBlocksRead += blocksRequired;
                         // Create an invalid texture. Unset pixels will be magenta.
                         var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, widthBlocks, heightBlocks, Magenta);
@@ -145,7 +165,7 @@ namespace GameCube.GFZ.TPL
                     else
                     {
                         // If no more blocks to read, make fully magenta texture.
-                        textureSeries[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureDescription.TextureFormat);
+                        textureSeries[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureSeriesDescription.TextureFormat);
                     }
                     textureSeries[i].IsValid = false;
 
@@ -153,13 +173,13 @@ namespace GameCube.GFZ.TPL
                     pixelHeight >>= 1;
                     continue;
                 }
-               
+
                 // If we succeed, proceed to deserialize blocks for texture.
                 //var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksW, blocksH, encoding);
-                var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksRequired, encoding);
+                var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, encoding, blocksRequired);
                 Assert.IsTrue(blocksRequired != 0);
                 Assert.IsTrue(directBlocks.Length == blocksRequired);
-                Assert.IsTrue(widthBlocks*heightBlocks == blocksRequired);
+                Assert.IsTrue(widthBlocks * heightBlocks == blocksRequired);
                 totalBlocksRead += blocksRequired;
 
                 // Make new texture. Crop it to width/height on occasions where pixel width or height
@@ -171,6 +191,15 @@ namespace GameCube.GFZ.TPL
                 // Halve the size for the next mipmap.
                 pixelWidth >>= 1;
                 pixelHeight >>= 1;
+
+                // Get texture hash ONLY for valid textures
+                textureRange.endAddress = (int)reader.BaseStream.Position;
+                reader.JumpToAddress(textureRange.startAddress);
+                var bytes = reader.ReadBytes(textureRange.Size);
+                reader.JumpToAddress(textureRange.endAddress);
+                //
+                var hashedBytes = MD5.ComputeHash(bytes);
+                textureSeries.MD5TextureHashes[i] = hashedBytes.ConcatElements((byte b) => { return b.ToString("x2"); }); // gross...?
             }
             return textureSeries;
         }
@@ -179,8 +208,8 @@ namespace GameCube.GFZ.TPL
         ///     GFZ has an error where it computes an incorrect number of blocks to encode a texture.
         ///     This method provides the amount of blocks the game thinks is needed to encoded for CMPR.
         /// </summary>
-        /// <param name="widthPixels">The pixel width of the texture to encode.</param>
-        /// <param name="heightPixels">The pixel height of the texture to encode.</param>
+        /// <param name="pixelWidtth">The pixel width of the texture to encode.</param>
+        /// <param name="pixelHeight">The pixel height of the texture to encode.</param>
         /// <returns>
         ///     The GFZ-specific number of blocks encoded for the texture. This amount may vary
         ///     from the number of blocks actually needed to encode a correctly formated CMPR image.
@@ -245,12 +274,12 @@ namespace GameCube.GFZ.TPL
         ///      16 x  1 ==   4x1 ==   4/4 ==   1 block  // 1 block less
         ///     TOTAL:                        343 blocks // 7 blocks under-allocated
         /// </example>
-        public static int GfzCmprBlocksEncoded(int widthPixels, int heightPixels)
+        public static int GfzCmprBlocksEncodedCount(int pixelWidtth, int pixelHeight)
         {
             // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
             // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
             // quadrant size (4, 4) instead.
-            int nBlocks4x4 = Encoding.GetTotalBlocksToEncode(widthPixels, heightPixels, 4, 4);
+            int nBlocks4x4 = Encoding.GetTotalBlocksToEncode(pixelWidtth, pixelHeight, 4, 4);
             // The number of blocks we get out is now 4 times the size since we specify a block
             // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
             // terms with other blocks, we divide by 4.
@@ -259,35 +288,42 @@ namespace GameCube.GFZ.TPL
         }
 
         /// <summary>
-        /// Provides the amount of blocks the game thinks needed to be encoded for <paramref name="encoding"/>.
+        ///     Provides the amount of blocks the game thinks it needs to encode a <paramref name="pixelWidth"/> by
+        ///     <paramref name="pixelHeight"/> sized texture using <paramref name="encoding"/>.
         /// </summary>
-        /// <param name="pixelWidth"></param>
-        /// <param name="pixelHeight"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static int GetGfzBlocksEncoded(int pixelWidth, int pixelHeight, Encoding encoding)
+        /// <param name="pixelWidth">The pixel width of the texture to encode.</param>
+        /// <param name="pixelHeight">The pixel height of the texture to encode.</param>
+        /// <param name="encoding">Which block encoding was used to encode blocks. </param>
+        /// <returns>
+        ///     The number of blocks encoded by GFZ for a texture of <paramref name="pixelWidth"/> by
+        ///     <paramref name="pixelHeight"/> size using its own <paramref name="encoding"/> format.
+        /// </returns>
+        public static int GetGfzBlocksEncodedCount(int pixelWidth, int pixelHeight, Encoding encoding)
         {
             bool isCmprTexture = encoding.Format == TextureFormat.CMPR;
 
             // Calculate the amount of blocks required to store image in encoding/format
             int blocksRequiredForTexture = isCmprTexture
-                ? GfzCmprBlocksEncoded(pixelWidth, pixelHeight)
+                ? GfzCmprBlocksEncodedCount(pixelWidth, pixelHeight)
                 : encoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight);
 
             return blocksRequiredForTexture;
         }
 
         /// <summary>
-        /// Provides total amount of blocks the game thinks needed to be encoded for <paramref name="encoding"/>.
+        ///     Provides the amount of blocks the game used to encode <paramref name="textureSeriesDescription"/>'s
+        ///     texture data using <paramref name="encoding"/>.
         /// </summary>
-        /// <param name="textureDescription"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static int GetTotalBlocksEncoded(TextureDescription textureDescription, Encoding encoding)
+        /// <param name="textureSeriesDescription"></param>
+        /// <returns>
+        /// 
+        /// </returns>
+        public static int GetTotalBlocksEncodedCount(TextureSeriesDescription textureSeriesDescription)
         {
-            int pixelWidth = textureDescription.Width;
-            int pixelHeight = textureDescription.Height;
-            int numTextures = textureDescription.NumberOfTextures;
+            var encoding = Encoding.GetEncoding(textureSeriesDescription.TextureFormat);
+            int pixelWidth = textureSeriesDescription.Width;
+            int pixelHeight = textureSeriesDescription.Height;
+            int numTextures = textureSeriesDescription.NumberOfTextures;
             int totalBlocksRead = 0;
 
             for (int i = 0; i < numTextures; i++)
@@ -299,7 +335,7 @@ namespace GameCube.GFZ.TPL
                     break;
 
                 // Calculate the amount of blocks required to store image in encoding/format
-                int blocksRequiredForTexture = GetGfzBlocksEncoded(pixelWidth, pixelHeight, encoding);
+                int blocksRequiredForTexture = GetGfzBlocksEncodedCount(pixelWidth, pixelHeight, encoding);
                 totalBlocksRead += blocksRequiredForTexture;
 
                 // Halve image dimensions per axis -> next mip size
@@ -311,14 +347,16 @@ namespace GameCube.GFZ.TPL
         }
 
         /// <summary>
-        /// Save blocks to texture even if insufficient amount of <paramref name="directBlocks"/> provided.
-        /// Unset pixels will be <paramref name="defaultColor"/>.
+        ///     Save blocks to texture even if insufficient amount of <paramref name="directBlocks"/> are provided.
+        ///     Unset pixels will be <paramref name="defaultColor"/>.
         /// </summary>
-        /// <param name="directBlocks"></param>
-        /// <param name="blocksWidth"></param>
-        /// <param name="blocksHeight"></param>
-        /// <param name="defaultColor"></param>
-        /// <returns></returns>
+        /// <param name="directBlocks">The blocks used to reconstruct the texture.</param>
+        /// <param name="blocksWidth">The width of the texture in blocks.</param>
+        /// <param name="blocksHeight">The height of the texture in blocks.</param>
+        /// <param name="defaultColor">The default color of unset pixels.</param>
+        /// <returns>
+        ///     A texture whose unset pixels are <paramref name="defaultColor"/>.
+        /// </returns>
         public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, int blocksWidth, int blocksHeight, TextureColor defaultColor)
         {
             int subBlockWidth = directBlocks[0].Width;
