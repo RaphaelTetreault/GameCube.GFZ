@@ -324,11 +324,12 @@ namespace GameCube.GFZ.CarData
                 BoosterParts[i] = ReadVehicleParameters(lines[currIndex++]);
 
             // NAMES
+            // My TSV format stores the name as the first entry
             machineNames = new ShiftJisCString[Machines.Length];
             for (int i = 0; i < Machines.Length; i++)
                 machineNames[i] = Machines[i].RuntimeName;
+
             // Default
-            //machineNames = MachineNamesTable;
             partsInternalNames = InternalPartNamesTable;
         }
 
