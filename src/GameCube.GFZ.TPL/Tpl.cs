@@ -11,7 +11,7 @@ namespace GameCube.GFZ.TPL
         IBinarySerializable
     {
         public const Endianness endianness = Endianness.BigEndian;
-        public static readonly System.Security.Cryptography.MD5 MD5 = System.Security.Cryptography.MD5.Create();
+        //public static readonly System.Security.Cryptography.MD5 MD5 = System.Security.Cryptography.MD5.Create();
 
         private int textureDescriptionsCount;
         private TextureSeriesDescription[] textureSeriesDescription = new TextureSeriesDescription[0];
@@ -198,6 +198,7 @@ namespace GameCube.GFZ.TPL
                 var bytes = reader.ReadBytes(textureRange.Size);
                 reader.JumpToAddress(textureRange.endAddress);
                 //
+                var MD5 = System.Security.Cryptography.MD5.Create();
                 var hashedBytes = MD5.ComputeHash(bytes);
                 textureSeries.MD5TextureHashes[i] = hashedBytes.ConcatElements((byte b) => { return b.ToString("x2"); }); // gross...?
             }
