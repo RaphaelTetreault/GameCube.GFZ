@@ -133,13 +133,26 @@ namespace GameCube.GFZ.LZ
         /// Returns a bool indicating the IO operation was successful.
         /// </returns>
         public static bool DecompressAvLzToDisk(string filePath, bool overwriteFiles)
+            => DecompressAvLzToDisk(filePath, overwriteFiles, out _);
+
+        /// <summary>
+        /// Decompresses file at <paramref name="filePath"/> using Amusement Vision LZ decompression
+        /// and saves it to disk.
+        /// </summary>
+        /// <param name="filePath">The file to decompress.</param>
+        /// <param name="overwriteFiles">Whether the opration can overwrite existing files on disk.</param>
+        /// <param name="outputFilePath">The file path to the decompressed file saved to disk.</param>
+        /// <returns>
+        /// Returns a bool indicating the IO operation was successful.
+        /// </returns>
+        public static bool DecompressAvLzToDisk(string filePath, bool overwriteFiles, out string outputFilePath)
         {
             var path = Path.GetDirectoryName(filePath);
             var fileName = Path.GetFileNameWithoutExtension(filePath);
-            var outputPath = Path.Combine(path, fileName);
+            outputFilePath = Path.Combine(path, fileName);
 
             // Prevent overwriting files if we don't want that
-            if (!overwriteFiles && File.Exists(outputPath))
+            if (!overwriteFiles && File.Exists(outputFilePath))
             {
                 return false;
             }
@@ -149,7 +162,7 @@ namespace GameCube.GFZ.LZ
 
             // Save stream from RAM to disk
             // File.Create will clear any existing file data
-            using (var writer = File.Create(outputPath, (int)decompressedFileStream.Length))
+            using (var writer = File.Create(outputFilePath, (int)decompressedFileStream.Length))
             {
                 decompressedFileStream.Seek(0, SeekOrigin.Begin);
                 decompressedFileStream.CopyTo(writer);
