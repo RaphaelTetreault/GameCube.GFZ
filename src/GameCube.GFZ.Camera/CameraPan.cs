@@ -21,8 +21,8 @@ namespace GameCube.GFZ.Camera
         private int frameCount;
         private float lerpSpeed;
         private byte[] zeroes0x08;
-        private CameraPanTarget from;
-        private CameraPanTarget to;
+        private CameraPanTarget from = new CameraPanTarget();
+        private CameraPanTarget to = new CameraPanTarget();
 
 
         // PROPERTIES
@@ -39,18 +39,18 @@ namespace GameCube.GFZ.Camera
         }
         public float LerpSpeed
         {
-            get => LerpSpeed;
-            set => LerpSpeed = value;
+            get => lerpSpeed;
+            set => lerpSpeed = value;
         }
         public CameraPanTarget From
         {
-            get => From;
-            set => From = value;
+            get => from;
+            set => from = value;
         }
         public CameraPanTarget To
         {
-            get => To;
-            set => To = value;
+            get => to;
+            set => to = value;
         }
 
 

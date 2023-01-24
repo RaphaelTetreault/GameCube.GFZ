@@ -10,7 +10,7 @@ namespace GameCube.GFZ.CarData
     public class CarData :
         IBinarySerializable,
         IBinaryFileType,
-        ITextSerializable
+        ITsvSerializable
     {
         // CONSTANTS
         // Numbers of things
