@@ -118,6 +118,7 @@ namespace GameCube.GFZ.LZ
             {
                 Lz.Unpack(inputFile, decompressedFile); // AX or GX will work ;)
                 decompressedFile.Flush();
+                decompressedFile.Position = 0;
             }
 
             return decompressedFile;
