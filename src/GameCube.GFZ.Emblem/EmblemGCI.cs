@@ -10,6 +10,7 @@ namespace GameCube.GFZ.Emblem
         IBinarySerializable
     {
         public const Endianness endianness = Endianness.BigEndian;
+        public const string Extension = ".gci";
         public const int GameCodeLength = 6;
         public const int FileNameLength = 32;
         public const int GameTitleLength = 32;
@@ -17,7 +18,7 @@ namespace GameCube.GFZ.Emblem
         public static readonly System.Text.Encoding TextEncoding = System.Text.Encoding.GetEncoding(932); // shift jis
 
         public Endianness Endianness => endianness;
-        public string FileExtension => ".gci";
+        public string FileExtension => Extension;
         public string FileName { get; set; } = string.Empty;
 
         // Fields

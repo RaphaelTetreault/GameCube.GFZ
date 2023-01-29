@@ -10,9 +10,10 @@ namespace GameCube.GFZ.Emblem
         IBinarySerializable
     {
         public const Endianness endianness = Endianness.BigEndian;
+        public const string Extension = ".bin";
 
         public Endianness Endianness => endianness;
-        public string FileExtension => ".bin";
+        public string FileExtension => Extension;
         public string FileName { get; set; } = string.Empty;
 
 
