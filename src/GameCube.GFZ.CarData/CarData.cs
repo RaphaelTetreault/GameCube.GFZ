@@ -273,6 +273,8 @@ namespace GameCube.GFZ.CarData
             reader.Read<ShiftJisCString>(ref partsInternalNames, kPartsInternalTable);
             SkipPadding(reader, DigitsPadding);
 
+            // Name table is reversed, so swap it around.
+            machineNames = machineNames.Reverse().ToArray();
             for (int i = 0; i < Machines.Length; i++)
                 Machines[i].RuntimeName = machineNames[i];
 
@@ -286,9 +288,12 @@ namespace GameCube.GFZ.CarData
 
         public void Serialize(EndianBinaryWriter writer)
         {
+            // Name table is reversed. Don't assign reference otherwise it flips each write.
+            var machineNamesReverse = machineNames.Reverse().ToArray();
+
             writer.Write(Machines);
             writer.Write(ZerosPadding);
-            writer.Write<ShiftJisCString>(machineNames);
+            writer.Write<ShiftJisCString>(machineNamesReverse);
             writer.Write(DigitsPadding);
             writer.Write(BodyParts);
             writer.Write(CockpitParts);
@@ -310,6 +315,7 @@ namespace GameCube.GFZ.CarData
             // MACHINES
             for (int i = 0; i < Machines.Length; i++)
                 Machines[i] = ReadVehicleParameters(lines[currIndex++]);
+
             // BODY
             currIndex += 3;
             for (int i = 0; i < BodyParts.Length; i++)
