@@ -18,7 +18,7 @@ namespace GameCube.GFZ.LZ
         /// <returns>
         /// A memory stream with the compressed file contents.
         /// </returns>
-        public static MemoryStream CompressAvLz(string filePath, GxGame game)
+        public static MemoryStream CompressAvLz(string filePath, AvGame game)
         {
             var compressedFile = new MemoryStream();
             using (var inputFile = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -40,7 +40,7 @@ namespace GameCube.GFZ.LZ
         /// <returns>
         /// Returns a bool indicating the IO operation was successful.
         /// </returns>
-        public static bool CompressAvLzToDisk(string filePath, GxGame game, bool overwriteFiles)
+        public static bool CompressAvLzToDisk(string filePath, AvGame game, bool overwriteFiles)
         {
             var outputPath = $"{filePath}.lz";
 
@@ -75,7 +75,7 @@ namespace GameCube.GFZ.LZ
         /// Returns an iterator for each file specified in <paramref name="filePaths"/>. For each file, the
         /// iterator returns a FileStatus with success and filePath data.
         /// </returns>
-        public static IEnumerable<FileStatus> CompressAvLzToDisk(string[] filePaths, GxGame game, bool overwriteFiles)
+        public static IEnumerable<FileStatus> CompressAvLzToDisk(string[] filePaths, AvGame game, bool overwriteFiles)
         {
             for (int i = 0; i < filePaths.Length; i++)
             {
@@ -98,7 +98,7 @@ namespace GameCube.GFZ.LZ
         /// Returns an iterator for each file found using the search parameters. For each file, the iterator
         /// returns a FileStatus with success and filePath data.
         /// </returns>
-        public static IEnumerable<FileStatus> CompressAvLzDirectoryToDisk(string rootPath, GxGame game, bool overwriteFiles, SearchOption searchOption, string searchPattern)
+        public static IEnumerable<FileStatus> CompressAvLzDirectoryToDisk(string rootPath, AvGame game, bool overwriteFiles, SearchOption searchOption, string searchPattern)
         {
             var filePaths = Directory.GetFiles(rootPath, searchPattern, searchOption);
             return CompressAvLzToDisk(filePaths, game, overwriteFiles);
