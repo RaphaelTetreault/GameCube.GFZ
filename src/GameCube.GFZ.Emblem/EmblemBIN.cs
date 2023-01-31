@@ -18,8 +18,7 @@ namespace GameCube.GFZ.Emblem
 
 
         private Emblem[] emblems = new Emblem[0];
-
-        public Emblem[] Emblems => emblems;
+        public Emblem[] Emblems { get => emblems; set => emblems = value; }
 
 
         public void Deserialize(EndianBinaryReader reader)
