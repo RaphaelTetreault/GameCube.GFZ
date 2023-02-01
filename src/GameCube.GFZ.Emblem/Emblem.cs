@@ -7,8 +7,12 @@ namespace GameCube.GFZ.Emblem
 {
     public class Emblem : FixedSizeTextureRGB5A3
     {
+        public const int _Width = 64;
+        public const int _Height = 64;
+
         public override int Width => 64;
         public override int Height => 64;
+
         public static int Size => 64 * 64 * sizeof(ushort);
     }
 }
