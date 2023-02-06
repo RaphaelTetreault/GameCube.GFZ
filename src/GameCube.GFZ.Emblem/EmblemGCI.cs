@@ -22,6 +22,7 @@ namespace GameCube.GFZ.Emblem
         public const int FileNameLength = 32;
         public const int GameTitleLength = 32;
         public const int CommentLength = 60;
+        public const int FileSize = 24_640; // bytes
         public static readonly System.Text.Encoding TextEncoding = System.Text.Encoding.GetEncoding(932); // shift jis
 
         public Endianness Endianness => endianness;
@@ -69,6 +70,13 @@ namespace GameCube.GFZ.Emblem
 
         public void Deserialize(EndianBinaryReader reader)
         {
+            bool isValidFileSize = reader.BaseStream.Length == FileSize;
+            if (!isValidFileSize)
+            {
+                string msg = $"File size is not exactly {FileSize:n0} bytes.";
+                throw new FileLoadException(msg);
+            }
+
             reader.Read(ref gameCode, TextEncoding, GameCodeLength);
             reader.Read(ref const_0xFF);
             reader.Read(ref regionCode);
