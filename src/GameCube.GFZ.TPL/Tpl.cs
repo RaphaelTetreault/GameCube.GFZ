@@ -11,7 +11,6 @@ namespace GameCube.GFZ.TPL
         IBinarySerializable
     {
         public const Endianness endianness = Endianness.BigEndian;
-        //public static readonly System.Security.Cryptography.MD5 MD5 = System.Security.Cryptography.MD5.Create();
 
         private int textureDescriptionsCount;
         private TextureSeriesDescription[] textureSeriesDescription = new TextureSeriesDescription[0];
@@ -71,7 +70,6 @@ namespace GameCube.GFZ.TPL
                 };
             }
         }
-
         public void Serialize(EndianBinaryWriter writer)
         {
             // Write texture series descriptions
@@ -95,18 +93,6 @@ namespace GameCube.GFZ.TPL
                 }
             }
         }
-
-        ///// <summary>
-        ///// Create a new texture series that has main texture and mipmaps.
-        ///// </summary>
-        ///// <param name="texture"></param>
-        ///// <param name="numMipmaps"></param>
-        ///// <returns></returns>
-        ///// <exception cref="NotImplementedException"></exception>
-        //public static TextureSeries CreateTextureSeries(Texture texture, int numMipmaps)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         /// <summary>
         /// Reads texture and all associated mipmaps.
