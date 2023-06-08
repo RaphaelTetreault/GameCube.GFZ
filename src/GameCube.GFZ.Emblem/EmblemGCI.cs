@@ -1,8 +1,7 @@
-﻿using GameCube.GFZ;
-using GameCube.GX;
-using GameCube.GX.Texture;
-using Manifold;
+﻿using GameCube.GX.Texture;
 using Manifold.IO;
+using System;
+using System.IO;
 
 namespace GameCube.GFZ.Emblem
 {
