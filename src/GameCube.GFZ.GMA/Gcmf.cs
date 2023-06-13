@@ -276,29 +276,29 @@ namespace GameCube.GFZ.GMA
             }
             this.RecordEndAddress(writer);
             {
-                writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                 //
                 foreach (var textureConfig in tevLayers)
                 {
                     writer.Write(textureConfig);
-                    writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                    writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
                 //
                 writer.Write(bones);
-                writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                 // Write garbage/blank on first pass
                 if (IsSkinnedModel || IsPhysicsDrivenModel)
                 {
                     writer.Write(skinnedVertexDescriptor);
-                    writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                    writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                 }
 
                 //
                 writer.Write(submeshes);
-                writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
 
                 if (IsSkinnedModel || IsPhysicsDrivenModel)
@@ -312,7 +312,7 @@ namespace GameCube.GFZ.GMA
                     // (#1) Write this data first (always has lowest offset)
                     Pointer SkinnedVerticesBPtr = writer.GetPositionAsPointer();
                     writer.Write(skinnedVerticesB);
-                    writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                    writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                     // (#2) This data will be empty / [0] when 'IsPhysicsDrivenModel'
                     // However, that's a good thing (we still want this address/offset).
@@ -320,7 +320,7 @@ namespace GameCube.GFZ.GMA
                     if (skinnedVerticesA is not null)
                     {
                         writer.Write(skinnedVerticesA);
-                        writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN); // redundant
+                        writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN); // redundant
                     }
 
                     // (#3) Like the previous type, this too will be null when 'IsPhysicsDrivenModel'
@@ -328,13 +328,13 @@ namespace GameCube.GFZ.GMA
                     if (UnkBoneIndices is not null)
                     {
                         writer.Write(UnkBoneIndices);
-                        writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                        writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
 
                     // (#4) Lastly, write the skin-bone bindings
                     Pointer SkinBoneBindingsPtr = writer.GetPositionAsPointer();
                     writer.Write(skinBoneBindings);
-                    writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+                    writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
                     // Second pass: rewrite data, getting correct count and offsets
                     skinnedVertexDescriptor = new SkinnedVertexDescriptor()

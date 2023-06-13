@@ -140,7 +140,7 @@ namespace GameCube.GFZ.GMA
                 writer.Write(vertexAttributes);
                 writer.Write(primaryDisplayListDescriptor);
                 writer.Write(unknownAlphaOptions);
-                writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
+                writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
                 if (RenderPrimaryFrontFaceCull)
                     WriteDisplayLists(writer, primaryDisplayListsOpaque, out pdlffc);
@@ -152,7 +152,7 @@ namespace GameCube.GFZ.GMA
                 if (RenderSecondary)
                 {
                     writer.Write(secondaryDisplayListDescriptor);
-                    writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
+                    writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
                     if (RenderSecondaryFrontFaceCull)
                         WriteDisplayLists(writer, secondaryDisplayListsOpaque, out sdlffc);
@@ -212,7 +212,7 @@ namespace GameCube.GFZ.GMA
             {
                 writer.Write(GX_NOP);
                 writer.Write(displayLists);
-                writer.WriteAlignment(GXUtility.GX_FIFO_ALIGN);
+                writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
             }
             addressRange.RecordEndAddress(writer);
         }

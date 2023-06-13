@@ -125,7 +125,7 @@ namespace GameCube.GFZ.GMA
 
             // Copy written memory stream data over to file stream
             nameWriter.BaseStream.CopyTo(writer.BaseStream);
-            writer.WriteAlignment(GX.GXUtility.GX_FIFO_ALIGN);
+            writer.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
 
             // Update some metadata
             modelBasePtrOffset = writer.GetPositionAsPointer().address;
