@@ -5,7 +5,7 @@ namespace GameCube.GFZ.CarData
     /// <summary>
     /// The name of each machine. Enum order is internal order in AX/GX ROM.
     /// </summary>
-    public enum MachineID
+    public enum MachineID : byte
     {
         [Description("Red Gazelle")]
         RedGazelle = 0,

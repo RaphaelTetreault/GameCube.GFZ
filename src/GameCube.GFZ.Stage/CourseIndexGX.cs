@@ -5,10 +5,10 @@ namespace GameCube.GFZ.Stage
     /// <summary>
     /// 
     /// </summary>
-    public enum CourseIndexGX
+    public enum CourseIndexGX : byte
     {
         [Description("---")]
-        None = -1,
+        None = 255,
 
         [Description("Screw Drive (test)")]
         TestScrewDrive = 0,
