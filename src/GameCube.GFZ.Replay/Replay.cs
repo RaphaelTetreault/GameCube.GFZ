@@ -1,4 +1,6 @@
 ﻿using Manifold.IO;
+using System.Collections;
+using System.IO;
 
 namespace GameCube.GFZ.Replay
 {
@@ -13,13 +15,13 @@ namespace GameCube.GFZ.Replay
         private byte racerArrayType; // 7, 15
         private byte courseID; // 6, 21
         private uint unknown1; // 32, 53
-        private uint unknown2; // 32, 85
-        private byte racerCount; // 5, 90
-        private byte grandPrixDifficulty; // 3, 93
-        private byte gameMode; // 2, 95
-        private bool unknown3; // 1, 96
-        private byte lapCount; // 2, 98
-        private byte[] racers; // not fixed. 1 OR 30 x? bits. Will be class
+        private uint unknown2; // 31, 84
+        private byte racerCount; // 5, 89
+        private byte grandPrixDifficulty; // 3, 92
+        private byte gameMode; // 2, 94
+        private bool unknown3; // 1, 95
+        private byte lapCount; // 2, 97
+        private RaceParticipant[] racers = Array.Empty<RaceParticipant>(); // not fixed. 1 OR 30 x? bits. Will be class
         private bool unknown4; // 1
         private byte unknown5; // 2
         private uint frameCount; // 20
@@ -31,9 +33,7 @@ namespace GameCube.GFZ.Replay
 
         public void Deserialize(EndianBinaryReader reader)
         {
-            var bytes = reader.ReadBytes(13);
-            var bitReader = new BitStreamReader(bytes);
-            bitReader.MirrorBytes();
+            var bitReader = new BitStreamReader(reader);
             bitReader.Read(ref timestamp8bits, 8);
             bitReader.Read(ref racerArrayType, 7);
             bitReader.Read(ref courseID, 6);
@@ -44,17 +44,20 @@ namespace GameCube.GFZ.Replay
             bitReader.Read(ref gameMode, 2);
             bitReader.Read(ref unknown3);
             bitReader.Read(ref lapCount, 2);
-            // racers
+            bitReader.Read(ref racers, racerCount);
             bitReader.Read(ref unknown4);
             bitReader.Read(ref unknown5, 2);
             bitReader.Read(ref frameCount, 20);
+            bitReader.Read(ref checkpointCount, 8);
+            bitReader.Read(ref checkpoints, checkpointCount);
+            bitReader.Read(ref inputCount, 14);
+            bitReader.Read(ref inputs, inputCount);
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             throw new NotImplementedException();
         }
-
 
     }
 }
