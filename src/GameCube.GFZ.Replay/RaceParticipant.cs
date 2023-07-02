@@ -1,11 +1,5 @@
-﻿using GameCube.GFZ;
-using GameCube.GFZ.CarData;
+﻿using GameCube.GFZ.CarData;
 using Manifold.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameCube.GFZ.Replay
 {
@@ -18,9 +12,9 @@ namespace GameCube.GFZ.Replay
         private MachineID machineID; // 6, 7
         private byte gridIndex; // 5, 12
         private byte graphConsoleSetting; // 7, 19
-        private byte colorPalette; // 2, 20
-        private byte unknown1; // 7, 27
-        private bool isCustomMachine; // 1, 28
+        private byte colorPalette; // 2, 21
+        private byte unknown1; // 7, 28
+        private bool isCustomMachine; // 1, 29
         private CustomMachine customMachineData = new(); // 8*33216, nullable
 
         public void Deserialize(BitStreamReader reader)

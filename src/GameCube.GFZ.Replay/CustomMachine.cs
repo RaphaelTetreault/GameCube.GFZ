@@ -1,17 +1,15 @@
 ﻿using GameCube.GFZ.CarData;
-using GameCube.GFZ.REL;
 using GameCube.GX;
-using GameCube.GX.Texture;
 using Manifold.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameCube.GFZ.Replay
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    ///     Byte-aligned despite being in serialized in the bitstream.
+    /// </remarks>
     public class CustomMachine :
         IBitSerializable
     {
@@ -23,7 +21,7 @@ namespace GameCube.GFZ.Replay
         private byte[] unknown2; // 7
         private byte[] speedSettings; // 7
         private byte[] unknown3; // 16
-        private byte[][] emblemData = new byte[4][]; // 4*8288
+        private byte[][] emblemData = new byte[4][]; // 4*8288, is actually a byte-aligned structure
         private PilotID pilotID; // 4
         private CustomBodyPartName bodyID; // 4
         private GXColor bodyColor; // 4

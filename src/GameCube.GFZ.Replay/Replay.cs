@@ -11,31 +11,30 @@ namespace GameCube.GFZ.Replay
     {
         public AddressRange AddressRange { get; set; }
 
-        // COMMENTS DENOTE BITS
-        private byte timestamp8bits; // 8, 8
-        private byte racerArrayType; // 7, 15
-        private byte courseID; // 6, 21
-        private uint unknown1; // 32, 53
-        private uint unknown2; // 31, 84
-        private byte racerCount; // 5, 89
-        private byte grandPrixDifficulty; // 3, 92
-        private byte gameMode; // 2, 94
-        private bool unknown3; // 1, 95
-        private byte lapCount; // 7, 102
-        private RaceParticipant[] racers = Array.Empty<RaceParticipant>(); // not fixed. 1 OR 30 x? bits. Will be class
-        private bool unknown4; // 1
-        private byte unknown5; // 2
-        private uint frameCount; // 20
-        private byte checkpointCount; // 8
-        private Checkpoint[] checkpoints = Array.Empty<Checkpoint>(); // 4*441
-        private ushort inputCount; // 14
-        private Input[] inputs = Array.Empty<Input>(); // count defined above
+        private byte timestamp8bits;
+        private byte racerArrayType;
+        private byte courseID;
+        private uint unknown1;
+        private uint unknown2;
+        private byte racerCount;
+        private byte grandPrixDifficulty;
+        private byte gameMode;
+        private bool unknown3;
+        private byte lapCount;
+        private RaceParticipant[] racers = Array.Empty<RaceParticipant>();
+        private bool unknown4;
+        private byte unknown5;
+        private uint frameCount;
+        private byte checkpointCount;
+        private Checkpoint[] checkpoints = Array.Empty<Checkpoint>();
+        private ushort inputCount;
+        private Input[] inputs = Array.Empty<Input>();
 
 
         public void Deserialize(EndianBinaryReader reader)
         {
             var bitReader = new BitStreamReader(reader);
-            bitReader.Read(ref timestamp8bits, 8);
+            bitReader.Read(ref timestamp8bits, 8); // +0x01
             bitReader.Read(ref racerArrayType, 7);
             bitReader.Read(ref courseID, 6);
             bitReader.Read(ref unknown1, 32);
@@ -43,10 +42,12 @@ namespace GameCube.GFZ.Replay
             bitReader.Read(ref racerCount, 5);
             bitReader.Read(ref grandPrixDifficulty, 3);
             bitReader.Read(ref gameMode, 2);
-            bitReader.Read(ref unknown3);
+            bitReader.Read(ref unknown3); // +0x0C
             bitReader.Read(ref lapCount, 7);
             Assert.IsTrue(lapCount == 3);
             bitReader.Read(ref racers, racerCount);
+            //skip racers
+            //byte[] _ = bitReader.ReadBytes(29 /*bits*/ * racerCount);
             bitReader.Read(ref unknown4);
             bitReader.Read(ref unknown5, 2);
             bitReader.Read(ref frameCount, 20);
