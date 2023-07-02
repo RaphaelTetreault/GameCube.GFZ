@@ -16,8 +16,9 @@ namespace GameCube.GFZ.Replay
         IBitSerializable
     {
         // numbers in BYTES
-        private byte[] unknown1; // 7
-        private byte colorID; // 1
+        private byte[] unknown1; // 5
+        private MachineID machineID; // 1
+        private byte colorPaletteID; // 1
         private byte emblemCount; // 1
         private byte[] unknown2; // 7
         private byte[] speedSettings; // 7
@@ -34,21 +35,24 @@ namespace GameCube.GFZ.Replay
 
         public void Deserialize(BitStreamReader reader)
         {
-            unknown1 = reader.ReadBytes(7); // bytes
-            colorID = reader.ReadByte(8);
-            emblemCount = reader.ReadByte(8);
-            unknown2 = reader.ReadBytes(7); // bytes
-            speedSettings = reader.ReadBytes(7); // bytes
-            unknown3 = reader.ReadBytes(16); // bytes
-            for (int i = 0; i < emblemData.Length; i++)
-                emblemData[i] = reader.ReadBytes(8288); // bytes
-            pilotID = (PilotID)reader.ReadUInt(32);
-            bodyID = (CustomBodyPartName)reader.ReadUInt(32);
-            bodyColor = new GXColor(reader.ReadUInt(32));
-            cockpitID = (CustomCockpitPartName)reader.ReadUInt(32);
-            cockpitColor = new GXColor(reader.ReadUInt(32));
-            boosterID = (CustomBoosterPartName)reader.ReadUInt(32);
-            boosterColor = new GXColor(reader.ReadUInt(32));
+            // bytes * 8 bits
+            unknown1 = reader.ReadBytes(5 * 8);
+            machineID = (MachineID)reader.ReadByte(1 * 8);
+            colorPaletteID = reader.ReadByte(1 * 8);
+            emblemCount = reader.ReadByte(1 * 8);
+            unknown2 = reader.ReadBytes(7 * 8);
+            speedSettings = reader.ReadBytes(7 * 8);
+            unknown3 = reader.ReadBytes(16 * 8);
+            Assert.IsTrue(emblemCount <= 4);
+            for (int i = 0; i < emblemCount; i++)
+                emblemData[i] = reader.ReadBytes(8288*8); // bytes
+            pilotID = (PilotID)reader.ReadUInt(4 * 8);
+            bodyID = (CustomBodyPartName)reader.ReadUInt(4 * 8);
+            bodyColor = new GXColor(reader.ReadUInt(4 * 8));
+            cockpitID = (CustomCockpitPartName)reader.ReadUInt(4 * 8);
+            cockpitColor = new GXColor(reader.ReadUInt(4 * 8));
+            boosterID = (CustomBoosterPartName)reader.ReadUInt(4 * 8);
+            boosterColor = new GXColor(reader.ReadUInt(4 * 8));
         }
 
         public void Serialize(BitStreamWriter writer)

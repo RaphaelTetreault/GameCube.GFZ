@@ -1,9 +1,10 @@
 ﻿using Manifold.IO;
-using System.Collections;
-using System.IO;
 
 namespace GameCube.GFZ.Replay
 {
+    // https://github.com/JoselleAstrid/fzerogx-docs/blob/master/file_formats/gci_replay.md#replay-gci-file-format
+
+
     public class Replay :
         IBinaryAddressable,
         IBinarySerializable
@@ -20,15 +21,15 @@ namespace GameCube.GFZ.Replay
         private byte grandPrixDifficulty; // 3, 92
         private byte gameMode; // 2, 94
         private bool unknown3; // 1, 95
-        private byte lapCount; // 2, 97
+        private byte lapCount; // 7, 102
         private RaceParticipant[] racers = Array.Empty<RaceParticipant>(); // not fixed. 1 OR 30 x? bits. Will be class
         private bool unknown4; // 1
         private byte unknown5; // 2
         private uint frameCount; // 20
         private byte checkpointCount; // 8
-        private byte[] checkpoints; // 4*441
+        private Checkpoint[] checkpoints = Array.Empty<Checkpoint>(); // 4*441
         private ushort inputCount; // 14
-        private byte[] inputs; // count defined above
+        private Input[] inputs = Array.Empty<Input>(); // count defined above
 
 
         public void Deserialize(EndianBinaryReader reader)
@@ -43,12 +44,14 @@ namespace GameCube.GFZ.Replay
             bitReader.Read(ref grandPrixDifficulty, 3);
             bitReader.Read(ref gameMode, 2);
             bitReader.Read(ref unknown3);
-            bitReader.Read(ref lapCount, 2);
+            bitReader.Read(ref lapCount, 7);
+            Assert.IsTrue(lapCount == 3);
             bitReader.Read(ref racers, racerCount);
             bitReader.Read(ref unknown4);
             bitReader.Read(ref unknown5, 2);
             bitReader.Read(ref frameCount, 20);
             bitReader.Read(ref checkpointCount, 8);
+            Assert.IsTrue(checkpointCount == 4);
             bitReader.Read(ref checkpoints, checkpointCount);
             bitReader.Read(ref inputCount, 14);
             bitReader.Read(ref inputs, inputCount);

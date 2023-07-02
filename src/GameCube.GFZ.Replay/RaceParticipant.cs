@@ -11,7 +11,6 @@ namespace GameCube.GFZ.Replay
 {
     // https://github.com/JoselleAstrid/fzerogx-docs/blob/master/file_formats/gci_replay.md#racer-array
 
-
     public class RaceParticipant :
         IBitSerializable
     {
