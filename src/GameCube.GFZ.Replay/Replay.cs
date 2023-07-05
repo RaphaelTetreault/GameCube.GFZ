@@ -3,13 +3,18 @@
 namespace GameCube.GFZ.Replay
 {
     // https://github.com/JoselleAstrid/fzerogx-docs/blob/master/file_formats/gci_replay.md#replay-gci-file-format
-
+    // TODO: https://github.com/JoselleAstrid/fgx-re/blob/master/py/fgx_encode.py#L136C8-L176C56
 
     public class Replay :
         IBinaryAddressable,
+        IBinaryFileType,
         IBinarySerializable
     {
         public AddressRange AddressRange { get; set; }
+        public Endianness Endianness => Endianness.BigEndian;
+        public string FileExtension => "";
+        public string FileName { get; set; } = string.Empty;
+
 
         private byte timestamp8bits;
         private byte racerArrayType;

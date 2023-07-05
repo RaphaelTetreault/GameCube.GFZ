@@ -1,6 +1,7 @@
 using GameCube.GFZ.CarData;
 using GameCube.GFZ.Stage;
 using Manifold.IO;
+using System;
 
 namespace GameCube.GFZ.Ghosts
 {
@@ -8,6 +9,7 @@ namespace GameCube.GFZ.Ghosts
         IBinarySerializable,
         IBinaryFileType
     {
+        public const string fileExtension = ".dat";
         public const Endianness endianness = Endianness.BigEndian;
         public const int BlockSize = 4000;
 
@@ -15,17 +17,18 @@ namespace GameCube.GFZ.Ghosts
         // TODO: make private, add accessors
         public MachineID machineID; // 0x00
         public byte courseID; // 0x01
-        public ushort one0x02; // 0x02, bool?
-        public uint zero0x04; // 0x04, 4 bytes (TODO: use byte[])
-        public ShiftJisCString playerName; // 0x08, len:16 bytes, ei: 8x16bit shift jis characters
+        public byte zero0x02; // 0x02 always zero...?
+        public bool unkBoolean; // 0x03, bool - usually True
+        public uint unk_prob_custom_machine_indices; // 0x04, 4 bytes (TODO: use byte[])
+        public ShiftJisCString playerName = string.Empty; // 0x08, len:16 bytes, ei: 8x16bit shift jis characters
         public byte totalBlocks; // usually 3 (16KB), can be 2 (12KB). Math: (value+1)*4KB
-        public byte unk0x19; //  maybe a checksum?
-        public uint zero0x1A; // zero. Ptr to emblem dat?
-        public byte[] unkData0x1E; // 6 bytes
+        public byte unk0x19; // maybe a checksum?
+        public uint zero0x1A; // 0x1A always zero
+        public byte[] unkData0x1E = Array.Empty<byte>(); // 6 bytes
         public Time time;
-        public GhostFrame[] frames;
+        public GhostFrame[] frames = Array.Empty<GhostFrame>();
 
-        public string FileExtension => ".bin";
+        public string FileExtension => fileExtension;
         public string FileName { get; set; } = string.Empty;
         public string TimeDisplay => time.ToString();
         public CourseIndexAX CourseIndexAX => (CourseIndexAX)courseID;
@@ -34,26 +37,32 @@ namespace GameCube.GFZ.Ghosts
 
         public void Deserialize(EndianBinaryReader reader)
         {
+            // been having a long day...
+            const int rawAddress = 0x0000;
+            const int gciAddress = 0x20a0;
+            int ptr = reader.GetPositionAsPointer();
+            Assert.IsTrue(ptr == rawAddress || ptr == gciAddress, $"Bad start address {ptr:x8}");
+
             reader.Read(ref machineID);
             reader.Read(ref courseID);
-            reader.Read(ref one0x02);
-            reader.Read(ref zero0x04);
+            reader.Read(ref zero0x02);
+            reader.Read(ref unkBoolean);
+            reader.Read(ref unk_prob_custom_machine_indices);
+            Pointer nameAddress = reader.GetPositionAsPointer();
             reader.Read(ref playerName);
-            reader.JumpToAddress(0x18);
+            reader.JumpToAddress(nameAddress + 0x10);
             reader.Read(ref totalBlocks);
             reader.Read(ref unk0x19);
             reader.Read(ref zero0x1A);
             reader.Read(ref unkData0x1E, 6);
             reader.Read(ref time);
 
-            Assert.IsTrue(one0x02 == 1);
-            Assert.IsTrue(zero0x04 == 0);
-            Assert.IsTrue(zero0x1A == 0);
+            Assert.IsTrue(zero0x02 == 0, $"0x02:{zero0x02:x2}");
+            Assert.IsTrue(zero0x1A == 0, $"0x1A:{zero0x1A:x8}");
+            Assert.IsTrue(totalBlocks < 4); // never seen more than 3
 
             int nCount = BlockSize * (totalBlocks + 1) / GhostFrame.Size;
             reader.Read(ref frames, nCount);
-
-            Assert.IsTrue(reader.BaseStream.IsAtEndOfStream(), $"{FileName} {reader.GetPositionAsPointer():x8}/{reader.BaseStream.Length:x8} ");
         }
 
         public void Serialize(EndianBinaryWriter writer)
@@ -67,10 +76,11 @@ namespace GameCube.GFZ.Ghosts
 
             writer.Write(machineID);
             writer.Write(courseID);
-            writer.Write(one0x02);
-            writer.Write(zero0x04);
+            writer.Write(zero0x02);
+            writer.Write(unkBoolean);
+            writer.Write(unk_prob_custom_machine_indices);
             writer.Write<ShiftJisCString>(playerName);
-            writer.AlignTo(0x18, 0x00);
+            writer.AlignTo(0x18, 0x00); // hm
             writer.Write(totalBlocks);
             writer.Write(unk0x19);
             writer.Write(zero0x1A);

@@ -7,8 +7,8 @@ namespace GameCube.GFZ.Ghosts
     {
         public const int Size = 0x10; // 16
 
-        public GhostFlags unk0x00; // Interpolation mode?
-        public GhostEnum unk0x01; // Almost like lap index
+        public GhostFlags0x00 unk0x00; // Interpolation mode?
+        public GhostFlags0x01 unk0x01; // Almost like lap index, but does some weird sh*t
         public CompressedRotation orientation;
         public short positionX;
         public short positionY;
@@ -24,9 +24,6 @@ namespace GameCube.GFZ.Ghosts
             reader.Read(ref positionY);
             reader.Read(ref positionZ);
             reader.Read(ref unk0x14);
-
-            Assert.IsTrue(unk0x00 >= 0 && unk0x00 <= GhostFlags.All, $"{nameof(GhostFlags)}:{unk0x00}");
-            Assert.IsTrue(unk0x01 >= 0 && unk0x01 <= (GhostEnum)3 || unk0x01 == GhostEnum.FirstFiveFrames, $"{nameof(GhostEnum)}:{unk0x01}");
         }
 
         public void Serialize(EndianBinaryWriter writer)
