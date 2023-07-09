@@ -1,15 +1,17 @@
 ﻿using GameCube.GCI;
+using GameCube.GX.Texture;
 using Manifold.IO;
 
-namespace GameCube.GFZ.Ghosts
+namespace GameCube.GFZ.GCI
 {
     public class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySerializable>
         where TBinarySerializable : IBinarySerializable, IBinaryFileType, new()
     {
         public const ushort UID0 = 0x0201; // but also 0401: perhaps GFZ-J/E/P?
-        public const ushort UID1 = 0x0401; // but also 0401: perhaps GFZ-J/E/P?
+        public const ushort UID1 = 0x0401; // but also 0201: perhaps GFZ-J/E/P?
         public const int GameTitleLength = 32;
         public const int CommentLength = 60;
+        public const int IconsCount = 1;
 
         private string gameTitle = string.Empty;
         private string comment = string.Empty;
@@ -27,26 +29,27 @@ namespace GameCube.GFZ.Ghosts
 
         public override void DeserializeCommentAndImages(EndianBinaryReader reader)
         {
-            var textEncoding = header.GetTextEncoding();
+            var textEncoding = Header.GetTextEncoding();
 
             reader.Read(ref unknown);
             reader.Read(ref uniqueID);
-            Assert.IsTrue(reader.GetPositionAsPointer() == header.CommentPtr);
+            Assert.IsTrue(reader.GetPositionAsPointer() == Header.CommentPtr);
             reader.Read(ref gameTitle, textEncoding, GameTitleLength);
             reader.Read(ref comment, textEncoding, CommentLength);
-            Assert.IsTrue(reader.GetPositionAsPointer() == header.ImageDataPtr);
+            Assert.IsTrue(reader.GetPositionAsPointer() == Header.ImageDataPtr);
             Banner = ReadDirectColorBanner(reader);
-            Icons = new GX.Texture.Texture[]
+            Icons = new Texture[]
             {
                 ReadDirectColorIcon(reader),
             };
-            Assert.IsTrue(header.ImageFormat == ImageFormat.DirectColor);
-            Assert.IsTrue(header.GetAnimationFrameCount() == Icons.Length);
+            Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
+            Assert.IsTrue(Icons.Length == IconsCount);
+            Assert.IsTrue(Header.GetAnimationFrameCount() == Icons.Length);
         }
 
         public override void SerializeCommentAndImages(EndianBinaryWriter writer)
         {
-            var textEncoding = header.GetTextEncoding();
+            var textEncoding = Header.GetTextEncoding();
 
             writer.Write(unknown);
             writer.Write(uniqueID);
@@ -54,9 +57,10 @@ namespace GameCube.GFZ.Ghosts
             writer.WritePadding(0x00, GameTitleLength - gameTitle.Length);
             writer.Write(comment, textEncoding, false);
             writer.WritePadding(0x00, CommentLength - comment.Length);
-
-            throw new System.NotImplementedException();
-            // TODO: weite banner and icons
+            Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
+            Assert.IsTrue(Icons.Length == IconsCount);
+            WriteDirectColorBanner(writer);
+            WriteDirectColorIcons(writer);
         }
     }
 }

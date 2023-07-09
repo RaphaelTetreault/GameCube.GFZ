@@ -89,7 +89,7 @@ namespace GameCube.GFZ.TPL
                 foreach (var entry in textureSerie.Entries)
                 {
                     var texture = entry.Texture;
-                    var blocks = Texture.CreateTextureDirectColorBlocks(texture, directEncoding);
+                    var blocks = Texture.CreateDirectColorBlocksFromTexture(texture, directEncoding);
                     directEncoding.WriteBlocks(writer, blocks);
                 }
             }

@@ -11,19 +11,19 @@ namespace GameCube.GFZ.Ghosts
     {
         public const string fileExtension = ".dat";
         public const Endianness endianness = Endianness.BigEndian;
-        public const int BlockSize = 4000;
+        public const int ChunkSize = 4000;
 
         // FIELDS
         // TODO: make private, add accessors
         public MachineID machineID; // 0x00
         public byte courseID; // 0x01
-        public byte zero0x02; // 0x02 always zero...?
+        public byte zero0x02; // Addr:0x02 always zero
         public bool unkBoolean; // 0x03, bool - usually True
         public uint unk_prob_custom_machine_indices; // 0x04, 4 bytes (TODO: use byte[])
         public ShiftJisCString playerName = string.Empty; // 0x08, len:16 bytes, ei: 8x16bit shift jis characters
-        public byte totalBlocks; // usually 3 (16KB), can be 2 (12KB). Math: (value+1)*4KB
+        public byte totalChunks; // usually 3 (16KB), can be 2 (12KB). Math: (value+1)*4KB
         public byte unk0x19; // maybe a checksum?
-        public uint zero0x1A; // 0x1A always zero
+        public uint zero0x1A; // Addr:0x1A always zero
         public byte[] unkData0x1E = Array.Empty<byte>(); // 6 bytes
         public Time time;
         public GhostFrame[] frames = Array.Empty<GhostFrame>();
@@ -51,7 +51,7 @@ namespace GameCube.GFZ.Ghosts
             Pointer nameAddress = reader.GetPositionAsPointer();
             reader.Read(ref playerName);
             reader.JumpToAddress(nameAddress + 0x10);
-            reader.Read(ref totalBlocks);
+            reader.Read(ref totalChunks);
             reader.Read(ref unk0x19);
             reader.Read(ref zero0x1A);
             reader.Read(ref unkData0x1E, 6);
@@ -59,18 +59,18 @@ namespace GameCube.GFZ.Ghosts
 
             Assert.IsTrue(zero0x02 == 0, $"0x02:{zero0x02:x2}");
             Assert.IsTrue(zero0x1A == 0, $"0x1A:{zero0x1A:x8}");
-            Assert.IsTrue(totalBlocks < 4); // never seen more than 3
+            Assert.IsTrue(totalChunks < 4); // never seen more than 3
 
-            int nCount = BlockSize * (totalBlocks + 1) / GhostFrame.Size;
+            int nCount = ChunkSize * (totalChunks + 1) / GhostFrame.Size;
             reader.Read(ref frames, nCount);
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             int intervalsSizeInBytes = GhostFrame.Size * frames.Length;
-            Assert.IsTrue(intervalsSizeInBytes % BlockSize == 0);
-            totalBlocks = (byte)(intervalsSizeInBytes / BlockSize);
-            totalBlocks--;
+            Assert.IsTrue(intervalsSizeInBytes % ChunkSize == 0);
+            totalChunks = (byte)(intervalsSizeInBytes / ChunkSize);
+            totalChunks--;
 
             Assert.IsTrue(unkData0x1E.Length == 6);
 
@@ -81,7 +81,7 @@ namespace GameCube.GFZ.Ghosts
             writer.Write(unk_prob_custom_machine_indices);
             writer.Write<ShiftJisCString>(playerName);
             writer.AlignTo(0x18, 0x00); // hm
-            writer.Write(totalBlocks);
+            writer.Write(totalChunks);
             writer.Write(unk0x19);
             writer.Write(zero0x1A);
             writer.Write(unkData0x1E);
