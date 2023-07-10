@@ -15,7 +15,7 @@ namespace GameCube.GFZ.Emblem
         public string FileName { get; set; } = string.Empty;
 
 
-        private Emblem[] emblems = new Emblem[0];
+        private Emblem[] emblems = Array.Empty<Emblem>();
         public Emblem[] Emblems { get => emblems; set => emblems = value; }
 
 

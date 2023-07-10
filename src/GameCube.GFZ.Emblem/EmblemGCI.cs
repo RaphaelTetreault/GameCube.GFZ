@@ -1,4 +1,5 @@
-﻿using GameCube.GFZ.GCI;
+﻿using GameCube.DiskImage;
+using GameCube.GFZ.GCI;
 
 namespace GameCube.GFZ.Emblem
 {
@@ -11,6 +12,15 @@ namespace GameCube.GFZ.Emblem
     /// </example>
     public class EmblemGCI : GfzGci<Emblem>
     {
+        public const ushort UID = 0x0401; // NOT A UNIQUE ID
+
+        public readonly ushort[] UIDs = { UID };
+        public override ushort[] UniqueIDs => UIDs;
+
         public Emblem Emblem { get => FileData; set => FileData = value; }
+
+
+        public EmblemGCI() : base() { }
+        public EmblemGCI(Region region) : base(region) { }
     }
 }
