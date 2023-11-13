@@ -1,11 +1,11 @@
 ﻿namespace GameCube.GFZ.REL
 {
-    public class Information
+    public class DataBlock
     {
         public int Address { get; }
         public int Size { get; }
 
-        public Information(int address, int size)
+        public DataBlock(int address, int size)
         {
             Address = address;
             Size = size;

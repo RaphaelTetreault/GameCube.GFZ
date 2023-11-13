@@ -127,6 +127,8 @@ namespace GameCube.GFZ.CarData
         [Description("Pheonix")]
         Pheonix,
 
+        // TODO: confirm this order
+
         [Description("Gomar")]
         Gomar,
 

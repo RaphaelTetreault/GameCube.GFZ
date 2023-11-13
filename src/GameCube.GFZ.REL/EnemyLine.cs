@@ -1,8 +1,4 @@
-using Manifold;
 using Manifold.IO;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 
 namespace GameCube.GFZ.REL
@@ -11,7 +7,7 @@ namespace GameCube.GFZ.REL
         IBinaryFileType
     {
         public const Endianness endianness = Endianness.BigEndian;
-        private string fileName;
+        private string fileName = string.Empty;
 
         public Endianness Endianness => endianness;
         public string FileExtension => "bin";

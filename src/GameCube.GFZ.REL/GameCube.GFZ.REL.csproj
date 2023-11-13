@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\GameCube.AmusementVision\src\GameCube.AmusementVision\GameCube.AmusementVision.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.CarData\GameCube.GFZ.CarData.csproj" />
     <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
   </ItemGroup>
 

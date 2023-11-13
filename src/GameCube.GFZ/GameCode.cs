@@ -2,9 +2,9 @@
 {
     public enum GameCode
     {
-        GFZE01,
-        GFZJ01,
-        GFZP01,
-        GFZJ8P,
+        GFZE01 = GameCodeFields.GX + GameCodeFields.NorthAmerica,
+        GFZJ01 = GameCodeFields.GX + GameCodeFields.Japan,
+        GFZP01 = GameCodeFields.GX + GameCodeFields.Europe,
+        GFZJ8P = GameCodeFields.AX + GameCodeFields.Japan,
     }
 }
