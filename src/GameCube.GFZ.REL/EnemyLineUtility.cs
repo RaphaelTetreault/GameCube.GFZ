@@ -36,19 +36,23 @@ namespace GameCube.GFZ.REL
             return (int)(((src << shift) | (src >> ((32 - shift) & 31))) & bitMask);
         }
 
-
-        // TODO: combine? not much use if the stream versionrequires +0x18
+        /// <summary>
+        ///     Bi-directional encrypt/decrypt of file ./enemy_line/line__.bin or line__.rel
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="lookup"></param>
+        /// <returns></returns>
         public static MemoryStream Crypt(string filePath, EnemyLineDataBlocks lookup)
         {
+            const int alignment = 0x18;// Padding for alignment to 0x20
+
+            // Prepare data stream
             byte[] fileData = File.ReadAllBytes(filePath);
-            byte[] streamData = new byte[fileData.Length + 0x18];
-            fileData.CopyTo(streamData, 0); 
+            int length = fileData.Length + alignment;
+            byte[] streamData = new byte[length]; 
+            fileData.CopyTo(streamData, 0);
             using MemoryStream data = new MemoryStream(streamData);
-            var stream = Crypt(data, lookup);
-            return stream;
-        }
-        public static MemoryStream Crypt(MemoryStream data, EnemyLineDataBlocks lookup)
-        {
+
             // Wrap data in reader and writer for BE operations
             EndianBinaryReader rdata = new EndianBinaryReader(data, EnemyLine.endianness);
             EndianBinaryWriter wdata = new EndianBinaryWriter(data, EnemyLine.endianness);
@@ -171,9 +175,9 @@ namespace GameCube.GFZ.REL
                 }
             }
 
-            byte[] bytes = data.ToArray()[0..^0x18];
-            MemoryStream trimmed = new MemoryStream(bytes);
-            return trimmed;
+            byte[] bytes = data.ToArray()[0..^alignment];
+            MemoryStream dataNoPadding = new MemoryStream(bytes);
+            return dataNoPadding;
         }
 
         private static void ValidateStageIndex(int index, int maxIndex, int minIndex = 0)
@@ -213,18 +217,22 @@ namespace GameCube.GFZ.REL
 
             throw new System.IndexOutOfRangeException("No more free space for course names");
         }
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, ShiftJisCString courseName)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, CString courseName)
         {
-            var bytes = ShiftJisCString.shiftJis.GetBytes(courseName);
+            var bytes = courseName.Encoding.GetBytes(courseName);
             PatchCustomCourseName(writer, lookup, index, bytes);
         }
 
-        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, float[] minimapParams)
+        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, MinimapProjection minimapProjection)
         {
             ValidateStageIndex(index, 45);
 
-            writer.JumpToAddress(lookup.CourseMinimapParameterStructs.Address + MinimapProjection.Size * index);
-            writer.Write(minimapParams);
+            int baseAddress = lookup.CourseMinimapParameterStructs.Address;
+            int offset = MinimapProjection.Size * index;
+            int address = baseAddress + offset;
+
+            writer.JumpToAddress(address);
+            writer.Write(minimapProjection);
         }
 
         public static void PatchBgmToSlot(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, byte trackId)
@@ -301,7 +309,7 @@ namespace GameCube.GFZ.REL
             writer.Write(courseIndex);
         }
 
-        public static void PatchCupSlots(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, Cup cup, Int16[] courses)
+        public static void PatchCupSlots(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, Cup cup, short[] courses)
         {
             if (courses.Length < 1 || courses.Length > 6)
             {
@@ -325,7 +333,7 @@ namespace GameCube.GFZ.REL
             {
                 do
                 {
-                    courses = courses.Concat(new Int16[] { -1 }).ToArray();
+                    courses = courses.Concat(new short[] { -1 }).ToArray();
                 }
                 while (courses.Length < 6);
             }
