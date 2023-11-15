@@ -1,9 +1,9 @@
 using Manifold.IO;
 using System.Collections.Generic;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
-    public abstract class EnemyLineDataBlocks
+    public abstract class LineInformation
     {
         public virtual Endianness Endianness => Endianness.BigEndian;
 

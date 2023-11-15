@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
     /// <summary>
     /// PAL
     /// </summary>
-    public class EnemyLineDataBlocksGfzp01 : EnemyLineDataBlocks
+    public class LineInformationGfzp01 : LineInformation
     {
-        public EnemyLineDataBlocksGfzp01()
+        public LineInformationGfzp01()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
             CourseNameAreas.Add(new CustomizableArea(ForbiddenWords.Address, ForbiddenWords.Size));

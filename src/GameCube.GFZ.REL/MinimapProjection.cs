@@ -1,8 +1,7 @@
 ﻿using Manifold.IO;
-using System.Drawing;
 using Unity.Mathematics;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
     public sealed class MinimapProjection :
         IBinarySerializable

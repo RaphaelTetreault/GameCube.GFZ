@@ -1,9 +1,9 @@
 using Manifold.IO;
 using System.IO;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
-    public class EnemyLine :
+    public class Line :
         IBinaryFileType
     {
         public const Endianness endianness = Endianness.BigEndian;

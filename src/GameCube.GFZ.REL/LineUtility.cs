@@ -6,9 +6,9 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
-    public class EnemyLineUtility
+    public class LineUtility
     {
         private static int lwz(EndianBinaryReader reader, int offset, int src)
         {
@@ -42,7 +42,7 @@ namespace GameCube.GFZ.REL
         /// <param name="filePath"></param>
         /// <param name="lookup"></param>
         /// <returns></returns>
-        public static MemoryStream Crypt(string filePath, EnemyLineDataBlocks lookup)
+        public static MemoryStream Crypt(string filePath, LineInformation lookup)
         {
             const int alignment = 0x18;// Padding for alignment to 0x20
 
@@ -54,8 +54,8 @@ namespace GameCube.GFZ.REL
             using MemoryStream data = new MemoryStream(streamData);
 
             // Wrap data in reader and writer for BE operations
-            EndianBinaryReader rdata = new EndianBinaryReader(data, EnemyLine.endianness);
-            EndianBinaryWriter wdata = new EndianBinaryWriter(data, EnemyLine.endianness);
+            EndianBinaryReader rdata = new EndianBinaryReader(data, Line.endianness);
+            EndianBinaryWriter wdata = new EndianBinaryWriter(data, Line.endianness);
             
             int salt = lookup.Salt;
             int key0 = lookup.Key0;
@@ -188,18 +188,16 @@ namespace GameCube.GFZ.REL
                 throw new IndexOutOfRangeException($"Index must be between {minIndex} and {maxIndex}. ({index})");
         }
 
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, byte[] courseName)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineInformation lookup, int index, byte[] courseName)
         {
-            ValidateStageIndex(index, 110);
+            ValidateStageIndex(index, LineRelConsts.MaxStageIndex);
 
             int newLength = courseName.Length + 4 - (courseName.Length % 4);
             byte[] courseNameExtended = new byte[newLength];
             Buffer.BlockCopy(courseName, 0, courseNameExtended, 0, courseName.Length);
 
-            //Debug.Log(lookup.CourseNameAreas.Count);
             for (int i = 0; i < lookup.CourseNameAreas.Count; ++i)
             {
-                //Debug.Log(lookup.CourseNameAreas[i]);
                 if (lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
                 {
                     int nameAddress = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
@@ -217,15 +215,15 @@ namespace GameCube.GFZ.REL
 
             throw new System.IndexOutOfRangeException("No more free space for course names");
         }
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, CString courseName)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineInformation lookup, int index, CString courseName)
         {
             var bytes = courseName.Encoding.GetBytes(courseName);
             PatchCustomCourseName(writer, lookup, index, bytes);
         }
 
-        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, MinimapProjection minimapProjection)
+        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, LineInformation lookup, int index, MinimapProjection minimapProjection)
         {
-            ValidateStageIndex(index, 45);
+            ValidateStageIndex(index, LineRelConsts.MaxMinimapIndex);
 
             int baseAddress = lookup.CourseMinimapParameterStructs.Address;
             int offset = MinimapProjection.Size * index;
@@ -235,36 +233,36 @@ namespace GameCube.GFZ.REL
             writer.Write(minimapProjection);
         }
 
-        public static void PatchBgmToSlot(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, byte trackId)
+        public static void PatchBgmToSlot(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId)
         {
-            if (index > 55)
+            if (slotIndex > 55)
             {
                 throw new IndexOutOfRangeException("Index must be between 0 and 55");
             }
 
-            if (trackId > 96 && trackId < 255)
+            if (bgmTrackId > 96 && bgmTrackId < 255)
             {
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
-            writer.JumpToAddress(lookup.CourseSlotBgm.Address + (int)index);
-            writer.Write(trackId);
+            writer.JumpToAddress(lookup.CourseSlotBgm.Address + slotIndex);
+            writer.Write(bgmTrackId);
         }
 
-        public static void PatchFinalLapBgmToSlot(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, byte trackId)
+        public static void PatchFinalLapBgmToSlot(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId)
         {
-            ValidateStageIndex(index, 45);
+            ValidateStageIndex(slotIndex, 45);
 
-            if (trackId > 96 && trackId < 255)
+            if (bgmTrackId > 96 && bgmTrackId < 255)
             {
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
-            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + index * 4);
-            writer.Write(trackId);
+            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + slotIndex * 4);
+            writer.Write(bgmTrackId);
         }
 
-        public static void PatchVenueIndex(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, Venue venue)
+        public static void PatchVenueIndex(EndianBinaryWriter writer, LineInformation lookup, int index, Venue venue)
         {
             ValidateStageIndex(index, 110);
 
@@ -277,7 +275,7 @@ namespace GameCube.GFZ.REL
             writer.Write((byte)venue);
         }
 
-        public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, int index, byte difficulty)
+        public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, LineInformation lookup, int index, byte difficulty)
         {
             ValidateStageIndex(index, 110);
 
@@ -291,7 +289,7 @@ namespace GameCube.GFZ.REL
             writer.Write(difficulty);
         }
 
-        public static void PatchCupSlot(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, Cup cup, int courseIndex)
+        public static void PatchCupSlot(EndianBinaryWriter writer, LineInformation lookup, Cup cup, int courseIndex)
         {
             ValidateStageIndex(courseIndex, 110, -1);
 
@@ -309,7 +307,7 @@ namespace GameCube.GFZ.REL
             writer.Write(courseIndex);
         }
 
-        public static void PatchCupSlots(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, Cup cup, short[] courses)
+        public static void PatchCupSlots(EndianBinaryWriter writer, LineInformation lookup, Cup cup, short[] courses)
         {
             if (courses.Length < 1 || courses.Length > 6)
             {
@@ -346,7 +344,7 @@ namespace GameCube.GFZ.REL
             writer.Write(courses);
         }
 
-        public static void PatchAxTimer(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, AcCupCourse courseId, byte seconds)
+        public static void PatchAxTimer(EndianBinaryWriter writer, LineInformation lookup, AcCupCourse courseId, byte seconds)
         {
             if ((byte)courseId > 6)
             {
@@ -357,7 +355,7 @@ namespace GameCube.GFZ.REL
             writer.Write(seconds);
         }
 
-        public static void PatchPilotPosition(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, PilotID id, float[] position)
+        public static void PatchPilotPosition(EndianBinaryWriter writer, LineInformation lookup, PilotID id, float[] position)
         {
             if (id > PilotID.Gen)
             {
@@ -373,7 +371,7 @@ namespace GameCube.GFZ.REL
             writer.Write(position);
         }
 
-        public static void PatchPilotToMachine(EndianBinaryWriter writer, EnemyLineDataBlocks lookup, Machine machine, PilotID pilot)
+        public static void PatchPilotToMachine(EndianBinaryWriter writer, LineInformation lookup, Machine machine, PilotID pilot)
         {
             if (pilot > PilotID.Gen)
             {

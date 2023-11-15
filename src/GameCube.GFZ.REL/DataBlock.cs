@@ -1,4 +1,4 @@
-﻿namespace GameCube.GFZ.REL
+﻿namespace GameCube.GFZ.LineREL
 {
     public class DataBlock
     {

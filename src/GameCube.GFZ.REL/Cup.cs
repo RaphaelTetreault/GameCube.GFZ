@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
     public enum Cup : byte
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 
-namespace GameCube.GFZ.REL
+namespace GameCube.GFZ.LineREL
 {
     /// <summary>
     /// AX
     /// </summary>
-    public class MainDolDataBlocksGfzj8p : EnemyLineDataBlocks
+    public class MainDolDataBlocksGfzj8p : LineInformation
     {
         public MainDolDataBlocksGfzj8p()
         {
