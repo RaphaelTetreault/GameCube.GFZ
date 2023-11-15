@@ -10,7 +10,7 @@
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.GCI\GameCube.GCI.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.CarData\GameCube.GFZ.CarData.csproj" />
-    <ProjectReference Include="..\GameCube.GFZ.REL\GameCube.GFZ.REL.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.REL\GameCube.GFZ.LineREL.csproj" />
   </ItemGroup>
 
 </Project>
