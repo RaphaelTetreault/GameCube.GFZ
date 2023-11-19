@@ -2,13 +2,10 @@
 
 namespace GameCube.GFZ.GeneralGameData
 {
-    // adv_ac?
-    // Wings For My Way -ver.AX- (AX Advertise)
-
     public enum Bgm
     {
-        [Description("(None)")]
-        none = 0,
+        [Description("(Wings For My Way -ver.AX- (AX Advertise))")]
+        adv_ac = 0,
 
         [Description("Wings For My Way (GX Advertise)")]
         adv_gc = 1,
@@ -58,7 +55,7 @@ namespace GameCube.GFZ.GeneralGameData
         [Description("Finish to Go (Finish)")]
         goal = 16,
 
-        [Description("")]
+        [Description("(Winning Run AX)")]
         hyosho_ac = 17,
 
         [Description("F-ZERO TV Opening (Interview In)")]
@@ -154,7 +151,7 @@ namespace GameCube.GFZ.GeneralGameData
         [Description("Emperor Breath (Story #8)")]
         story9 = 48,
 
-        [Description("U-Rays (Tutorial)")]
+        [Description("(Story Staff Roll)")]
         storyend = 49,
 
         [Description("ZEN (Aeropolis)")]
@@ -163,16 +160,16 @@ namespace GameCube.GFZ.GeneralGameData
         [Description("ZEN (Aeropolis) B")]
         tower_b = 51,
 
-        //[Description("")]
-        //unused52 = 52,
+        [Description("U-Rays (Tutorial)")]
+        tutorial = 52,
 
         [Description("Hurrah for the Champion (Winning Run)")]
         winingrun = 53,
 
-        //[Description("")]
-        //unused54 = 54,
+        [Description("(unused)")]
+        unused = 54,
 
-        [Description()] // in GX, not on CD?
+        [Description("Step 70's (Options)")]
         yobi2 = 55,
 
         [Description("ANTONIO GUSTER")]
@@ -299,7 +296,8 @@ namespace GameCube.GFZ.GeneralGameData
         zoda_t = 96,
 
         // Metadata
-        last_id = 96,
+        invalid_id_start = 97,
+        invalid_id_end = 254,
 
         [Description("(Random song)")]
         random = 255,

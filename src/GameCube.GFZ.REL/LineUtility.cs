@@ -6,6 +6,7 @@ using GameCube.GFZ.GeneralGameData;
 using System;
 using System.IO;
 using System.Linq;
+using GameCuibe.GFZ.GeneralGameData;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -241,31 +242,45 @@ namespace GameCube.GFZ.LineREL
                 throw new IndexOutOfRangeException("Index must be between 0 and 55");
             }
 
-            if (bgmIndex > (byte)Bgm.last_id && bgmIndex != (byte)Bgm.random)
+            if (bgmIndex >= (byte)Bgm.invalid_id_start &&
+                bgmIndex <= (byte)Bgm.invalid_id_end)
             {
-                throw new ArgumentException("Track ID must be between 0 and 96, or 255");
+                string msg = "BGM index must be between 0 and 96, or be exactly 255";
+                throw new ArgumentException(msg);
             }
 
             writer.JumpToAddress(lookup.CourseSlotBgm.Address + stageIndex);
             writer.Write(bgmIndex);
         }
 
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmIndex, ushort offset)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, BgmFinalLap bgmfl)
         {
             ValidateStageIndex(stageIndex, 45);
 
-            if (bgmIndex > (byte)Bgm.last_id && bgmIndex != (byte)Bgm.random)
+            if (bgmfl.songIndex >= (byte)Bgm.invalid_id_start &&
+                bgmfl.songIndex <= (byte)Bgm.invalid_id_end)
             {
-                throw new ArgumentException("Track ID must be between 0 and 96, or 255");
+                string msg = "BGM index must be between 0 and 96, or be exactly 255";
+                throw new ArgumentException(msg);
             }
 
             // Patch song
             writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4);
-            writer.Write(bgmIndex);
-
-            // patch loop point offset
-            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4 + 2);
-            writer.Write(offset);
+            writer.Write(bgmfl);
+        }
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, byte bgmIndex)
+        {
+            ushort offset = BgmReference.GetBgmLoopPointOffset(bgmIndex);
+            PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmIndex, offset);
+        }
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, byte bgmIndex, ushort offset)
+        {
+            BgmFinalLap bgmfl = new BgmFinalLap()
+            {
+                songIndex = bgmIndex,
+                loopPointDataOffset = offset,
+            };
+            PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmfl);
         }
 
         public static void PatchVenueIndex(EndianBinaryWriter writer, LineInformation lookup, int index, Venue venue)
