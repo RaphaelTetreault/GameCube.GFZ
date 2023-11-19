@@ -2,6 +2,7 @@ using Manifold;
 using Manifold.IO;
 using GameCube.GFZ;
 using GameCube.GFZ.CarData;
+using GameCube.GFZ.GeneralGameData;
 using System;
 using System.IO;
 using System.Linq;
@@ -233,37 +234,37 @@ namespace GameCube.GFZ.LineREL
             writer.Write(minimapProjection);
         }
 
-        public static void PatchStageBgm(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmTrackId)
+        public static void PatchStageBgm(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmIndex)
         {
             if (stageIndex > 55)
             {
                 throw new IndexOutOfRangeException("Index must be between 0 and 55");
             }
 
-            if (bgmTrackId > 96 && bgmTrackId < 255)
+            if (bgmIndex > (byte)Bgm.last_id && bgmIndex != (byte)Bgm.random)
             {
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
             writer.JumpToAddress(lookup.CourseSlotBgm.Address + stageIndex);
-            writer.Write(bgmTrackId);
+            writer.Write(bgmIndex);
         }
 
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId, ushort offset)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmIndex, ushort offset)
         {
-            ValidateStageIndex(slotIndex, 45);
+            ValidateStageIndex(stageIndex, 45);
 
-            if (bgmTrackId > 96 && bgmTrackId < 255)
+            if (bgmIndex > (byte)Bgm.last_id && bgmIndex != (byte)Bgm.random)
             {
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
             // Patch song
-            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + slotIndex * 4);
-            writer.Write(bgmTrackId);
+            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4);
+            writer.Write(bgmIndex);
 
             // patch loop point offset
-            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + slotIndex * 4 + 2);
+            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4 + 2);
             writer.Write(offset);
         }
 
