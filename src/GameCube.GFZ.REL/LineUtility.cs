@@ -233,9 +233,9 @@ namespace GameCube.GFZ.LineREL
             writer.Write(minimapProjection);
         }
 
-        public static void PatchBgmToSlot(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId)
+        public static void PatchStageBgm(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmTrackId)
         {
-            if (slotIndex > 55)
+            if (stageIndex > 55)
             {
                 throw new IndexOutOfRangeException("Index must be between 0 and 55");
             }
@@ -245,11 +245,11 @@ namespace GameCube.GFZ.LineREL
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
-            writer.JumpToAddress(lookup.CourseSlotBgm.Address + slotIndex);
+            writer.JumpToAddress(lookup.CourseSlotBgm.Address + stageIndex);
             writer.Write(bgmTrackId);
         }
 
-        public static void PatchFinalLapBgmToSlot(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, int slotIndex, byte bgmTrackId, ushort offset)
         {
             ValidateStageIndex(slotIndex, 45);
 
@@ -258,8 +258,13 @@ namespace GameCube.GFZ.LineREL
                 throw new ArgumentException("Track ID must be between 0 and 96, or 255");
             }
 
+            // Patch song
             writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + slotIndex * 4);
             writer.Write(bgmTrackId);
+
+            // patch loop point offset
+            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + slotIndex * 4 + 2);
+            writer.Write(offset);
         }
 
         public static void PatchVenueIndex(EndianBinaryWriter writer, LineInformation lookup, int index, Venue venue)
