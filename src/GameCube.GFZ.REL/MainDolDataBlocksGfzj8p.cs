@@ -1,4 +1,6 @@
+using Manifold.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -15,6 +17,7 @@ namespace GameCube.GFZ.LineREL
 
         // TODO: const for file hash
         public override GameCode GameCode => GameCode.GFZJ8P;
+        public override Encoding TextEncoding => ShiftJisCString.shiftJis;
         public override string SourceFile => "../sys/main.dol"; //...?
         public override string WorkingFile => "../sys/main.dol";
         public override string FileHashMD5 => throw new System.NotImplementedException();
@@ -28,11 +31,11 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CupCourseLut => new DataBlock(0x20FB64, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x20FBE8, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x20FC6C, 0x84);
-        public override DataBlock CourseNameOffsetStructs => throw new System.NotImplementedException("This is absent from the AX version");
+        public override DataBlock CourseNameOffsets => throw new System.NotImplementedException("This is absent from the AX version");
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0, 0x508);
         public override DataBlock ForbiddenWords => throw new System.NotImplementedException("This is absent from the AX version");
         public override DataBlock AxModeCourseTimers => new DataBlock(0x3390C8, 6);
-        public override int CourseNamePointerOffsetBase => 0;
+        public override int CourseNamesBaseAddress => 0;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override DataBlock PilotPositions => new DataBlock(0x230004, 0x210);
         public override DataBlock PilotToMachineLut => new DataBlock(0x20FAC0, 0xA4);

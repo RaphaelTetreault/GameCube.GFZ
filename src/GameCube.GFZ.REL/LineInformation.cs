@@ -8,6 +8,7 @@ namespace GameCube.GFZ.LineREL
         public virtual Endianness Endianness => Endianness.BigEndian;
 
         public abstract GameCode GameCode { get; }
+        public abstract System.Text.Encoding TextEncoding { get; } 
         public abstract string SourceFile { get; }
         public abstract string WorkingFile { get; }
         public abstract string FileHashMD5 { get; }
@@ -21,11 +22,11 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock CupCourseLut { get; }
         public abstract DataBlock CupCourseLutAssets { get; }
         public abstract DataBlock CupCourseLutUnk { get; }
-        public abstract DataBlock CourseNameOffsetStructs{ get; }
+        public abstract DataBlock CourseNameOffsets{ get; }
         public abstract DataBlock CourseMinimapParameterStructs { get; }
         public abstract DataBlock ForbiddenWords { get; }
         public abstract DataBlock AxModeCourseTimers { get; }
-        public abstract int CourseNamePointerOffsetBase { get; }
+        public abstract int CourseNamesBaseAddress { get; }
         public abstract List<CustomizableArea> CourseNameAreas { get; }
         public abstract DataBlock PilotPositions { get; }
         public abstract DataBlock PilotToMachineLut { get; }

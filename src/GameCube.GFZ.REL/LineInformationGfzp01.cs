@@ -1,4 +1,6 @@
+using Manifold.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -16,6 +18,7 @@ namespace GameCube.GFZ.LineREL
         public const string kFileHashMD5 = "96398b677d77e2ae1592b695a4bebaca";
 
         public override GameCode GameCode => GameCode.GFZP01;
+        public override Encoding TextEncoding => AsciiCString.ascii;
         public override string SourceFile => "enemy_line/line__.bin";
         public override string WorkingFile => "enemy_line/line__.rel";
         public override string FileHashMD5 => kFileHashMD5;
@@ -29,11 +32,11 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CupCourseLut => new DataBlock(0x1688B0, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x168934, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x1689B8, 0x84);
-        public override DataBlock CourseNameOffsetStructs => new DataBlock(0x201F38, 0x14D0);
+        public override DataBlock CourseNameOffsets => new DataBlock(0x201F38, 0x14D0);
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0x18CF50, 0x508);
         public override DataBlock ForbiddenWords => new DataBlock(0x1BB83C, 0x3E0);
         public override DataBlock AxModeCourseTimers => new DataBlock(0x1B7810, 6);
-        public override int CourseNamePointerOffsetBase => 0x16E5A0;
+        public override int CourseNamesBaseAddress => 0x16E5A0;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override DataBlock PilotPositions => new DataBlock(0x1A38F4, 0x210);
         public override DataBlock PilotToMachineLut => new DataBlock(0x168800, 0xA4);

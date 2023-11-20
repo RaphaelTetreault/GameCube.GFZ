@@ -1,4 +1,6 @@
+using Manifold.IO;
 using System.Collections.Generic;
+using System.Text;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -16,24 +18,25 @@ namespace GameCube.GFZ.LineREL
         public const string kFileHashMD5 = "f8947b6cec19af95f96fb9d11670ebdd";
 
         public override GameCode GameCode => GameCode.GFZJ01;
+        public override Encoding TextEncoding => ShiftJisCString.shiftJis;
         public override string SourceFile => "enemy_line/line__.bin";
         public override string WorkingFile => "enemy_line/line__.rel";
         public override string FileHashMD5 => kFileHashMD5;
         public override DataBlock VenueNames => new DataBlock(0x194A60, 0xA0);
         public override DataBlock SlotVenueDefinitions => new DataBlock(0x1951B4, 111);
-        public override DataBlock CourseNamesEnglish => new DataBlock(0x19523C, 0x15C);
-        public override DataBlock CourseNamesTranslations => new DataBlock(0x19555C, 0x8D8);
+        public override DataBlock CourseNamesEnglish => new DataBlock(0x19523C, 0x15C);      // table 27 english only
+        public override DataBlock CourseNamesTranslations => new DataBlock(0x19555C, 0x8D8); // table GER FRE SPA ITA JPN * 27
         public override DataBlock CourseSlotDifficulty => new DataBlock(0x165460, 111);
         public override DataBlock CourseSlotBgm => new DataBlock(0x1607B4, 56);
         public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x1607EC, 184);
         public override DataBlock CupCourseLut => new DataBlock(0x164548, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x1645CC, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x164650, 0x84);
-        public override DataBlock CourseNameOffsetStructs => new DataBlock(0x1F7E20, 0x14D0);
+        public override DataBlock CourseNameOffsets => new DataBlock(0x1F2870, 0x14D0);
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0x188098, 0x508);
         public override DataBlock ForbiddenWords => new DataBlock(0x1ABA60, 0x3E0);
         public override DataBlock AxModeCourseTimers => new DataBlock(0x1A9390, 6);
-        public override int CourseNamePointerOffsetBase => 0x16A180;
+        public override int CourseNamesBaseAddress => 0x16A180;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override DataBlock PilotPositions => new DataBlock(0x19E49C, 0x210);
         public override DataBlock PilotToMachineLut => new DataBlock(0x164498, 0xA4);
