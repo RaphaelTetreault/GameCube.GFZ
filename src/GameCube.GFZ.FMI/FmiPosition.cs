@@ -1,5 +1,6 @@
 ﻿using Manifold.IO;
 using System;
+using System.IO;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ.FMI
@@ -7,16 +8,19 @@ namespace GameCube.GFZ.FMI
     [Serializable]
     public class FmiPosition :
         IBinarySerializable,
-        IBinaryAddressable
+        IBinaryAddressable,
+        ITextSerializable
     {
         // FIELDS
-        public float3 position;
-        public int zero_0x0C;
-        public FmiPositionType positionType;
+        private float3 position;
+        private int zero_0x0C;
+        private FmiPositionType positionType;
 
 
         // PROEPRTIES
         public AddressRange AddressRange { get; set; }
+        public float3 Position { get => position; set => position = value; }
+        public FmiPositionType PositionType { get => positionType; set => positionType = value; }
 
 
         // METHODS
@@ -34,6 +38,11 @@ namespace GameCube.GFZ.FMI
             }
         }
 
+        public void Deserialize(StreamReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
@@ -45,5 +54,10 @@ namespace GameCube.GFZ.FMI
             this.RecordEndAddress(writer);
         }
 
+        public void Serialize(StreamWriter writer)
+        {
+            writer.WriteLine($"{nameof(position)}: {position}");
+            writer.WriteLine($"{nameof(positionType)}: {positionType}");
+        }
     }
 }

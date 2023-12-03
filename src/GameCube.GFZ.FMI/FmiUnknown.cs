@@ -1,26 +1,33 @@
 ﻿using Manifold.IO;
 using System;
+using System.IO;
 
 namespace GameCube.GFZ.FMI
 {
     [Serializable]
     public class FmiUnknown :
         IBinarySerializable,
-        IBinaryAddressable
+        IBinaryAddressable,
+        ITextSerializable
     {
         //
         public const int kPaddingSize = 0x34;
 
         // FIELDS
-        public byte unk_0x00;   // 0x00 - 01
-        public float unk_0x01;  // 0x01 - 05
-        public byte unk_0x05;   // 0x05 - 06
-        public float unk_0x06;  // 0x06 - 0A
-        public ushort unk_0x0A; // 0x0A - 0C
-        public byte[] zeroPadding_0x34;
+        private byte unk_0x00;   // 0x00 - 01
+        private float unk_0x01;  // 0x01 - 05
+        private byte unk_0x05;   // 0x05 - 06
+        private float unk_0x06;  // 0x06 - 0A
+        private ushort unk_0x0A; // 0x0A - 0C
+        private byte[] zeroPadding_0x34 = Array.Empty<byte>();
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
+        public byte Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
+        public float Unk_0x01 { get => unk_0x01; set => unk_0x01 = value; }
+        public byte Unk_0x05 { get => unk_0x05; set => unk_0x05 = value; }
+        public float Unk_0x06 { get => unk_0x06; set => unk_0x06 = value; }
+        public ushort Unk_0x0A { get => unk_0x0A; set => unk_0x0A = value; }
 
 
         // METHODS
@@ -44,6 +51,11 @@ namespace GameCube.GFZ.FMI
             }
         }
 
+        public void Deserialize(StreamReader reader)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Serialize(EndianBinaryWriter writer)
         {
             this.RecordStartAddress(writer);
@@ -58,5 +70,13 @@ namespace GameCube.GFZ.FMI
             this.RecordEndAddress(writer);
         }
 
+        public void Serialize(StreamWriter writer)
+        {
+            writer.WriteLine($"{nameof(unk_0x00)}: {unk_0x00}");
+            writer.WriteLine($"{nameof(unk_0x01)}: {unk_0x01}");
+            writer.WriteLine($"{nameof(unk_0x05)}: {unk_0x05}");
+            writer.WriteLine($"{nameof(unk_0x06)}: {unk_0x06}");
+            writer.WriteLine($"{nameof(unk_0x0A)}: {unk_0x0A}");
+        }
     }
 }
