@@ -9,7 +9,7 @@ namespace GameCube.GFZ.FMI
     ///     Represents a machine thruster/exhaust particle emitter.
     /// </summary>
     /// <remarks>
-    ///     Rotate and Scale parameters only apply to booster custom parts 6, 7, and 23.
+    ///     `targetOffset` only applies to booster custom parts 6, 7, and 23 (angled thrusters).
     /// </remarks>
     [Serializable]
     public class FmiEmitter :
@@ -19,23 +19,25 @@ namespace GameCube.GFZ.FMI
     {
         // FIELDS
         private float3 position;
-        private float rotateY; // radians?
-        private float rotateX; // radians?
-        private float scaleMin;
-        private float scaleMax;
-        private FmiColorRGB colorMin;
-        private FmiColorRGB colorMax;
+        private float3 targetOffset;
+        private float scale;
+        private FmiColorRGB accelColor;
+        private FmiColorRGB boostColor;
         private uint zero_0x34;
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
+        /// <summary>
+        ///     The emitter's position.
+        /// </summary>
         public float3 Position { get => position; set => position = value; }
-        public float RotateY { get => rotateY; set => rotateY = value; }
-        public float RotateX { get => rotateX; set => rotateX = value; }
-        public float ScaleMin { get => scaleMin; set => scaleMin = value; }
-        public float ScaleMax { get => scaleMax; set => scaleMax = value; }
-        public FmiColorRGB ColorMin { get => colorMin; set => colorMin = value; }
-        public FmiColorRGB ColorMax { get => colorMax; set => colorMax = value; }
+        /// <summary>
+        ///     Target offset position to point emitter towards relative to emitter position.
+        /// </summary>
+        public float3 TargetOffset { get => targetOffset; set => targetOffset = value; }
+        public float ScaleMax { get => scale; set => scale = value; }
+        public FmiColorRGB ColorMin { get => accelColor; set => accelColor = value; }
+        public FmiColorRGB ColorMax { get => boostColor; set => boostColor = value; }
 
 
         // METHODS
@@ -44,12 +46,10 @@ namespace GameCube.GFZ.FMI
             this.RecordStartAddress(reader);
             {
                 reader.Read(ref position);
-                reader.Read(ref rotateY);
-                reader.Read(ref rotateX);
-                reader.Read(ref scaleMin);
-                reader.Read(ref scaleMax);
-                reader.Read(ref colorMin);
-                reader.Read(ref colorMax);
+                reader.Read(ref targetOffset);
+                reader.Read(ref scale);
+                reader.Read(ref accelColor);
+                reader.Read(ref boostColor);
                 reader.Read(ref zero_0x34);
             }
             this.RecordEndAddress(reader);
@@ -68,12 +68,10 @@ namespace GameCube.GFZ.FMI
             this.RecordStartAddress(writer);
             {
                 writer.Write(position);
-                writer.Write(rotateY);
-                writer.Write(rotateX);
-                writer.Write(scaleMin);
-                writer.Write(scaleMax);
-                writer.Write(colorMin);
-                writer.Write(colorMax);
+                writer.Write(targetOffset);
+                writer.Write(scale);
+                writer.Write(accelColor);
+                writer.Write(boostColor);
                 writer.Write(zero_0x34);
             }
             this.RecordEndAddress(writer);
@@ -82,12 +80,10 @@ namespace GameCube.GFZ.FMI
         public void Serialize(StreamWriter writer)
         {
             writer.WriteLine($"{nameof(position)}: {position}");
-            writer.WriteLine($"{nameof(rotateY)}: {rotateY}");
-            writer.WriteLine($"{nameof(rotateX)}: {rotateX}");
-            writer.WriteLine($"{nameof(scaleMin)}: {scaleMin}");
-            writer.WriteLine($"{nameof(scaleMax)}: {scaleMax}");
-            writer.WriteLine($"{nameof(colorMin)}: {colorMin}");
-            writer.WriteLine($"{nameof(colorMax)}: {colorMax}");
+            writer.WriteLine($"{nameof(targetOffset)}: {targetOffset}");
+            writer.WriteLine($"{nameof(scale)}: {scale}");
+            writer.WriteLine($"{nameof(accelColor)}: {accelColor}");
+            writer.WriteLine($"{nameof(boostColor)}: {boostColor}");
         }
     }
 }
