@@ -2,6 +2,12 @@
 using System;
 using System.IO;
 
+// There is strange data in "header"
+// When 0x04 is 0x01 or 0x01429544, then next bytes are always 40_01_4d_98 (float?) and 00_00_00_03 (uint?)
+// When 0x04 is 0                 , then next bytes are 2 floats
+// The latter only applies to Sonic Phantom (error?) and cockpits 1, 3, 4, 9, 10, 11, 12, 13, 14, 17, 22, 23, 24
+// Dolphin has thrown PC address errors when messing with this. Maybe pointers inside file?
+
 namespace GameCube.GFZ.FMI
 {
     [Serializable]
@@ -14,12 +20,16 @@ namespace GameCube.GFZ.FMI
         private const uint kEmittersAbsPtr = 0x0044;
         private const uint kPositionsAbsPtr = 0x0208;
         private const uint kAnimationNameAbsPtr = 0x02A0;
+        private const int kPaddingSize = 0x34;
 
         // FIELDS
         private ushort zero_0x00;
         private byte positionsCount;
         private byte emittersCount;
-        private FmiUnknown unknown = new();
+        private uint unk_value0x04;
+        private float unk_float0x08;
+        private FloatUintUnion unk_union0x0C;
+        private byte[] zeroPadding_0x34 = Array.Empty<byte>();
         // REFERENCES
         private FmiEmitter[] emitters = Array.Empty<FmiEmitter>();
         private FmiPosition[] positions = Array.Empty<FmiPosition>();
@@ -29,10 +39,16 @@ namespace GameCube.GFZ.FMI
         public AddressRange AddressRange { get; set; }
         public byte PositionsCount { get => positionsCount; set => positionsCount = value; }
         public byte EmittersCount { get => emittersCount; set => emittersCount = value; }
-        public FmiUnknown Unknown { get => unknown; set => unknown = value; }
         public FmiEmitter[] Emitters { get => emitters; set => emitters = value; }
         public FmiPosition[] Positions { get => positions; set => positions = value; }
         public ShiftJisCString[] Names { get => names; set => names = value; }
+        public uint Unk_value0x04 { get => unk_value0x04; set => unk_value0x04 = value; }
+        public float Unk_float0x08 { get => unk_float0x08; set => unk_float0x08 = value; }
+        public FloatUintUnion Unk_union0x0C { get => unk_union0x0C; set => unk_union0x0C = value; }
+        // Temp metadata
+        public bool UnionIsFloat => Unk_value0x04 == 0;
+        public bool UnionIsUint => Unk_value0x04 == 0x01429544; // might only be first byte
+        public bool UnionIsUnrecognized => !UnionIsFloat && !UnionIsUint;
 
 
         // METHODS
@@ -43,9 +59,22 @@ namespace GameCube.GFZ.FMI
                 reader.Read(ref zero_0x00);
                 reader.Read(ref positionsCount);
                 reader.Read(ref emittersCount);
-                reader.Read(ref unknown);
+                reader.Read(ref unk_value0x04);
+                reader.Read(ref unk_float0x08);
+                reader.Read(ref unk_union0x0C);
+                reader.Read(ref zeroPadding_0x34, kPaddingSize);
             }
             this.RecordEndAddress(reader);
+            {
+                Assert.IsTrue(zero_0x00 == 0);
+
+                if (unk_value0x04 == 1)
+                for (int i = 0; i < zeroPadding_0x34.Length; i++)
+                {
+                    Assert.IsTrue(zeroPadding_0x34[i] == 0, i.ToString());
+                }
+            }
+            //
             {
                 bool hasExhaustEmitters = emittersCount > 0;
                 if (hasExhaustEmitters)
@@ -80,7 +109,7 @@ namespace GameCube.GFZ.FMI
             const int h1 = 64;
 
             writer.WriteLineWithTail("General Data (Unknown)", '#', h1);
-            unknown.Serialize(writer);
+            //unknown.Serialize(writer);
             writer.WriteLine();
 
             writer.WriteLineWithTail("Emitters", '#', h1);
