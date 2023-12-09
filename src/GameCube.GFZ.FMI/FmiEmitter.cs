@@ -15,7 +15,7 @@ namespace GameCube.GFZ.FMI
     public class FmiEmitter :
         IBinarySerializable,
         IBinaryAddressable,
-        ITextSerializable
+        IPlainTextSerializable
     {
         // FIELDS
         private float3 position;
@@ -58,9 +58,21 @@ namespace GameCube.GFZ.FMI
             }
         }
 
-        public void Deserialize(StreamReader reader)
+        public void Deserialize(PlainTextReader reader)
         {
-            throw new NotImplementedException();
+            reader.ReadLineValue(ref position.x);
+            reader.ReadLineValue(ref position.y);
+            reader.ReadLineValue(ref position.z);
+            reader.ReadLineValue(ref targetOffset.x);
+            reader.ReadLineValue(ref targetOffset.y);
+            reader.ReadLineValue(ref targetOffset.z);
+            reader.ReadLineValue(ref scale);
+            reader.ReadLineValue(ref accelColor.r);
+            reader.ReadLineValue(ref accelColor.g);
+            reader.ReadLineValue(ref accelColor.b);
+            reader.ReadLineValue(ref boostColor.r);
+            reader.ReadLineValue(ref boostColor.g);
+            reader.ReadLineValue(ref boostColor.b);
         }
 
         public void Serialize(EndianBinaryWriter writer)
@@ -77,13 +89,21 @@ namespace GameCube.GFZ.FMI
             this.RecordEndAddress(writer);
         }
 
-        public void Serialize(StreamWriter writer)
+        public void Serialize(PlainTextWriter writer)
         {
-            writer.WriteLine($"{nameof(position)}: {position}");
-            writer.WriteLine($"{nameof(targetOffset)}: {targetOffset}");
-            writer.WriteLine($"{nameof(scale)}: {scale}");
-            writer.WriteLine($"{nameof(accelColor)}: {accelColor}");
-            writer.WriteLine($"{nameof(boostColor)}: {boostColor}");
+            writer.WriteLineValue(nameof(position) + ".X", position.x);
+            writer.WriteLineValue(nameof(position) + ".Y", position.y);
+            writer.WriteLineValue(nameof(position) + ".Z", position.z);
+            writer.WriteLineValue(nameof(targetOffset) + ".X", targetOffset.x);
+            writer.WriteLineValue(nameof(targetOffset) + ".Y", targetOffset.y);
+            writer.WriteLineValue(nameof(targetOffset) + ".Z", targetOffset.z);
+            writer.WriteLineValue(nameof(scale), scale);
+            writer.WriteLineValue(nameof(accelColor) + ".R", accelColor.r);
+            writer.WriteLineValue(nameof(accelColor) + ".G", accelColor.g);
+            writer.WriteLineValue(nameof(accelColor) + ".B", accelColor.b);
+            writer.WriteLineValue(nameof(boostColor) + ".R", boostColor.r);
+            writer.WriteLineValue(nameof(boostColor) + ".G", boostColor.g);
+            writer.WriteLineValue(nameof(boostColor) + ".B", boostColor.b);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Manifold.IO;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 // There is strange data in "header"
@@ -14,7 +15,7 @@ namespace GameCube.GFZ.FMI
     public class Fmi :
         IBinaryAddressable,
         IBinarySerializable,
-        ITextSerializable
+        IPlainTextSerializable
     {
         // CONSTANTS
         private const uint kEmittersAbsPtr = 0x0044;
@@ -69,10 +70,10 @@ namespace GameCube.GFZ.FMI
                 Assert.IsTrue(zero_0x00 == 0);
 
                 if (unk_value0x04 == 1)
-                for (int i = 0; i < zeroPadding_0x34.Length; i++)
-                {
-                    Assert.IsTrue(zeroPadding_0x34[i] == 0, i.ToString());
-                }
+                    for (int i = 0; i < zeroPadding_0x34.Length; i++)
+                    {
+                        Assert.IsTrue(zeroPadding_0x34[i] == 0, i.ToString());
+                    }
             }
             //
             {
@@ -99,34 +100,63 @@ namespace GameCube.GFZ.FMI
             }
         }
 
-        public void Deserialize(StreamReader reader)
+        public void Deserialize(PlainTextReader reader)
         {
-            throw new NotImplementedException();
+            List<FmiEmitter> emitters = new();
+            while (!reader.IsArrayEndMarker())
+            {
+                var emitter = new FmiEmitter();
+                emitter.Deserialize(reader);
+                emitters.Add(emitter);
+            }
+            this.emitters = emitters.ToArray();
+
+            List<string> names = new();
+            List<FmiPosition> positions = new();
+            while (!reader.IsArrayEndMarker())
+            {
+                // Get param name
+                names.Add(reader.ReadLineValue());
+                // Get param position
+                var position = new FmiPosition();
+                position.Deserialize(reader);
+                positions.Add(position);
+            }
+            this.names = names.ConvertAll(x => (ShiftJisCString)x).ToArray();
+            this.positions = positions.ToArray();
         }
 
-        public void Serialize(StreamWriter writer)
+        public void Serialize(PlainTextWriter writer)
         {
-            const int h1 = 64;
-
-            writer.WriteLineWithTail("General Data (Unknown)", '#', h1);
-            //unknown.Serialize(writer);
+            writer.WriteLineComment("FMI");
             writer.WriteLine();
-
-            writer.WriteLineWithTail("Emitters", '#', h1);
-            foreach (var emitter in emitters)
+            
+            writer.WriteLineComment("Emitters");
+            writer.IncrementIndent();
+            for (int i = 0; i < emitters.Length; i++)
             {
-                writer.WriteLineWithTail("Emitter", '-', h1);
-                emitter.Serialize(writer);
+                var emitter = emitters[i];
+                writer.WriteLineComment($"Emitter {i + 1}");
+                writer.SerializeIndent(emitter);
             }
+            writer.DecrementIndent();
+            writer.WriteLineArrayEnd();
             writer.WriteLine();
 
-            writer.WriteLineWithTail("Positions", '#', h1);
+            writer.WriteLineComment("Positions");
+            writer.IncrementIndent();
             for (int i = 0; i < positionsCount; i++)
             {
-                writer.WriteLineWithTail("Position", '-', h1);
-                writer.WriteLine($"Position Object Name: \"{names[i]}\"");
-                positions[i].Serialize(writer);
+                var name = names[i];
+                var position = positions[i];
+                writer.WriteLineComment($"Position {i + 1}");
+                writer.IncrementIndent();
+                writer.WriteLineValue(nameof(name), name);
+                writer.DecrementIndent();
+                writer.SerializeIndent(position);
             }
+            writer.DecrementIndent();
+            writer.WriteLineArrayEnd();
             writer.WriteLine();
         }
 
