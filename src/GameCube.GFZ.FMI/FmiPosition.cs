@@ -40,10 +40,10 @@ namespace GameCube.GFZ.FMI
 
         public void Deserialize(PlainTextReader reader)
         {
-            reader.ReadLineValue(ref position.x);
-            reader.ReadLineValue(ref position.y);
-            reader.ReadLineValue(ref position.z);
-            reader.ReadLineValue(ref positionType);
+            reader.ReadValue(ref position.x);
+            reader.ReadValue(ref position.y);
+            reader.ReadValue(ref position.z);
+            reader.ReadValue(ref positionType);
         }
 
         public void Serialize(EndianBinaryWriter writer)
