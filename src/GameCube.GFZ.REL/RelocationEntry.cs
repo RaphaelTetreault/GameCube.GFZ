@@ -1,4 +1,5 @@
 ﻿using Manifold.IO;
+using System;
 using System.Runtime.InteropServices;
 
 namespace GameCube.GFZ.LineREL
@@ -10,7 +11,8 @@ namespace GameCube.GFZ.LineREL
     ///     Based off of: https://wiki.tockdom.com/wiki/REL_(File_Format)#Relocation_Data
     /// </remarks>
     [StructLayout(LayoutKind.Explicit)]
-    public struct RelocationEntry
+    public struct RelocationEntry :
+        IBinarySerializable
     {
         /// <summary>
         ///     Offset in bytes from the previous relocation to this one.
@@ -35,10 +37,26 @@ namespace GameCube.GFZ.LineREL
         /// </summary>
         [FieldOffset(0x04)] public Offset addEnd;
 
+        /// <summary>
+        ///     The value raw (64 bit).
+        /// </summary>
+        [FieldOffset(0x00)] public ulong raw;
+
+
+        public void Deserialize(EndianBinaryReader reader)
+        {
+            reader.Read(ref raw);
+        }
+
         public Pointer ResolveAddress(int baseAddress)
         {
             Pointer pointer = baseAddress + addEnd;
             return pointer;
+        }
+
+        public void Serialize(EndianBinaryWriter writer)
+        {
+            writer.Write(raw);
         }
     }
 }
