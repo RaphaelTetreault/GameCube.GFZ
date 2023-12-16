@@ -20,23 +20,24 @@ namespace GameCube.GFZ.LineREL
         //    bool canAllocateSize = size < RemainingMemorySize();
         //    return canAllocateSize;
         //}
-        public Pointer AllocateMemory(int size)
+        public Pointer AllocateMemory(int size, int alignment = 0)
         {
             foreach (MemoryArea memoryArea in MemoryAreas)
             {
-                if (!memoryArea.CanAllocateSize(size))
+                int alignedSize = memoryArea.GetAlignedSize(size, alignment);
+                if (!memoryArea.CanAllocateSize(alignedSize))
                     continue;
 
-                Pointer pointer = memoryArea.AllocateMemory(size);
+                Pointer pointer = memoryArea.AllocateMemory(alignedSize);
                 return pointer;
             }
 
             // If it fails, return null
-            return 0;
+            return Pointer.Null;
         }
-        public Pointer AllocateMemoryWithError(int size)
+        public Pointer AllocateMemoryWithError(int size, int alignment = 0)
         {
-            Pointer pointer = AllocateMemory(size);
+            Pointer pointer = AllocateMemory(size, alignment);
 
             if (pointer.IsNull)
             {

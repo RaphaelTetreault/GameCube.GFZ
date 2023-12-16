@@ -22,10 +22,12 @@ namespace GameCube.GFZ.LineREL
         public override string SourceFile => "enemy_line/line__.bin";
         public override string WorkingFile => "enemy_line/line__.rel";
         public override string FileHashMD5 => kFileHashMD5;
-        public override DataBlock VenueNames => new DataBlock(0x199940, 0xA0);
+        public override DataBlock VenueNamesEnglish => new DataBlock(0x199940, 0xA0);
+        public override DataBlock VenueNamesJapanese => throw new System.NotImplementedException();
         public override DataBlock SlotVenueDefinitions => new DataBlock(0x19A094, 111);
+        public override Pointer StringTableBaseAddress => 0x16E5A0;
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19A11C, 0x15C);
-        public override DataBlock CourseNamesTranslations => throw new System.NotImplementedException("This is absent from the EUR version");
+        public override DataBlock CourseNamesLocalizations => throw new System.NotImplementedException("This is absent from the EUR version");
         public override DataBlock CourseSlotDifficulty => new DataBlock(0x1698EC, 111);
         public override DataBlock CourseSlotBgm => new DataBlock(0x16495C, 56);
         public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x164994, 184);
@@ -36,7 +38,6 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0x18CF50, 0x508);
         public override DataBlock ForbiddenWords => new DataBlock(0x1BB83C, 0x3E0);
         public override DataBlock AxModeCourseTimers => new DataBlock(0x1B7810, 6);
-        public override int CourseNamesBaseAddress => 0x16E5A0;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override DataBlock PilotPositions => new DataBlock(0x1A38F4, 0x210);
         public override DataBlock PilotToMachineLut => new DataBlock(0x168800, 0xA4);

@@ -208,7 +208,7 @@ namespace GameCube.GFZ.LineREL
 
                     int indexAddress = lookup.CourseNameOffsets.Address + (int)index * 0x30;
                     writer.JumpToAddress(indexAddress);
-                    writer.Write(nameAddress - lookup.CourseNamesBaseAddress);
+                    writer.Write(nameAddress - lookup.StringTableBaseAddress);
 
                     lookup.CourseNameAreas[i].Occupied += newLength;
                     return;
