@@ -32,7 +32,7 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock VenueNamesJapanese => throw new System.NotImplementedException();
 
         public override int CourseNameLanguages => throw new System.NotImplementedException();
-        public override ArrayPointer32 CourseNameOffsetsArrayPointer => new(0x201F38, 666);
+        public override ArrayPointer32 CourseNameOffsets => new(0x201F38, 666);
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19875C, 0x15C);
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x198A7C, 0x8D8);
 

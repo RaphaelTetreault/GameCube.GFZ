@@ -21,7 +21,7 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock VenueNamesJapanese { get; }
 
         public abstract int CourseNameLanguages { get; }
-        public abstract ArrayPointer32 CourseNameOffsetsArrayPointer { get; }
+        public abstract ArrayPointer32 CourseNameOffsets { get; }
         public abstract DataBlock CourseNamesEnglish { get; }
         public abstract DataBlock CourseNamesLocalizations { get; }
 
