@@ -14,30 +14,34 @@ namespace GameCube.GFZ.LineREL
         public abstract string FileHashMD5 { get; }
         public abstract Pointer StringTableBaseAddress { get; }
 
+        // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         public abstract ArrayPointer32 VenueNameOffsets { get; }
         public abstract ArrayPointer32 VenueNamesEnglishOffsets { get; }
         public abstract ArrayPointer32 VenueNamesJapaneseOffsets { get; }
         public abstract DataBlock VenueNamesEnglish { get; }
         public abstract DataBlock VenueNamesJapanese { get; }
 
+        // Done
         public abstract int CourseNameLanguages { get; }
         public abstract ArrayPointer32 CourseNameOffsets { get; }
         public abstract DataBlock CourseNamesEnglish { get; }
         public abstract DataBlock CourseNamesLocalizations { get; }
 
-        public abstract DataBlock CourseVenueIndex { get; }
-        public abstract DataBlock CourseDifficulty { get; }
-        public abstract DataBlock CourseBgmIndex { get; }
-        public abstract DataBlock CourseBgmFinalLapIndex { get; }
-        public abstract DataBlock CupCourseLut { get; }
-        public abstract DataBlock CupCourseLutAssets { get; }
-        public abstract DataBlock CupCourseLutUnk { get; }
-        public abstract DataBlock CourseMinimapParameterStructs { get; }
-        public abstract DataBlock ForbiddenWords { get; }
-        public abstract DataBlock AxModeCourseTimers { get; }
-        public abstract List<CustomizableArea> CourseNameAreas { get; }
-        public abstract DataBlock PilotPositions { get; }
-        public abstract DataBlock PilotToMachineLut { get; }
+        public abstract DataBlock CourseVenueIndex { get; }         // done
+        public abstract DataBlock CourseDifficulty { get; }         // done
+        public abstract DataBlock CourseBgmIndex { get; }           // done
+        public abstract DataBlock CourseBgmFinalLapIndex { get; }   // done
+        public abstract DataBlock CupCourseLut { get; }             // TODO: index in cup
+        public abstract DataBlock CupCourseLutAssets { get; }       // TODO: gma/tpl loading index
+        public abstract DataBlock CupCourseLutUnk { get; }          // TODO: unknown, but related
+        public abstract DataBlock CourseMinimapParameterStructs { get; } // for editor
+        public abstract DataBlock ForbiddenWords { get; }           // 
+        public abstract DataBlock AxModeCourseTimers { get; }       // 
+        public abstract List<CustomizableArea> CourseNameAreas { get; } // to deprecate?
+        public abstract DataBlock PilotPositions { get; }           // 
+        public abstract DataBlock PilotToMachineLut { get; }        //
+
+        // internal only
         public abstract short Salt { get; }
         public abstract int Key0 { get; }
         public abstract int Key1 { get; }
