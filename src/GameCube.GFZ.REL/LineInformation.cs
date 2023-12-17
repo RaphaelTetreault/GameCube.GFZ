@@ -13,12 +13,19 @@ namespace GameCube.GFZ.LineREL
         public abstract string WorkingFile { get; }
         public abstract string FileHashMD5 { get; }
         public abstract Pointer StringTableBaseAddress { get; }
+
+        public abstract ArrayPointer32 VenueNameOffsets { get; }
+        public abstract ArrayPointer32 VenueNamesEnglishOffsets { get; }
+        public abstract ArrayPointer32 VenueNamesJapaneseOffsets { get; }
         public abstract DataBlock VenueNamesEnglish { get; }
         public abstract DataBlock VenueNamesJapanese { get; }
-        public abstract DataBlock SlotVenueDefinitions { get; }
-        public abstract DataBlock CourseNameOffsets { get; }
+
+        public abstract int CourseNameLanguages { get; }
+        public abstract ArrayPointer32 CourseNameOffsetsArrayPointer { get; }
         public abstract DataBlock CourseNamesEnglish { get; }
         public abstract DataBlock CourseNamesLocalizations { get; }
+
+        public abstract DataBlock SlotVenueDefinitions { get; }
         public abstract DataBlock CourseSlotDifficulty { get; }
         public abstract DataBlock CourseSlotBgm { get; }
         public abstract DataBlock CourseSlotBgmFinalLap { get; }

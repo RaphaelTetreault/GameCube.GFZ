@@ -23,19 +23,26 @@ namespace GameCube.GFZ.LineREL
         public override string SourceFile => "enemy_line/line__.bin";
         public override string WorkingFile => "enemy_line/line__.rel";
         public override string FileHashMD5 => kFileHashMD5;
+        public override Pointer StringTableBaseAddress => 0x16D600;
+
+        public override ArrayPointer32 VenueNameOffsets => throw new System.NotImplementedException();
+        public override ArrayPointer32 VenueNamesEnglishOffsets => throw new System.NotImplementedException();
+        public override ArrayPointer32 VenueNamesJapaneseOffsets => throw new System.NotImplementedException();
         public override DataBlock VenueNamesEnglish => new DataBlock(0x197F80, 0xA4);
         public override DataBlock VenueNamesJapanese => throw new System.NotImplementedException();
-        public override DataBlock SlotVenueDefinitions => new DataBlock(0x1986D4, 111);
-        public override Pointer StringTableBaseAddress => 0x16D600;
+
+        public override int CourseNameLanguages => throw new System.NotImplementedException();
+        public override ArrayPointer32 CourseNameOffsetsArrayPointer => new(0x201F38, 666);
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19875C, 0x15C);
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x198A7C, 0x8D8);
+
+        public override DataBlock SlotVenueDefinitions => new DataBlock(0x1986D4, 111);
         public override DataBlock CourseSlotDifficulty => new DataBlock(0x168958, 111);
         public override DataBlock CourseSlotBgm => new DataBlock(0x163A8C, 56);
         public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x163AC4, 184);
         public override DataBlock CupCourseLut => new DataBlock(0x167940, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x1679C4, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x167A48, 0x84);
-        public override DataBlock CourseNameOffsets => new DataBlock(0x1F7E20, 0x14D0);
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0x18B5B0, 0x508);
         public override DataBlock ForbiddenWords => new DataBlock(0x1B0630, 0x3E0);
         public override DataBlock AxModeCourseTimers => new DataBlock(0x1ADBC0, 6);
