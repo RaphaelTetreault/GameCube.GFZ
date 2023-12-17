@@ -34,10 +34,10 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x21B770, 0x8D8);
 
 
-        public override DataBlock SlotVenueDefinitions => new DataBlock(0x21B3EC, 111);
-        public override DataBlock CourseSlotDifficulty => throw new System.NotImplementedException("This is absent from the AX version");
-        public override DataBlock CourseSlotBgm => new DataBlock(0x20E3F0, 56);
-        public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x20E484, 184);
+        public override DataBlock CourseVenueIndex => new DataBlock(0x21B3EC, 111);
+        public override DataBlock CourseDifficulty => throw new System.NotImplementedException("This is absent from the AX version");
+        public override DataBlock CourseBgmIndex => new DataBlock(0x20E3F0, 56);
+        public override DataBlock CourseBgmFinalLapIndex => new DataBlock(0x20E484, 184);
         public override DataBlock CupCourseLut => new DataBlock(0x20FB64, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x20FBE8, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x20FC6C, 0x84);

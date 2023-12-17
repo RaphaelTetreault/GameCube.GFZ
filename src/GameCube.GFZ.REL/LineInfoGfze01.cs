@@ -36,10 +36,10 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19875C, 0x15C);
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x198A7C, 0x8D8);
 
-        public override DataBlock SlotVenueDefinitions => new DataBlock(0x1986D4, 111);
-        public override DataBlock CourseSlotDifficulty => new DataBlock(0x168958, 111);
-        public override DataBlock CourseSlotBgm => new DataBlock(0x163A8C, 56);
-        public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x163AC4, 184);
+        public override DataBlock CourseVenueIndex => new DataBlock(0x1986D4, 111);
+        public override DataBlock CourseDifficulty => new DataBlock(0x168958, 111);
+        public override DataBlock CourseBgmIndex => new DataBlock(0x163A8C, 56);
+        public override DataBlock CourseBgmFinalLapIndex => new DataBlock(0x163AC4, 184);
         public override DataBlock CupCourseLut => new DataBlock(0x167940, 0x84);
         public override DataBlock CupCourseLutAssets => new DataBlock(0x1679C4, 0x84);
         public override DataBlock CupCourseLutUnk => new DataBlock(0x167A48, 0x84);
