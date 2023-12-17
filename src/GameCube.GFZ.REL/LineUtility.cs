@@ -44,7 +44,7 @@ namespace GameCube.GFZ.LineREL
         /// <param name="filePath"></param>
         /// <param name="lookup"></param>
         /// <returns></returns>
-        public static MemoryStream Crypt(string filePath, LineInformation lookup)
+        public static MemoryStream Crypt(string filePath, LineRelInfo lookup)
         {
             const int alignment = 0x18;// Padding for alignment to 0x20
 
@@ -190,7 +190,7 @@ namespace GameCube.GFZ.LineREL
                 throw new IndexOutOfRangeException($"Index must be between {minIndex} and {maxIndex}. ({index})");
         }
 
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineInformation lookup, int index, byte[] courseName)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineRelInfo lookup, int index, byte[] courseName)
         {
             ValidateStageIndex(index, LineRelConsts.MaxStageIndex);
 
@@ -217,13 +217,13 @@ namespace GameCube.GFZ.LineREL
 
             throw new System.IndexOutOfRangeException("No more free space for course names");
         }
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineInformation lookup, int index, CString courseName)
+        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineRelInfo lookup, int index, CString courseName)
         {
             var bytes = courseName.Encoding.GetBytes(courseName);
             PatchCustomCourseName(writer, lookup, index, bytes);
         }
 
-        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, LineInformation lookup, int index, MinimapProjection minimapProjection)
+        public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, LineRelInfo lookup, int index, MinimapProjection minimapProjection)
         {
             ValidateStageIndex(index, LineRelConsts.MaxMinimapIndex);
 
@@ -235,7 +235,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(minimapProjection);
         }
 
-        public static void PatchStageBgm(EndianBinaryWriter writer, LineInformation lookup, int stageIndex, byte bgmIndex)
+        public static void PatchStageBgm(EndianBinaryWriter writer, LineRelInfo lookup, int stageIndex, byte bgmIndex)
         {
             if (stageIndex > 55)
             {
@@ -253,7 +253,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(bgmIndex);
         }
 
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, BgmFinalLap bgmfl)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, BgmFinalLap bgmfl)
         {
             ValidateStageIndex(stageIndex, 45);
 
@@ -268,12 +268,12 @@ namespace GameCube.GFZ.LineREL
             writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4);
             writer.Write(bgmfl);
         }
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, byte bgmIndex)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex)
         {
             ushort offset = BgmReference.GetBgmLoopPointOffset(bgmIndex);
             PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmIndex, offset);
         }
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineInformation lookup, byte stageIndex, byte bgmIndex, ushort offset)
+        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex, ushort offset)
         {
             BgmFinalLap bgmfl = new BgmFinalLap()
             {
@@ -283,7 +283,7 @@ namespace GameCube.GFZ.LineREL
             PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmfl);
         }
 
-        public static void PatchVenueIndex(EndianBinaryWriter writer, LineInformation lookup, int index, Venue venue)
+        public static void PatchVenueIndex(EndianBinaryWriter writer, LineRelInfo lookup, int index, Venue venue)
         {
             ValidateStageIndex(index, 110);
 
@@ -296,7 +296,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write((byte)venue);
         }
 
-        public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, LineInformation lookup, int index, byte difficulty)
+        public static void PatchDifficultyRatingToSlot(EndianBinaryWriter writer, LineRelInfo lookup, int index, byte difficulty)
         {
             ValidateStageIndex(index, 110);
 
@@ -310,7 +310,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(difficulty);
         }
 
-        public static void PatchCupSlot(EndianBinaryWriter writer, LineInformation lookup, Cup cup, int courseIndex)
+        public static void PatchCupSlot(EndianBinaryWriter writer, LineRelInfo lookup, Cup cup, int courseIndex)
         {
             ValidateStageIndex(courseIndex, 110, -1);
 
@@ -328,7 +328,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(courseIndex);
         }
 
-        public static void PatchCupSlots(EndianBinaryWriter writer, LineInformation lookup, Cup cup, short[] courses)
+        public static void PatchCupSlots(EndianBinaryWriter writer, LineRelInfo lookup, Cup cup, short[] courses)
         {
             if (courses.Length < 1 || courses.Length > 6)
             {
@@ -365,7 +365,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(courses);
         }
 
-        public static void PatchAxTimer(EndianBinaryWriter writer, LineInformation lookup, AcCupCourse courseId, byte seconds)
+        public static void PatchAxTimer(EndianBinaryWriter writer, LineRelInfo lookup, AcCupCourse courseId, byte seconds)
         {
             if ((byte)courseId > 6)
             {
@@ -376,7 +376,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(seconds);
         }
 
-        public static void PatchPilotPosition(EndianBinaryWriter writer, LineInformation lookup, PilotID id, float[] position)
+        public static void PatchPilotPosition(EndianBinaryWriter writer, LineRelInfo lookup, PilotID id, float[] position)
         {
             if (id > PilotID.Gen)
             {
@@ -392,7 +392,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(position);
         }
 
-        public static void PatchPilotToMachine(EndianBinaryWriter writer, LineInformation lookup, Machine machine, PilotID pilot)
+        public static void PatchPilotToMachine(EndianBinaryWriter writer, LineRelInfo lookup, Machine machine, PilotID pilot)
         {
             if (pilot > PilotID.Gen)
             {

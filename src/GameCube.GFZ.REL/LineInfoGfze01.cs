@@ -7,9 +7,9 @@ namespace GameCube.GFZ.LineREL
     /// <summary>
     /// NTSC E
     /// </summary>
-    public class LineInformationGfze01 : LineInformation
+    public class LineInfoGfze01 : LineRelInfo
     {
-        public LineInformationGfze01()
+        public LineInfoGfze01()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
             CourseNameAreas.Add(new CustomizableArea(CourseNamesLocalizations.Address, CourseNamesLocalizations.Size));

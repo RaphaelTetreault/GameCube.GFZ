@@ -7,9 +7,9 @@ namespace GameCube.GFZ.LineREL
     /// <summary>
     /// PAL
     /// </summary>
-    public class LineInformationGfzp01 : LineInformation
+    public class LineRelInfoGfzp01 : LineRelInfo
     {
-        public LineInformationGfzp01()
+        public LineRelInfoGfzp01()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
             CourseNameAreas.Add(new CustomizableArea(ForbiddenWords.Address, ForbiddenWords.Size));

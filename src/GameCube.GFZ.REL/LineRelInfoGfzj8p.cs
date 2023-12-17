@@ -7,9 +7,9 @@ namespace GameCube.GFZ.LineREL
     /// <summary>
     /// AX
     /// </summary>
-    public class MainDolDataBlocksGfzj8p : LineInformation
+    public class LineRelInfoGfzj8p : LineRelInfo
     {
-        public MainDolDataBlocksGfzj8p()
+        public LineRelInfoGfzj8p()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
             CourseNameAreas.Add(new CustomizableArea(CourseNamesLocalizations.Address, CourseNamesLocalizations.Size));
