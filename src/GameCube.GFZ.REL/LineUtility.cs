@@ -235,7 +235,7 @@ namespace GameCube.GFZ.LineREL
             writer.Write(minimapProjection);
         }
 
-        public static void PatchStageBgm(EndianBinaryWriter writer, LineRelInfo lookup, int stageIndex, byte bgmIndex)
+        public static void PatchCourseBgm(EndianBinaryWriter writer, LineRelInfo lookup, int stageIndex, byte bgmIndex)
         {
             if (stageIndex > 55)
             {
@@ -268,7 +268,7 @@ namespace GameCube.GFZ.LineREL
             writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + stageIndex * 4);
             writer.Write(bgmfl);
         }
-        public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex)
+        public static void PatchCourseBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex)
         {
             ushort offset = BgmReference.GetBgmLoopPointOffset(bgmIndex);
             PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmIndex, offset);
