@@ -34,6 +34,7 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x21B770, 0x8D8);
 
         public override Pointer CarDataMachinesPtr => throw new System.NotImplementedException();
+        public override Pointer MachineLetterRatingsPtr => throw new System.NotImplementedException();
 
         public override DataBlock CourseVenueIndex => new DataBlock(0x21B3EC, 111);
         public override DataBlock CourseDifficulty => throw new System.NotImplementedException("This is absent from the AX version");

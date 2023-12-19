@@ -36,6 +36,7 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseNamesLocalizations => throw new System.NotImplementedException("This is absent from the EUR version");
 
         public override Pointer CarDataMachinesPtr => throw new System.NotImplementedException();
+        public override Pointer MachineLetterRatingsPtr => 0x1B8E20;
 
         public override DataBlock CourseVenueIndex => new DataBlock(0x19A094, 111);
         public override DataBlock CourseDifficulty => new DataBlock(0x1698EC, 111);
