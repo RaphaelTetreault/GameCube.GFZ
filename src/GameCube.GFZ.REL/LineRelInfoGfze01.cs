@@ -7,9 +7,9 @@ namespace GameCube.GFZ.LineREL
     /// <summary>
     /// NTSC E
     /// </summary>
-    public class LineInfoGfze01 : LineRelInfo
+    public class LineRelInfoGfze01 : LineRelInfo
     {
-        public LineInfoGfze01()
+        public LineRelInfoGfze01()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
             CourseNameAreas.Add(new CustomizableArea(CourseNamesLocalizations.Address, CourseNamesLocalizations.Size));
@@ -35,6 +35,8 @@ namespace GameCube.GFZ.LineREL
         public override ArrayPointer32 CourseNameOffsets => new(0x201F38, 666);
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19875C, 0x15C);
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x198A7C, 0x8D8);
+
+        public override Pointer CarDataMachinesPtr => 0x195660;
 
         public override DataBlock CourseVenueIndex => new DataBlock(0x1986D4, 111);
         public override DataBlock CourseDifficulty => new DataBlock(0x168958, 111);

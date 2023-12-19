@@ -27,6 +27,8 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock CourseNamesEnglish { get; }
         public abstract DataBlock CourseNamesLocalizations { get; }
 
+        public abstract Pointer CarDataMachinesPtr { get; }
+
         public abstract DataBlock CourseVenueIndex { get; }         // done
         public abstract DataBlock CourseDifficulty { get; }         // done
         public abstract DataBlock CourseBgmIndex { get; }           // done
