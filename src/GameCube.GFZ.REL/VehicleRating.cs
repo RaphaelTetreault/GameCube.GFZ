@@ -47,27 +47,20 @@ namespace GameCube.GFZ.LineREL
         }
         public static LetterRating FromChar(char rating)
         {
-            const string msg = "Character is not S, A, B, C, D, or E.";
-
-            return rating switch
+            bool isAlphaLower = rating >= 'a' && rating <= 'z';
+            bool isAlphaUpper = rating >= 'A' && rating <= 'Z';
+            bool isNumeric = rating >= '0' && rating <= '9';
+            bool isInvalid = !(isAlphaLower || isAlphaUpper || isNumeric);
+            if (isInvalid)
             {
-                // Uppercase
-                'S' => LetterRating.S,
-                'A' => LetterRating.A,
-                'B' => LetterRating.B,
-                'C' => LetterRating.C,
-                'D' => LetterRating.D,
-                'E' => LetterRating.E,
-                // Lowercase
-                's' => LetterRating.S,
-                'a' => LetterRating.A,
-                'b' => LetterRating.B,
-                'c' => LetterRating.C,
-                'd' => LetterRating.D,
-                'e' => LetterRating.E,
-                // Error on anything else
-                _ => throw new System.ArgumentException(msg),
-            };
+                string msg =
+                    $"Character '{rating}' is not alphanumeric. " +
+                    $"Use characters SABCDE, sabcde, or 012345.";
+                throw new ArgumentException(msg);
+            }
+
+            LetterRating value = Enum.Parse<LetterRating>(rating.ToString(), true);
+            return value;
         }
 
         public void Deserialize(EndianBinaryReader reader)
