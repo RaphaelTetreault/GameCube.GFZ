@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GameCube.GFZ.LineREL
+namespace GameCube.GFZ.GameData
 {
     public enum AcCupCourse : byte
     {
