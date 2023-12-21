@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GameCube.GFZ.GeneralGameData
+namespace GameCube.GFZ.GameData
 {
     public enum Bgm
     {

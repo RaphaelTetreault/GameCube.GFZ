@@ -1,4 +1,4 @@
-﻿namespace GameCube.GFZ.GeneralGameData
+﻿namespace GameCube.GFZ.GameData
 {
     public static class BgmReference
     {
@@ -30,5 +30,20 @@
                 _ => 0xFFFF,
             };
         }
+
+        /// <summary>
+        ///     Get the associated final lap BGM loop point offset
+        ///     for <paramref name="bgmFinalLapIndex"/>.
+        /// </summary>
+        /// <param name="bgmFinalLapIndex"></param>
+        /// <returns>
+        ///     The relevant 16-bit offset to the correct loop point data.
+        /// </returns>
+        public static ushort GetBgmLoopPointOffset(Bgm bgmFinalLapIndex)
+        {
+            ushort value = GetBgmLoopPointOffset((byte)bgmFinalLapIndex);
+            return value;
+        }
+
     }
 }
