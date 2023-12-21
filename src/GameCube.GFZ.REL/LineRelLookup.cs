@@ -3,7 +3,7 @@ namespace GameCube.GFZ.LineREL
     /// <summary>
     ///     Main address lookup directory
     /// </summary>
-    public static class LineLookup
+    public static class LineRelLookup
     {
         public static LineRelInfo GFZE01 => new LineRelInfoGfze01();
         public static LineRelInfo GFZJ01 => new LineRelInfoGfzj01();

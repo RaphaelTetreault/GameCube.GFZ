@@ -1,6 +1,4 @@
-using Manifold;
 using Manifold.IO;
-using GameCube.GFZ;
 using GameCube.GFZ.CarData;
 using GameCube.GFZ.GameData;
 using System;
@@ -8,7 +6,7 @@ using System.IO;
 using System.Linq;
 
 namespace GameCube.GFZ.LineREL
-{1
+{
     public class LineUtility
     {
         private static int lwz(EndianBinaryReader reader, int offset, int src)
@@ -191,7 +189,7 @@ namespace GameCube.GFZ.LineREL
 
         public static void PatchCustomCourseName(EndianBinaryWriter writer, LineRelInfo lookup, int index, byte[] courseName)
         {
-            ValidateStageIndex(index, LineRelConsts.MaxStageIndex);
+            ValidateStageIndex(index, GameDataConsts.MaxStageIndex);
 
             int newLength = courseName.Length + 4 - (courseName.Length % 4);
             byte[] courseNameExtended = new byte[newLength];
@@ -224,7 +222,7 @@ namespace GameCube.GFZ.LineREL
 
         public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, LineRelInfo lookup, int index, MinimapProjection minimapProjection)
         {
-            ValidateStageIndex(index, LineRelConsts.MaxMinimapIndex);
+            ValidateStageIndex(index, GameDataConsts.MaxMinimapIndex);
 
             int baseAddress = lookup.CourseMinimapParameterStructs.Address;
             int offset = MinimapProjection.Size * index;

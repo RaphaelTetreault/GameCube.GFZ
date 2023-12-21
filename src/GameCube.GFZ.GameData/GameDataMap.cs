@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GameCube.GFZ.LineREL
+namespace GameCube.GFZ.GameData
 {
     public static class GameDataMap
     {
