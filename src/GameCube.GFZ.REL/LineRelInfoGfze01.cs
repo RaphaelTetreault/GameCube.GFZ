@@ -9,12 +9,6 @@ namespace GameCube.GFZ.LineREL
     /// </summary>
     public class LineRelInfoGfze01 : LineRelInfo
     {
-        public LineRelInfoGfze01()
-        {
-            CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
-            CourseNameAreas.Add(new CustomizableArea(CourseNamesLocalizations.Address, CourseNamesLocalizations.Size));
-        }
-
         public const string kFileHashMD5 = "a1790e38cbe17510017689088eab5758";
         public const string kFileHashMD5_1kb = "";
 
@@ -51,7 +45,6 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseMinimapParameterStructs => new(0x18B5B0, 0x508);
         public override DataBlock ForbiddenWords => new(0x1B0630, 0x3E0);
         public override DataBlock AxModeCourseTimers => new(0x1ADBC0, 6);
-        public override List<CustomizableArea> CourseNameAreas => new();
         public override DataBlock PilotPositions => new(0x1A19C4, 0x210);
         public override DataBlock PilotToMachineLut => new(0x167890, 0xA4);
 
