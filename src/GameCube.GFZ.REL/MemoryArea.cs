@@ -1,5 +1,4 @@
 ﻿using Manifold.IO;
-using System.IO;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -23,6 +22,7 @@ namespace GameCube.GFZ.LineREL
             };
             RemainingMemorySize = MemorySize;
         }
+
         public MemoryArea(Pointer address, int size)
         {
             BaseAddress = address;
@@ -34,6 +34,7 @@ namespace GameCube.GFZ.LineREL
             };
             RemainingMemorySize = size;
         }
+
         public MemoryArea(AddressRange addressRange)
         {
             AddressRange = addressRange;
@@ -65,11 +66,13 @@ namespace GameCube.GFZ.LineREL
             int alignedSize = size + bytesToPad;
             return alignedSize;
         }
+
         public bool CanAllocateSize(int size)
         {
             bool canAllocateSize = size < RemainingMemorySize;
             return canAllocateSize;
         }
+
         public Pointer AllocateMemory(int size)
         {
             if (CanAllocateSize(size))
@@ -84,12 +87,14 @@ namespace GameCube.GFZ.LineREL
                 return Pointer.Null;
             }
         }
+
         public Pointer AllocateMemory(int size, int alignment)
         {
             int alignedSize = GetAlignedSize(size, alignment);
             Pointer pointer = AllocateMemory(alignedSize);
             return pointer;
         }
+
         public Pointer AllocateMemoryWithError(int size)
         {
             Pointer pointer = AllocateMemory(size);
@@ -102,6 +107,7 @@ namespace GameCube.GFZ.LineREL
 
             return pointer;
         }
+
         public Pointer AllocateMemoryWithError(int size, int alignment)
         {
             int alignedSize = GetAlignedSize(size, alignment);

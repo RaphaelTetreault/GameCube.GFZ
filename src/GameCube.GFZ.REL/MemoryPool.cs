@@ -15,11 +15,24 @@ namespace GameCube.GFZ.LineREL
             MemoryAreas.AddRange(memoryAreas);
         }
 
-        //public bool CanAllocateSize(int size)
-        //{
-        //    bool canAllocateSize = size < RemainingMemorySize();
-        //    return canAllocateSize;
-        //}
+        public bool CanAllocateSize(int size)
+        {
+            // Find largest contiguous size that can be allocated
+            int maxContiguousSize = 0;
+            foreach (MemoryArea memoryArea in MemoryAreas)
+            {
+                bool isLarger = memoryArea.RemainingMemorySize > maxContiguousSize;
+                if (isLarger)
+                {
+                    maxContiguousSize = memoryArea.RemainingMemorySize;
+                }
+            }
+
+            // See if size fits in it
+            bool canAllocateSize = size <= maxContiguousSize;
+            return canAllocateSize;
+        }
+
         public Pointer AllocateMemory(int size, int alignment = 0)
         {
             foreach (MemoryArea memoryArea in MemoryAreas)
@@ -35,6 +48,7 @@ namespace GameCube.GFZ.LineREL
             // If it fails, return null
             return Pointer.Null;
         }
+
         public Pointer AllocateMemoryWithError(int size, int alignment = 0)
         {
             Pointer pointer = AllocateMemory(size, alignment);
@@ -55,6 +69,7 @@ namespace GameCube.GFZ.LineREL
                 size += memoryArea.MemorySize;
             return size;
         }
+
         public int RemainingMemorySize()
         {
             int remainingMemory = 0;
