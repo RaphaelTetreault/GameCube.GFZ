@@ -11,7 +11,7 @@ namespace GameCube.GFZ.CarData
     public class CarData :
         IBinarySerializable,
         IBinaryFileType,
-        ITableSerializable
+        ITableCollectionSerializable
     {
         // CONSTANTS
         // Numbers of things
@@ -550,12 +550,12 @@ namespace GameCube.GFZ.CarData
 
 
 
-        public void Deserialize(TableCollection tableCollection)
+        public void GetTables(TableCollection tableCollection)
         {
             throw new NotImplementedException();
         }
 
-        public void Serialize(TableCollection tableCollection)
+        public void AddToTables(TableCollection tableCollection)
         {
             Table machineTable = new Table()
             {
@@ -564,14 +564,21 @@ namespace GameCube.GFZ.CarData
                 RowHeadersCount = 1,
             };
             tableCollection.Add(machineTable);
-            tableCollection.SetCurrentTable("Machines");
+            //tableCollection.SetCurrentTable("Machines");
 
-            machineTable.SetHeaderRow(0, Machines[0].GetHeaders());
-            machineTable.SetHeaderColumn(0, MachineNamesTable.Reverse().Cast<string>().ToArray());
+            // Set machines names in column
+            machineTable.SetCell(0, 0, "Machine Names");
+            string[] machineNames = MachineNamesTable.Reverse().ToArray().AsStringArray();
+            machineTable.SetColumn(0, machineNames, 1);
+            // Set headers for all columns
+            string[] machineAttributes = Machines[0].GetHeaders();
+            machineTable.SetRow(0, machineAttributes, 1);
+            //
+            machineTable.ResetActiveCell();
             foreach (var machine in Machines)
             {
-                machine.Serialize(tableCollection);
-                machineTable.SetNextLine();
+                machine.WriteCells(machineTable);
+                machineTable.LineFeed();
             }
         }
 

@@ -126,9 +126,8 @@ namespace GameCube.GFZ.CarData
             this.RecordEndAddress(reader);
         }
 
-        public void Deserialize(TableCollection tableCollection)
+        public void ReadCells(Table table)
         {
-            Table table = tableCollection.CurrentTable;
             table.GetNext(ref weight);
             table.GetNext(ref acceleration);
             table.GetNext(ref maxSpeed);
@@ -269,55 +268,54 @@ namespace GameCube.GFZ.CarData
             this.RecordEndAddress(writer);
         }
 
-        public void Serialize(TableCollection tableCollection)
+        public void WriteCells(Table table)
         {
-            Table table = tableCollection.CurrentTable;
-            table.SetNext(weight);
-            table.SetNext(acceleration);
-            table.SetNext(maxSpeed);
-            table.SetNext(grip1);
-            table.SetNext(grip3);
-            table.SetNext(turnTension);
-            table.SetNext(driftAcceleration);
-            table.SetNext(turnMovement);
-            table.SetNext(strafeTurn);
-            table.SetNext(strafe);
-            table.SetNext(turnReaction);
-            table.SetNext(grip2);
-            table.SetNext(boostStrength);
-            table.SetNext(boostDuration);
-            table.SetNext(turnDeceleration);
-            table.SetNext(drag);
-            table.SetNext(body);
-            table.SetNext(unk_0x48);
-            table.SetNext(unk_0x49);
-            table.SetNext(zero_0x4A);
-            table.SetNext(cameraReorientation);
-            table.SetNext(cameraRepositioning);
-            table.SetNext(tiltFrontRight.x);
-            table.SetNext(tiltFrontRight.y);
-            table.SetNext(tiltFrontRight.z);
-            table.SetNext(tiltFrontLeft.x);
-            table.SetNext(tiltFrontLeft.y);
-            table.SetNext(tiltFrontLeft.z);
-            table.SetNext(tiltBackRight.x);
-            table.SetNext(tiltBackRight.y);
-            table.SetNext(tiltBackRight.z);
-            table.SetNext(tiltBackLeft.x);
-            table.SetNext(tiltBackLeft.y);
-            table.SetNext(tiltBackLeft.z);
-            table.SetNext(wallCollisionFrontRight.x);
-            table.SetNext(wallCollisionFrontRight.y);
-            table.SetNext(wallCollisionFrontRight.z);
-            table.SetNext(wallCollisionFrontLeft.x);
-            table.SetNext(wallCollisionFrontLeft.y);
-            table.SetNext(wallCollisionFrontLeft.z);
-            table.SetNext(wallCollisionBackRight.x);
-            table.SetNext(wallCollisionBackRight.y);
-            table.SetNext(wallCollisionBackRight.z);
-            table.SetNext(wallCollisionBackLeft.x);
-            table.SetNext(wallCollisionBackLeft.y);
-            table.SetNext(wallCollisionBackLeft.z);
+            table.SetNextCell(weight);
+            table.SetNextCell(acceleration);
+            table.SetNextCell(maxSpeed);
+            table.SetNextCell(grip1);
+            table.SetNextCell(grip3);
+            table.SetNextCell(turnTension);
+            table.SetNextCell(driftAcceleration);
+            table.SetNextCell(turnMovement);
+            table.SetNextCell(strafeTurn);
+            table.SetNextCell(strafe);
+            table.SetNextCell(turnReaction);
+            table.SetNextCell(grip2);
+            table.SetNextCell(boostStrength);
+            table.SetNextCell(boostDuration);
+            table.SetNextCell(turnDeceleration);
+            table.SetNextCell(drag);
+            table.SetNextCell(body);
+            table.SetNextCell(unk_0x48);
+            table.SetNextCell(unk_0x49);
+            table.SetNextCell(zero_0x4A);
+            table.SetNextCell(cameraReorientation);
+            table.SetNextCell(cameraRepositioning);
+            table.SetNextCell(tiltFrontRight.x);
+            table.SetNextCell(tiltFrontRight.y);
+            table.SetNextCell(tiltFrontRight.z);
+            table.SetNextCell(tiltFrontLeft.x);
+            table.SetNextCell(tiltFrontLeft.y);
+            table.SetNextCell(tiltFrontLeft.z);
+            table.SetNextCell(tiltBackRight.x);
+            table.SetNextCell(tiltBackRight.y);
+            table.SetNextCell(tiltBackRight.z);
+            table.SetNextCell(tiltBackLeft.x);
+            table.SetNextCell(tiltBackLeft.y);
+            table.SetNextCell(tiltBackLeft.z);
+            table.SetNextCell(wallCollisionFrontRight.x);
+            table.SetNextCell(wallCollisionFrontRight.y);
+            table.SetNextCell(wallCollisionFrontRight.z);
+            table.SetNextCell(wallCollisionFrontLeft.x);
+            table.SetNextCell(wallCollisionFrontLeft.y);
+            table.SetNextCell(wallCollisionFrontLeft.z);
+            table.SetNextCell(wallCollisionBackRight.x);
+            table.SetNextCell(wallCollisionBackRight.y);
+            table.SetNextCell(wallCollisionBackRight.z);
+            table.SetNextCell(wallCollisionBackLeft.x);
+            table.SetNextCell(wallCollisionBackLeft.y);
+            table.SetNextCell(wallCollisionBackLeft.z);
         }
     }
 }
