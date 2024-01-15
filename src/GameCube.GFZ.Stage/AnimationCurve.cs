@@ -30,7 +30,7 @@ namespace GameCube.GFZ.Stage
         {
             keyableAttributes = new KeyableAttribute[numKeyables];
         }
-        public AnimationCurve(KeyableAttribute[] keyables)
+        public AnimationCurve(params KeyableAttribute[] keyables)
         {
             keyableAttributes = keyables;
         }
