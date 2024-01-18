@@ -303,244 +303,6 @@ namespace GameCube.GFZ.CarData
             writer.Write(DigitsPadding);
         }
 
-        public void Deserialize(StreamReader reader)
-        {
-            Machines = new VehicleParameters[MachineCount];
-            BodyParts = new VehicleParameters[BodyCount];
-            CockpitParts = new VehicleParameters[CockpitCount];
-            BoosterParts = new VehicleParameters[BoosterCount];
-
-            var lines = reader.ReadToEnd().Split('\n');
-            int currIndex = 2; // skip 2 lines
-
-            // MACHINES
-            for (int i = 0; i < Machines.Length; i++)
-                Machines[i] = ReadVehicleParameters(lines[currIndex++]);
-
-            // BODY
-            currIndex += 3;
-            for (int i = 0; i < BodyParts.Length; i++)
-                BodyParts[i] = ReadVehicleParameters(lines[currIndex++]);
-            // COCKPIT
-            currIndex += 3;
-            for (int i = 0; i < CockpitParts.Length; i++)
-                CockpitParts[i] = ReadVehicleParameters(lines[currIndex++]);
-            // BOOSTER
-            currIndex += 3;
-            for (int i = 0; i < BoosterParts.Length; i++)
-                BoosterParts[i] = ReadVehicleParameters(lines[currIndex++]);
-
-            // NAMES
-            // My TSV format stores the name as the first entry
-            machineNames = new ShiftJisCString[Machines.Length];
-            for (int i = 0; i < Machines.Length; i++)
-                machineNames[i] = Machines[i].RuntimeName;
-
-            // Default
-            partsInternalNames = InternalPartNamesTable;
-        }
-
-        public void Serialize(StreamWriter writer)
-        {
-            writer.WriteLine("Machines");
-            WriteHeadings(writer);
-            for (int i = 0; i < Machines.Length; i++)
-                WriteMachineParameters(writer, Machines[i], i);
-            writer.WriteLine();
-
-            writer.WriteLine("Body Parts");
-            WriteHeadings(writer);
-            for (int i = 0; i < BodyParts.Length; i++)
-                WriteMachineParameters(writer, BodyParts[i], i);
-            writer.WriteLine();
-
-            writer.WriteLine("Cockpit Parts");
-            WriteHeadings(writer);
-            for (int i = 0; i < CockpitParts.Length; i++)
-                WriteMachineParameters(writer, CockpitParts[i], i);
-            writer.WriteLine();
-
-            writer.WriteLine("Booster Parts");
-            WriteHeadings(writer);
-            for (int i = 0; i < BoosterParts.Length; i++)
-                WriteMachineParameters(writer, BoosterParts[i], i);
-            writer.WriteLine();
-        }
-
-        public void WriteHeadings(StreamWriter writer)
-        {
-            writer.WriteNextCol(nameof(VehicleParameters.RuntimeName));
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol(nameof(VehicleParameters.Weight));
-            writer.WriteNextCol(nameof(VehicleParameters.Acceleration));
-            writer.WriteNextCol(nameof(VehicleParameters.MaxSpeed));
-            writer.WriteNextCol(nameof(VehicleParameters.Grip1));
-            writer.WriteNextCol(nameof(VehicleParameters.Grip3));
-            writer.WriteNextCol(nameof(VehicleParameters.TurnTension));
-            writer.WriteNextCol(nameof(VehicleParameters.DriftAcceleration));
-            writer.WriteNextCol(nameof(VehicleParameters.TurnMovement));
-            writer.WriteNextCol(nameof(VehicleParameters.StrafeTurn));
-            writer.WriteNextCol(nameof(VehicleParameters.Strafe));
-            writer.WriteNextCol(nameof(VehicleParameters.TurnReaction));
-            writer.WriteNextCol(nameof(VehicleParameters.Grip2));
-            writer.WriteNextCol(nameof(VehicleParameters.BoostStrength));
-            writer.WriteNextCol(nameof(VehicleParameters.BoostDuration));
-            writer.WriteNextCol(nameof(VehicleParameters.TurnDeceleration));
-            writer.WriteNextCol(nameof(VehicleParameters.Drag));
-            writer.WriteNextCol(nameof(VehicleParameters.Body));
-            writer.WriteNextCol(nameof(VehicleParameters.Unk_0x48));
-            writer.WriteNextCol(nameof(VehicleParameters.Unk_0x49));
-            writer.WriteNextCol(nameof(VehicleParameters.Zero_0x4A));
-            writer.WriteNextCol(nameof(VehicleParameters.CameraReorientation));
-            writer.WriteNextCol(nameof(VehicleParameters.CameraRepositioning));
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontRight) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontRight) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontRight) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontLeft) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontLeft) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltFrontLeft) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackRight) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackRight) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackRight) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackLeft) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackLeft) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.TiltBackLeft) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontRight) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontRight) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontRight) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontLeft) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontLeft) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionFrontLeft) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackRight) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackRight) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackRight) + ".z");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackLeft) + ".x");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackLeft) + ".y");
-            writer.WriteNextCol(nameof(VehicleParameters.WallCollisionBackLeft) + ".z");
-            writer.WriteNextRow();
-        }
-        public void WriteMachineParameters(StreamWriter writer, VehicleParameters parameters, int index)
-        {
-            string name = parameters.RuntimeName == null ? "null" : parameters.RuntimeName;
-
-            writer.WriteNextCol(name);
-            writer.WriteNextCol(index);
-            writer.WriteNextCol(parameters.Weight);
-            writer.WriteNextCol(parameters.Acceleration);
-            writer.WriteNextCol(parameters.MaxSpeed);
-            writer.WriteNextCol(parameters.Grip1);
-            writer.WriteNextCol(parameters.Grip3);
-            writer.WriteNextCol(parameters.TurnTension);
-            writer.WriteNextCol(parameters.DriftAcceleration);
-            writer.WriteNextCol(parameters.TurnMovement);
-            writer.WriteNextCol(parameters.StrafeTurn);
-            writer.WriteNextCol(parameters.Strafe);
-            writer.WriteNextCol(parameters.TurnReaction);
-            writer.WriteNextCol(parameters.Grip2);
-            writer.WriteNextCol(parameters.BoostStrength);
-            writer.WriteNextCol(parameters.BoostDuration);
-            writer.WriteNextCol(parameters.TurnDeceleration);
-            writer.WriteNextCol(parameters.Drag);
-            writer.WriteNextCol(parameters.Body);
-            writer.WriteNextCol((int)parameters.Unk_0x48);
-            writer.WriteNextCol((int)parameters.Unk_0x49);
-            writer.WriteNextCol(parameters.Zero_0x4A);
-            writer.WriteNextCol(parameters.CameraReorientation);
-            writer.WriteNextCol(parameters.CameraRepositioning);
-            writer.WriteNextCol(parameters.TiltFrontRight.x);
-            writer.WriteNextCol(parameters.TiltFrontRight.y);
-            writer.WriteNextCol(parameters.TiltFrontRight.z);
-            writer.WriteNextCol(parameters.TiltFrontLeft.x);
-            writer.WriteNextCol(parameters.TiltFrontLeft.y);
-            writer.WriteNextCol(parameters.TiltFrontLeft.z);
-            writer.WriteNextCol(parameters.TiltBackRight.x);
-            writer.WriteNextCol(parameters.TiltBackRight.y);
-            writer.WriteNextCol(parameters.TiltBackRight.z);
-            writer.WriteNextCol(parameters.TiltBackLeft.x);
-            writer.WriteNextCol(parameters.TiltBackLeft.y);
-            writer.WriteNextCol(parameters.TiltBackLeft.z);
-            writer.WriteNextCol(parameters.WallCollisionFrontRight.x);
-            writer.WriteNextCol(parameters.WallCollisionFrontRight.y);
-            writer.WriteNextCol(parameters.WallCollisionFrontRight.z);
-            writer.WriteNextCol(parameters.WallCollisionFrontLeft.x);
-            writer.WriteNextCol(parameters.WallCollisionFrontLeft.y);
-            writer.WriteNextCol(parameters.WallCollisionFrontLeft.z);
-            writer.WriteNextCol(parameters.WallCollisionBackRight.x);
-            writer.WriteNextCol(parameters.WallCollisionBackRight.y);
-            writer.WriteNextCol(parameters.WallCollisionBackRight.z);
-            writer.WriteNextCol(parameters.WallCollisionBackLeft.x);
-            writer.WriteNextCol(parameters.WallCollisionBackLeft.y);
-            writer.WriteNextCol(parameters.WallCollisionBackLeft.z);
-            writer.WriteNextRow();
-        }
-        public VehicleParameters ReadVehicleParameters(string line)
-        {
-            VehicleParameters parameters = new VehicleParameters();
-            var cols = line.Split('\t');
-            int baseIndex = 0;
-
-            parameters.RuntimeName = ReadNextCol(line, ref baseIndex);
-            string index = ReadNextCol(line, ref baseIndex);
-            parameters.Weight = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Acceleration = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.MaxSpeed = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Grip1 = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Grip3 = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.TurnTension = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.DriftAcceleration = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.TurnMovement = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.StrafeTurn = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Strafe = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.TurnReaction = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Grip2 = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.BoostStrength = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.BoostDuration = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.TurnDeceleration = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Drag = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Body = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Unk_0x48 = (CarDataFlags0x48)int.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Unk_0x49 = (CarDataFlags0x49)int.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.Zero_0x4A = (ushort)int.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.CameraReorientation = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.CameraRepositioning = float.Parse(ReadNextCol(line, ref baseIndex));
-            parameters.TiltFrontRight = ParseFloat3(line, ref baseIndex);
-            parameters.TiltFrontLeft = ParseFloat3(line, ref baseIndex);
-            parameters.TiltBackRight = ParseFloat3(line, ref baseIndex);
-            parameters.TiltBackLeft = ParseFloat3(line, ref baseIndex);
-            parameters.WallCollisionFrontRight = ParseFloat3(line, ref baseIndex);
-            parameters.WallCollisionFrontLeft = ParseFloat3(line, ref baseIndex);
-            parameters.WallCollisionBackRight = ParseFloat3(line, ref baseIndex);
-            parameters.WallCollisionBackLeft = ParseFloat3(line, ref baseIndex);
-
-            return parameters;
-        }
-
-        public float3 ParseFloat3(string line, ref int baseIndex)
-        {
-            float x = float.Parse(ReadNextCol(line, ref baseIndex));
-            float y = float.Parse(ReadNextCol(line, ref baseIndex));
-            float z = float.Parse(ReadNextCol(line, ref baseIndex));
-            float3 value = new float3(x, y, z);
-            return value;
-        }
-
-        public string ReadNextCol(string line, ref int baseIndex)
-        {
-            // read column string length
-            int stringLength = 0;
-            for (int i = baseIndex; i < line.Length; i++)
-            {
-                char c = line[i];
-                if (c == '\t' || c == '\n')
-                    break;
-                stringLength++;
-            }
-
-            string str = line.Substring(baseIndex, stringLength);
-            baseIndex += stringLength + 1;
-            return str;
-        }
-
         public void SkipPadding(EndianBinaryReader reader, byte[] padding)
         {
             foreach (var @byte in padding)
@@ -548,40 +310,69 @@ namespace GameCube.GFZ.CarData
         }
 
 
+        // TODO: replace instances of this function with new table serialization
+        public void Deserialize(StreamReader reader)
+        {
+            throw new NotFiniteNumberException();
+        }
 
-
-        public void GetTables(TableCollection tableCollection)
+        public void FromTables(TableCollection tableCollection)
         {
             throw new NotImplementedException();
         }
 
-        public void AddToTables(TableCollection tableCollection)
+        public void ToTables(TableCollection tableCollection)
         {
-            Table machineTable = new Table()
-            {
-                Name = "Machines",
-                ColumnHeadersCount = 1,
-                RowHeadersCount = 1,
-            };
-            tableCollection.Add(machineTable);
-            //tableCollection.SetCurrentTable("Machines");
-
-            // Set machines names in column
-            machineTable.SetCell(0, 0, "Machine Names");
-            string[] machineNames = MachineNamesTable.Reverse().ToArray().AsStringArray();
-            machineTable.SetColumn(0, machineNames, 1);
-            // Set headers for all columns
-            string[] machineAttributes = Machines[0].GetHeaders();
-            machineTable.SetRow(0, machineAttributes, 1);
-            //
-            machineTable.ResetActiveCell();
-            foreach (var machine in Machines)
-            {
-                machine.WriteCells(machineTable);
-                machineTable.LineFeed();
-            }
+            Table[] tables = CreateTables();
+            tableCollection.Add(tables);
         }
 
+        public Table[] CreateTables()
+        {
+            string[] headers = Machines[0].GetHeaders();
+            string[] machineNames = MachineNamesTable.Reverse().ToArray().AsStringArray();
+            string[] bodyNames = Enum.GetNames<CustomBodyPartName>();
+            string[] cockpitNames = Enum.GetNames<CustomCockpitPartName>();
+            string[] boosterNames = Enum.GetNames<CustomBoosterPartName>();
+
+            Table[] tables = new Table[4]
+            {
+                CreateTable("Machine Name", headers, machineNames, Machines),
+                CreateTable("Body Name", headers, bodyNames, BodyParts),
+                CreateTable("Cockpit Name", headers, cockpitNames, CockpitParts),
+                CreateTable("Booster Name", headers, boosterNames, BoosterParts),
+            };
+            return tables;
+        }
+
+        private static Table CreateTable(string rowColHeader, string[] headers, string[] names, VehicleParameters[] vehicleParameters)
+        {
+            bool isValidLengths = names.Length == vehicleParameters.Length;
+            if (!isValidLengths)
+            {
+                throw new Exception();
+            }
+
+            Table table = new Table();
+
+            // Set headers, row headers
+            table.SetCell(0, 0, rowColHeader);
+            table.SetRow(0, headers, 1);
+            table.SetColumn(0, names, 1);
+
+            // Set each value
+            table.ResetActiveCell();
+            foreach (var vehicleParameter in vehicleParameters)
+            {
+                vehicleParameter.WriteCells(table);
+                table.LineFeed();
+            }
+
+            return table;
+        }
+
+
+        // Need a distinct interface for table "root"
         public string[] GetHeaders() => Array.Empty<string>();
     }
 }
