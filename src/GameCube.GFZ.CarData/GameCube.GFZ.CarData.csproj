@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO.UnityMath\Manifold.IO.UnityMath.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.Text.Tables\Manifold.Text.Tables.csproj" />
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
     <ProjectReference Include="..\..\..\Unity.Mathematics\src\Unity.Mathematics\Unity.Mathematics.csproj" />
     <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
