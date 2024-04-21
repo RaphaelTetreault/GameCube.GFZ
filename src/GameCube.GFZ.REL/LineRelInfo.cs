@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameCube.GFZ.LineREL
 {
-    public abstract class LineInformation
+    public abstract class LineRelInfo
     {
         public virtual Endianness Endianness => Endianness.BigEndian;
 
