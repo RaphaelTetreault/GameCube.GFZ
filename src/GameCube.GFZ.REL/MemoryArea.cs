@@ -1,4 +1,5 @@
 ﻿using Manifold.IO;
+using System.IO;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -42,6 +43,28 @@ namespace GameCube.GFZ.LineREL
         }
 
 
+        /// Returns the length required to align stream to alignment
+        /// name="stream">The stream to base alignment length from.
+        /// name="alignment">The alignment stride.
+        public static int GetLengthOfAlignment(MemoryArea memoryArea, int alignment)
+        {
+            // Skip cases where no alignment is needed
+            if (alignment < 2)
+                return 0;
+
+            // Get number of bytes needed to aligment
+            int bytesToPad = alignment - (memoryArea.CurrentAddress % alignment);
+            // If bytes to pad is alignment size, then no bytes to pad
+            int finalAlignment = (bytesToPad == alignment) ? 0 : bytesToPad;
+            return finalAlignment;
+        }
+
+        public int GetAlignedSize(int size, int alignment)
+        {
+            int bytesToPad = GetLengthOfAlignment(this, alignment);
+            int alignedSize = size + bytesToPad;
+            return alignedSize;
+        }
         public bool CanAllocateSize(int size)
         {
             bool canAllocateSize = size < RemainingMemorySize;
@@ -58,8 +81,14 @@ namespace GameCube.GFZ.LineREL
             }
             else
             {
-                return 0;
+                return Pointer.Null;
             }
+        }
+        public Pointer AllocateMemory(int size, int alignment)
+        {
+            int alignedSize = GetAlignedSize(size, alignment);
+            Pointer pointer = AllocateMemory(alignedSize);
+            return pointer;
         }
         public Pointer AllocateMemoryWithError(int size)
         {
@@ -71,6 +100,12 @@ namespace GameCube.GFZ.LineREL
                 throw new System.InsufficientMemoryException();
             }
 
+            return pointer;
+        }
+        public Pointer AllocateMemoryWithError(int size, int alignment)
+        {
+            int alignedSize = GetAlignedSize(size, alignment);
+            Pointer pointer = AllocateMemoryWithError(alignedSize);
             return pointer;
         }
 

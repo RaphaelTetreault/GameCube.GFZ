@@ -12,7 +12,7 @@ namespace GameCube.GFZ.LineREL
         public MainDolDataBlocksGfzj8p()
         {
             CourseNameAreas.Add(new CustomizableArea(CourseNamesEnglish.Address, CourseNamesEnglish.Size));
-            CourseNameAreas.Add(new CustomizableArea(CourseNamesTranslations.Address, CourseNamesTranslations.Size));
+            CourseNameAreas.Add(new CustomizableArea(CourseNamesLocalizations.Address, CourseNamesLocalizations.Size));
         }
 
         // TODO: const for file hash
@@ -21,10 +21,11 @@ namespace GameCube.GFZ.LineREL
         public override string SourceFile => "../sys/main.dol"; //...?
         public override string WorkingFile => "../sys/main.dol";
         public override string FileHashMD5 => throw new System.NotImplementedException();
-        public override DataBlock VenueNames => new DataBlock(0x21AE54, 0x8C);
+        public override DataBlock VenueNamesEnglish => new DataBlock(0x21AE54, 0x8C);
+        public override DataBlock VenueNamesJapanese => throw new System.NotImplementedException();
         public override DataBlock SlotVenueDefinitions => new DataBlock(0x21B3EC, 111);
         public override DataBlock CourseNamesEnglish => new DataBlock(0x21B474, 0x140);
-        public override DataBlock CourseNamesTranslations => new DataBlock(0x21B770, 0x8D8);
+        public override DataBlock CourseNamesLocalizations => new DataBlock(0x21B770, 0x8D8);
         public override DataBlock CourseSlotDifficulty => throw new System.NotImplementedException("This is absent from the AX version");
         public override DataBlock CourseSlotBgm => new DataBlock(0x20E3F0, 56);
         public override DataBlock CourseSlotBgmFinalLap => new DataBlock(0x20E484, 184);
@@ -35,7 +36,7 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseMinimapParameterStructs => new DataBlock(0, 0x508);
         public override DataBlock ForbiddenWords => throw new System.NotImplementedException("This is absent from the AX version");
         public override DataBlock AxModeCourseTimers => new DataBlock(0x3390C8, 6);
-        public override int CourseNamesBaseAddress => 0;
+        public override Pointer StringTableBaseAddress => 0;
         public override List<CustomizableArea> CourseNameAreas => new List<CustomizableArea>();
         public override DataBlock PilotPositions => new DataBlock(0x230004, 0x210);
         public override DataBlock PilotToMachineLut => new DataBlock(0x20FAC0, 0xA4);
