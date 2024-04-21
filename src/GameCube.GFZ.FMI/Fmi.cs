@@ -116,7 +116,7 @@ namespace GameCube.GFZ.FMI
             while (!reader.IsArrayEndMarker())
             {
                 // Get param name
-                names.Add(reader.ReadLineValue());
+                names.Add(reader.ReadValue());
                 // Get param position
                 var position = new FmiPosition();
                 position.Deserialize(reader);

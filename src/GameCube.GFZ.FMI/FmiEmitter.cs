@@ -35,9 +35,9 @@ namespace GameCube.GFZ.FMI
         ///     Target offset position to point emitter towards relative to emitter position.
         /// </summary>
         public float3 TargetOffset { get => targetOffset; set => targetOffset = value; }
-        public float ScaleMax { get => scale; set => scale = value; }
-        public FmiColorRGB ColorMin { get => accelColor; set => accelColor = value; }
-        public FmiColorRGB ColorMax { get => boostColor; set => boostColor = value; }
+        public float Scale { get => scale; set => scale = value; }
+        public FmiColorRGB AccelColor { get => accelColor; set => accelColor = value; }
+        public FmiColorRGB BoostColor { get => boostColor; set => boostColor = value; }
 
 
         // METHODS
@@ -60,19 +60,19 @@ namespace GameCube.GFZ.FMI
 
         public void Deserialize(PlainTextReader reader)
         {
-            reader.ReadLineValue(ref position.x);
-            reader.ReadLineValue(ref position.y);
-            reader.ReadLineValue(ref position.z);
-            reader.ReadLineValue(ref targetOffset.x);
-            reader.ReadLineValue(ref targetOffset.y);
-            reader.ReadLineValue(ref targetOffset.z);
-            reader.ReadLineValue(ref scale);
-            reader.ReadLineValue(ref accelColor.r);
-            reader.ReadLineValue(ref accelColor.g);
-            reader.ReadLineValue(ref accelColor.b);
-            reader.ReadLineValue(ref boostColor.r);
-            reader.ReadLineValue(ref boostColor.g);
-            reader.ReadLineValue(ref boostColor.b);
+            reader.ReadValue(ref position.x);
+            reader.ReadValue(ref position.y);
+            reader.ReadValue(ref position.z);
+            reader.ReadValue(ref targetOffset.x);
+            reader.ReadValue(ref targetOffset.y);
+            reader.ReadValue(ref targetOffset.z);
+            reader.ReadValue(ref scale);
+            reader.ReadValue(ref accelColor.r);
+            reader.ReadValue(ref accelColor.g);
+            reader.ReadValue(ref accelColor.b);
+            reader.ReadValue(ref boostColor.r);
+            reader.ReadValue(ref boostColor.g);
+            reader.ReadValue(ref boostColor.b);
         }
 
         public void Serialize(EndianBinaryWriter writer)
