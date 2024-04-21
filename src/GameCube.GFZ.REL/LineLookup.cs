@@ -5,7 +5,7 @@ namespace GameCube.GFZ.LineREL
     /// </summary>
     public static class LineLookup
     {
-        public static LineRelInfo GFZE01 => new LineInfoGfze01();
+        public static LineRelInfo GFZE01 => new LineRelInfoGfze01();
         public static LineRelInfo GFZJ01 => new LineRelInfoGfzj01();
         public static LineRelInfo GFZP01 => new LineRelInfoGfzp01();
         public static LineRelInfo GFZJ8P => new LineRelInfoGfzj8p();
