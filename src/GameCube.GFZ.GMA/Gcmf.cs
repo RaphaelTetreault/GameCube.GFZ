@@ -202,13 +202,14 @@ namespace GameCube.GFZ.GMA
                             // Kinda hacky, but it works. Read so long as the first int32 of the type is 
                             // non-zero AND fits in a byte (matrix indexes are a single byte). This has been 
                             // checked to work (no non-zero data unread from any file) since that first int of
-                            // the type (which is the count) must be none zero to declare the array's size.
+                            // the type (which is the count) must be non-zero to declare the array's size.
                             //
                             // Basically, what we want is to read so long as the 32bit value is not zero but
-                            // also between 0-256 (8-bit non-zero).
+                            // also between 0-256 (8-bit non-zero). Other unrelated data might be present after,
+                            // and in those cases will use the 32bits (be zero or greater than 255).
                             //
                             // To do this with a single Peek call, we have to handle the case of 0 correctly.
-                            // If we subtract 0 with 1, 0 underflows and becomes an invalid index -1. To check if a max
+                            // If we subtract 1 from 0, 0 underflows and becomes an invalid index -1. To check if a max
                             // index of 255 is valid (which is now 254 due to the -1), we check for less than 255.
                             var peekValue = reader.PeekUInt();
                             hasSkinBoneBinding = unchecked(peekValue - 1) < byte.MaxValue;
