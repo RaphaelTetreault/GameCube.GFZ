@@ -9,8 +9,8 @@ namespace GameCube.GFZ.LineREL
         public const int Size = sizeof(LetterRating) * 3;
 
         public LetterRating body;
-        public LetterRating cockpit;
-        public LetterRating booster;
+        public LetterRating boost;
+        public LetterRating grip;
 
         public VehicleRating()
         {
@@ -19,8 +19,8 @@ namespace GameCube.GFZ.LineREL
         {
             VehicleRating temp = FromString(value);
             body = temp.body;
-            cockpit = temp.cockpit;
-            booster = temp.booster;
+            boost = temp.boost;
+            grip = temp.grip;
         }
 
         public static VehicleRating FromString(string rating)
@@ -40,8 +40,8 @@ namespace GameCube.GFZ.LineREL
             VehicleRating value = new VehicleRating
             {
                 body = FromChar(rating[0]),
-                cockpit = FromChar(rating[1]),
-                booster = FromChar(rating[2]),
+                boost = FromChar(rating[1]),
+                grip = FromChar(rating[2]),
             };
             return value;
         }
@@ -73,15 +73,15 @@ namespace GameCube.GFZ.LineREL
         public void Deserialize(EndianBinaryReader reader)
         {
             reader.Read(ref body);
-            reader.Read(ref cockpit);
-            reader.Read(ref booster);
+            reader.Read(ref boost);
+            reader.Read(ref grip);
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             writer.Write(body);
-            writer.Write(cockpit);
-            writer.Write(booster);
+            writer.Write(boost);
+            writer.Write(grip);
         }
     }
 }
