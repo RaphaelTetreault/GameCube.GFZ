@@ -8,7 +8,7 @@
         renderObject3pSplitScreen = 1 << 2,
         renderObject4pSplitScreen = 1 << 3,
         unk_AlphaBlendMode = 1 << 4,
-        unk_5 = 1 << 5,
+        unk_5 = 1 << 5, // disabled in track preview?
         unk_HideObject1 = 1 << 6,
         unk_HideObject2 = 1 << 7,
         renderAsBillboard = 1 << 8,
