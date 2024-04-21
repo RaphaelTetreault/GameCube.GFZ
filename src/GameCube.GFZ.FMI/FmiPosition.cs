@@ -63,7 +63,7 @@ namespace GameCube.GFZ.FMI
             writer.WriteLineValue(nameof(position) + ".Y", position.y);
             writer.WriteLineValue(nameof(position) + ".Z", position.z);
             writer.WriteLineValue(nameof(positionType), positionType);
-            writer.WriteLineComment($"{positionType} is value {(uint)PositionType}");
+            writer.WriteLineComment($"{positionType} is value {(uint)PositionType} 0x{(uint)positionType:x8}");
         }
     }
 }
