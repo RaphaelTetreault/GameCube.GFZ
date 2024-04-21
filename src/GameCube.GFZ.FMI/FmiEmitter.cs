@@ -1,20 +1,19 @@
 ﻿using GameCube.GX;
 using Manifold.IO;
 using System;
-using System.IO;
 using Unity.Mathematics;
 
 namespace GameCube.GFZ.FMI
 {
     [Serializable]
-    public class ExhaustParticle :
+    public class FmiEmitter :
         IBinarySerializable,
         IBinaryAddressable
     {
         // FIELDS
         public float3 position;
-        public uint unk_0x0C;
-        public uint unk_0x10;
+        public float specialFlagsData_0x0C; // has to do with special flags in FmiType
+        public float specialFlagsData_0x10; // has to do with special flags in FmiType
         public float scaleMin;
         public float scaleMax;
         // Engine Color of Normal Acceleration
@@ -33,8 +32,8 @@ namespace GameCube.GFZ.FMI
             this.RecordStartAddress(reader);
             {
                 reader.Read(ref position);
-                reader.Read(ref unk_0x0C);
-                reader.Read(ref unk_0x10);
+                reader.Read(ref specialFlagsData_0x0C);
+                reader.Read(ref specialFlagsData_0x10);
                 reader.Read(ref scaleMin);
                 reader.Read(ref scaleMax);
                 reader.Read(ref colorMin);
@@ -48,8 +47,8 @@ namespace GameCube.GFZ.FMI
             this.RecordStartAddress(writer);
             {
                 writer.Write(position);
-                writer.Write(unk_0x0C);
-                writer.Write(unk_0x10);
+                writer.Write(specialFlagsData_0x0C);
+                writer.Write(specialFlagsData_0x10);
                 writer.Write(scaleMin);
                 writer.Write(scaleMax);
                 writer.Write(colorMin);

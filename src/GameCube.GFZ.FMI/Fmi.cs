@@ -1,6 +1,5 @@
 ﻿using Manifold.IO;
 using System;
-using System.IO;
 
 namespace GameCube.GFZ.FMI
 {
@@ -8,32 +7,30 @@ namespace GameCube.GFZ.FMI
     public class Fmi :
         IBinaryAddressable,
         IBinarySerializable,
-        IFileType
+        IBinaryFileType
+        //IFileType
     {
         // CONSTANTS
-        private const long kParticlesAbsPtr = 0x0044;
-        private const long kAnimationAbsPtr = 0x0208;
-        private const long kNameAbsPtr = 0x02A0;
+        private const uint kParticlesAbsPtr = 0x0044;
+        private const uint kAnimationAbsPtr = 0x0208;
+        private const uint kAnimationNameAbsPtr = 0x02A0;
+        public const Endianness endianness = Endianness.BigEndian;
 
         // FIELDS
-        public byte unk_0x00;
-        public byte unk_0x01;
-        public byte animationCount;
+        public ushort zero_0x00;
+        public byte animationCount; 
         public byte exhaustCount;
-        public byte unk_0x04;
-        public float unk_0x05;
-        public byte unk_0x06;
-        public float unk_0x07;
-        public ushort unk_0x08;
+        public FmiUnknown unknown = new();
         // REFERENCES
-        public ExhaustParticle[] particles;
-        public ExhaustAnimation[] animations;
-
+        public FmiEmitter[] emitters = Array.Empty<FmiEmitter>();
+        public FmiPosition[] positions = Array.Empty<FmiPosition>();
+        public ShiftJisCString[] names = Array.Empty<ShiftJisCString>();
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public string FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
         public string FileExtension => ".fmi";
+        public Endianness Endianness => endianness;
 
 
         // METHODS
@@ -41,27 +38,34 @@ namespace GameCube.GFZ.FMI
         {
             this.RecordStartAddress(reader);
             {
-                reader.Read(ref unk_0x00);
-                reader.Read(ref unk_0x01);
+                reader.Read(ref zero_0x00);
                 reader.Read(ref animationCount);
                 reader.Read(ref exhaustCount);
-                reader.Read(ref unk_0x04);
-                reader.Read(ref unk_0x05);
-                reader.Read(ref unk_0x06);
-                reader.Read(ref unk_0x07);
-                reader.Read(ref unk_0x08);
+                reader.Read(ref unknown);
             }
             this.RecordEndAddress(reader);
             {
-                reader.BaseStream.Seek(kParticlesAbsPtr, SeekOrigin.Begin);
-                reader.Read(ref particles, animationCount);
+                bool hasExhaustEmitters = exhaustCount > 0;
+                if (hasExhaustEmitters)
+                {
+                    reader.JumpToAddress(kParticlesAbsPtr);
+                    reader.Read(ref emitters, animationCount);
+                }
 
-                reader.BaseStream.Seek(kAnimationAbsPtr, SeekOrigin.Begin);
-                reader.Read(ref animations, exhaustCount);
+                bool hasAnimations = animationCount > 0;
+                if (hasAnimations)
+                {
+                    reader.JumpToAddress(kAnimationAbsPtr);
+                    reader.Read(ref positions, animationCount);
 
-                // TODO: read names
+                    reader.JumpToAddress(kAnimationNameAbsPtr);
+                    reader.Read(ref names, animationCount);
+                }
             }
             this.SetReaderToEndAddress(reader);
+            {
+                Assert.IsTrue(zero_0x00 == 0);
+            }
         }
 
         public void Serialize(EndianBinaryWriter writer)
