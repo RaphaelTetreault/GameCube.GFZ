@@ -25,10 +25,10 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock CourseNamesEnglish { get; }
         public abstract DataBlock CourseNamesLocalizations { get; }
 
-        public abstract DataBlock SlotVenueDefinitions { get; }
-        public abstract DataBlock CourseSlotDifficulty { get; }
-        public abstract DataBlock CourseSlotBgm { get; }
-        public abstract DataBlock CourseSlotBgmFinalLap { get; }
+        public abstract DataBlock CourseVenueIndex { get; }
+        public abstract DataBlock CourseDifficulty { get; }
+        public abstract DataBlock CourseBgmIndex { get; }
+        public abstract DataBlock CourseBgmFinalLapIndex { get; }
         public abstract DataBlock CupCourseLut { get; }
         public abstract DataBlock CupCourseLutAssets { get; }
         public abstract DataBlock CupCourseLutUnk { get; }

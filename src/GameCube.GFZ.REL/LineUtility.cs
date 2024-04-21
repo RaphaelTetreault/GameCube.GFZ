@@ -249,7 +249,7 @@ namespace GameCube.GFZ.LineREL
                 throw new ArgumentException(msg);
             }
 
-            writer.JumpToAddress(lookup.CourseSlotBgm.Address + stageIndex);
+            writer.JumpToAddress(lookup.CourseBgmIndex.Address + stageIndex);
             writer.Write(bgmIndex);
         }
 
@@ -265,7 +265,7 @@ namespace GameCube.GFZ.LineREL
             }
 
             // Patch song
-            writer.JumpToAddress(lookup.CourseSlotBgmFinalLap.Address + stageIndex * 4);
+            writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + stageIndex * 4);
             writer.Write(bgmfl);
         }
         public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex)
@@ -292,7 +292,7 @@ namespace GameCube.GFZ.LineREL
                 throw new ArgumentException("Invalid Venue");
             }
 
-            writer.JumpToAddress(lookup.SlotVenueDefinitions.Address + (int)index);
+            writer.JumpToAddress(lookup.CourseVenueIndex.Address + (int)index);
             writer.Write((byte)venue);
         }
 
@@ -306,7 +306,7 @@ namespace GameCube.GFZ.LineREL
                 throw new ArgumentException("More than 24 stars cannot be displayed");
             }
 
-            writer.JumpToAddress(lookup.CourseSlotDifficulty.Address + (int)index);
+            writer.JumpToAddress(lookup.CourseDifficulty.Address + (int)index);
             writer.Write(difficulty);
         }
 
