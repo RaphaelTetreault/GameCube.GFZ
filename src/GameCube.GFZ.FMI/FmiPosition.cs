@@ -9,7 +9,7 @@ namespace GameCube.GFZ.FMI
     public class FmiPosition :
         IBinarySerializable,
         IBinaryAddressable,
-        ITextSerializable
+        IPlainTextSerializable
     {
         // FIELDS
         private float3 position;
@@ -38,9 +38,12 @@ namespace GameCube.GFZ.FMI
             }
         }
 
-        public void Deserialize(StreamReader reader)
+        public void Deserialize(PlainTextReader reader)
         {
-            throw new NotImplementedException();
+            reader.ReadLineValue(ref position.x);
+            reader.ReadLineValue(ref position.y);
+            reader.ReadLineValue(ref position.z);
+            reader.ReadLineValue(ref positionType);
         }
 
         public void Serialize(EndianBinaryWriter writer)
@@ -54,10 +57,13 @@ namespace GameCube.GFZ.FMI
             this.RecordEndAddress(writer);
         }
 
-        public void Serialize(StreamWriter writer)
+        public void Serialize(PlainTextWriter writer)
         {
-            writer.WriteLine($"{nameof(position)}: {position}");
-            writer.WriteLine($"{nameof(positionType)}: {positionType}");
+            writer.WriteLineValue(nameof(position) + ".X", position.x);
+            writer.WriteLineValue(nameof(position) + ".Y", position.y);
+            writer.WriteLineValue(nameof(position) + ".Z", position.z);
+            writer.WriteLineValue(nameof(positionType), positionType);
+            writer.WriteLineComment($"{positionType} is value {(uint)PositionType}");
         }
     }
 }
