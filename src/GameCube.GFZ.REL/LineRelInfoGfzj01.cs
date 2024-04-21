@@ -35,9 +35,9 @@ namespace GameCube.GFZ.LineREL
 
         // COURSE NAMES
         public override int CourseNameLanguages => 6;
-        public override ArrayPointer32 CourseNameOffsetsArrayPointer => new(0x1F2870, 666); // Where offsets to strings are
+        public override ArrayPointer32 CourseNameOffsets => new(0x1F286C, 666); // 
         public override DataBlock CourseNamesEnglish => new DataBlock(0x19523C, 0x15C); // English strings
-        public override DataBlock CourseNamesLocalizations => new DataBlock(0x195554, 0x8E0); // Other localization strings
+        public override DataBlock CourseNamesLocalizations => new DataBlock(0x19555C, 0x8D8); // Other localization strings
 
         public override DataBlock SlotVenueDefinitions => new DataBlock(0x1951B4, 111);
         public override DataBlock CourseSlotDifficulty => new DataBlock(0x165460, 111);
