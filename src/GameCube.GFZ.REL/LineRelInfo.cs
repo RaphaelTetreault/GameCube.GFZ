@@ -28,6 +28,10 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock CourseNamesLocalizations { get; }
 
         public abstract Pointer CarDataMachinesPtr { get; }
+        /// <summary>
+        ///     The letter ratings for machines. Eg: EAD, ACB, etc.
+        /// </summary>
+        public abstract Pointer MachineLetterRatingsPtr { get; }
 
         public abstract DataBlock CourseVenueIndex { get; }         // done
         public abstract DataBlock CourseDifficulty { get; }         // done

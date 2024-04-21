@@ -37,6 +37,7 @@ namespace GameCube.GFZ.LineREL
         public override DataBlock CourseNamesLocalizations => new DataBlock(0x198A7C, 0x8D8);
 
         public override Pointer CarDataMachinesPtr => 0x195660;
+        public override Pointer MachineLetterRatingsPtr => 0x1AECB8;
 
         public override DataBlock CourseVenueIndex => new DataBlock(0x1986D4, 111);
         public override DataBlock CourseDifficulty => new DataBlock(0x168958, 111);
