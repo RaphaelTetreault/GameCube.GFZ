@@ -1,6 +1,6 @@
 ﻿using Manifold.IO;
 
-namespace GameCuibe.GFZ.GameData
+namespace GameCube.GFZ.GameData
 {
     public struct BgmFinalLap :
         IBinarySerializable

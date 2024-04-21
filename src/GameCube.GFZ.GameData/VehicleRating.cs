@@ -1,7 +1,6 @@
 ﻿using Manifold.IO;
-using System;
 
-namespace GameCube.GFZ.LineREL
+namespace GameCube.GFZ.GameData
 {
     public struct VehicleRating :
         IBinarySerializable

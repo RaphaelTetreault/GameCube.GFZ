@@ -1,4 +1,4 @@
-﻿namespace GameCube.GFZ.LineREL
+﻿namespace GameCube.GFZ.GameData
 {
     public enum LetterRating : uint
     {
