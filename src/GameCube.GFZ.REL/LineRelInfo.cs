@@ -43,7 +43,6 @@ namespace GameCube.GFZ.LineREL
         public abstract DataBlock CourseMinimapParameterStructs { get; } // for editor
         public abstract DataBlock ForbiddenWords { get; }           // 
         public abstract DataBlock AxModeCourseTimers { get; }       // 
-        public abstract List<CustomizableArea> CourseNameAreas { get; } // to deprecate?
         public abstract DataBlock PilotPositions { get; }           // 
         public abstract DataBlock PilotToMachineLut { get; }        //
 

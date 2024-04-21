@@ -187,39 +187,6 @@ namespace GameCube.GFZ.LineREL
                 throw new IndexOutOfRangeException($"Index must be between {minIndex} and {maxIndex}. ({index})");
         }
 
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineRelInfo lookup, int index, byte[] courseName)
-        {
-            ValidateStageIndex(index, GameDataConsts.MaxStageIndex);
-
-            int newLength = courseName.Length + 4 - (courseName.Length % 4);
-            byte[] courseNameExtended = new byte[newLength];
-            Buffer.BlockCopy(courseName, 0, courseNameExtended, 0, courseName.Length);
-
-            for (int i = 0; i < lookup.CourseNameAreas.Count; ++i)
-            {
-                if (lookup.CourseNameAreas[i].Occupied + newLength <= lookup.CourseNameAreas[i].Size)
-                {
-                    int nameAddress = lookup.CourseNameAreas[i].Occupied + lookup.CourseNameAreas[i].Address;
-                    writer.JumpToAddress(nameAddress);
-                    writer.Write(courseNameExtended);
-
-                    int indexAddress = lookup.CourseNameOffsets.address + (int)index * 0x30;
-                    writer.JumpToAddress(indexAddress);
-                    writer.Write(nameAddress - lookup.StringTableBaseAddress);
-
-                    lookup.CourseNameAreas[i].Occupied += newLength;
-                    return;
-                }
-            }
-
-            throw new System.IndexOutOfRangeException("No more free space for course names");
-        }
-        public static void PatchCustomCourseName(EndianBinaryWriter writer, LineRelInfo lookup, int index, CString courseName)
-        {
-            var bytes = courseName.Encoding.GetBytes(courseName);
-            PatchCustomCourseName(writer, lookup, index, bytes);
-        }
-
         public static void PatchCustomMinimapParameters(EndianBinaryWriter writer, LineRelInfo lookup, int index, MinimapProjection minimapProjection)
         {
             ValidateStageIndex(index, GameDataConsts.MaxMinimapIndex);
