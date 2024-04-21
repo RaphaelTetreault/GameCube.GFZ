@@ -27,11 +27,11 @@ namespace GameCube.GFZ.LineREL
         public override Pointer StringTableBaseAddress => 0x16A180;
 
         // VENUE NAMES
-        public ArrayPointer VenueNameOffsets => new ArrayPointer(42, 0x1f1C2C); // ENG followed by JPN
-        public ArrayPointer VenueNamesEnglishOffsets => new ArrayPointer(22, 0x1f1C2C);
-        public ArrayPointer VenueNamesJapaneseOffsets => new ArrayPointer(20, 0x1f1CDC);
-        public override DataBlock VenueNamesEnglish => new DataBlock(0x194A60, 0xA4);
-        public override DataBlock VenueNamesJapanese => new DataBlock(0x194B5C, 0xD8);
+        public ArrayPointer32 VenueNameOffsets => new(0x1F1C2C, 42); // ENG followed by JPN
+        public ArrayPointer32 VenueNamesEnglishOffsets => new(0x1F1C2C, 22);
+        public ArrayPointer32 VenueNamesJapaneseOffsets => new(0x1F1CDC, 20);
+        public override DataBlock VenueNamesEnglish => new(0x194A60, 0xA4);
+        public override DataBlock VenueNamesJapanese => new(0x194B5C, 0xD8);
 
         // COURSE NAMES
         public override DataBlock CourseNameOffsets => new DataBlock(0x1F2870, 0x14D0); // Where offsets to strings are
