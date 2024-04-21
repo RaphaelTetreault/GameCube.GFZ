@@ -1,5 +1,4 @@
 using Manifold.IO;
-using System.Collections.Generic;
 
 namespace GameCube.GFZ.LineREL
 {
