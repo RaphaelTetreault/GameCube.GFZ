@@ -4,7 +4,7 @@ namespace GameCube.GFZ.Stage
     /// Fog interpolation mode.
     /// F-Zero GX uses Linear, Exponential, and Exponential Squared.
     /// </summary>
-    public enum FogType
+    public enum FogType : uint
     {
         /// <summary>
         /// No fog

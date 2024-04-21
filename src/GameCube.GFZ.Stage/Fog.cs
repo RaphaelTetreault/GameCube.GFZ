@@ -339,12 +339,13 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public FogCurves ToFogCurves(Fog fog)
+        public static FogCurves ToFogCurves(Fog fog)
         {
             var value = new FogCurves();
             value.animationCurves = fog.ToAnimationCurves();
             return value;
         }
+        public FogCurves ToFogCurves() => ToFogCurves(this);
 
         /// <summary>
         /// 
