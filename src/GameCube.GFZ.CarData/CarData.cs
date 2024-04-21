@@ -1,5 +1,6 @@
 ﻿using Manifold;
 using Manifold.IO;
+using Manifold.Text.Tables;
 using System;
 using System.IO;
 using System.Linq;
@@ -7,11 +8,10 @@ using Unity.Mathematics;
 
 namespace GameCube.GFZ.CarData
 {
-    [Serializable]
     public class CarData :
         IBinarySerializable,
         IBinaryFileType,
-        ITsvSerializable
+        ITableSerializable
     {
         // CONSTANTS
         // Numbers of things
@@ -547,5 +547,34 @@ namespace GameCube.GFZ.CarData
                 Assert.IsTrue(reader.ReadByte() == @byte);
         }
 
+
+
+
+        public void Deserialize(TableCollection tableCollection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Serialize(TableCollection tableCollection)
+        {
+            Table machineTable = new Table()
+            {
+                Name = "Machines",
+                ColumnHeadersCount = 1,
+                RowHeadersCount = 1,
+            };
+            tableCollection.Add(machineTable);
+            tableCollection.SetCurrentTable("Machines");
+
+            machineTable.SetHeaderRow(0, Machines[0].GetHeaders());
+            machineTable.SetHeaderColumn(0, MachineNamesTable.Reverse().Cast<string>().ToArray());
+            foreach (var machine in Machines)
+            {
+                machine.Serialize(tableCollection);
+                machineTable.SetNextLine();
+            }
+        }
+
+        public string[] GetHeaders() => Array.Empty<string>();
     }
 }
