@@ -2,14 +2,13 @@ using Manifold;
 using Manifold.IO;
 using GameCube.GFZ;
 using GameCube.GFZ.CarData;
-using GameCube.GFZ.GeneralGameData;
+using GameCube.GFZ.GameData;
 using System;
 using System.IO;
 using System.Linq;
-using GameCuibe.GFZ.GeneralGameData;
 
 namespace GameCube.GFZ.LineREL
-{
+{1
     public class LineUtility
     {
         private static int lwz(EndianBinaryReader reader, int offset, int src)
