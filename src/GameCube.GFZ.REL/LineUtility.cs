@@ -17,7 +17,7 @@ namespace GameCube.GFZ.LineREL
         }
         private static void stw(EndianBinaryWriter writer, int val, int offset, int des)
         {
-            writer.JumpToAddress(des + offset);
+            writer.JumpToAddress(des + offset, true);
             writer.Write(val);
         }
         private static int mulhwu(int val1, int val2)
