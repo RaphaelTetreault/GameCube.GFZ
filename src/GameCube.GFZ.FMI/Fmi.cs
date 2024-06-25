@@ -13,7 +13,6 @@ using System.Reflection.PortableExecutable;
 
 namespace GameCube.GFZ.FMI
 {
-    [Serializable]
     public class Fmi :
         IBinaryAddressable,
         IBinarySerializable,
