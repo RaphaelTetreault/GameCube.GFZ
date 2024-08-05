@@ -50,7 +50,7 @@ namespace GameCube.GFZ.Stage
         {
             // NOTE you can dot any of the vertices you want with
             //      the normal and will always get the same scalar.
-            PlaneDistance = -math.dot(normal, vertex0);
+            PlaneDistance = -Vector3.Dot(normal, vertex0);
         }
 
         public Vector3[] GetVertices()
@@ -81,9 +81,9 @@ namespace GameCube.GFZ.Stage
             Vector3 v0v1 = vertex0 - vertex1;
             Vector3 v1v2 = vertex1 - vertex2;
             Vector3 v2v0 = vertex2 - vertex0;
-            edgeNormal0 = math.cross(normal, v0v1);
-            edgeNormal1 = math.cross(normal, v1v2);
-            edgeNormal2 = math.cross(normal, v2v0);
+            edgeNormal0 = Vector3.Cross(normal, v0v1);
+            edgeNormal1 = Vector3.Cross(normal, v1v2);
+            edgeNormal2 = Vector3.Cross(normal, v2v0);
             //edgeNormal0 = math.normalize(edgeNormal0);
             //edgeNormal1 = math.normalize(edgeNormal1);
             //edgeNormal2 = math.normalize(edgeNormal2);
@@ -93,8 +93,8 @@ namespace GameCube.GFZ.Stage
         {
             Vector3 v0v1 = vertex0 - vertex1; // dir v0 -> v1
             Vector3 v0v2 = vertex0 - vertex2; // dir v0 -> v2
-            normal = -math.cross(v0v1, v0v2);
-            normal = math.normalize(normal);
+            normal = -Vector3.Cross(v0v1, v0v2);
+            normal = Vector3.Normalize(normal);
         }
 
         public void Update()
@@ -109,26 +109,26 @@ namespace GameCube.GFZ.Stage
         // TODO: deprecate, use different moeth so triangle can go between bounds.
         public float GetMinPositionX()
         {
-            float min = math.min(vertex0.X, vertex1.X);
-            min = math.min(min, vertex2.X);
+            float min = Math.Min(vertex0.X, vertex1.X);
+            min = Math.Min(min, vertex2.X);
             return min;
         }
         public float GetMinPositionZ()
         {
-            float min = math.min(vertex0.Z, vertex1.Z);
-            min = math.min(min, vertex2.Z);
+            float min = Math.Min(vertex0.Z, vertex1.Z);
+            min = Math.Min(min, vertex2.Z);
             return min;
         }
         public float GetMaxPositionX()
         {
-            float max = math.max(vertex0.X, vertex1.X);
-            max = math.max(max, vertex2.X);
+            float max = Math.Max(vertex0.X, vertex1.X);
+            max = Math.Max(max, vertex2.X);
             return max;
         }
         public float GetMaxPositionZ()
         {
-            float max = math.max(vertex0.Z, vertex1.Z);
-            max = math.max(max, vertex2.Z);
+            float max = Math.Max(vertex0.Z, vertex1.Z);
+            max = Math.Max(max, vertex2.Z);
             return max;
         }
 

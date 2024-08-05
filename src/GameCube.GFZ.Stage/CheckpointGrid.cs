@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -30,12 +31,12 @@ namespace GameCube.GFZ.Stage
             foreach (var checkpoint in checkpoints)
             {
                 // MIN
-                min.X = math.min(min.X, checkpoint.GetMinPositionX());
-                min.Z = math.min(min.Z, checkpoint.GetMinPositionZ());
+                min.X = Math.Min(min.X, checkpoint.GetMinPositionX());
+                min.Z = Math.Min(min.Z, checkpoint.GetMinPositionZ());
 
                 // MAX
-                max.X = math.max(max.X, checkpoint.GetMaxPositionX());
-                max.Z = math.max(max.Z, checkpoint.GetMaxPositionZ());
+                max.X = Math.Max(max.X, checkpoint.GetMaxPositionX());
+                max.Z = Math.Max(max.Z, checkpoint.GetMaxPositionZ());
             }
 
             // Compute bounds
@@ -57,8 +58,8 @@ namespace GameCube.GFZ.Stage
             IndexLists = new IndexList[kListCount];
 
             // so if track has no width, we still pick up some points
-            //var widthX = math.max(matrixBoundsXZ.subdivisionWidth, 1f);
-            //var lengthZ = math.max(matrixBoundsXZ.subdivisionLength, 1f);
+            //var widthX = Math.Max(matrixBoundsXZ.subdivisionWidth, 1f);
+            //var lengthZ = Math.Max(matrixBoundsXZ.subdivisionLength, 1f);
             var widthX = matrixBoundsXZ.SubdivisionWidth;
             var lengthZ = matrixBoundsXZ.SubdivisionLength;
 
@@ -80,16 +81,16 @@ namespace GameCube.GFZ.Stage
             for (int z = 0; z < SubdivisionsZ; z++)
             {
                 // Get the minimum and maximum Z coordinates allowed to exist in this cell
-                var minZIndex = math.clamp(z - 2, 0, SubdivisionsZ - 1);
-                var maxZIndex = math.clamp(z + 2, 0, SubdivisionsZ - 1);
+                var minZIndex = Math.Clamp(z - 2, 0, SubdivisionsZ - 1);
+                var maxZIndex = Math.Clamp(z + 2, 0, SubdivisionsZ - 1);
                 var minZ = matrixBoundsXZ.Top + (lengthZ * minZIndex);
                 var maxZ = matrixBoundsXZ.Top + (lengthZ * maxZIndex);
 
                 for (int x = 0; x < SubdivisionsX; x++)
                 {
                     // Get the minimum and maximum X coordinates allowed to exist this cell
-                    var minXIndex = math.clamp(x - 2, 0, SubdivisionsX - 1);
-                    var maxXIndex = math.clamp(x + 2, 0, SubdivisionsX - 1);
+                    var minXIndex = Math.Clamp(x - 2, 0, SubdivisionsX - 1);
+                    var maxXIndex = Math.Clamp(x + 2, 0, SubdivisionsX - 1);
                     var minX = matrixBoundsXZ.Left + (widthX * minXIndex);
                     var maxX = matrixBoundsXZ.Left + (widthX * maxXIndex);
 
@@ -148,16 +149,16 @@ namespace GameCube.GFZ.Stage
             for (int z = 0; z < SubdivisionsZ; z++)
             {
                 // Get the minimum and maximum Z coordinates allowed to exist in this cell
-                var minZIndex = math.clamp(z - 1, 0, SubdivisionsZ - 1);
-                var maxZIndex = math.clamp(z + 1, 0, SubdivisionsZ - 1);
+                var minZIndex = Math.Clamp(z - 1, 0, SubdivisionsZ - 1);
+                var maxZIndex = Math.Clamp(z + 1, 0, SubdivisionsZ - 1);
                 var minZ = matrixBoundsXZ.Top + (lengthZ * minZIndex);
                 var maxZ = matrixBoundsXZ.Top + (lengthZ * maxZIndex);
 
                 for (int x = 0; x < SubdivisionsX; x++)
                 {
                     // Get the minimum and maximum X coordinates allowed to exist in this cell
-                    var minXIndex = math.clamp(x - 1, 0, SubdivisionsX - 1);
-                    var maxXIndex = math.clamp(x + 1, 0, SubdivisionsX - 1);
+                    var minXIndex = Math.Clamp(x - 1, 0, SubdivisionsX - 1);
+                    var maxXIndex = Math.Clamp(x + 1, 0, SubdivisionsX - 1);
                     var minX = matrixBoundsXZ.Left + (widthX * minXIndex);
                     var maxX = matrixBoundsXZ.Left + (widthX * maxXIndex);
 
@@ -201,8 +202,8 @@ namespace GameCube.GFZ.Stage
             float tb = (minZ - startZ) / (endZ - startZ);
 
             bool intersects = 
-                math.max(0, math.max(math.min(tl, tr), math.min(tt, tb))) <
-                math.min(1, math.min(math.max(tl, tr), math.max(tt, tb)));
+                Math.Max(0, Math.Max(Math.Min(tl, tr), Math.Min(tt, tb))) <
+                Math.Min(1, Math.Min(Math.Max(tl, tr), Math.Max(tt, tb)));
             return intersects;
         }
     }

@@ -163,21 +163,21 @@ namespace GameCube.GFZ.Stage
             foreach (var tri in ColliderTris)
             {
                 // MIN
-                min.X = math.min(min.X, tri.GetMinPositionX());
-                min.Z = math.min(min.Z, tri.GetMinPositionZ());
+                min.X = Math.Min(min.X, tri.GetMinPositionX());
+                min.Z = Math.Min(min.Z, tri.GetMinPositionZ());
                 // MAX
-                max.X = math.max(max.X, tri.GetMaxPositionX());
-                max.Z = math.max(max.Z, tri.GetMaxPositionZ());
+                max.X = Math.Max(max.X, tri.GetMaxPositionX());
+                max.Z = Math.Max(max.Z, tri.GetMaxPositionZ());
             }
             // Iterate over every quad, get min/maz X and Z coordinates
             foreach (var quad in ColliderQuads)
             {
                 // MIN
-                min.X = math.min(min.X, quad.GetMinPositionX());
-                min.Z = math.min(min.Z, quad.GetMinPositionZ());
+                min.X = Math.Min(min.X, quad.GetMinPositionX());
+                min.Z = Math.Min(min.Z, quad.GetMinPositionZ());
                 // MAX
-                max.X = math.max(max.X, quad.GetMaxPositionX());
-                max.Z = math.max(max.Z, quad.GetMaxPositionZ());
+                max.X = Math.Max(max.X, quad.GetMaxPositionX());
+                max.Z = Math.Max(max.Z, quad.GetMaxPositionZ());
             }
 
             // Compute bounds
@@ -258,8 +258,8 @@ namespace GameCube.GFZ.Stage
                 int numQuadVerts = 0;
                 for (int i = 0; i < countSurfaceTypes; i++)
                 {
-                    numTriVerts = math.max(triMeshGrids[i].IndexesLength, numTriVerts);
-                    numQuadVerts = math.max(quadMeshGrids[i].IndexesLength, numQuadVerts);
+                    numTriVerts = Math.Max(triMeshGrids[i].IndexesLength, numTriVerts);
+                    numQuadVerts = Math.Max(quadMeshGrids[i].IndexesLength, numQuadVerts);
                 }
 
                 reader.JumpToAddress(staticColliderTrisPtr);
