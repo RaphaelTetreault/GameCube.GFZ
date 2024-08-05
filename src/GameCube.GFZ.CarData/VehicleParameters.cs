@@ -150,30 +150,30 @@ namespace GameCube.GFZ.CarData
             table.GetNext(ref zero_0x4A);
             table.GetNext(ref cameraReorientation);
             table.GetNext(ref cameraRepositioning);
-            table.GetNext(ref tiltFrontRight.x);
-            table.GetNext(ref tiltFrontRight.y);
-            table.GetNext(ref tiltFrontRight.z);
-            table.GetNext(ref tiltFrontLeft.x);
-            table.GetNext(ref tiltFrontLeft.y);
-            table.GetNext(ref tiltFrontLeft.z);
-            table.GetNext(ref tiltBackRight.x);
-            table.GetNext(ref tiltBackRight.y);
-            table.GetNext(ref tiltBackRight.z);
-            table.GetNext(ref tiltBackLeft.x);
-            table.GetNext(ref tiltBackLeft.y);
-            table.GetNext(ref tiltBackLeft.z);
-            table.GetNext(ref wallCollisionFrontRight.x);
-            table.GetNext(ref wallCollisionFrontRight.y);
-            table.GetNext(ref wallCollisionFrontRight.z);
-            table.GetNext(ref wallCollisionFrontLeft.x);
-            table.GetNext(ref wallCollisionFrontLeft.y);
-            table.GetNext(ref wallCollisionFrontLeft.z);
-            table.GetNext(ref wallCollisionBackRight.x);
-            table.GetNext(ref wallCollisionBackRight.y);
-            table.GetNext(ref wallCollisionBackRight.z);
-            table.GetNext(ref wallCollisionBackLeft.x);
-            table.GetNext(ref wallCollisionBackLeft.y);
-            table.GetNext(ref wallCollisionBackLeft.z);
+            table.GetNext(ref tiltFrontRight.X);
+            table.GetNext(ref tiltFrontRight.Y);
+            table.GetNext(ref tiltFrontRight.Z);
+            table.GetNext(ref tiltFrontLeft.X);
+            table.GetNext(ref tiltFrontLeft.Y);
+            table.GetNext(ref tiltFrontLeft.Z);
+            table.GetNext(ref tiltBackRight.X);
+            table.GetNext(ref tiltBackRight.Y);
+            table.GetNext(ref tiltBackRight.Z);
+            table.GetNext(ref tiltBackLeft.X);
+            table.GetNext(ref tiltBackLeft.Y);
+            table.GetNext(ref tiltBackLeft.Z);
+            table.GetNext(ref wallCollisionFrontRight.X);
+            table.GetNext(ref wallCollisionFrontRight.Y);
+            table.GetNext(ref wallCollisionFrontRight.Z);
+            table.GetNext(ref wallCollisionFrontLeft.X);
+            table.GetNext(ref wallCollisionFrontLeft.Y);
+            table.GetNext(ref wallCollisionFrontLeft.Z);
+            table.GetNext(ref wallCollisionBackRight.X);
+            table.GetNext(ref wallCollisionBackRight.Y);
+            table.GetNext(ref wallCollisionBackRight.Z);
+            table.GetNext(ref wallCollisionBackLeft.X);
+            table.GetNext(ref wallCollisionBackLeft.Y);
+            table.GetNext(ref wallCollisionBackLeft.Z);
         }
 
         public string[] GetHeaders()
@@ -202,30 +202,30 @@ namespace GameCube.GFZ.CarData
                 nameof(zero_0x4A),
                 nameof(cameraReorientation),
                 nameof(cameraRepositioning),
-                nameof(tiltFrontRight) + ".x",
-                nameof(tiltFrontRight) + ".,y",
-                nameof(tiltFrontRight) + ".,z",
-                nameof(tiltFrontLeft) + ".,x",
-                nameof(tiltFrontLeft) + ".,y",
-                nameof(tiltFrontLeft) + ".,z",
-                nameof(tiltBackRight) + ".,x",
-                nameof(tiltBackRight) + ".,y",
-                nameof(tiltBackRight) + ".,z",
-                nameof(tiltBackLeft) + ".,x",
-                nameof(tiltBackLeft) + ".,y",
-                nameof(tiltBackLeft) + ".,z",
-                nameof(wallCollisionFrontRight) + ".,x",
-                nameof(wallCollisionFrontRight) + ".,y",
-                nameof(wallCollisionFrontRight) + ".,z",
-                nameof(wallCollisionFrontLeft) + ".,x",
-                nameof(wallCollisionFrontLeft) + ".,y",
-                nameof(wallCollisionFrontLeft) + ".,z",
-                nameof(wallCollisionBackRight) + ".,x",
-                nameof(wallCollisionBackRight) + ".,y",
-                nameof(wallCollisionBackRight) + ".,z",
-                nameof(wallCollisionBackLeft) + ".,x",
-                nameof(wallCollisionBackLeft) + ".,y",
-                nameof(wallCollisionBackLeft) + ".,z",
+                nameof(tiltFrontRight) + ".X",
+                nameof(tiltFrontRight) + ".Y",
+                nameof(tiltFrontRight) + ".Z",
+                nameof(tiltFrontLeft) + ".X",
+                nameof(tiltFrontLeft) + ".Y",
+                nameof(tiltFrontLeft) + ".Z",
+                nameof(tiltBackRight) + ".X",
+                nameof(tiltBackRight) + ".Y",
+                nameof(tiltBackRight) + ".Z",
+                nameof(tiltBackLeft) + ".X",
+                nameof(tiltBackLeft) + ".Y",
+                nameof(tiltBackLeft) + ".Z",
+                nameof(wallCollisionFrontRight) + ".X",
+                nameof(wallCollisionFrontRight) + ".Y",
+                nameof(wallCollisionFrontRight) + ".Z",
+                nameof(wallCollisionFrontLeft) + ".X",
+                nameof(wallCollisionFrontLeft) + ".Y",
+                nameof(wallCollisionFrontLeft) + ".Z",
+                nameof(wallCollisionBackRight) + ".X",
+                nameof(wallCollisionBackRight) + ".Y",
+                nameof(wallCollisionBackRight) + ".Z",
+                nameof(wallCollisionBackLeft) + ".X",
+                nameof(wallCollisionBackLeft) + ".Y",
+                nameof(wallCollisionBackLeft) + ".Z",
             };
         }
 
@@ -292,30 +292,30 @@ namespace GameCube.GFZ.CarData
             table.SetNextCell(zero_0x4A);
             table.SetNextCell(cameraReorientation);
             table.SetNextCell(cameraRepositioning);
-            table.SetNextCell(tiltFrontRight.x);
-            table.SetNextCell(tiltFrontRight.y);
-            table.SetNextCell(tiltFrontRight.z);
-            table.SetNextCell(tiltFrontLeft.x);
-            table.SetNextCell(tiltFrontLeft.y);
-            table.SetNextCell(tiltFrontLeft.z);
-            table.SetNextCell(tiltBackRight.x);
-            table.SetNextCell(tiltBackRight.y);
-            table.SetNextCell(tiltBackRight.z);
-            table.SetNextCell(tiltBackLeft.x);
-            table.SetNextCell(tiltBackLeft.y);
-            table.SetNextCell(tiltBackLeft.z);
-            table.SetNextCell(wallCollisionFrontRight.x);
-            table.SetNextCell(wallCollisionFrontRight.y);
-            table.SetNextCell(wallCollisionFrontRight.z);
-            table.SetNextCell(wallCollisionFrontLeft.x);
-            table.SetNextCell(wallCollisionFrontLeft.y);
-            table.SetNextCell(wallCollisionFrontLeft.z);
-            table.SetNextCell(wallCollisionBackRight.x);
-            table.SetNextCell(wallCollisionBackRight.y);
-            table.SetNextCell(wallCollisionBackRight.z);
-            table.SetNextCell(wallCollisionBackLeft.x);
-            table.SetNextCell(wallCollisionBackLeft.y);
-            table.SetNextCell(wallCollisionBackLeft.z);
+            table.SetNextCell(tiltFrontRight.X);
+            table.SetNextCell(tiltFrontRight.Y);
+            table.SetNextCell(tiltFrontRight.Z);
+            table.SetNextCell(tiltFrontLeft.X);
+            table.SetNextCell(tiltFrontLeft.Y);
+            table.SetNextCell(tiltFrontLeft.Z);
+            table.SetNextCell(tiltBackRight.X);
+            table.SetNextCell(tiltBackRight.Y);
+            table.SetNextCell(tiltBackRight.Z);
+            table.SetNextCell(tiltBackLeft.X);
+            table.SetNextCell(tiltBackLeft.Y);
+            table.SetNextCell(tiltBackLeft.Z);
+            table.SetNextCell(wallCollisionFrontRight.X);
+            table.SetNextCell(wallCollisionFrontRight.Y);
+            table.SetNextCell(wallCollisionFrontRight.Z);
+            table.SetNextCell(wallCollisionFrontLeft.X);
+            table.SetNextCell(wallCollisionFrontLeft.Y);
+            table.SetNextCell(wallCollisionFrontLeft.Z);
+            table.SetNextCell(wallCollisionBackRight.X);
+            table.SetNextCell(wallCollisionBackRight.Y);
+            table.SetNextCell(wallCollisionBackRight.Z);
+            table.SetNextCell(wallCollisionBackLeft.X);
+            table.SetNextCell(wallCollisionBackLeft.Y);
+            table.SetNextCell(wallCollisionBackLeft.Z);
         }
     }
 }

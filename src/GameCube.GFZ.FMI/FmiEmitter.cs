@@ -60,12 +60,12 @@ namespace GameCube.GFZ.FMI
 
         public void Deserialize(PlainTextReader reader)
         {
-            reader.ReadValue(ref position.x);
-            reader.ReadValue(ref position.y);
-            reader.ReadValue(ref position.z);
-            reader.ReadValue(ref targetOffset.x);
-            reader.ReadValue(ref targetOffset.y);
-            reader.ReadValue(ref targetOffset.z);
+            reader.ReadValue(ref position.X);
+            reader.ReadValue(ref position.Y);
+            reader.ReadValue(ref position.Z);
+            reader.ReadValue(ref targetOffset.X);
+            reader.ReadValue(ref targetOffset.Y);
+            reader.ReadValue(ref targetOffset.Z);
             reader.ReadValue(ref scale);
             reader.ReadValue(ref accelColor.r);
             reader.ReadValue(ref accelColor.g);
@@ -91,12 +91,12 @@ namespace GameCube.GFZ.FMI
 
         public void Serialize(PlainTextWriter writer)
         {
-            writer.WriteLineValue(nameof(position) + ".X", position.x);
-            writer.WriteLineValue(nameof(position) + ".Y", position.y);
-            writer.WriteLineValue(nameof(position) + ".Z", position.z);
-            writer.WriteLineValue(nameof(targetOffset) + ".X", targetOffset.x);
-            writer.WriteLineValue(nameof(targetOffset) + ".Y", targetOffset.y);
-            writer.WriteLineValue(nameof(targetOffset) + ".Z", targetOffset.z);
+            writer.WriteLineValue(nameof(position) + ".X", position.X);
+            writer.WriteLineValue(nameof(position) + ".Y", position.Y);
+            writer.WriteLineValue(nameof(position) + ".Z", position.Z);
+            writer.WriteLineValue(nameof(targetOffset) + ".X", targetOffset.X);
+            writer.WriteLineValue(nameof(targetOffset) + ".Y", targetOffset.Y);
+            writer.WriteLineValue(nameof(targetOffset) + ".Z", targetOffset.Z);
             writer.WriteLineValue(nameof(scale), scale);
             writer.WriteLineValue(nameof(accelColor) + ".R", accelColor.r);
             writer.WriteLineValue(nameof(accelColor) + ".G", accelColor.g);

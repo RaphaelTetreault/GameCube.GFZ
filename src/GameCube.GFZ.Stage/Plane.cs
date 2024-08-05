@@ -44,9 +44,9 @@ namespace GameCube.GFZ.Stage
         public void ComputeDotProduct()
         {
             float dotProduct =
-                normal.x * origin.x +
-                normal.y * origin.y +
-                normal.z * origin.z;
+                normal.X * origin.X +
+                normal.Y * origin.Y +
+                normal.Z * origin.Z;
 
             // dot product is inverted
             this.distance = -dotProduct;

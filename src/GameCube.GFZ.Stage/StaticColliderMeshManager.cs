@@ -163,21 +163,21 @@ namespace GameCube.GFZ.Stage
             foreach (var tri in ColliderTris)
             {
                 // MIN
-                min.x = math.min(min.x, tri.GetMinPositionX());
-                min.z = math.min(min.z, tri.GetMinPositionZ());
+                min.X = math.min(min.X, tri.GetMinPositionX());
+                min.Z = math.min(min.Z, tri.GetMinPositionZ());
                 // MAX
-                max.x = math.max(max.x, tri.GetMaxPositionX());
-                max.z = math.max(max.z, tri.GetMaxPositionZ());
+                max.X = math.max(max.X, tri.GetMaxPositionX());
+                max.Z = math.max(max.Z, tri.GetMaxPositionZ());
             }
             // Iterate over every quad, get min/maz X and Z coordinates
             foreach (var quad in ColliderQuads)
             {
                 // MIN
-                min.x = math.min(min.x, quad.GetMinPositionX());
-                min.z = math.min(min.z, quad.GetMinPositionZ());
+                min.X = math.min(min.X, quad.GetMinPositionX());
+                min.Z = math.min(min.Z, quad.GetMinPositionZ());
                 // MAX
-                max.x = math.max(max.x, quad.GetMaxPositionX());
-                max.z = math.max(max.z, quad.GetMaxPositionZ());
+                max.X = math.max(max.X, quad.GetMaxPositionX());
+                max.Z = math.max(max.Z, quad.GetMaxPositionZ());
             }
 
             // Compute bounds
@@ -185,10 +185,10 @@ namespace GameCube.GFZ.Stage
             var bounds = new GridXZ();
             bounds.NumSubdivisionsX = subdivisions;
             bounds.NumSubdivisionsZ = subdivisions;
-            bounds.Left = min.x;
-            bounds.Top = min.z;
-            bounds.SubdivisionWidth = (max.x - min.x) / subdivisions; // delta / subdivisions
-            bounds.SubdivisionLength = (max.z - min.z) / subdivisions; // delta / subdivisions
+            bounds.Left = min.X;
+            bounds.Top = min.Z;
+            bounds.SubdivisionWidth = (max.X - min.X) / subdivisions; // delta / subdivisions
+            bounds.SubdivisionLength = (max.Z - min.Z) / subdivisions; // delta / subdivisions
 
             // Assign
             meshGridXZ = bounds;

@@ -7,7 +7,7 @@ namespace GameCube.GFZ.Stage
 {
     // NOTES:
     // Indexes 0-3 ARE USED
-    //  idx0: uv.xy scrolling (or, at least, on some models)
+    //  idx0: uv.Xy scrolling (or, at least, on some models)
     //  idx1: ?
     //  idx2: ?
     //  idx3: ?
@@ -84,7 +84,7 @@ namespace GameCube.GFZ.Stage
                 Assert.ReferencePointer(fields[i], fieldPtrs[i]);
 
                 //if (fields[i] != null)
-                //    Assert.IsTrue(fields[i].x != 0 && fields[i].y != 0);
+                //    Assert.IsTrue(fields[i].X != 0 && fields[i].Y != 0);
             }
         }
 

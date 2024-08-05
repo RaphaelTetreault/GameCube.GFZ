@@ -13,9 +13,9 @@ using System.IO;
 // Indexes 0-5, length 6, values are:
 // 0: Fog.fogRange.near
 // 1: Fog.fogRange.far
-// 2: Fog.colorRGB.x - color R
-// 3: Fog.colorRGB.y - color G
-// 4: Fog.colorRGB.z - color B
+// 2: Fog.colorRGB.X - color R
+// 3: Fog.colorRGB.Y - color G
+// 4: Fog.colorRGB.Z - color B
 // 5: (always 0)
 //
 // Get animation curves [6] easily with helper funtion Fog.GetAnimationCurves().

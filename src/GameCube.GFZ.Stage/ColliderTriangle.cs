@@ -109,26 +109,26 @@ namespace GameCube.GFZ.Stage
         // TODO: deprecate, use different moeth so triangle can go between bounds.
         public float GetMinPositionX()
         {
-            float min = math.min(vertex0.x, vertex1.x);
-            min = math.min(min, vertex2.x);
+            float min = math.min(vertex0.X, vertex1.X);
+            min = math.min(min, vertex2.X);
             return min;
         }
         public float GetMinPositionZ()
         {
-            float min = math.min(vertex0.z, vertex1.z);
-            min = math.min(min, vertex2.z);
+            float min = math.min(vertex0.Z, vertex1.Z);
+            min = math.min(min, vertex2.Z);
             return min;
         }
         public float GetMaxPositionX()
         {
-            float max = math.max(vertex0.x, vertex1.x);
-            max = math.max(max, vertex2.x);
+            float max = math.max(vertex0.X, vertex1.X);
+            max = math.max(max, vertex2.X);
             return max;
         }
         public float GetMaxPositionZ()
         {
-            float max = math.max(vertex0.z, vertex1.z);
-            max = math.max(max, vertex2.z);
+            float max = math.max(vertex0.Z, vertex1.Z);
+            max = math.max(max, vertex2.Z);
             return max;
         }
 

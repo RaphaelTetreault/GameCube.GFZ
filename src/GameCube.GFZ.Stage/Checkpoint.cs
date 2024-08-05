@@ -102,8 +102,8 @@ namespace GameCube.GFZ.Stage
             // iterate over every position, mo
             foreach (var checkpoint in checkpoints)
             {
-                min = math.min(min, checkpoint.PlaneStart.origin.y);
-                min = math.min(min, checkpoint.PlaneEnd.origin.y);
+                min = math.min(min, checkpoint.PlaneStart.origin.Y);
+                min = math.min(min, checkpoint.PlaneEnd.origin.Y);
             }
 
             return min;
@@ -112,19 +112,19 @@ namespace GameCube.GFZ.Stage
         // track checkpoint matrix bounds
         public float GetMinPositionX()
         {
-            return math.min(PlaneStart.origin.x, PlaneEnd.origin.x);
+            return math.min(PlaneStart.origin.X, PlaneEnd.origin.X);
         }
         public float GetMinPositionZ()
         {
-            return math.min(PlaneStart.origin.z, PlaneEnd.origin.z);
+            return math.min(PlaneStart.origin.Z, PlaneEnd.origin.Z);
         }
         public float GetMaxPositionX()
         {
-            return math.max(PlaneStart.origin.x, PlaneEnd.origin.x);
+            return math.max(PlaneStart.origin.X, PlaneEnd.origin.X);
         }
         public float GetMaxPositionZ()
         {
-            return math.max(PlaneStart.origin.z, PlaneEnd.origin.z);
+            return math.max(PlaneStart.origin.Z, PlaneEnd.origin.Z);
         }
 
 

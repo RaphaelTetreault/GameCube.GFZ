@@ -30,22 +30,22 @@ namespace GameCube.GFZ.Stage
             foreach (var checkpoint in checkpoints)
             {
                 // MIN
-                min.x = math.min(min.x, checkpoint.GetMinPositionX());
-                min.z = math.min(min.z, checkpoint.GetMinPositionZ());
+                min.X = math.min(min.X, checkpoint.GetMinPositionX());
+                min.Z = math.min(min.Z, checkpoint.GetMinPositionZ());
 
                 // MAX
-                max.x = math.max(max.x, checkpoint.GetMaxPositionX());
-                max.z = math.max(max.z, checkpoint.GetMaxPositionZ());
+                max.X = math.max(max.X, checkpoint.GetMaxPositionX());
+                max.Z = math.max(max.Z, checkpoint.GetMaxPositionZ());
             }
 
             // Compute bounds
             var bounds = new GridXZ();
             bounds.NumSubdivisionsX = Subdivisions;
             bounds.NumSubdivisionsZ = Subdivisions;
-            bounds.Left = min.x;
-            bounds.Top = min.z;
-            bounds.SubdivisionWidth = (max.x - min.x) / Subdivisions; // delta / subdivisions
-            bounds.SubdivisionLength = (max.z - min.z) / Subdivisions; // delta / subdivisions
+            bounds.Left = min.X;
+            bounds.Top = min.Z;
+            bounds.SubdivisionWidth = (max.X - min.X) / Subdivisions; // delta / subdivisions
+            bounds.SubdivisionLength = (max.Z - min.Z) / Subdivisions; // delta / subdivisions
 
             return bounds;
         }
@@ -99,8 +99,8 @@ namespace GameCube.GFZ.Stage
                     {
                         var checkpoint = checkpoints[i];
 
-                        var posX = checkpoint.PlaneStart.origin.x;
-                        var posZ = checkpoint.PlaneStart.origin.z;
+                        var posX = checkpoint.PlaneStart.origin.X;
+                        var posZ = checkpoint.PlaneStart.origin.Z;
 
                         bool isBetweenX = IsBetween(posX, minX, maxX);
                         bool isBetweenZ = IsBetween(posZ, minZ, maxZ);
@@ -169,14 +169,14 @@ namespace GameCube.GFZ.Stage
                         var start = checkpoint.PlaneStart.origin;
                         var end = checkpoint.PlaneEnd.origin;
 
-                        bool intersects = line_rect_isect(start.x, start.z, end.x, end.z, minX, maxX, minZ, maxZ);
+                        bool intersects = line_rect_isect(start.X, start.Z, end.X, end.Z, minX, maxX, minZ, maxZ);
                         if (intersects)
                             indexes.Add(i);
 
-                        //bool minAboveMaxZ = start.z > maxZ && end.z > maxZ;
-                        //bool maxBelowMinZ = start.z < minZ && end.z < minZ;
-                        //bool maxLeftOfMinX = start.x < minX && end.x < minX;
-                        //bool minRightOfMaxX = start.x > maxX && end.x > maxX;
+                        //bool minAboveMaxZ = start.Z > maxZ && end.Z > maxZ;
+                        //bool maxBelowMinZ = start.Z < minZ && end.Z < minZ;
+                        //bool maxLeftOfMinX = start.X < minX && end.X < minX;
+                        //bool minRightOfMaxX = start.X > maxX && end.X > maxX;
                         //bool doesNotIntersect = minAboveMaxZ || maxBelowMinZ || maxLeftOfMinX || minRightOfMaxX;
                         //if (doesNotIntersect)
                         //    continue;

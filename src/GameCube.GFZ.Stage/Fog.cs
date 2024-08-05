@@ -44,8 +44,8 @@ namespace GameCube.GFZ.Stage
         // Note that default values appear in AX tests and similar. A good default set.
         private FogType interpolation = FogType.Exponential;
         private ViewRange fogRange = new ViewRange(20f, 100f);
-        private Vector3 colorRGB = Vector3.zero;
-        private Vector3 zero0x18 = Vector3.zero; // Always zero. Perhaps always black? The last 2 values are not used in anim curve, though.
+        private Vector3 colorRGB = Vector3.Zero;
+        private Vector3 zero0x18 = Vector3.Zero; // Always zero. Perhaps always black? The last 2 values are not used in anim curve, though.
 
 
         // PROPERTIES
@@ -357,9 +357,9 @@ namespace GameCube.GFZ.Stage
             {
                 ToAnimationCurve(FogRange.near),
                 ToAnimationCurve(FogRange.far),
-                ToAnimationCurve(ColorRGB.x),
-                ToAnimationCurve(ColorRGB.y),
-                ToAnimationCurve(ColorRGB.z),
+                ToAnimationCurve(ColorRGB.X),
+                ToAnimationCurve(ColorRGB.Y),
+                ToAnimationCurve(ColorRGB.Z),
                 ToAnimationCurve(0f),
             };
         }
@@ -400,14 +400,14 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordEndAddress(reader);
             {
-                Assert.IsTrue(zero0x18.Equals(Vector3.zero));
+                Assert.IsTrue(zero0x18.Equals(Vector3.Zero));
             }
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             {
-                Assert.IsTrue(zero0x18.Equals(Vector3.zero));
+                Assert.IsTrue(zero0x18.Equals(Vector3.Zero));
             }
             this.RecordStartAddress(writer);
             {
@@ -436,7 +436,7 @@ namespace GameCube.GFZ.Stage
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Interpolation)}: {Interpolation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(FogRange)}: {FogRange}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(ColorRGB)}(r:{ColorRGB.x}, g:{ColorRGB.y}, b:{ColorRGB.z})");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(ColorRGB)}(r:{ColorRGB.X}, g:{ColorRGB.Y}, b:{ColorRGB.Z})");
             indentLevel--;
         }
 

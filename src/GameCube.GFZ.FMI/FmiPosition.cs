@@ -40,9 +40,9 @@ namespace GameCube.GFZ.FMI
 
         public void Deserialize(PlainTextReader reader)
         {
-            reader.ReadValue(ref position.x);
-            reader.ReadValue(ref position.y);
-            reader.ReadValue(ref position.z);
+            reader.ReadValue(ref position.X);
+            reader.ReadValue(ref position.Y);
+            reader.ReadValue(ref position.Z);
             reader.ReadValue(ref positionType);
         }
 
@@ -59,9 +59,9 @@ namespace GameCube.GFZ.FMI
 
         public void Serialize(PlainTextWriter writer)
         {
-            writer.WriteLineValue(nameof(position) + ".X", position.x);
-            writer.WriteLineValue(nameof(position) + ".Y", position.y);
-            writer.WriteLineValue(nameof(position) + ".Z", position.z);
+            writer.WriteLineValue(nameof(position) + ".X", position.X);
+            writer.WriteLineValue(nameof(position) + ".Y", position.Y);
+            writer.WriteLineValue(nameof(position) + ".Z", position.Z);
             writer.WriteLineValue(nameof(positionType), positionType);
             writer.WriteLineComment($"{positionType} is value {(uint)PositionType} 0x{(uint)positionType:x8}");
         }

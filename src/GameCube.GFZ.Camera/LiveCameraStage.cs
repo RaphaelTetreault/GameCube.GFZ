@@ -71,25 +71,25 @@ namespace GameCube.GFZ.Camera
                 pan.To.RotationRoll= float.Parse(data[dataIndex++]);
 
                 Vector3 fromPos = new();
-                fromPos.x = float.Parse(data[dataIndex++]);
-                fromPos.y = float.Parse(data[dataIndex++]);
-                fromPos.z = float.Parse(data[dataIndex++]);
+                fromPos.X = float.Parse(data[dataIndex++]);
+                fromPos.Y = float.Parse(data[dataIndex++]);
+                fromPos.Z = float.Parse(data[dataIndex++]);
                 pan.From.CameraPosition = fromPos;
                 Vector3 toPos = new();
-                toPos.x = float.Parse(data[dataIndex++]);
-                toPos.y = float.Parse(data[dataIndex++]);
-                toPos.z = float.Parse(data[dataIndex++]);
+                toPos.X = float.Parse(data[dataIndex++]);
+                toPos.Y = float.Parse(data[dataIndex++]);
+                toPos.Z = float.Parse(data[dataIndex++]);
                 pan.To.CameraPosition = toPos;
 
                 Vector3 fromLookat = new();
-                fromLookat.x = float.Parse(data[dataIndex++]);
-                fromLookat.y = float.Parse(data[dataIndex++]);
-                fromLookat.z = float.Parse(data[dataIndex++]);
+                fromLookat.X = float.Parse(data[dataIndex++]);
+                fromLookat.Y = float.Parse(data[dataIndex++]);
+                fromLookat.Z = float.Parse(data[dataIndex++]);
                 pan.From.LookAtPosition = fromLookat;
                 Vector3 toLookat = new();
-                toLookat.x = float.Parse(data[dataIndex++]);
-                toLookat.y = float.Parse(data[dataIndex++]);
-                toLookat.z = float.Parse(data[dataIndex++]);
+                toLookat.X = float.Parse(data[dataIndex++]);
+                toLookat.Y = float.Parse(data[dataIndex++]);
+                toLookat.Z = float.Parse(data[dataIndex++]);
                 pan.To.LookAtPosition = toLookat;
             }
         }
@@ -111,19 +111,19 @@ namespace GameCube.GFZ.Camera
             writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.RotationRoll));
             writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.RotationRoll));
 
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".x");
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".y");
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".z");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".x");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".y");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".z");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".X");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".Y");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".Z");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".X");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".Y");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".Z");
 
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".x");
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".y");
-            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".z");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".x");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".y");
-            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".z");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".X");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Y");
+            writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Z");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".X");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Y");
+            writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Z");
             writer.WriteNextRow();
 
             foreach (var pan in pans)
@@ -138,19 +138,19 @@ namespace GameCube.GFZ.Camera
                 writer.WriteNextCol(pan.From.RotationRoll);
                 writer.WriteNextCol(pan.To.RotationRoll);
 
-                writer.WriteNextCol(pan.From.CameraPosition.x);
-                writer.WriteNextCol(pan.From.CameraPosition.y);
-                writer.WriteNextCol(pan.From.CameraPosition.z);
-                writer.WriteNextCol(pan.To.CameraPosition.x);
-                writer.WriteNextCol(pan.To.CameraPosition.y);
-                writer.WriteNextCol(pan.To.CameraPosition.z);
+                writer.WriteNextCol(pan.From.CameraPosition.X);
+                writer.WriteNextCol(pan.From.CameraPosition.Y);
+                writer.WriteNextCol(pan.From.CameraPosition.Z);
+                writer.WriteNextCol(pan.To.CameraPosition.X);
+                writer.WriteNextCol(pan.To.CameraPosition.Y);
+                writer.WriteNextCol(pan.To.CameraPosition.Z);
 
-                writer.WriteNextCol(pan.From.LookAtPosition.x);
-                writer.WriteNextCol(pan.From.LookAtPosition.y);
-                writer.WriteNextCol(pan.From.LookAtPosition.z);
-                writer.WriteNextCol(pan.To.LookAtPosition.x);
-                writer.WriteNextCol(pan.To.LookAtPosition.y);
-                writer.WriteNextCol(pan.To.LookAtPosition.z);
+                writer.WriteNextCol(pan.From.LookAtPosition.X);
+                writer.WriteNextCol(pan.From.LookAtPosition.Y);
+                writer.WriteNextCol(pan.From.LookAtPosition.Z);
+                writer.WriteNextCol(pan.To.LookAtPosition.X);
+                writer.WriteNextCol(pan.To.LookAtPosition.Y);
+                writer.WriteNextCol(pan.To.LookAtPosition.Z);
                 writer.WriteNextRow();
             }
         }
