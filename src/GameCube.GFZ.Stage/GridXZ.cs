@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -77,16 +77,16 @@ namespace GameCube.GFZ.Stage
 
 
         // METHODS
-        public (float2 center, float2 scale) GetCenterAndScale()
+        public (Vector2 center, Vector2 scale) GetCenterAndScale()
         {
             // Calculate full scale.
             var fullWidth = SubdivisionWidth * NumSubdivisionsX;
             var fullLength = SubdivisionLength * NumSubdivisionsZ;
-            float2 scale = new float2(fullWidth, fullLength);
+            Vector2 scale = new Vector2(fullWidth, fullLength);
             // Compute corner/origin of bounds
-            float2 corner = new float2(Left, Top);
+            Vector2 corner = new Vector2(Left, Top);
             // Center is halfway from the corner, hence /2f
-            float2 center = corner + scale / 2f;
+            Vector2 center = corner + scale / 2f;
 
             return (center, scale);
         }
@@ -123,7 +123,7 @@ namespace GameCube.GFZ.Stage
         public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
         {
             // Get some useful metadata to print
-            (float2 center, float2 scale) = GetCenterAndScale();
+            (Vector2 center, Vector2 scale) = GetCenterAndScale();
 
             builder.AppendLineIndented(indent, indentLevel, nameof(GridXZ));
             indentLevel++;

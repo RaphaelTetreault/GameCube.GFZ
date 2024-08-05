@@ -1,7 +1,7 @@
 ﻿using Manifold.IO;
 using Manifold.Text.Tables;
 using System;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.CarData
 {
@@ -38,14 +38,14 @@ namespace GameCube.GFZ.CarData
         private ushort zero_0x4A;
         private float cameraReorientation;
         private float cameraRepositioning;
-        private float3 tiltFrontRight;
-        private float3 tiltFrontLeft;
-        private float3 tiltBackRight;
-        private float3 tiltBackLeft;
-        private float3 wallCollisionFrontRight;
-        private float3 wallCollisionFrontLeft;
-        private float3 wallCollisionBackRight;
-        private float3 wallCollisionBackLeft;
+        private Vector3 tiltFrontRight;
+        private Vector3 tiltFrontLeft;
+        private Vector3 tiltBackRight;
+        private Vector3 tiltBackLeft;
+        private Vector3 wallCollisionFrontRight;
+        private Vector3 wallCollisionFrontLeft;
+        private Vector3 wallCollisionBackRight;
+        private Vector3 wallCollisionBackLeft;
         // REFERENCES
         private ShiftJisCString runtimeName;
 
@@ -75,14 +75,14 @@ namespace GameCube.GFZ.CarData
         public ushort Zero_0x4A { get => zero_0x4A; set => zero_0x4A = value; }
         public float CameraReorientation { get => cameraReorientation; set => cameraReorientation = value; }
         public float CameraRepositioning { get => cameraRepositioning; set => cameraRepositioning = value; }
-        public float3 TiltFrontRight { get => tiltFrontRight; set => tiltFrontRight = value; }
-        public float3 TiltFrontLeft { get => tiltFrontLeft; set => tiltFrontLeft = value; }
-        public float3 TiltBackRight { get => tiltBackRight; set => tiltBackRight = value; }
-        public float3 TiltBackLeft { get => tiltBackLeft; set => tiltBackLeft = value; }
-        public float3 WallCollisionFrontRight { get => wallCollisionFrontRight; set => wallCollisionFrontRight = value; }
-        public float3 WallCollisionFrontLeft { get => wallCollisionFrontLeft; set => wallCollisionFrontLeft = value; }
-        public float3 WallCollisionBackRight { get => wallCollisionBackRight; set => wallCollisionBackRight = value; }
-        public float3 WallCollisionBackLeft { get => wallCollisionBackLeft; set => wallCollisionBackLeft = value; }
+        public Vector3 TiltFrontRight { get => tiltFrontRight; set => tiltFrontRight = value; }
+        public Vector3 TiltFrontLeft { get => tiltFrontLeft; set => tiltFrontLeft = value; }
+        public Vector3 TiltBackRight { get => tiltBackRight; set => tiltBackRight = value; }
+        public Vector3 TiltBackLeft { get => tiltBackLeft; set => tiltBackLeft = value; }
+        public Vector3 WallCollisionFrontRight { get => wallCollisionFrontRight; set => wallCollisionFrontRight = value; }
+        public Vector3 WallCollisionFrontLeft { get => wallCollisionFrontLeft; set => wallCollisionFrontLeft = value; }
+        public Vector3 WallCollisionBackRight { get => wallCollisionBackRight; set => wallCollisionBackRight = value; }
+        public Vector3 WallCollisionBackLeft { get => wallCollisionBackLeft; set => wallCollisionBackLeft = value; }
         public ShiftJisCString RuntimeName { get => runtimeName; set => runtimeName = value; }
 
 

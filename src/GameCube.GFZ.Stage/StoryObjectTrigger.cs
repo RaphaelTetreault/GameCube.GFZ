@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -41,11 +41,11 @@ namespace GameCube.GFZ.Stage
         private ushort zero_0x00;
         private byte boulderGroupOrderIndex;
         private byte boulderGroupAndDifficulty; // split lower/upper 4 bits, see properties
-        private float3 story2BoulderScale;
+        private Vector3 story2BoulderScale;
         private Pointer story2BoulderPathPtr;
-        private float3 scale;    // trigger scale
-        private float3 rotation; // trigger rotation
-        private float3 position; // trigger position
+        private Vector3 scale;    // trigger scale
+        private Vector3 rotation; // trigger rotation
+        private Vector3 position; // trigger position
         // FIELDS (deserialized from pointers)
         private StoryObjectPath storyObjectPath;
 
@@ -70,11 +70,11 @@ namespace GameCube.GFZ.Stage
         }
         public byte BoulderGroupOrderIndex { get => boulderGroupOrderIndex; set => boulderGroupOrderIndex = value; }
         public byte BoulderGroupAndDifficulty { get => boulderGroupAndDifficulty; set => boulderGroupAndDifficulty = value; }
-        public float3 Story2BoulderScale { get => story2BoulderScale; set => story2BoulderScale = value; }
+        public Vector3 Story2BoulderScale { get => story2BoulderScale; set => story2BoulderScale = value; }
         public Pointer Story2BoulderPathPtr { get => story2BoulderPathPtr; set => story2BoulderPathPtr = value; }
-        public float3 Scale { get => scale; set => scale = value; }
-        public float3 Rotation { get => rotation; set => rotation = value; }
-        public float3 Position { get => position; set => position = value; }
+        public Vector3 Scale { get => scale; set => scale = value; }
+        public Vector3 Rotation { get => rotation; set => rotation = value; }
+        public Vector3 Position { get => position; set => position = value; }
         public StoryObjectPath StoryObjectPath { get => storyObjectPath; set => storyObjectPath = value; }
 
 

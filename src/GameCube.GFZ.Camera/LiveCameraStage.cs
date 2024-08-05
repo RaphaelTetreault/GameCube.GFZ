@@ -2,7 +2,7 @@
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Camera
 {
@@ -70,23 +70,23 @@ namespace GameCube.GFZ.Camera
                 pan.From.RotationRoll = float.Parse(data[dataIndex++]);
                 pan.To.RotationRoll= float.Parse(data[dataIndex++]);
 
-                float3 fromPos = new();
+                Vector3 fromPos = new();
                 fromPos.x = float.Parse(data[dataIndex++]);
                 fromPos.y = float.Parse(data[dataIndex++]);
                 fromPos.z = float.Parse(data[dataIndex++]);
                 pan.From.CameraPosition = fromPos;
-                float3 toPos = new();
+                Vector3 toPos = new();
                 toPos.x = float.Parse(data[dataIndex++]);
                 toPos.y = float.Parse(data[dataIndex++]);
                 toPos.z = float.Parse(data[dataIndex++]);
                 pan.To.CameraPosition = toPos;
 
-                float3 fromLookat = new();
+                Vector3 fromLookat = new();
                 fromLookat.x = float.Parse(data[dataIndex++]);
                 fromLookat.y = float.Parse(data[dataIndex++]);
                 fromLookat.z = float.Parse(data[dataIndex++]);
                 pan.From.LookAtPosition = fromLookat;
-                float3 toLookat = new();
+                Vector3 toLookat = new();
                 toLookat.x = float.Parse(data[dataIndex++]);
                 toLookat.y = float.Parse(data[dataIndex++]);
                 toLookat.z = float.Parse(data[dataIndex++]);

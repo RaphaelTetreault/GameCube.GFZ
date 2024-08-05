@@ -80,7 +80,7 @@ namespace GameCube.GFZ.Stage
             // Validate each field/pointer
             for (int i = 0; i < kCount; i++)
             {
-                // reference can be to float2(0, 0)
+                // reference can be to Vector2(0, 0)
                 Assert.ReferencePointer(fields[i], fieldPtrs[i]);
 
                 //if (fields[i] != null)

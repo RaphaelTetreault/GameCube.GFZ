@@ -3,7 +3,7 @@ using Manifold.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -25,9 +25,9 @@ namespace GameCube.GFZ.Stage
         private Pointer animationCurvesTrsPtr;
         private Pointer trackCornerPtr;
         private ArrayPointer childrenPtr;
-        private float3 fallbackScale = new float3(1, 1, 1);
-        private float3 fallbackRotation = new float3(0, 0, 0);
-        private float3 fallbackPosition = new float3(0, 0, 0);
+        private Vector3 fallbackScale = new Vector3(1, 1, 1);
+        private Vector3 fallbackRotation = new Vector3(0, 0, 0);
+        private Vector3 fallbackPosition = new Vector3(0, 0, 0);
         private ushort root_unk_0x38; // Combined, might be cull flags
         private ushort root_unk_0x3A; // Combined, might be cull flags
         private float railHeightRight;
@@ -54,9 +54,9 @@ namespace GameCube.GFZ.Stage
         public Pointer AnimationCurvesTrsPtr { get => animationCurvesTrsPtr; set => animationCurvesTrsPtr = value; }
         public Pointer TrackCornerPtr { get => trackCornerPtr; set => trackCornerPtr = value; }
         public ArrayPointer ChildrenPtr { get => childrenPtr; set => childrenPtr = value; }
-        public float3 FallbackScale { get => fallbackScale; set => fallbackScale = value; }
-        public float3 FallbackRotation { get => fallbackRotation; set => fallbackRotation = value; }
-        public float3 FallbackPosition { get => fallbackPosition; set => fallbackPosition = value; }
+        public Vector3 FallbackScale { get => fallbackScale; set => fallbackScale = value; }
+        public Vector3 FallbackRotation { get => fallbackRotation; set => fallbackRotation = value; }
+        public Vector3 FallbackPosition { get => fallbackPosition; set => fallbackPosition = value; }
         public ushort Root_unk_0x38 { get => root_unk_0x38; set => root_unk_0x38 = value; }
         public ushort Root_unk_0x3A { get => root_unk_0x3A; set => root_unk_0x3A = value; }
         public float RailHeightRight { get => railHeightRight; set => railHeightRight = value; }

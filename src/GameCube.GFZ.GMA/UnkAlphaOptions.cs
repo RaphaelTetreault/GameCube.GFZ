@@ -1,5 +1,5 @@
 ﻿using Manifold.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.GMA
 {
@@ -11,14 +11,14 @@ namespace GameCube.GFZ.GMA
         IBinarySerializable
     {
         // FIELDS
-        private float3 origin;
+        private Vector3 origin;
         private float unk0x0C; // if GCMF flags at 0x00 are set with bit 9, this value exists. All values: 0f, 1f.
         private BlendFactors unk0x10; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public float3 Origin { get => origin; set => origin = value; }
+        public Vector3 Origin { get => origin; set => origin = value; }
         public float Unk0x0C { get => unk0x0C; set => unk0x0C = value; }
         public BlendFactors BlendFactors { get => unk0x10; set => unk0x10 = value; }
 

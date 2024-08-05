@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -25,12 +25,12 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
 
         // PROPERTIES USED TO MAKE SENSE OF THIS NONSENSE
-        public float3 Position => Transform.Position;
-        public float3 PositionFrom => Transform.Position;
-        public float3 PositionTo => Transform.Scale;
-        public float3 Scale => Transform.Scale;
-        public quaternion Rotation => Transform.Rotation;
-        public float3 RotationEuler => Transform.RotationEuler;
+        public Vector3 Position => Transform.Position;
+        public Vector3 PositionFrom => Transform.Position;
+        public Vector3 PositionTo => Transform.Scale;
+        public Vector3 Scale => Transform.Scale;
+        public Quaternion Rotation => Transform.Rotation;
+        public Vector3 RotationEuler => Transform.RotationEuler;
 
         public TransformTRXS Transform { get => transform; set => transform = value; }
         public CourseMetadataType MetadataType { get => metadataType; set => metadataType = value; }

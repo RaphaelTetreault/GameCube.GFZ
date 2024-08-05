@@ -1,7 +1,7 @@
 ﻿using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.FMI
 {
@@ -18,8 +18,8 @@ namespace GameCube.GFZ.FMI
         IPlainTextSerializable
     {
         // FIELDS
-        private float3 position;
-        private float3 targetOffset;
+        private Vector3 position;
+        private Vector3 targetOffset;
         private float scale;
         private FmiColorRGB accelColor;
         private FmiColorRGB boostColor;
@@ -30,11 +30,11 @@ namespace GameCube.GFZ.FMI
         /// <summary>
         ///     The emitter's position.
         /// </summary>
-        public float3 Position { get => position; set => position = value; }
+        public Vector3 Position { get => position; set => position = value; }
         /// <summary>
         ///     Target offset position to point emitter towards relative to emitter position.
         /// </summary>
-        public float3 TargetOffset { get => targetOffset; set => targetOffset = value; }
+        public Vector3 TargetOffset { get => targetOffset; set => targetOffset = value; }
         public float Scale { get => scale; set => scale = value; }
         public FmiColorRGB AccelColor { get => accelColor; set => accelColor = value; }
         public FmiColorRGB BoostColor { get => boostColor; set => boostColor = value; }

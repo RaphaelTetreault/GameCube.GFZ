@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -44,8 +44,8 @@ namespace GameCube.GFZ.Stage
         // Note that default values appear in AX tests and similar. A good default set.
         private FogType interpolation = FogType.Exponential;
         private ViewRange fogRange = new ViewRange(20f, 100f);
-        private float3 colorRGB = float3.zero;
-        private float3 zero0x18 = float3.zero; // Always zero. Perhaps always black? The last 2 values are not used in anim curve, though.
+        private Vector3 colorRGB = Vector3.zero;
+        private Vector3 zero0x18 = Vector3.zero; // Always zero. Perhaps always black? The last 2 values are not used in anim curve, though.
 
 
         // PROPERTIES
@@ -64,7 +64,7 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// Color as 3 floats in order RGB.
         /// </summary>
-        public float3 ColorRGB { get => colorRGB; set => colorRGB = value; }
+        public Vector3 ColorRGB { get => colorRGB; set => colorRGB = value; }
 
 
         // STATIC METHODS
@@ -109,7 +109,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(300f, 3500f),
                 // #ffffec - soft yellow, almost beige
-                ColorRGB = new float3(1f, 1f, 0.924f),
+                ColorRGB = new Vector3(1f, 1f, 0.924f),
             };
         }
         public static Fog BigBlue()
@@ -119,7 +119,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(500f, 4000f),
                 // #afdcff - soft blue
-                ColorRGB = new float3(0.686f, 0.862f, 1f),
+                ColorRGB = new Vector3(0.686f, 0.862f, 1f),
             };
         }
         public static Fog CasinoPalace()
@@ -129,7 +129,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 20000f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog CosmoTerminal()
@@ -139,7 +139,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(4500f, 9000f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog FireField()
@@ -149,7 +149,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Linear,
                 FogRange = new ViewRange(0f, 5500f),
                 // #c79064 - mid-tone brown
-                ColorRGB = new float3(0.78f, 0.566f, 0.391f),
+                ColorRGB = new Vector3(0.78f, 0.566f, 0.391f),
             };
         }
         public static Fog GrandPrixPodium()
@@ -159,7 +159,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 12000f),
                 // #2d3c50 - deep blue
-                ColorRGB = new float3(0.176f, 0.235f, 0.313f),
+                ColorRGB = new Vector3(0.176f, 0.235f, 0.313f),
             };
         }
         public static Fog GreenPlant()
@@ -170,7 +170,7 @@ namespace GameCube.GFZ.Stage
                 // Intersection: -500, Mobius Ring: -250,
                 FogRange = new ViewRange(-375f, 2400f),
                 // 0.701, 0.780, 0.898 - dull blue (like sky color)
-                ColorRGB = new float3(0.703f, 0.781f, 0.898f),
+                ColorRGB = new Vector3(0.703f, 0.781f, 0.898f),
             };
         }
         public static Fog GreenPlantSpiral()
@@ -180,7 +180,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(0f, 7500f),
                 // #b3bd9f - dull green
-                ColorRGB = new float3(0.703f, 0.7422f, 0.625f),
+                ColorRGB = new Vector3(0.703f, 0.7422f, 0.625f),
             };
         }
         public static Fog Lightning()
@@ -191,7 +191,7 @@ namespace GameCube.GFZ.Stage
                 // Thunder Road: 3000f
                 FogRange = new ViewRange(0f, 2400f),
                 // #181a1e - very dark blue, almost black
-                ColorRGB = new float3(0.094f, 0.102f, 0.117f),
+                ColorRGB = new Vector3(0.094f, 0.102f, 0.117f),
             };
         }
         public static Fog MuteCity()
@@ -201,7 +201,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(20f, 100f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog MuteCityCOM()
@@ -211,7 +211,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 12000f),
                 // #2d3c50 - dark blue
-                ColorRGB = new float3(0.1765f, 0.2353f, 0.3137f),
+                ColorRGB = new Vector3(0.1765f, 0.2353f, 0.3137f),
             };
         }
         public static Fog OuterSpace()
@@ -221,7 +221,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(2000f, 15000f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog PhantomRoad()
@@ -231,7 +231,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 8000f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog PhantomRoadAX()
@@ -241,7 +241,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 16000f),
                 // #000000 - very, very dark blue, consider black
-                ColorRGB = new float3(0f, 0f, 0.1f),
+                ColorRGB = new Vector3(0f, 0f, 0.1f),
             };
         }
         public static Fog PortTown()
@@ -251,7 +251,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 16000f),
                 // #81634a - brown
-                ColorRGB = new float3(0.505f, 0.388f, 0.29f),
+                ColorRGB = new Vector3(0.505f, 0.388f, 0.29f),
             };
         }
         public static Fog SandOcean()
@@ -261,7 +261,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(20f, 100f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog VictoryLap()
@@ -271,7 +271,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(0f, 12000f),
                 // #2d3c50 - dark blue
-                ColorRGB = new float3(0.176f, 0.235f, 0.313f),
+                ColorRGB = new Vector3(0.176f, 0.235f, 0.313f),
             };
         }
         // Story Missions
@@ -282,7 +282,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(-3000f, 20000f),
                 // #373250 - dark indigo
-                ColorRGB = new float3(0.2156f, 0.196f, 0.3137f),
+                ColorRGB = new Vector3(0.2156f, 0.196f, 0.3137f),
             };
         }
         public static Fog StoryFireField()
@@ -292,7 +292,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Linear,
                 FogRange = new ViewRange(0f, 1500f),
                 // #ff7832 - saturated orange
-                ColorRGB = new float3(1f, 0.469f, 0.1954f),
+                ColorRGB = new Vector3(1f, 0.469f, 0.1954f),
             };
         }
         public static Fog StoryLightning()
@@ -302,7 +302,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Linear,
                 FogRange = new ViewRange(200f, 1350f),
                 // #db5528 - mid-tone red-orange
-                ColorRGB = new float3(0.8594f, 0.332f, 0.1563f),
+                ColorRGB = new Vector3(0.8594f, 0.332f, 0.1563f),
             };
         }
         public static Fog StoryMuteCityCOM()
@@ -312,7 +312,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(600f, 7470f),
                 // #00c864 - saturated green-teal
-                ColorRGB = new float3(0f, 0.7843f, 0.3922f),
+                ColorRGB = new Vector3(0f, 0.7843f, 0.3922f),
             };
         }
         public static Fog StoryPortTown()
@@ -322,7 +322,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.ExponentialSquared,
                 FogRange = new ViewRange(0f, 20000f),
                 // #000000 - black
-                ColorRGB = new float3(0f, 0f, 0f),
+                ColorRGB = new Vector3(0f, 0f, 0f),
             };
         }
         public static Fog StorySandOcean()
@@ -332,7 +332,7 @@ namespace GameCube.GFZ.Stage
                 Interpolation = FogType.Exponential,
                 FogRange = new ViewRange(50f, 70000f),
                 // #fffaf2 - light beige
-                ColorRGB = new float3(1f, 0.98f, 0.95f),
+                ColorRGB = new Vector3(1f, 0.98f, 0.95f),
 
             };
         }
@@ -400,14 +400,14 @@ namespace GameCube.GFZ.Stage
             }
             this.RecordEndAddress(reader);
             {
-                Assert.IsTrue(zero0x18.Equals(float3.zero));
+                Assert.IsTrue(zero0x18.Equals(Vector3.zero));
             }
         }
 
         public void Serialize(EndianBinaryWriter writer)
         {
             {
-                Assert.IsTrue(zero0x18.Equals(float3.zero));
+                Assert.IsTrue(zero0x18.Equals(Vector3.zero));
             }
             this.RecordStartAddress(writer);
             {

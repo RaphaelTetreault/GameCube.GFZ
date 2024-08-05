@@ -2,7 +2,7 @@
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -17,11 +17,11 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// The facing direction of this plane.
         /// </summary>
-        public float3 normal;
+        public Vector3 normal;
         /// <summary>
         /// The origin position of this plane.
         /// </summary>
-        public float3 origin;
+        public Vector3 origin;
 
 
         public void Deserialize(EndianBinaryReader reader)

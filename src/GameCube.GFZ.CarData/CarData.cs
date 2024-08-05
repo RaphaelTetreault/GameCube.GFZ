@@ -4,7 +4,7 @@ using Manifold.Text.Tables;
 using System;
 using System.IO;
 using System.Linq;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.CarData
 {

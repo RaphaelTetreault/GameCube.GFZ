@@ -1,7 +1,7 @@
 ﻿using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.FMI
 {
@@ -12,14 +12,14 @@ namespace GameCube.GFZ.FMI
         IPlainTextSerializable
     {
         // FIELDS
-        private float3 position;
+        private Vector3 position;
         private int zero_0x0C;
         private FmiPositionType positionType;
 
 
         // PROEPRTIES
         public AddressRange AddressRange { get; set; }
-        public float3 Position { get => position; set => position = value; }
+        public Vector3 Position { get => position; set => position = value; }
         public FmiPositionType PositionType { get => positionType; set => positionType = value; }
 
 

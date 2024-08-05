@@ -1,7 +1,7 @@
 ﻿using Manifold.IO;
 using System.IO;
-using Unity.Mathematics;
-using static Unity.Mathematics.math;
+using System.Numerics;
+using static System.MathF;
 
 namespace GameCube.GFZ
 {
@@ -19,8 +19,8 @@ namespace GameCube.GFZ
         IBinarySerializable
     {
         // METADATA
-        private quaternion quaternion;
-        private float3 eulers;
+        private Quaternion quaternion;
+        private Vector3 eulers;
 
 
         // FIELDS
@@ -57,20 +57,20 @@ namespace GameCube.GFZ
                 ComputeProperties();
             }
         }
-        public quaternion Quaternion
+        public Quaternion Quaternion
         {
             get => quaternion;
-            // TODO: implement when Unity.Mathematics supports quaternion <=> eulers
+            // TODO: implement when System.Numerics supports quaternion <=> eulers
             // set {}
         }
-        public float3 Eulers
+        public Vector3 Eulers
         {
             get => eulers;
             set
             {
-                x = eulers.x;
-                y = eulers.y;
-                z = eulers.z;
+                x = eulers.X;
+                y = eulers.Y;
+                z = eulers.Z;
                 ComputeProperties();
             }
         }
@@ -85,49 +85,66 @@ namespace GameCube.GFZ
         /// <param name="yRadians"></param>
         /// <param name="zRadians"></param>
         /// <returns></returns>
-        public static quaternion RecomposeRotation(float xRadians, float yRadians, float zRadians)
+        public static Quaternion RecomposeRotation(float xRadians, float yRadians, float zRadians)
         {
             // Reconstruct componenets as matrices 3x3
-            var mtxX = new float3x3(
-                1, 0, 0,
-                0, cos(xRadians), -sin(xRadians),
-                0, sin(xRadians), cos(xRadians)
+            var mtxX = new Matrix4x4(
+                1, 0, 0, 0,
+                0, Cos(xRadians), -Sin(xRadians), 0,
+                0, Sin(xRadians), Cos(xRadians), 0,
+                0, 0, 0, 1
                 );
-            var mtxY = new float3x3(
-                cos(yRadians), 0, sin(yRadians),
-                0, 1, 0,
-                -sin(yRadians), 0, cos(yRadians)
+            var mtxY = new Matrix4x4(
+                Cos(yRadians), 0, Sin(yRadians), 0,
+                0, 1, 0, 0,
+                -Sin(yRadians), 0, Cos(yRadians), 0,
+                0, 0, 0, 1
                 );
-            var mtxZ = new float3x3(
-                cos(zRadians), -sin(zRadians), 0,
-                sin(zRadians), cos(zRadians), 0,
-                0, 0, 1
+            var mtxZ = new Matrix4x4(
+                Cos(zRadians), -Sin(zRadians), 0, 0,
+                Sin(zRadians), Cos(zRadians), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
                 );
 
             // 
             var mtx = mtxZ * mtxY * mtxX;
-            var rotation = new quaternion(mtx);
+            var rotation = mtx.Rotation();
 
             return rotation;
         }
 
-        public static float3 DecomposeRotationDegrees(float3x3 matrix)
+        public static Vector3 DecomposeRotation(Matrix4x4 matrix)
         {
             // Get the relevant parts of the rotation from the matrix
             // https://nghiaho.com/?page_id=846
-            float r11 = matrix.c0.x;
-            float r21 = matrix.c1.y;
-            float r31 = matrix.c2.x;
-            float r32 = matrix.c2.y;
-            float r33 = matrix.c2.z;
+            float r11 = matrix.M11;
+            float r21 = matrix.M21;
+            float r31 = matrix.M31;
+            float r32 = matrix.M32;
+            float r33 = matrix.M33;
 
             // Compute discrete rotation steps
-            float xRadians = atan2(r32, r33);
-            float yRadians = atan2(-r31, sqrt(pow(r32, 2) + pow(r33, 2)));
-            float zRadians = atan2(r21, r11);
+            float xRadians = Atan2(r32, r33);
+            float yRadians = Atan2(-r31, Sqrt(Pow(r32, 2) + Pow(r33, 2)));
+            float zRadians = Atan2(r21, r11);
+
+            // Put in Vector3
+            Vector3 decomposedEulers = new Vector3(xRadians, yRadians, zRadians);
+            return decomposedEulers;
+        }
+
+        public static Vector3 DecomposeRotationDegrees(Matrix4x4 matrix)
+        {
+            // Convert matrix into distinct radian rotations
+            Vector3 radians = DecomposeRotation(matrix);
 
             // Set angles to be in degrees, not radians
-            float3 decomposedEulers = degrees(new float3(xRadians, yRadians, zRadians));
+            float x = MathFX.RadiansToDegrees(radians.X);
+            float y = MathFX.RadiansToDegrees(radians.Y);
+            float z = MathFX.RadiansToDegrees(radians.Z);
+            Vector3 decomposedEulers = new Vector3(x, y, z);
+
             return decomposedEulers;
         }
 
@@ -151,12 +168,12 @@ namespace GameCube.GFZ
         private void ComputeProperties()
         {
             quaternion = RecomposeRotation(x.Radians, y.Radians, z.Radians);
-            eulers = new float3(x.Degrees, y.Degrees, z.Degrees);
+            eulers = new Vector3(x.Degrees, y.Degrees, z.Degrees);
         }
 
         public override string ToString()
         {
-            return $"({eulers.x:0.0}, {eulers.y:0.0}, {eulers.z:0.0})";
+            return $"({eulers.X:0.0}, {eulers.Y:0.0}, {eulers.Z:0.0})";
         }
     }
 }

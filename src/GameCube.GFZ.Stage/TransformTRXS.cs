@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -19,21 +19,21 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private float3 position;
+        private Vector3 position;
         private CompressedRotation compressedRotation;
         private UnknownTransformOption unknownOption;
         private ObjectActiveOverride objectActiveOverride;
-        private float3 scale = new float3(1,1,1);
+        private Vector3 scale = new Vector3(1,1,1);
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
         public CompressedRotation CompressedRotation { get => compressedRotation; set => compressedRotation = value; }
         public ObjectActiveOverride ObjectActiveOverride { get => objectActiveOverride; set => objectActiveOverride = value; }
-        public float3 Position { get => position; set => position = value; }
-        public quaternion Rotation => compressedRotation.Quaternion;
-        public float3 RotationEuler => compressedRotation.Eulers;
-        public float3 Scale { get => scale; set => scale = value; }
+        public Vector3 Position { get => position; set => position = value; }
+        public Quaternion Rotation => compressedRotation.Quaternion;
+        public Vector3 RotationEuler => compressedRotation.Eulers;
+        public Vector3 Scale { get => scale; set => scale = value; }
         public UnknownTransformOption UnknownOption { get => unknownOption; set => unknownOption = value; }
 
 

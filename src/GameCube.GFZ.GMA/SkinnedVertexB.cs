@@ -1,7 +1,7 @@
 ﻿using GameCube.GX;
 using Manifold;
 using Manifold.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.GMA
 {
@@ -16,11 +16,11 @@ namespace GameCube.GFZ.GMA
         IBinarySerializable
     {
         // FIELDS
-        private float3 position;
-        private float3 normal;
-        private float2 textureUV0;
-        private float2 textureUV1;
-        private float2 textureUV2;
+        private Vector3 position;
+        private Vector3 normal;
+        private Vector2 textureUV0;
+        private Vector2 textureUV1;
+        private Vector2 textureUV2;
         private GXColor color0 = new GXColor(ComponentType.GX_RGBA8); // RGBA. Appears to truly be a color.
         private GXColor color1 = new GXColor(ComponentType.GX_RGBA8); // Magic bits. Variations: 00000000, 00010100, 02000002, 01000001, 03000003
         private GXColor color2 = new GXColor(ComponentType.GX_RGBA8); // RGBA. Color-looking, but does use alpha channel.

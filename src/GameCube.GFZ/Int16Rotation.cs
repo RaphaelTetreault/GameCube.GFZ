@@ -1,6 +1,8 @@
 using Manifold.IO;
+using System;
 using System.IO;
-using static Unity.Mathematics.math;
+using static System.MathF;
+using static Manifold.IO.MathFX;
 
 namespace GameCube.GFZ
 {
@@ -26,7 +28,7 @@ namespace GameCube.GFZ
             set
             {
                 degrees = value;
-                radians = radians(degrees);
+                radians = DegreesToRadians(degrees);
                 binary = CompressDegreesToShort(degrees);
             }
         }
@@ -37,7 +39,7 @@ namespace GameCube.GFZ
             {
                 binary = value;
                 degrees = ShortToDegrees(binary);
-                radians = radians(degrees);
+                radians = DegreesToRadians(degrees);
             }
         }
         public float Radians
@@ -46,7 +48,7 @@ namespace GameCube.GFZ
             set
             {
                 radians = value;
-                degrees = degrees(radians);
+                degrees = DegreesToRadians(radians);
                 binary = CompressDegreesToShort(degrees);
             }
         }

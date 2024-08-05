@@ -2,7 +2,7 @@ using Manifold;
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 //////////////////////////
 // Analysis: 2022-01-14 //
@@ -156,8 +156,8 @@ namespace GameCube.GFZ.Stage
             }
 
             // Get min and max XZ values of any checkpoint
-            float3 min = new float3(float.MaxValue, 0, float.MaxValue);
-            float3 max = new float3(float.MinValue, 0, float.MinValue);
+            Vector3 min = new Vector3(float.MaxValue, 0, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, 0, float.MinValue);
 
             // Iterate over every triangle, get min/maz X and Z coordinates
             foreach (var tri in ColliderTris)

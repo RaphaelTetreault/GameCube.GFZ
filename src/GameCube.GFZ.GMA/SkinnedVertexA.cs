@@ -1,6 +1,6 @@
 ﻿using Manifold.IO;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.GMA
 {
@@ -19,15 +19,15 @@ namespace GameCube.GFZ.GMA
         IBinarySerializable
     {
         // FIELDS
-        private float3 position;
-        private float3 normal;
-        private float2 textureUV0;
+        private Vector3 position;
+        private Vector3 normal;
+        private Vector2 textureUV0;
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public float3 Position { get => position; set => position = value; }
-        public float3 Normal { get => normal; set => normal = value; }
-        public float2 TextureUV0 { get => textureUV0; set => textureUV0 = value; }
+        public Vector3 Position { get => position; set => position = value; }
+        public Vector3 Normal { get => normal; set => normal = value; }
+        public Vector2 TextureUV0 { get => textureUV0; set => textureUV0 = value; }
 
 
         // METHODS

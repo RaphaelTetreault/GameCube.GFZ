@@ -1,7 +1,7 @@
 ﻿using Manifold;
 using Manifold.IO;
 using System;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ
 {
@@ -17,41 +17,54 @@ namespace GameCube.GFZ
         ITextPrintable
     {
         // "FIELDS" as reconstructed for ease of use (it's really 3 rows x 4 columns)
-        private float4x4 matrix = float4x4.TRS(new(), new(), new float3(1, 1, 1));
-
+        private Matrix4x4 matrix = Matrix4x4.Identity;
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public float4x4 Matrix { get => matrix; set => matrix = value; }
-        public float3 Position => matrix.Position();
-        public quaternion Rotation => matrix.Rotation();
-        public float3 RotationEuler => matrix.RotationEuler();
-        public float3 Scale => matrix.Scale();
+        public Matrix4x4 Matrix { get => matrix; set => matrix = value; }
+        public Vector3 Position => matrix.Position();
+        public Quaternion Rotation => matrix.Rotation();
+        public Vector3 RotationEuler => matrix.RotationEuler();
+        public Vector3 Scale => matrix.Scale();
 
 
         // METHODS
         public void Deserialize(EndianBinaryReader reader)
         {
-            // The data is stored as rows
-            float4 row0 = new float4();
-            float4 row1 = new float4();
-            float4 row2 = new float4();
-            // The final row is implied (constant) in a 3x4 matrix
-            float4 row3 = new float4(0, 0, 0, 1);
+            // The data is stored as rows. Matrix4x4 calls them M[R][C], where
+            // [R] is row number and [C] is column number. eg. M24 is row 2, col 4.
+            float M11, M12, M13, M14;
+            float M21, M22, M23, M24;
+            float M31, M32, M33, M34;
+            // The final row is implied (constant) in a 3x4 matrix as (0, 0, 0, 1)
 
             this.RecordStartAddress(reader);
             {
                 // Read rows
-                reader.Read(ref row0);
-                reader.Read(ref row1);
-                reader.Read(ref row2);
+                // Row 1
+                M11 = reader.ReadFloat();
+                M12 = reader.ReadFloat();
+                M13 = reader.ReadFloat();
+                M14 = reader.ReadFloat();
+                // Row 2
+                M21 = reader.ReadFloat();
+                M22 = reader.ReadFloat();
+                M23 = reader.ReadFloat();
+                M24 = reader.ReadFloat();
+                // Row 2
+                M31 = reader.ReadFloat();
+                M32 = reader.ReadFloat();
+                M33 = reader.ReadFloat();
+                M34 = reader.ReadFloat();
             }
             this.RecordEndAddress(reader);
             {
-                // matrix is constructed from 4 columns -NOT- rows...
-                var matrixTransposed = new float4x4(row0, row1, row2, row3);
-                // ...thus we need to transpose afterwards to swap rows and columns
-                matrix = math.transpose(matrixTransposed);
+                // matrix is constructed from 4 rows
+                matrix = new Matrix4x4(
+                    M11, M12, M13, M14,
+                    M21, M22, M23, M24,
+                    M31, M32, M33, M34,
+                    0, 0, 0, 1);
             }
         }
 
@@ -59,16 +72,22 @@ namespace GameCube.GFZ
         {
             this.RecordStartAddress(writer);
             {
-                // the matrix only returns colunms but we need rows, so transpose to swap row/col
-                var matrixTransposed = math.transpose(matrix);
-                var row0 = matrixTransposed.c0;
-                var row1 = matrixTransposed.c1;
-                var row2 = matrixTransposed.c2;
-
                 // Write rows
-                writer.Write(row0);
-                writer.Write(row1);
-                writer.Write(row2);
+                // Row 1
+                writer.Write(matrix.M11);
+                writer.Write(matrix.M12);
+                writer.Write(matrix.M13);
+                writer.Write(matrix.M14);
+                // Row 2
+                writer.Write(matrix.M21);
+                writer.Write(matrix.M22);
+                writer.Write(matrix.M23);
+                writer.Write(matrix.M24);
+                // Row 3
+                writer.Write(matrix.M31);
+                writer.Write(matrix.M32);
+                writer.Write(matrix.M33);
+                writer.Write(matrix.M34);
             }
             this.RecordEndAddress(writer);
         }

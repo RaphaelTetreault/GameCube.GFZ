@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
@@ -24,8 +24,8 @@ namespace GameCube.GFZ.Stage
         public static GridXZ GetMatrixBoundsXZ(Checkpoint[] checkpoints)
         {
             // Get min and max XZ values of any checkpoint
-            float3 min = new float3(float.MaxValue, 0, float.MaxValue);
-            float3 max = new float3(float.MinValue, 0, float.MinValue);
+            Vector3 min = new Vector3(float.MaxValue, 0, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, 0, float.MinValue);
 
             foreach (var checkpoint in checkpoints)
             {

@@ -2,7 +2,7 @@
 using Manifold.IO;
 using System;
 using System.IO;
-using Unity.Mathematics;
+using System.Numerics;
 
 namespace GameCube.GFZ.Camera
 {
@@ -12,8 +12,8 @@ namespace GameCube.GFZ.Camera
         IBinarySerializable
     {
         // FIELDS
-        private float3 cameraPosition;
-        private float3 lookAtPosition;
+        private Vector3 cameraPosition;
+        private Vector3 lookAtPosition;
         private float fieldOfView;
         private Int16Rotation rotationRoll;
         private ushort zero_0x1E;
@@ -24,12 +24,12 @@ namespace GameCube.GFZ.Camera
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
 
-        public float3 CameraPosition
+        public Vector3 CameraPosition
         {
             get => cameraPosition;
             set => cameraPosition = value;
         }
-        public float3 LookAtPosition
+        public Vector3 LookAtPosition
         {
             get => lookAtPosition;
             set => lookAtPosition = value;
