@@ -13,6 +13,7 @@ namespace GameCube.GFZ.TPL
         IBinaryAddressable,
         IBinarySerializable
     {
+        public const ushort k0x0000 = 0x0000;
         public const ushort k0x1234 = 0x1234;
         public const int Size = 0x14; // 20 bytes
 
@@ -69,12 +70,14 @@ namespace GameCube.GFZ.TPL
         public void Serialize(EndianBinaryWriter writer)
         {
             {
-                Assert.IsTrue(const_zero == 0);
-                //Assert.IsTrue(const_0x1234 == k0x1234);
+                if (!IsGarbageEntry)
+                    Assert.IsTrue(const_zero == 0);
+                Assert.IsTrue(const_0x1234 == k0x1234);
             }
             this.RecordStartAddress(writer);
             {
-                writer.Write(const_zero);
+                //writer.Write(const_zero); // write out garbage?
+                writer.Write(k0x0000);
                 writer.Write(isNull);
                 writer.Write(textureFormat);
                 writer.Write(texturePtr);

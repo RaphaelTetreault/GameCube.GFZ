@@ -1,13 +1,14 @@
 ﻿using GameCube.GX.Texture;
 using Manifold.IO;
+using System;
 
 namespace GameCube.GFZ.TPL
 {
     public class TextureSeries
     {
-        public TextureData[] Entries { get; internal set; }
+        public TextureData[] Entries { get; internal set; } = Array.Empty<TextureData>();
         public TextureSeriesDescription Description { get; internal set; }
-        public string[] MD5TextureHashes { get; internal set; }
+        public string[] MD5TextureHashes { get; internal set; } = Array.Empty<string>();
         public AddressRange AddressRange { get; internal set; }
 
         public TextureData this[int i]

@@ -15,7 +15,7 @@ namespace GameCube.GFZ.TPL
 
         private int textureDescriptionsCount;
         private TextureSeriesDescription[] textureSeriesDescription = new TextureSeriesDescription[0];
-        private TextureSeries[] textureSeries = new TextureSeries[0];
+        private TextureSeries[] textureSeries = Array.Empty<TextureSeries>();
 
         public Endianness Endianness => endianness;
         public string FileExtension => ".tpl";
@@ -85,6 +85,11 @@ namespace GameCube.GFZ.TPL
             // Write each texture of each texture series
             foreach (var textureSerie in textureSeries)
             {
+                // Skip any null series
+                // TODO: consider making the entries in the array zeroed rather than leave true nulls around.
+                if (textureSerie is null)
+                    continue;
+
                 var directEncoding = DirectEncoding.GetEncoding(textureSerie.Description.TextureFormat);
                 foreach (var entry in textureSerie.Entries)
                 {

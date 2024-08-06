@@ -135,7 +135,7 @@ namespace GameCube.GFZ.GMA
             gcmfWriter.BaseStream.CopyTo(writer.BaseStream);
 
             // Re-write values
-            writer.JumpToAddress(0);
+            writer.JumpToAddress(0, true);
             writer.Write(modelsCount);
             writer.Write(modelBasePtrOffset);
         }
