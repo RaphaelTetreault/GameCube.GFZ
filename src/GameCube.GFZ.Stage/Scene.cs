@@ -235,9 +235,14 @@ namespace GameCube.GFZ.Stage
         {
             // CAPTURE METADATA
             FileSize = (int)reader.BaseStream.Length;
-            // Store the stage index, can solve venue and course name from this using hashes
-            var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
-            CourseIndex = int.Parse(matchDigits.Value);
+
+            bool hasFileName = !string.IsNullOrWhiteSpace(FileName);
+            if (hasFileName)
+            {
+                // Store the stage index, can solve venue and course name from this using hashes
+                var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
+                CourseIndex = int.Parse(matchDigits.Value);
+            }
 
             // TODO: use file hash + DB instead of hardcoded guesses.
             Venue = CourseUtility.GetVenue(CourseIndex);
@@ -918,7 +923,7 @@ namespace GameCube.GFZ.Stage
 
             // RE-WRITE ColiScene HEADER TO RESERIALIZE POINTERS
             // Rewrite main block pointers
-            writer.JumpToAddress(0);
+            writer.JumpToAddress(0, true);
             SerializeHeader(writer);
             // Validate this structure before finishing.
             ValidateReferences();
