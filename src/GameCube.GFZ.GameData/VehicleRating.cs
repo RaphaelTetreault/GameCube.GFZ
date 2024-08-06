@@ -1,4 +1,5 @@
 ﻿using Manifold.IO;
+using System;
 
 namespace GameCube.GFZ.GameData
 {

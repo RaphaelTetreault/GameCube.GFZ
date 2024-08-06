@@ -2,6 +2,7 @@
 using GameCube.GCI;
 using GameCube.GX.Texture;
 using Manifold.IO;
+using System;
 
 namespace GameCube.GFZ.GCI
 {

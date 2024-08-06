@@ -1,5 +1,6 @@
 ﻿using GameCube.GCI;
 using Manifold.IO;
+using System;
 
 namespace GameCube.GFZ.Replay
 {
