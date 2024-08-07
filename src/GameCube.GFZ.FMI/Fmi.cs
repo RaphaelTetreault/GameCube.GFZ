@@ -160,7 +160,7 @@ namespace GameCube.GFZ.FMI
 
             // Prepare file. There is a minimum size even if "empty"
             writer.WritePadding(0x00, kMinFileSize);
-            writer.JumpToAddress(0);
+            writer.JumpToZero();
 
             this.RecordStartAddress(writer);
             {

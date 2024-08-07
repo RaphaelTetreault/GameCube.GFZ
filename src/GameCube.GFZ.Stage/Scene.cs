@@ -923,7 +923,7 @@ namespace GameCube.GFZ.Stage
 
             // RE-WRITE ColiScene HEADER TO RESERIALIZE POINTERS
             // Rewrite main block pointers
-            writer.JumpToAddress(0, true);
+            writer.JumpToZero();
             SerializeHeader(writer);
             // Validate this structure before finishing.
             ValidateReferences();
