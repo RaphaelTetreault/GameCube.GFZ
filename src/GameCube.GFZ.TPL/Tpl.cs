@@ -123,13 +123,13 @@ namespace GameCube.GFZ.TPL
                 bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
                 if (isInvalidTextureSize)
                 {
-                    textureSeries[i].Texture = new Texture(1, 1, Magenta, textureSeriesDescription.TextureFormat);
+                    textureSeries[i].Texture = new Texture(0, 0, textureSeriesDescription.TextureFormat);
                     pixelWidth >>= 1;
                     pixelHeight >>= 1;
                     continue;
                 }
 
-                //
+                // Record where this texture is; for future use.
                 AddressRange textureRange = new AddressRange();
                 textureRange.startAddress = (int)reader.BaseStream.Position;
 
@@ -159,15 +159,12 @@ namespace GameCube.GFZ.TPL
                         // If no more blocks to read, make fully magenta texture.
                         textureSeries[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureSeriesDescription.TextureFormat);
                     }
-                    textureSeries[i].IsValid = false;
-
                     pixelWidth >>= 1;
                     pixelHeight >>= 1;
                     continue;
                 }
 
                 // If we succeed, proceed to deserialize blocks for texture.
-                //var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, blocksW, blocksH, encoding);
                 var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, encoding, blocksRequired);
                 Assert.IsTrue(blocksRequired != 0);
                 Assert.IsTrue(directBlocks.Length == blocksRequired);
@@ -185,7 +182,7 @@ namespace GameCube.GFZ.TPL
                 pixelHeight >>= 1;
 
                 // Get texture hash ONLY for valid textures
-                textureRange.endAddress = (int)reader.BaseStream.Position;
+                textureRange.endAddress = reader.BaseStream.Position;
                 reader.JumpToAddress(textureRange.startAddress);
                 var bytes = reader.ReadBytes(textureRange.Size);
                 reader.JumpToAddress(textureRange.endAddress);
