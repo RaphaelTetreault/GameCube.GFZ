@@ -8,7 +8,8 @@ namespace GameCube.GFZ.TPL
     {
         public TextureData[] Entries { get; internal set; } = Array.Empty<TextureData>();
         public TextureSeriesDescription Description { get; internal set; }
-        public string[] MD5TextureHashes { get; internal set; } = Array.Empty<string>();
+        //public string[] MD5TextureHashes { get; internal set; } = Array.Empty<string>();
+        //public string[] CRC32TextureHashes { get; internal set; } = Array.Empty<string>();
         public AddressRange AddressRange { get; internal set; }
 
         public TextureData this[int i]
@@ -25,7 +26,7 @@ namespace GameCube.GFZ.TPL
 
             // Initialiize texture series
             int numberOfTextures = textureSeriesDescription.NumberOfTextures;
-            MD5TextureHashes = new string[numberOfTextures];
+            //MD5TextureHashes = new string[numberOfTextures];
             Entries = new TextureData[numberOfTextures];
             for (int i = 0; i < Entries.Length; i++)
                 Entries[i] = new TextureData();

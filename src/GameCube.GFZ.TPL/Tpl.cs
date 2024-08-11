@@ -189,10 +189,9 @@ namespace GameCube.GFZ.TPL
                 reader.JumpToAddress(textureRange.startAddress);
                 var bytes = reader.ReadBytes(textureRange.Size);
                 reader.JumpToAddress(textureRange.endAddress);
-                //
-                var MD5 = System.Security.Cryptography.MD5.Create();
-                var hashedBytes = MD5.ComputeHash(bytes);
-                textureSeries.MD5TextureHashes[i] = hashedBytes.ConcatElements((byte b) => { return b.ToString("x2"); }); // gross...?
+
+                // Compute simple hash of texture data
+                textureSeries[i].CRC32 = System.IO.Hashing.Crc32.Hash(bytes).ConcatElements((byte b) => { return b.ToString("x2"); });
             }
             return textureSeries;
         }

@@ -18,7 +18,7 @@ namespace GameCube.GFZ.TPL
         public const int Size = 0x14; // 20 bytes
 
         private ushort const_zero;
-        private bool isNull;
+        private bool isNull = true;
         private TextureFormat textureFormat; // 1 byte
         private Pointer texturePtr;
         private ushort width;
