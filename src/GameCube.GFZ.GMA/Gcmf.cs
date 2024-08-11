@@ -1,4 +1,5 @@
-﻿using Manifold;
+﻿using GameCube.GX;
+using Manifold;
 using Manifold.IO;
 using System;
 using System.Collections.Generic;
@@ -31,16 +32,18 @@ namespace GameCube.GFZ.GMA
         private byte zero0x1F;
         private Offset submeshOffsetPtr;
         private uint zero0x24;
-        private BoneIndexes8 boneIndices = new BoneIndexes8();
-        private TevLayer[] tevLayers = new TevLayer[0];
-        private TransformMatrix3x4[] bones = new TransformMatrix3x4[0];
+        private BoneIndexes8 boneIndices = new();
+        private TevLayer[] tevLayers = [];
+        private TransformMatrix3x4[] bones = [];
         private SkinnedVertexDescriptor skinnedVertexDescriptor;
-        private Submesh[] submeshes = new Submesh[0];
-        private SkinnedVertexA[] skinnedVerticesA = new SkinnedVertexA[0];
-        private SkinnedVertexB[] skinnedVerticesB = new SkinnedVertexB[0];
-        private SkinBoneBinding[] skinBoneBindings = new SkinBoneBinding[0];
-        private short[] unkBoneIndices = new short[0];
+        private Submesh[] submeshes = [];
+        private SkinnedVertexA[] skinnedVerticesA = [];
+        private SkinnedVertexB[] skinnedVerticesB = [];
+        private SkinBoneBinding[] skinBoneBindings = [];
+        private short[] unkBoneIndices = [];
 
+        //
+        public string CRC32 { get; set; } = string.Empty;
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
@@ -228,6 +231,24 @@ namespace GameCube.GFZ.GMA
                     }
                 }
             }
+
+            // Generate CRC32
+            Pointer currentAddress = reader.GetPositionAsPointer();
+
+            var vertBytes = new List<byte>();
+            foreach (var submesh in submeshes)
+            {
+                AddBytes(reader, vertBytes, submesh.PrimaryDisplayListDescriptor);
+                AddBytes(reader, vertBytes, submesh.PrimaryFrontFacing);
+                AddBytes(reader, vertBytes, submesh.PrimaryBackFacing);
+                AddBytes(reader, vertBytes, submesh.SecondaryDisplayListDescriptor);
+                AddBytes(reader, vertBytes, submesh.SecondaryFrontFacing);
+                AddBytes(reader, vertBytes, submesh.SecondaryBackFacing);
+            }
+            // Compute CRC32 hash of texture data
+            CRC32 = System.IO.Hashing.Crc32.Hash(vertBytes.ToArray()).ConcatElements((byte b) => { return b.ToString("x2"); });
+
+            reader.JumpToAddress(currentAddress);
         }
 
         public void Serialize(EndianBinaryWriter writer)
@@ -375,6 +396,26 @@ namespace GameCube.GFZ.GMA
             for (ushort i = 0; i < tevLayers.Length; i++)
             {
                 tevLayers[i].TevLayerIndex = i;
+            }
+        }
+
+        /// <summary>
+        ///     Adds bytes from an address range to a list. Used to hash model.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="list"></param>
+        /// <param name="addressables"></param>
+        private void AddBytes(EndianBinaryReader reader, List<byte> list, params IBinaryAddressable[] addressables)
+        {
+            if (addressables is null)
+                return;
+
+            foreach (var addressable in addressables)
+            {
+                if (addressable is null)
+                    continue;
+
+                list.AddRange(addressable.AddressRange.GetBytes(reader));
             }
         }
     }
