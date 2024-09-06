@@ -13,14 +13,13 @@ namespace GameCube.GFZ
         public static VertexAttributeTable VAT { get => vat; }
 
         private static readonly VertexAttributeTable vat = new(
-            new VertexAttributeFormat[2]
-            {
+            [
                 // VAT 0
                 new VertexAttributeFormat()
                 {
                     pos = new VertexAttribute(ComponentCount.GX_POS_XYZ, ComponentType.GX_F32),
                     nrm = new VertexAttribute(ComponentCount.GX_NRM_XYZ, ComponentType.GX_F32),
-                    nbt = new VertexAttribute(ComponentCount.GX_NRM_NBT, ComponentType.GX_F32), // compressed
+                    nbt = new VertexAttribute(ComponentCount.GX_NRM_NBT, ComponentType.GX_F32),
                     clr0 = new VertexAttribute(ComponentCount.GX_CLR_RGBA, ComponentType.GX_RGBA8),
                     tex0 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_F32),
                     tex1 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_F32),
@@ -30,14 +29,14 @@ namespace GameCube.GFZ
                 // VAT 1
                 new VertexAttributeFormat()
                 {
-                    pos = new VertexAttribute(ComponentCount.GX_POS_XYZ, ComponentType.GX_S16, 13), // Verified
-                    nrm = new VertexAttribute(ComponentCount.GX_NRM_XYZ, ComponentType.GX_S16, 14), // Verified
-                    clr0 = new VertexAttribute(ComponentCount.GX_CLR_RGBA, ComponentType.GX_RGBA8), // Verified
-                    tex0 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 14), // UNVERIFIED if s16 is correct
-                    tex1 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 14), // ^ same
-                    tex2 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 14), // ^ same
+                    pos = new VertexAttribute(ComponentCount.GX_POS_XYZ, ComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
+                    nrm = new VertexAttribute(ComponentCount.GX_NRM_XYZ, ComponentType.GX_S16, 14), // TODO: RE-VERIFY
+                    clr0 = new VertexAttribute(ComponentCount.GX_CLR_RGBA, ComponentType.GX_RGBA8), // Raphaël verified 2019 (?)
+                    tex0 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
+                    tex1 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // UNVERIFIED
+                    tex2 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // UNVERIFIED
                 },
-            }
+            ]
         );
     }
 }
