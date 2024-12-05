@@ -16,8 +16,8 @@ namespace GameCube.GFZ.Stage
     ///     <item>
     ///         <term>Story 1: Captain Falcon Trains</term>
     ///         <description>
-    ///             (F-Zero AX only!) Represents collectable capsule's trigger.
-    ///             Story 1 capsule data was moved to the MiscellaneousTrigger type for F-Zero GX.
+    ///             (F-Zero GX only!) Represents collectable capsule's trigger.
+    ///             AX Story 1 capsule data was moved to the <see cref="MiscellaneousTrigger "/> type.
     ///         </description>
     ///     </item>
     ///     <item>

@@ -25,7 +25,7 @@ namespace GameCube.GFZ.Stage
         
         /// <summary>
         /// Trigger volumes for capsule in Story 1. Used only in F-Zero AX. Data
-        /// was moved to story 
+        /// was moved to <see cref="StoryObjectTrigger"/> for GX. 
         /// </summary>
         Story1_CapsuleAX = 1 << 30,
         
