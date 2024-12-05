@@ -12,8 +12,8 @@ public class FmiFile : BinaryFileWrapper<Fmi>
     public const string extension = ".fmi";
 
     // PROPERTIES
-    public override Endianness Endianness => endianness;
-    public override string FileExtension => extension;
+    public override Endianness Endianness { get; set; } = endianness;
+    public override string FileExtension { get; set; } = extension;
     public override string FileName { get; set; } = string.Empty;
 
     // CONSTRUCTORS
