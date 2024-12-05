@@ -10,13 +10,13 @@ namespace GameCube.GFZ.Stage
     /// A trigger for special Story Mode objects.
     /// </summary>
     /// <remarks>
+    /// This structure is used for the following missions:
     /// <list type="bullet">
-    ///     <listheader>This structure is used for the following missions:</listheader>
     ///     <description></description>
     ///     <item>
     ///         <term>Story 1: Captain Falcon Trains</term>
     ///         <description>
-    ///             (F-Zero GX only!) Represents collectable capsule's trigger.
+    ///             F-Zero GX only! Represents collectable capsule's trigger.
     ///             AX Story 1 capsule data was previously in the <see cref="MiscellaneousTrigger "/> type.
     ///         </description>
     ///     </item>
