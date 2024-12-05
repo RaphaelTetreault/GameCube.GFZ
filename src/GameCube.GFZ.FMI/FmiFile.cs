@@ -15,4 +15,8 @@ public class FmiFile : BinaryFileWrapper<Fmi>
     public override Endianness Endianness => endianness;
     public override string FileExtension => extension;
     public override string FileName { get; set; } = string.Empty;
+
+    // CONSTRUCTORS
+    public FmiFile() : base() { }
+    public FmiFile(string inputPath) : base(inputPath) { }
 }
