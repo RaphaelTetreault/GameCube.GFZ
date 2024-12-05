@@ -100,6 +100,7 @@ namespace GameCube.GFZ.Stage
                     reader.JumpToAddress(story2BoulderPathPtr);
                     reader.Read(ref storyObjectPath);
                 }
+                Assert.IsTrue(zero_0x00 == 0);
             }
             this.SetReaderToEndAddress(reader);
         }
@@ -107,6 +108,7 @@ namespace GameCube.GFZ.Stage
         public void Serialize(EndianBinaryWriter writer)
         {
             {
+                Assert.IsTrue(zero_0x00 == 0);
                 story2BoulderPathPtr = storyObjectPath.GetPointer();
             }
             this.RecordStartAddress(writer);
@@ -133,7 +135,7 @@ namespace GameCube.GFZ.Stage
             builder.AppendLineIndented(indent, indentLevel, nameof(StoryObjectTrigger));
             indentLevel++;
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Position)}: {Position}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Rotation)}: {rotation}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Rotation)}: {Rotation}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(Scale)}: {Scale}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroupOrderIndex)}: {BoulderGroupOrderIndex}");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroup)}: {BoulderGroup}");
