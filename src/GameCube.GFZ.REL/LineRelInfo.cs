@@ -95,6 +95,10 @@ namespace GameCube.GFZ.LineREL
         /// <summary>
         ///     Data for course name localizations (non-English european languages).
         /// </summary>
+        /// <remarks>
+        ///     AX, E, J order: GER, FRE, SPA, ITA, JPN (interleaved).
+        ///     P order: JPN (only).
+        /// </remarks>
         public abstract DataBlock CourseNamesLocalizations { get; }
 
         /// <summary>
@@ -114,26 +118,106 @@ namespace GameCube.GFZ.LineREL
         /// </summary>
         public abstract Pointer VehicleMaxSpeedCap9990KmhPtr { get; }
 
+        /// <summary>
+        ///     Index which correlates stage index to venue.
+        /// </summary>
         public abstract DataBlock CourseVenueIndex { get; }         // done
-        public abstract DataBlock CourseDifficulty { get; }         // done
-        public abstract DataBlock CourseBgmIndex { get; }           // done
-        public abstract DataBlock CourseBgmFinalLapIndex { get; }   // done
-        public abstract DataBlock CupCourseLut { get; }             // TODO: index in cup
-        public abstract DataBlock CupCourseLutAssets { get; }       // TODO: gma/tpl loading index
-        public abstract DataBlock CupCourseLutUnk { get; }          // TODO: unknown, but related
-        public abstract DataBlock CourseMinimapParameterStructs { get; } // for editor
-        public abstract DataBlock ForbiddenWords { get; }           // 
-        public abstract DataBlock AxModeCourseTimers { get; }       // 
-        public abstract DataBlock PilotPositions { get; }           // 
-        public abstract DataBlock PilotToMachineLut { get; }        //
 
-        // internal only
+        /// <summary>
+        ///     Dificulty rating byte for each stage index.
+        /// </summary>
+        public abstract DataBlock CourseDifficulty { get; }         // done
+
+        /// <summary>
+        ///     Index which correlates stage index to BGM.
+        /// </summary>
+        public abstract DataBlock CourseBgmIndex { get; }           // done
+
+        /// <summary>
+        ///     Index which correlates stage index to final lap BGM.
+        /// </summary>
+        public abstract DataBlock CourseBgmFinalLapIndex { get; }   // done
+
+        /// <summary>
+        ///     Look-Up-Table which maps the 6 cup entries to stages indexes
+        ///     for the purpose of loading the COLI_COURSE## file.
+        /// </summary>
+        public abstract DataBlock CupCourseLut { get; }             // TODO: index in cup
+
+        /// <summary>
+        ///     Look-Up-Table which maps the 6 cup entries to stages indexes
+        ///     for the purpose of loading in the GMA and TPL assets.
+        /// </summary>
+        public abstract DataBlock CupCourseLutAssets { get; }       // TODO: gma/tpl loading index
+
+        /// <summary>
+        ///     Look-Up-Table which maps the 6 cup entries to stages indexes.
+        ///     Purpose unknown.
+        /// </summary>
+        public abstract DataBlock CupCourseLutUnk { get; }          // TODO: unknown, but related
+
+        /// <summary>
+        ///     Stage minimap projections.
+        /// </summary>
+        public abstract DataBlock CourseMinimapParameterStructs { get; }
+
+        /// <summary>
+        ///     List of banned/censored words.
+        /// </summary>
+        /// <remarks>
+        ///     Use to invalidate values during name entry.
+        /// </remarks>
+        public abstract DataBlock ForbiddenWords { get; }
+
+        /// <summary>
+        ///     List of banned/censored words.
+        /// </summary>
+        public abstract DataBlock AxModeCourseTimers { get; }
+
+        /// <summary>
+        ///     Positions for pilot seating in their vehicle.
+        /// </summary>
+        public abstract DataBlock PilotPositions { get; }
+
+        /// <summary>
+        ///     Map which translates pilot index into machine index.
+        /// </summary>
+        public abstract DataBlock PilotToMachineLut { get; }
+
+
+        /// <summary>
+        ///     Encryption/Decryption salt.
+        /// </summary>
         public abstract short Salt { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption key 0.
+        /// </summary>
         public abstract int Key0 { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption key 1.
+        /// </summary>
         public abstract int Key1 { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption key 2.
+        /// </summary>
         public abstract int Key2 { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption block key 0.
+        /// </summary>
         public abstract int BlockKey0 { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption block key 1.
+        /// </summary>
         public abstract short BlockKey1 { get; }
+
+        /// <summary>
+        ///     Encryption/Decryption block key 2.
+        /// </summary>
         public abstract short BlockKey2 { get; }
     }
 }

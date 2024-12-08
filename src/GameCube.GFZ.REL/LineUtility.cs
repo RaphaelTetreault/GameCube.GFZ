@@ -287,7 +287,7 @@ namespace GameCube.GFZ.LineREL
             // Patch index for loading in assets (GMA, TPL)
             writer.JumpToAddress(lookup.CupCourseLutAssets.Address + offset);
             writer.Write(courseIndex);
-            // 
+            // Patch the index for... something we don't currenlty know.
             writer.JumpToAddress(lookup.CupCourseLutUnk.Address + offset);
             writer.Write(courseIndex);
         }
