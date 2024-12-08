@@ -1,5 +1,4 @@
 using Manifold.IO;
-using System.Text;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -11,7 +10,6 @@ namespace GameCube.GFZ.LineREL
         public const string kFileHashMD5 = "f8947b6cec19af95f96fb9d11670ebdd";
 
         public override GameCode GameCode => GameCode.GFZJ01;
-        public override Encoding TextEncoding => ShiftJisCString.shiftJis;
         public override string SourceFile => "enemy_line/line__.bin";
         public override string WorkingFile => "enemy_line/line__.rel";
         public override string FileHashMD5 => kFileHashMD5;

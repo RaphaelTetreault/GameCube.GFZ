@@ -15,14 +15,6 @@ namespace GameCube.GFZ.LineREL
         public abstract GameCode GameCode { get; }
 
         /// <summary>
-        ///     String encoding. Either ASCII or Shift-JIS.
-        /// </summary>
-        /// <remarks>
-        ///     ASCII should probably should be Windows 1132.
-        /// </remarks>
-        public abstract System.Text.Encoding TextEncoding { get; } 
-
-        /// <summary>
         ///     
         /// </summary>
         public abstract string SourceFile { get; }

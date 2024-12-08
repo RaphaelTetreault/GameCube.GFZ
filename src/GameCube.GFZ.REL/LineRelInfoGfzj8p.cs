@@ -1,5 +1,4 @@
 using Manifold.IO;
-using System.Text;
 
 namespace GameCube.GFZ.LineREL
 {
@@ -10,7 +9,6 @@ namespace GameCube.GFZ.LineREL
     {
         // TODO: const for file hash
         public override GameCode GameCode => GameCode.GFZJ8P;
-        public override Encoding TextEncoding => ShiftJisCString.shiftJis;
         public override string SourceFile => "../sys/main.dol"; //...?
         public override string WorkingFile => "../sys/main.dol";
         public override string FileHashMD5 => throw new System.NotImplementedException();
