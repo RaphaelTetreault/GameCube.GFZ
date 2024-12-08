@@ -29,6 +29,7 @@ namespace GameCube.GFZ.LineREL
 
         public override Pointer CarDataMachinesPtr => throw new System.NotImplementedException();
         public override Pointer MachineLetterRatingsPtr => throw new System.NotImplementedException();
+        public override Pointer VehicleMaxSpeedCap9990KmhPtr => 0x33ab20;
 
         public override DataBlock CourseVenueIndex => new(0x21B3EC, 111);
         public override DataBlock CourseDifficulty => throw new System.NotImplementedException("This is absent from the AX version");

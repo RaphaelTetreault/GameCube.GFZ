@@ -30,6 +30,7 @@ namespace GameCube.GFZ.LineREL
 
         public override Pointer CarDataMachinesPtr => 0x195648;
         public override Pointer MachineLetterRatingsPtr => 0x1B8E20;
+        public override Pointer VehicleMaxSpeedCap9990KmhPtr => 0x160e10;
 
         public override DataBlock CourseVenueIndex => new(0x19A094, 111);
         public override DataBlock CourseDifficulty => new(0x1698EC, 111);
