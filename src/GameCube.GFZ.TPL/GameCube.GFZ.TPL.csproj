@@ -1,20 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="GameCube.GFZ.GMA.asmdef" />
     <None Remove="GameCube.GFZ.GMA.asmdef.meta" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="System.IO.Hashing" Version="8.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.GX.Texture\GameCube.GX.Texture.csproj" />
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.GX\GameCube.GX.csproj" />
@@ -22,5 +18,4 @@
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold\Manifold.csproj" />
     <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
   </ItemGroup>
-
 </Project>
