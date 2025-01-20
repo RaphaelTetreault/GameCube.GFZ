@@ -14,7 +14,8 @@ public class GmaRef :
     IPlainTextSerializable
 {
     // READONLY
-    private static readonly Encoding encoding = Encoding.Unicode;
+    public const string Extension = "gmaref";
+    public static readonly Encoding Encoding = Encoding.Unicode;
 
     // FIELDS
     private string[] gcmfModels = [];
