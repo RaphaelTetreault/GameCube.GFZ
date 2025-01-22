@@ -18,5 +18,21 @@ namespace GameCube.GFZ.TPL
         public bool HasRawData => RawTextureData.Length > 0;
         public byte[] RawTextureData { get; internal set; } = Array.Empty<byte>();
         public Texture Texture { get; internal set; } = defaultTexture;
+
+        /// <summary>
+        ///      
+        /// </summary>
+        public TextureBundleElement() { }
+
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="isValid"></param>
+        public TextureBundleElement(Texture texture, bool isValid = true)
+        {
+            Texture = texture;
+            IsValid = isValid;
+        }
     }
 }
