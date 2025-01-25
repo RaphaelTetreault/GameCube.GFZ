@@ -189,7 +189,24 @@ namespace GameCube.GFZ.TPL
                 textureBundle.Elements[i].RawTextureData = bytes;
 
                 // Compute CRC32 hash of texture data
-                textureBundle.Elements[i].CRC32 = System.IO.Hashing.Crc32.Hash(bytes).ConcatElements((byte b) => { return b.ToString("x2"); });
+                byte[] hashBytes = System.IO.Hashing.Crc32.Hash(bytes);
+                // Convert to big endian (the good endianness; fight me)
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(hashBytes);
+                uint crc32 = BitConverter.ToUInt32(hashBytes, 0);
+                textureBundle.Elements[i].CRC32 = crc32;
+
+                // TEST
+                // TODO: clean up, keep - this works
+                {
+                    System.Collections.Generic.List<uint> invalidBlackTextureCRC32s = [
+                        0xad550a19, // 2x8 or 8x2 black
+                        ];
+
+                    bool isInvalid = invalidBlackTextureCRC32s.Contains(crc32);
+                    textureBundle.Elements[i].IsValid = !isInvalid;
+                }
+
             }
             return textureBundle;
         }
