@@ -196,17 +196,12 @@ namespace GameCube.GFZ.TPL
                 uint crc32 = BitConverter.ToUInt32(hashBytes, 0);
                 textureBundle.Elements[i].CRC32 = crc32;
 
-                // TEST
-                // TODO: clean up, keep - this works
-                {
-                    System.Collections.Generic.List<uint> invalidBlackTextureCRC32s = [
-                        0xad550a19, // 2x8 or 8x2 black
-                        ];
-
-                    bool isInvalid = invalidBlackTextureCRC32s.Contains(crc32);
-                    textureBundle.Elements[i].IsValid = !isInvalid;
-                }
-
+                // Some mipmaps are "valid" but in fact are just black.
+                // Catch those cases and flag validity afterwards.
+                System.Collections.Generic.List<uint> invalidTextureCRC32s =
+                    [0xad550a19]; // 2x8 or 8x2 black
+                bool isInvalid = invalidTextureCRC32s.Contains(crc32);
+                textureBundle.Elements[i].IsValid = !isInvalid;
             }
             return textureBundle;
         }
