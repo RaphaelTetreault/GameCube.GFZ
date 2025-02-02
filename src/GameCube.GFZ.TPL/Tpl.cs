@@ -1,6 +1,5 @@
 using GameCube.GX;
 using GameCube.GX.Texture;
-using Manifold;
 using Manifold.IO;
 using System;
 
@@ -8,23 +7,20 @@ namespace GameCube.GFZ.TPL
 {
     [Serializable]
     public class Tpl :
-        IBinaryFileType,
         IBinarySerializable
     {
-        public const Endianness endianness = Endianness.BigEndian;
+        // CONSTS
+        private static readonly TextureColor Magenta = new(255, 0, 255);
 
+        // MEMBERS
         private int textureDescriptionsCount;
-        private TextureBundleDescription[] textureBundlesDescription = new TextureBundleDescription[0];
-        private TextureBundle[] textureBundles = Array.Empty<TextureBundle>();
+        private TextureBundleDescription[] textureBundlesDescription = [];
+        private TextureBundle[] textureBundles = [];
 
-        public Endianness Endianness => endianness;
-        public string FileExtension => ".tpl";
-        public string FileName { get; set; } = "";
-
+        // PROPERTIES
         public TextureBundleDescription[] TextureBundleDescriptions => textureBundlesDescription;
         public TextureBundle[] TextureBundles => textureBundles;
 
-        private static readonly TextureColor Magenta = new TextureColor(255, 0, 255);
 
         public void Deserialize(EndianBinaryReader reader)
         {
@@ -47,18 +43,24 @@ namespace GameCube.GFZ.TPL
 
                 // Some TPLs come with garbage data in the first 0x30 bytes of the file (in the first 4 bytes of affected descriptions).
                 // Make sure the null check above never fails. Otherwise you need to find a different way to check for this garbage.
-                var msg = $"Uncaught garbage entry {FileName} entry {i} addr {textureBundleDescription.AddressRange.PrintStartAddress()}";
-                Assert.IsFalse(textureBundleDescription.IsGarbageEntry, msg);
+                var msg1 = $"Uncaught garbage entry {i} addr {textureBundleDescription.AddressRange.PrintStartAddress()}";
+                Assert.IsFalse(textureBundleDescription.IsGarbageEntry, msg1);
 
                 // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
                 var encoding = Encoding.GetEncoding(textureBundleDescription.TextureFormat);
-                Assert.IsTrue(encoding.IsDirect, "Encoding is not direct. GFZ does not use (handle?) indirect modes.");
+                var msg2 = "Encoding is not direct. GFZ does not use (handle?) indirect modes.";
+                Assert.IsTrue(encoding.IsDirect, msg2);
 
                 // Assert game uses all power-of-two textures.
                 int isWidthPowerOfTwo = textureBundleDescription.Width % encoding.BlockWidth;
                 int isHeightPowerOfTwo = textureBundleDescription.Height % encoding.BlockHeight;
                 if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
-                    DebugConsole.Log($"{FileName}.tpl: Texture index {i} has size (x:{textureBundleDescription.Width}, y:{textureBundleDescription.Height}). Not a power of two.");
+                {
+                    string msg3 =
+                        $"Texture index {i} has size (x:{textureBundleDescription.Width}, " +
+                        $"y:{textureBundleDescription.Height}). Not a power of two.";
+                    Assert.IsTrue(false, msg3);
+                }
 
                 // Read the texture bundle.
                 reader.JumpToAddress(textureBundleDescription.TextureBundlePtr);
@@ -71,6 +73,7 @@ namespace GameCube.GFZ.TPL
                 };
             }
         }
+
         public void Serialize(EndianBinaryWriter writer)
         {
             // Write texture bundle descriptions
@@ -130,7 +133,7 @@ namespace GameCube.GFZ.TPL
                 }
 
                 // Record where this texture is; for future use.
-                AddressRange textureRange = new AddressRange();
+                AddressRange textureRange = new();
                 textureRange.startAddress = reader.BaseStream.Position;
 
                 // Get how many blocks to read (width and height separated)
