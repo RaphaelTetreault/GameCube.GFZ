@@ -224,7 +224,7 @@ namespace GameCube.GFZ.GMA
                         while (hasSkinBoneBinding);
 
                         // Convert list to array, assign, and align stream for future data
-                        skinBoneBindings = bindings.ToArray();
+                        skinBoneBindings = [.. bindings];
                         reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);
                     }
                 }
@@ -403,7 +403,7 @@ namespace GameCube.GFZ.GMA
         /// <param name="reader"></param>
         /// <param name="list"></param>
         /// <param name="addressables"></param>
-        private void AddBytes(EndianBinaryReader reader, List<byte> list, params IBinaryAddressable[] addressables)
+        private static void AddBytes(EndianBinaryReader reader, List<byte> list, params IBinaryAddressable[] addressables)
         {
             if (addressables is null)
                 return;

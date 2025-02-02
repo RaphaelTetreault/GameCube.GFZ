@@ -7,7 +7,7 @@ namespace GameCube.GFZ.Stage
     // 2022/03/09: formerly TrackCheckpointGrid
 
     /// <summary>
-    /// A table for index lists specifically for track checkpoints.
+    ///     A table for index lists specifically for track checkpoints.
     /// </summary>
     [System.Serializable]
     public sealed class CheckpointGrid : IndexGrid
@@ -25,8 +25,8 @@ namespace GameCube.GFZ.Stage
         public static GridXZ GetMatrixBoundsXZ(Checkpoint[] checkpoints)
         {
             // Get min and max XZ values of any checkpoint
-            Vector3 min = new Vector3(float.MaxValue, 0, float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue, 0, float.MinValue);
+            Vector3 min = new(float.MaxValue, 0, float.MaxValue);
+            Vector3 max = new(float.MinValue, 0, float.MinValue);
 
             foreach (var checkpoint in checkpoints)
             {
@@ -103,8 +103,8 @@ namespace GameCube.GFZ.Stage
                         var posX = checkpoint.PlaneStart.origin.X;
                         var posZ = checkpoint.PlaneStart.origin.Z;
 
-                        bool isBetweenX = IsBetween(posX, minX, maxX);
-                        bool isBetweenZ = IsBetween(posZ, minZ, maxZ);
+                        bool isBetweenX = IsBetweenInclusive(posX, minX, maxX);
+                        bool isBetweenZ = IsBetweenInclusive(posZ, minZ, maxZ);
 
                         // if the x and z coordinates are within the region we want, store index to checkpoint
                         bool isInRegion = isBetweenX && isBetweenZ;
@@ -121,7 +121,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        private bool IsBetween(float value, float min, float max)
+        private static bool IsBetweenInclusive(float value, float min, float max)
         {
             bool isMoreThanMin = value >= min;
             bool isLessThanMax = value <= max;
@@ -129,7 +129,7 @@ namespace GameCube.GFZ.Stage
             return isBetween;
         }
 
-        public void GenerateIndexesBlanks(GridXZ matrixBoundsXZ, Checkpoint[] checkpoints)
+        public void GenerateIndexesBlanks(GridXZ _, Checkpoint[] checkpoints)
         {
             var list = new List<int>();
             for (int i = 0; i < checkpoints.Length; i++)
@@ -170,7 +170,7 @@ namespace GameCube.GFZ.Stage
                         var start = checkpoint.PlaneStart.origin;
                         var end = checkpoint.PlaneEnd.origin;
 
-                        bool intersects = line_rect_isect(start.X, start.Z, end.X, end.Z, minX, maxX, minZ, maxZ);
+                        bool intersects = LineRectangleIntersects(start.X, start.Z, end.X, end.Z, minX, maxX, minZ, maxZ);
                         if (intersects)
                             indexes.Add(i);
 
@@ -194,7 +194,7 @@ namespace GameCube.GFZ.Stage
         }
 
         //https://www.lexaloffle.com/bbs/?pid=80455
-        private bool line_rect_isect(float startX, float startZ, float endX, float endZ, float minX, float maxX, float minZ, float maxZ)
+        private static bool LineRectangleIntersects(float startX, float startZ, float endX, float endZ, float minX, float maxX, float minZ, float maxZ)
         {
             float tl = (minX - startX) / (endX - startX);
             float tr = (maxX - startX) / (endX - startX);

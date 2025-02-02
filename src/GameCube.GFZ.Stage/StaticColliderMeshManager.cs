@@ -49,28 +49,28 @@ namespace GameCube.GFZ.Stage
 
 
         // FIELDS
-        private byte[] zeroes_group1;
+        private byte[] zeroes_group1 = [];
         private Pointer staticColliderTrisPtr;
-        private Pointer[] triMeshGridPtrs; // variable AX/GX
+        private Pointer[] triMeshGridPtrs = []; // variable AX/GX
         private GridXZ meshGridXZ = new();
         private Pointer staticColliderQuadsPtr;
-        private Pointer[] quadMeshGridPtrs; // variable AX/GX
-        private byte[] zeroes_group2;
+        private Pointer[] quadMeshGridPtrs = []; // variable AX/GX
+        private byte[] zeroes_group2 = [];
         private ArrayPointer unknownCollidersPtr;
         private ArrayPointer staticSceneObjectsPtr;
-        private byte[] zeroes_group3;
+        private byte[] zeroes_group3 = [];
         private Pointer boundingSpherePtr;
-        private byte[] zeroes_group4;
+        private byte[] zeroes_group4 = [];
         private float unk_float;
-        private byte[] zeroes_group5;
+        private byte[] zeroes_group5 = [];
         // REFERENCE FIELDS
-        private ColliderTriangle[] colliderTris = new ColliderTriangle[0];
-        private ColliderQuad[] colliderQuads = new ColliderQuad[0];
-        private StaticColliderMeshGrid[] triMeshGrids;
-        private StaticColliderMeshGrid[] quadMeshGrids;
-        private BoundingSphere boundingSphere = new BoundingSphere();
-        private UnknownCollider[] unknownColliders;
-        private SceneObjectStatic[] staticSceneObjects; // Some of these used to be name-parsed colliders! (eg: *_CLASS2, etc)
+        private ColliderTriangle[] colliderTris = [];
+        private ColliderQuad[] colliderQuads = [];
+        private StaticColliderMeshGrid[] triMeshGrids = [];
+        private StaticColliderMeshGrid[] quadMeshGrids = [];
+        private BoundingSphere boundingSphere = new();
+        private UnknownCollider[] unknownColliders = [];
+        private SceneObjectStatic[] staticSceneObjects = []; // Some of these used to be name-parsed colliders! (eg: *_CLASS2, etc)
 
 
         // CONSTRUCTORS
@@ -98,17 +98,12 @@ namespace GameCube.GFZ.Stage
         {
             get
             {
-                switch (SerializeFormat)
+                return SerializeFormat switch
                 {
-                    case SerializeFormat.AX:
-                        return kCountAxSurfaceTypes;
-
-                    case SerializeFormat.GX:
-                        return kCountGxSurfaceTypes;
-
-                    default:
-                        throw new ArgumentException($"Invalid serialization format '{SerializeFormat}'.");
-                }
+                    SerializeFormat.AX => kCountAxSurfaceTypes,
+                    SerializeFormat.GX => kCountGxSurfaceTypes,
+                    _ => throw new ArgumentException($"Invalid serialization format '{SerializeFormat}'."),
+                };
             }
         }
         public Pointer StaticColliderTrisPtr { get => staticColliderTrisPtr; set => staticColliderTrisPtr = value; }
@@ -156,8 +151,8 @@ namespace GameCube.GFZ.Stage
             }
 
             // Get min and max XZ values of any checkpoint
-            Vector3 min = new Vector3(float.MaxValue, 0, float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue, 0, float.MinValue);
+            Vector3 min = new(float.MaxValue, 0, float.MaxValue);
+            Vector3 max = new(float.MinValue, 0, float.MinValue);
 
             // Iterate over every triangle, get min/maz X and Z coordinates
             foreach (var tri in ColliderTris)
