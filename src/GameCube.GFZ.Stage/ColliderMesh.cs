@@ -1,4 +1,5 @@
-﻿using Manifold;
+﻿using GameCube.Common;
+using Manifold;
 using Manifold.IO;
 using System;
 
@@ -27,10 +28,10 @@ namespace GameCube.GFZ.Stage
         // FIELDS
         private ColliderMeshType colliderType;
         private BoundingSphere boundingSphere;
-        private ArrayPointer2D collisionArrayPtr2D = new ArrayPointer2D(kTotalIndices);
+        private ArrayPointer2D collisionArrayPtr2D = new(kTotalIndices);
         // REFERENCE FIELDS
-        private ColliderTriangle[] tris;
-        private ColliderQuad[] quads;
+        private ColliderTriangle[] tris = [];
+        private ColliderQuad[] quads = [];
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }

@@ -1,6 +1,5 @@
 ﻿using GameCube.GX.Texture;
 using Manifold.IO;
-using System;
 using System.IO;
 
 namespace GameCube.GFZ.TPL;
@@ -14,7 +13,7 @@ namespace GameCube.GFZ.TPL;
 public class GxTextureAsset :
     IBinarySerializable
 {
-    public const Endianness endianness = Tpl.endianness;
+    public const Endianness endianness = TplFile.endianness;
     private const uint magic = 0x47585458; // GXTX
     private const int alignment = 32;
 
@@ -24,7 +23,7 @@ public class GxTextureAsset :
     private byte count;
     private TextureFormat format;
     private int dataLength;
-    private byte[] data = Array.Empty<byte>();
+    private byte[] data = [];
 
     // Properties
     public byte Count { get => count; set => count = value; }
@@ -75,7 +74,7 @@ public class GxTextureAsset :
     }
     public Texture[] GetTexturesFromData()
     {
-        using var reader = new EndianBinaryReader(new MemoryStream(data), Tpl.endianness);
+        using var reader = new EndianBinaryReader(new MemoryStream(data), TplFile.endianness);
 
         Texture[] textures = new Texture[count];
         int width = this.width;

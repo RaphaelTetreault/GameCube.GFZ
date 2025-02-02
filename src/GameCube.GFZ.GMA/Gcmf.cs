@@ -1,9 +1,7 @@
-﻿using GameCube.GX;
+﻿using GameCube.Common;
 using Manifold;
 using Manifold.IO;
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace GameCube.GFZ.GMA
 {
@@ -35,7 +33,7 @@ namespace GameCube.GFZ.GMA
         private BoneIndexes8 boneIndices = new();
         private TevLayer[] tevLayers = [];
         private TransformMatrix3x4[] bones = [];
-        private SkinnedVertexDescriptor skinnedVertexDescriptor;
+        private SkinnedVertexDescriptor skinnedVertexDescriptor = new();
         private Submesh[] submeshes = [];
         private SkinnedVertexA[] skinnedVerticesA = [];
         private SkinnedVertexB[] skinnedVerticesB = [];
