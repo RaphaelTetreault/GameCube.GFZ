@@ -14,14 +14,15 @@ namespace GameCube.GFZ.Replay
     public class CustomMachine :
         IBitSerializable
     {
+#pragma warning disable IDE0052 // incomplete implementation, therefore pragma: Remove unread private members
         // numbers in BYTES
-        private byte[] unknown1; // 5
+        private byte[] unknown1 = []; // 5
         private MachineID machineID; // 1
         private byte colorPaletteID; // 1
         private byte emblemCount; // 1
-        private byte[] unknown2; // 7
-        private byte[] speedSettings; // 7
-        private byte[] unknown3; // 16
+        private byte[] unknown2 = []; // 7
+        private byte[] speedSettings = []; // 7
+        private byte[] unknown3 = []; // 16
         private byte[][] emblemData = new byte[4][]; // 4*8288, is actually a byte-aligned structure
         private PilotID pilotID; // 4
         private CustomBodyPartName bodyID; // 4
@@ -31,6 +32,7 @@ namespace GameCube.GFZ.Replay
         private CustomBoosterPartName boosterID; // 4
         private GXColor boosterColor; // 4
         private uint unknown4; // 4
+#pragma warning restore IDE0052 // Remove unread private members
 
         public void Deserialize(BitStreamReader reader)
         {
@@ -52,6 +54,7 @@ namespace GameCube.GFZ.Replay
             cockpitColor = new GXColor(reader.ReadUInt(4 * 8));
             boosterID = (CustomBoosterPartName)reader.ReadUInt(4 * 8);
             boosterColor = new GXColor(reader.ReadUInt(4 * 8));
+            unknown4 = reader.ReadUInt(4 * 8);
         }
 
         public void Serialize(BitStreamWriter writer)
