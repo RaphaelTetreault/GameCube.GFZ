@@ -1,16 +1,15 @@
 using GameCube.GFZ.CarData;
 using GameCube.GFZ.Stage;
 using Manifold.IO;
-using System;
 
 namespace GameCube.GFZ.Ghosts
 {
+    /// <summary>
+    ///     Vehicle ghost for stage.
+    /// </summary>
     public class GhostData :
-        IBinarySerializable,
-        IBinaryFileType
+        IBinarySerializable
     {
-        public const string fileExtension = ".dat";
-        public const Endianness endianness = Endianness.BigEndian;
         public const int ChunkSize = 4000;
 
         // FIELDS
@@ -24,16 +23,13 @@ namespace GameCube.GFZ.Ghosts
         public byte totalChunks; // usually 3 (16KB), can be 2 (12KB). Math: (value+1)*4KB
         public byte unk0x19; // maybe a checksum?
         public uint zero0x1A; // Addr:0x1A always zero
-        public byte[] unkData0x1E = Array.Empty<byte>(); // 6 bytes
+        public byte[] unkData0x1E = []; // 6 bytes
         public Time time;
-        public GhostFrame[] frames = Array.Empty<GhostFrame>();
+        public GhostFrame[] frames = [];
 
-        public string FileExtension => fileExtension;
-        public string FileName { get; set; } = string.Empty;
         public string TimeDisplay => time.ToString();
         public CourseIndexAX CourseIndexAX => (CourseIndexAX)courseID;
         public CourseIndexGX CourseIndexGX => (CourseIndexGX)courseID;
-        public Endianness Endianness => endianness;
 
         public void Deserialize(EndianBinaryReader reader)
         {
@@ -61,8 +57,8 @@ namespace GameCube.GFZ.Ghosts
             Assert.IsTrue(zero0x1A == 0, $"0x1A:{zero0x1A:x8}");
             Assert.IsTrue(totalChunks < 4); // never seen more than 3
 
-            int nCount = ChunkSize * (totalChunks + 1) / GhostFrame.Size;
-            reader.Read(ref frames, nCount);
+            int frameCount = ChunkSize * (totalChunks + 1) / GhostFrame.Size;
+            reader.Read(ref frames, frameCount);
         }
 
         public void Serialize(EndianBinaryWriter writer)

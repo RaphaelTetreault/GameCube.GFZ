@@ -1,15 +1,14 @@
 ﻿using Manifold.IO;
 
-namespace GameCube.GFZ.Emblem;
+namespace GameCube.GFZ.Ghosts;
 
 /// <summary>
-///     
+///     File wrapper for <see cref="GhostData"/>.
 /// </summary>
 /// <remarks>
-///     When not in a GCI, it is a series of textures in the ./emblem directory.
-///     It stores a number of derfault emblems to place on vehicles.
+///     Staff ghost file.
 /// </remarks>
-public class EmblemBIN : BinaryFileWrapper<EmblemGroup>
+public class GhostDataBIN : BinaryFileWrapper<GhostData>
 {
     // CONSTANTS
     public const Endianness endianness = Endianness.BigEndian;
@@ -21,6 +20,6 @@ public class EmblemBIN : BinaryFileWrapper<EmblemGroup>
     public override string FileName { get; set; } = string.Empty;
 
     // CONSTRUCTORS
-    public EmblemBIN() : base() { }
-    public EmblemBIN(string inputPath) : base(inputPath) { }
+    public GhostDataBIN() : base() { }
+    public GhostDataBIN(string inputPath) : base(inputPath) { }
 }

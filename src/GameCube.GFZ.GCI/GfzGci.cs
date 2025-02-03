@@ -1,6 +1,5 @@
 ﻿using GameCube.DiskImage;
 using GameCube.GCI;
-using GameCube.GX.Texture;
 using Manifold.IO;
 using System;
 
@@ -56,10 +55,10 @@ namespace GameCube.GFZ.GCI
             reader.Read(ref comment, textEncoding, CommentLength);
             Assert.IsTrue(reader.GetPositionAsPointer() == Header.ImageDataPtr);
             Banner = ReadDirectColorBanner(reader);
-            Icons = new Texture[]
-            {
+            Icons =
+            [
                 ReadDirectColorIcon(reader),
-            };
+            ];
             Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
             Assert.IsTrue(Icons.Length == IconsCount);
             Assert.IsTrue(Header.GetAnimationFrameCount() == Icons.Length);
@@ -96,10 +95,10 @@ namespace GameCube.GFZ.GCI
                     // TODO: old tests showed game needed 3 numbers post baseName. Still needed?
                     //       ie: "8P-GFZE-fze02000020003FBF71CA629FFA.dat.gci"
                     //       I used to do: *fze020_[filename].dat.gci
-                    //       ALSO, you need to confrim if the filename can be shorter. If so, fill it in.
+                    //       ALSO, you need to confirm if the filename can be shorter. If so, fill it in.
                     int maxChars = GetHashLength(fileType);
                     string hashName = fileNameWithoutExtension.Length > maxChars
-                        ? fileNameWithoutExtension.Substring(0, maxChars)
+                        ? fileNameWithoutExtension[..maxChars]
                         : fileNameWithoutExtension;
                     fileName += hashName;
                     break;
@@ -124,29 +123,24 @@ namespace GameCube.GFZ.GCI
         }
         private static string GfzGciDesignator(GfzGciFileType fileType)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case GfzGciFileType.Emblem: return "fze";
-                case GfzGciFileType.Garage: return "fzc";
-                case GfzGciFileType.Ghost: return "fzg";
-                case GfzGciFileType.Replay: return "fzr";
-
-                case GfzGciFileType.Save:
-                default:
-                    return "";
-            }
+                GfzGciFileType.Emblem => "fze",
+                GfzGciFileType.Garage => "fzc",
+                GfzGciFileType.Ghost => "fzg",
+                GfzGciFileType.Replay => "fzr",
+                _ => string.Empty,
+            };
         }
         private static int GetHashLength(GfzGciFileType fileType)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case GfzGciFileType.Emblem: return 24;
-                case GfzGciFileType.Ghost: return 16;
-                case GfzGciFileType.Replay: return 22;
-
-                default:
-                    return -1;
-            }
+                GfzGciFileType.Emblem => 24,
+                GfzGciFileType.Ghost => 16,
+                GfzGciFileType.Replay => 22,
+                _ => -1,
+            };
         }
     }
 }

@@ -4,25 +4,24 @@ using System;
 
 namespace GameCube.GFZ.Emblem
 {
-    // this is really jus a serializable texture... maybe worth doing generic Tex with serialize?
+    /// <summary>
+    ///     An F-Zero GX custom machine emblem.
+    /// </summary>
+    /// <remarks>
+    ///     An emblem is really just a specific spec for a GameCube GC texture.
+    /// </remarks>
     public class Emblem :
-        IBinarySerializable,
-        IBinaryFileType
+        IBinarySerializable
     {
         // Consts
         public const int Width = 64;
         public const int Height = 64;
         public const TextureFormat Format = TextureFormat.RGB5A3;
-        public const Endianness endianness = Endianness.BigEndian;
         public static readonly int Size = 64 * 64 * sizeof(ushort);
         public static readonly DirectEncoding DirectEncoding = DirectEncoding.GetEncoding(Format);
 
         // Properties
         public Texture Texture { get; set; } = new Texture();
-
-        public Endianness Endianness => endianness;
-        public string FileExtension => ".bin";
-        public string FileName { get; set; } = string.Empty;
 
         // Constructors
         public Emblem()

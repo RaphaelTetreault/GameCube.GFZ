@@ -10,7 +10,7 @@ namespace GameCube.GFZ.Replay
         ///     Unique ID.
         /// </summary>
         public const ushort UID = 0x0504;
-        public readonly ushort[] UIDs = { UID };
+        public readonly ushort[] UIDs = [UID];
         public override ushort UniqueID => throw new NotImplementedException();
         public override ushort[] UniqueIDs => UIDs;
         public Replay Replay { get => FileData; set => FileData = value; }
