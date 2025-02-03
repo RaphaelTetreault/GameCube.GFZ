@@ -1,11 +1,15 @@
-﻿using Manifold.IO;
+﻿// 2025-02-02: GCI currently requires IBinaryFileType, so emblem here is wrapped
+// in that type to satisfy that constraint. Otherwise, not needed, just pass Emblem
+// into GfzGci<Emblem>
+
+using Manifold.IO;
 
 namespace GameCube.GFZ.Emblem;
 
 /// <summary>
-///     Customize garage default emblems in ./emblem/ directory.
+///     A file wrapped <see cref="Emblem"/> to fit inside a GCI.
 /// </summary>
-public class EmblemBIN : BinaryFileWrapper<EmblemGroup>
+public class EmblemFile : BinaryFileWrapper<Emblem>
 {
     // CONSTANTS
     public const Endianness endianness = Endianness.BigEndian;
@@ -17,6 +21,6 @@ public class EmblemBIN : BinaryFileWrapper<EmblemGroup>
     public override string FileName { get; set; } = string.Empty;
 
     // CONSTRUCTORS
-    public EmblemBIN() : base() { }
-    public EmblemBIN(string inputPath) : base(inputPath) { }
+    public EmblemFile() : base() { }
+    public EmblemFile(string inputPath) : base(inputPath) { }
 }

@@ -10,7 +10,7 @@ namespace GameCube.GFZ.Emblem
     ///     Primary source of information:
     ///     https://docs.google.com/document/d/1c4a7d6xZ-rnK-E5p7d__6V1qhLxcdOHwAmv-FR8K50s/edit
     /// </example>
-    public class EmblemGCI : GfzGci<EmblemBIN>
+    public class EmblemGCI : GfzGci<EmblemFile>
     {
         public const ushort UID = 0x0401; // NOT A UNIQUE ID
 
@@ -19,28 +19,12 @@ namespace GameCube.GFZ.Emblem
 
         public Emblem Emblem
         {
-            get => FileData.Value.Emblems[0];
-            set => FileData.Value.Emblems[0] = value;
+            get => FileData.Value;
+            set => FileData.Value = value;
         }
 
+        public EmblemGCI() : base() { }
+        public EmblemGCI(Region region) : base(region) { }
 
-        public EmblemGCI() : base()
-        {
-            InitEmlbemGroupTo1();
-        }
-
-        public EmblemGCI(Region region) : base(region)
-        {
-            InitEmlbemGroupTo1();
-        }
-
-        /// <summary>
-        ///     Make sure 1 emblem always exists.
-        /// </summary>
-        private void InitEmlbemGroupTo1()
-        {
-            FileData = new();
-            FileData.Value.Emblems = new Emblem[1];
-        }
     }
 }
