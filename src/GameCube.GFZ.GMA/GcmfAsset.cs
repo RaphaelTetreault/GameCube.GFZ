@@ -4,16 +4,13 @@ using System.Text;
 namespace GameCube.GFZ.GMA;
 
 /// <summary>
-///     An assetized version of <see cref="GMA.Gcmf"/>.
+///     An assetized version of <see cref="GMA.Gcmf"/> with text references
+///     to its textures.
 /// </summary>
-/// <remarks>
-///     TODO: Convert this to BinaryFileWrapper(Gcmf)?
-/// </remarks>
 public class GcmfAsset :
     IBinarySerializable
 {
     // CONSTANTS
-    public const Endianness endianness = Gma.endianness;
     private const uint kMagic = 0x47434D58; // GCMX
     private const int kAlignment = 32;
 

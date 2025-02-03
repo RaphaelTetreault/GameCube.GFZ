@@ -10,24 +10,18 @@ namespace GameCube.GFZ.GMA
     /// </summary>
     public class Gma :
         IBinarySerializable,
-        IHasReference,
-        IBinaryFileType
+        IHasReference
     {
-        public const Endianness endianness = Endianness.BigEndian;
-
         // FIELDS
         private int modelsCount;
         private Offset modelBasePtrOffset;
-        private ModelEntry[] modelEntries;
+        private ModelEntry[] modelEntries = [];
         // Pseudo-fields.
-        private Model[] models;
+        private Model[] models = [];
 
 
         // PROPERTIES
         public AddressRange AddressRange { get; set; }
-        public Endianness Endianness => endianness;
-        public string FileExtension => ".gma";
-        public string FileName { get; set; }
         public int ModelsCount { get => modelsCount; set => modelsCount = value; }
         public Offset ModelBasePtr { get => modelBasePtrOffset; set => modelBasePtrOffset = value; }
         public ModelEntry[] ModelEntries { get => modelEntries; set => modelEntries = value; }
@@ -84,7 +78,7 @@ namespace GameCube.GFZ.GMA
 
             // Write GCMFs to a memory stream, collect their pointer
             var gcmfOffsets = new Offset[modelGCMFs.Count];
-            var gcmfWriter = new EndianBinaryWriter(new MemoryStream(), Endianness);
+            var gcmfWriter = new EndianBinaryWriter(new MemoryStream(), writer.Endianness);
             for (int i = 0; i < modelGCMFs.Count; i++)
             {
                 var gcmf = modelGCMFs[i];
@@ -95,7 +89,7 @@ namespace GameCube.GFZ.GMA
 
             // Write names to memory stream, collet their pointers
             var nameOffsets = new Offset[modelGCMFs.Count];
-            var nameWriter = new EndianBinaryWriter(new MemoryStream(), Endianness);
+            var nameWriter = new EndianBinaryWriter(new MemoryStream(), writer.Endianness);
             for (int i = 0; i < modelGCMFs.Count; i++)
             {
                 var name = modelNames[i];

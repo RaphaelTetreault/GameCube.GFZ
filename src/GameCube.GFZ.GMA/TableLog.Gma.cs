@@ -10,7 +10,7 @@ namespace GameCube.GFZ.GMA
         public static readonly string tsvTextureConfigs = $"{nameof(Gma)}-{nameof(TevLayer)}.tsv";
         public static readonly string tsvMaterials = $"{nameof(Gma)}-{nameof(Material)}.tsv";
 
-        public static void PrintGmaAll(Gma[] gmas, string outputDirectory)
+        public static void PrintGmaAll(GmaFile[] gmas, string outputDirectory)
         {
             {
                 var fileName = Path.Combine(outputDirectory, tsvGcmf);
@@ -26,7 +26,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public static void PrintGcmf(Gma[] gmas, string outputFileName)
+        public static void PrintGcmf(GmaFile[] gmas, string outputFileName)
         {
             using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
@@ -55,7 +55,7 @@ namespace GameCube.GFZ.GMA
                 foreach (var gma in gmas)
                 {
                     int modelIndex = 0;
-                    foreach (var model in gma.Models)
+                    foreach (var model in gma.Value.Models)
                     {
                         var gcmf = model.Gcmf;
                         writer.WriteNextCol(gma.FileName);
@@ -84,7 +84,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public static void PrintTextureConfigs(Gma[] gmas, string outputFileName)
+        public static void PrintTextureConfigs(GmaFile[] gmas, string outputFileName)
         {
             using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
@@ -110,7 +110,7 @@ namespace GameCube.GFZ.GMA
                 foreach (var gma in gmas)
                 {
                     int modelIndex = 0;
-                    foreach (var model in gma.Models)
+                    foreach (var model in gma.Value.Models)
                     {
                         int textureConfigIndex = 0;
                         foreach (var textureConfif in model.Gcmf.TevLayers)
@@ -140,7 +140,7 @@ namespace GameCube.GFZ.GMA
             }
         }
 
-        public static void PrintMaterials(Gma[] gmas, string outputFileName)
+        public static void PrintMaterials(GmaFile[] gmas, string outputFileName)
         {
             using (var writer = new StreamWriter(File.Create(outputFileName)))
             {
@@ -173,7 +173,7 @@ namespace GameCube.GFZ.GMA
                 foreach (var gma in gmas)
                 {
                     int modelIndex = 0;
-                    foreach (var model in gma.Models)
+                    foreach (var model in gma.Value.Models)
                     {
                         int submeshIndex = 0;
                         foreach (var submesh in model.Gcmf.Submeshes)

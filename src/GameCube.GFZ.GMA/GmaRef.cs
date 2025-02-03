@@ -5,7 +5,8 @@ using System.Text;
 namespace GameCube.GFZ.GMA;
 
 /// <summary>
-///     An assetized version of <see cref="GMA.Gcmf"/>.
+///     An assetized version of <see cref="Gma"/> with loose text references
+///     to its required models.
 /// </summary>
 /// <remarks>
 ///     TODO: Convert this to BinaryFileWrapper(Gcmf)?

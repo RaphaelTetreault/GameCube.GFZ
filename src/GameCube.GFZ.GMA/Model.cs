@@ -6,7 +6,7 @@ using System.IO;
 namespace GameCube.GFZ.GMA
 {
     /// <summary>
-    /// A model comprised of a mesh (many display lists) and materials.
+    ///     A model comprised of a mesh (many display lists) and materials.
     /// </summary>
     public class Model
     {
