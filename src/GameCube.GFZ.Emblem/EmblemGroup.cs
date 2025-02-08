@@ -1,4 +1,7 @@
-﻿using Manifold.IO;
+﻿// TODO: candidate for: public explicit extension EmblemGroup for Emblem[] {}
+// https://www.youtube.com/watch?v=O3hx6oPWzX8&ab_channel=MicrosoftDeveloper
+
+using Manifold.IO;
 using System;
 
 namespace GameCube.GFZ.Emblem;
