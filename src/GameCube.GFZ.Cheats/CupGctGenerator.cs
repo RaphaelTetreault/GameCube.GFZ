@@ -14,12 +14,12 @@ namespace GameCube.GFZ.Cheats
 
         const ulong CodeConst = 0x401A9B84_00000000;
 
-        public GCT GetCustomCups(ulong[][] gameCups, CupList cupList)
+        public Gct GetCustomCups(ulong[][] gameCups, CupList cupList)
         {
             if (gameCups.Length != 5)
                 throw new ArgumentException();
 
-            var gct = new GCT();
+            var gct = new Gct();
             gct.codes = new GctCode[]
             {
                 GetCustomCup(gameCups[0], cupList.rubyCup),
