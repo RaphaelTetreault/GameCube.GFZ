@@ -18,8 +18,8 @@ namespace GameCube.GFZ.TPL
         private TextureBundle[] textureBundles = [];
 
         // PROPERTIES
-        public TextureBundleDescription[] TextureBundleDescriptions => textureBundlesDescription;
-        public TextureBundle[] TextureBundles => textureBundles;
+        public TextureBundleDescription[] TextureBundleDescriptions { get => textureBundlesDescription; set => textureBundlesDescription = value; }
+        public TextureBundle[] TextureBundles { get => textureBundles; set => textureBundles = value; }
 
 
         public void Deserialize(EndianBinaryReader reader)

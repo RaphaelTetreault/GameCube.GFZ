@@ -24,10 +24,10 @@ public class TplRef :
     {
         // Figure out how many entries in TPL
         string lastLine = reader.Lines[^1];
-        int lastIndex = ReadIndex(lastLine);
+        int lastIndex = ReadIndex(lastLine) + 1;
         // Create new array
         Textures = new string[lastIndex];
-        for (int i = 0; i < Textures.Length; i++)
+        for (int i = 0; i < reader.LineCount; i++)
         {
             string line = reader.ReadLine();
             int texIndex = ReadIndex(line);

@@ -6,7 +6,7 @@ namespace GameCube.GFZ.TPL
 {
     public class TextureBundle
     {
-        public TextureBundleElement[] Elements { get; internal set; } = Array.Empty<TextureBundleElement>();
+        public TextureBundleElement[] Elements { get; internal set; } = [];
         public TextureBundleDescription Description { get; internal set; }
         public AddressRange AddressRange { get; internal set; }
         public int Length => Elements is null ? 0 : Elements.Length;

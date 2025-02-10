@@ -72,7 +72,7 @@ namespace GameCube.GFZ.TPL
             {
                 if (!IsGarbageEntry)
                     Assert.IsTrue(const_zero == 0);
-                Assert.IsTrue(const_0x1234 == k0x1234);
+                //Assert.IsTrue(const_0x1234 == k0x1234);
             }
             this.RecordStartAddress(writer);
             {

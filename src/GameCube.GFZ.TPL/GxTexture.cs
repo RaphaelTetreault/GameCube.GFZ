@@ -10,10 +10,9 @@ namespace GameCube.GFZ.TPL;
 /// <remarks>
 ///     TODO: Convert this to BinaryFileWrapper(Texture)?
 /// </remarks>
-public class GxTextureAsset :
+public class GxTexture :
     IBinarySerializable
 {
-    public const Endianness endianness = TplFile.endianness;
     private const uint magic = 0x47585458; // GXTX
     private const int alignment = 32;
 
