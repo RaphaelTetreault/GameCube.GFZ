@@ -6,39 +6,72 @@ using System.IO;
 
 namespace GameCube.GFZ.Stage
 {
+    // TODO: put somewhere generic
+    public delegate void Analyzer<T>(T[] values, string outputFilePath);
+    public readonly record struct LogFuncFile(Analyzer<Scene> AnalysisFunction, string FileName);
+
+
     public static class StageTableLogger
     {
-        // Names of files generated
-        public static readonly string tsvHeader = $"{nameof(Scene)}-Header.tsv";
-        public static readonly string tsvGeneralData = $"General Data.tsv";
-        public static readonly string tsvTrackKeyablesAll = $"Track Keyables All.tsv";
-        public static readonly string tsvTrackSegment = $"{nameof(TrackSegment)}.tsv";
-        //public static readonly string tsvTrackSegmentCurves = $"{nameof(TrackSegment)}-{nameof(AnimationCurveTRS)}.tsv";
-        public static readonly string tsvSurfaceAttributeArea = $"{nameof(EmbeddedTrackPropertyArea)}.tsv";
-        public static readonly string tsvTrackNode = $"{nameof(TrackNode)}.tsv";
-        public static readonly string tsvSceneObject = $"{nameof(SceneObject)}.tsv";
-        public static readonly string tsvSceneObjectLod = $"{nameof(SceneObjectLOD)}.tsv";
-        public static readonly string tsvSceneObjectsAndLod = $"{nameof(SceneObjectLOD)}.tsv";
-        public static readonly string tsvSceneObjectDynamic = $"{nameof(SceneObjectDynamic)}.tsv";
-        public static readonly string tsvAnimationClip = $"{nameof(SceneObjectDynamic)}-{nameof(AnimationClip)}.tsv";
-        public static readonly string tsvTextureMetadata = $"{nameof(SceneObjectDynamic)}-{nameof(TextureScroll)}.tsv";
-        public static readonly string tsvSkeletalAnimator = $"{nameof(SceneObjectDynamic)}-{nameof(SkeletalAnimator)}.tsv";
-        public static readonly string tsvColliderGeometryTri = $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Tris.tsv";
-        public static readonly string tsvColliderGeometryQuad = $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Quads.tsv";
-        public static readonly string tsvTransform = $"{nameof(TransformTRXS)}.tsv";
-        public static readonly string tsvTimeExtensionTrigger = $"{nameof(TimeExtensionTrigger)}.tsv";
-        public static readonly string tsvMiscellaneousTrigger = $"{nameof(MiscellaneousTrigger)}.tsv";
-        public static readonly string tsvStoryObjectTrigger = $"{nameof(StoryObjectTrigger)}.tsv";
-        public static readonly string tsvUnknownTrigger = $"{nameof(CullOverrideTrigger)}.tsv";
-        public static readonly string tsvVisualEffectTrigger = $"{nameof(VisualEffectTrigger)}.tsv";
-        public static readonly string tsvFog = $"{nameof(Fog)}.tsv";
-        public static readonly string tsvFogCurves = $"{nameof(FogCurves)}.tsv";
-        public static readonly string tsvStaticColliderMeshes = $"{nameof(StaticColliderMeshManager)}.tsv";
-        public static readonly string tsvUnknownCollider = $"{nameof(UnknownCollider)}.tsv";
+        // Map functions to output file name
+        public static readonly LogFuncFile LogCullOverrideTrigger = new(AnalyzeCullOverrideTrigger, $"{nameof(CullOverrideTrigger)}.tsv");
+        public static readonly LogFuncFile LogHeader = new(AnalyzeHeaders, $"{nameof(Scene)}-Header.tsv");
+        public static readonly LogFuncFile LogFog = new(AnalyzeFog, $"{nameof(Fog)}.tsv");
+        public static readonly LogFuncFile LogFogCurves = new(AnalyzeFogCurves, $"{nameof(FogCurves)}.tsv");
+        public static readonly LogFuncFile LogGeneralData = new(AnalyzeGeneralData, $"General Data.tsv");
+        public static readonly LogFuncFile LogMiscellaneousTrigger = new(AnalyzeMiscellaneousTriggers, $"{nameof(MiscellaneousTrigger)}.tsv");
+        public static readonly LogFuncFile LogSceneObjectDynamic = new(AnalyzeSceneObjectDynamic, $"{nameof(SceneObjectDynamic)}.tsv");
+        public static readonly LogFuncFile LogSceneObjectLODs = new(AnalyzeSceneObjectLODs, $"{nameof(SceneObjectLOD)}.tsv");
+        public static readonly LogFuncFile LogSceneObjects = new(AnalyzeSceneObjects, $"{nameof(SceneObject)}.tsv");
+        public static readonly LogFuncFile LogSceneObjectsAndLod = new(AnalyzeSceneObjectsAndLODs, $"{nameof(SceneObject)}-{nameof(SceneObjectLOD)}.tsv");
+        public static readonly LogFuncFile LogSodAnimationClip = new(AnalyzeAnimationClips, $"{nameof(SceneObjectDynamic)}-{nameof(AnimationClip)}.tsv");
+        public static readonly LogFuncFile LogSodTextureMetadata = new(AnalyzeTextureMetadata, $"{nameof(SceneObjectDynamic)}-{nameof(TextureScroll)}.tsv");
+        public static readonly LogFuncFile LogSodSkeletalAnimator = new(AnalyzeSkeletalAnimator, $"{nameof(SceneObjectDynamic)}-{nameof(SkeletalAnimator)}.tsv");
+        public static readonly LogFuncFile LogSodGeometryTri = new(AnalyzeColliderGeometryTri, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Tris.tsv");
+        public static readonly LogFuncFile LogSodGeometryQuad = new(AnalyzeColliderGeometryQuad, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Quads.tsv");
+        public static readonly LogFuncFile LogStaticColliderMeshManager = new(AnalyzeStaticColliderMeshManagers, $"{nameof(StaticColliderMeshManager)}.tsv");
+        public static readonly LogFuncFile LogStaticQuads = new(AnalyzeStaticColliderQuads, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderQuad)}s.tsv");
+        public static readonly LogFuncFile LogStaticTriangles = new(AnalyzeStaticColliderTriangles, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderTriangle)}s.tsv");
+        public static readonly LogFuncFile LogStoryObjectTrigger = new(AnalyzeStoryObjectTrigger, $"{nameof(StoryObjectTrigger)}.tsv");
+        public static readonly LogFuncFile LogSurfaceAttributeArea = new(AnalyzeSurfaceAttributeAreas, $"{nameof(EmbeddedTrackPropertyArea)}.tsv");
+        public static readonly LogFuncFile LogTimeExtensionTrigger = new(AnalyzeTimeExtensionTriggers, $"{nameof(TimeExtensionTrigger)}.tsv");
+        public static readonly LogFuncFile LogTrackKeyablesAll = new(AnalyzeTrackKeyablesAll, $"Track Keyables All.tsv");
+        public static readonly LogFuncFile LogTrackNode = new(AnalyzeTrackNodes, $"{nameof(TrackNode)}.tsv");
+        public static readonly LogFuncFile LogTrackSegment = new(AnalyzeTrackSegments, $"{nameof(TrackSegment)}.tsv");
+        public static readonly LogFuncFile LogTransform = new(AnalyzeSceneObjectTransforms, $"{nameof(TransformTRXS)}.tsv");
+        public static readonly LogFuncFile LogUnknownCollider = new(AnalyzeUnknownColliders, $"{nameof(UnknownCollider)}.tsv");
+        public static readonly LogFuncFile LogVisualEffectTrigger = new(AnalyzeVisualEffectTriggers, $"{nameof(VisualEffectTrigger)}.tsv");
 
-        public static readonly string tsvStaticColliderTriangles = $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderTriangle)}s.tsv";
-        public static readonly string tsvStaticColliderQuads= $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderQuad)}s.tsv";
-
+        public static readonly LogFuncFile[] AllLogFunctionFiles =
+        [
+            LogCullOverrideTrigger,
+            LogHeader,
+            LogFog,
+            LogFogCurves,
+            LogGeneralData,
+            LogMiscellaneousTrigger,
+            LogSceneObjectDynamic,
+            LogSceneObjectLODs,
+            LogSceneObjects,
+            LogSceneObjectsAndLod,
+            LogSodAnimationClip,
+            LogSodTextureMetadata,
+            LogSodSkeletalAnimator,
+            LogSodGeometryTri,
+            LogSodGeometryQuad,
+            LogStaticColliderMeshManager,
+            LogStaticQuads,
+            LogStaticTriangles,
+            LogStoryObjectTrigger,
+            LogSurfaceAttributeArea,
+            LogTimeExtensionTrigger,
+            LogTrackKeyablesAll,
+            LogTrackNode,
+            LogTrackSegment,
+            LogTransform,
+            LogUnknownCollider,
+            LogVisualEffectTrigger
+        ];
 
         #region Track Data / Transforms
 
@@ -87,7 +120,6 @@ namespace GameCube.GFZ.Stage
 
             writer.Flush();
         }
-
         public static void AnalyzeTrackKeyables(Scene[] scenes, string filename, int keyablesSet)
         {
             using var writer = new StreamWriter(File.Create(filename));
@@ -130,7 +162,7 @@ namespace GameCube.GFZ.Stage
 
             writer.Flush();
         }
-        public static void WriteTrackKeyableAttributeRecursive(StreamWriter writer, Scene scene, int nestedDepth, int animationCurveIndex, int trackTransformIndex, TrackSegment trackTransform)
+        private static void WriteTrackKeyableAttributeRecursive(StreamWriter writer, Scene scene, int nestedDepth, int animationCurveIndex, int trackTransformIndex, TrackSegment trackTransform)
         {
             var animationCurves = trackTransform.AnimationCurveTRS.AnimationCurves;
             var keyableIndex = 1; // 0-n, depends on number of keyables in array
@@ -148,7 +180,7 @@ namespace GameCube.GFZ.Stage
             //foreach (var child in trackTransform.children)
             //    WriteTrackKeyableAttributeRecursive(writer, sobj, nestedDepth + 1, animationCurveIndex, trackTransformIndex, child);
         }
-        public static void WriteKeyableAttribute(StreamWriter writer, Scene scene, int nestedDepth, int keyableIndex, int keyableTotal, int keyablesSet, int trackTransformIndex, KeyableAttribute param, TrackSegment tt)
+        private static void WriteKeyableAttribute(StreamWriter writer, Scene scene, int nestedDepth, int keyableIndex, int keyableTotal, int keyablesSet, int trackTransformIndex, KeyableAttribute param, TrackSegment tt)
         {
             string gameId = scene.IsFileGX ? "GX" : "AX";
 
@@ -242,7 +274,7 @@ namespace GameCube.GFZ.Stage
             writer.Flush();
         }
         // Writes self and children
-        public static void WriteTrackSegmentRecursive(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackSegment)
+        private static void WriteTrackSegmentRecursive(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackSegment)
         {
             // Write Parent
             WriteTrackSegment(writer, scene, depth, index, total, trackSegment);
@@ -257,7 +289,7 @@ namespace GameCube.GFZ.Stage
             }
         }
         // The actual writing to file
-        public static void WriteTrackSegment(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackTransform)
+        private static void WriteTrackSegment(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackTransform)
         {
             writer.WriteNextCol(scene.FileName);
             writer.WriteNextCol($"{s_order++}");
@@ -931,7 +963,7 @@ namespace GameCube.GFZ.Stage
 
         #region TRIGGERS
 
-        public static void AnalyzeArcadeCheckpointTriggers(Scene[] scenes, string fileName)
+        public static void AnalyzeTimeExtensionTriggers(Scene[] scenes, string fileName)
         {
             using var writer = new StreamWriter(File.Create(fileName));
             
@@ -976,7 +1008,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public static void AnalyzeCourseMetadataTriggers(Scene[] scenes, string fileName)
+        public static void AnalyzeMiscellaneousTriggers(Scene[] scenes, string fileName)
         {
             using var writer = new StreamWriter(File.Create(fileName));
             
@@ -1074,7 +1106,7 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-        public static void AnalyzeUnknownTrigger(Scene[] scenes, string fileName)
+        public static void AnalyzeCullOverrideTrigger(Scene[] scenes, string fileName)
         {
             using var writer = new StreamWriter(File.Create(fileName));
             
@@ -1435,7 +1467,7 @@ namespace GameCube.GFZ.Stage
             writer.Flush();
         }
 
-        public static void AnalyzeStaticColliderMeshes(Scene[] scenes, string fileName)
+        public static void AnalyzeStaticColliderMeshManagers(Scene[] scenes, string fileName)
         {
             using var writer = new StreamWriter(File.Create(fileName));
             
@@ -1771,7 +1803,7 @@ namespace GameCube.GFZ.Stage
         }
 
 
-        public static void AnalyzeUnknownCollider(Scene[] scenes, string fileName)
+        public static void AnalyzeUnknownColliders(Scene[] scenes, string fileName)
         {
             using var writer = new StreamWriter(File.Create(fileName));
             
