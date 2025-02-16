@@ -1,1895 +1,695 @@
-﻿using Manifold;
+﻿namespace GameCube.GFZ.Stage;
+
+using Manifold;
 using GameCube.Common;
 using Manifold.IO;
 using System.Collections.Generic;
 using System.IO;
+using static Manifold.IO.TableLogger;
 
-namespace GameCube.GFZ.Stage
+/// <summary>
+///     Library of log functions for <see cref="Scene"/> (stage) files.
+/// </summary>
+public static class StageTableLogger
 {
-    // TODO: put somewhere generic
-    public delegate void Analyzer<T>(T[] values, string outputFilePath);
-    public readonly record struct LogFuncFile(Analyzer<Scene> AnalysisFunction, string FileName);
+    // Map functions to output file name
+    public static readonly LogFuncFile<Scene> LogCullOverrideTrigger = new(AnalyzeCullOverrideTrigger, $"{nameof(CullOverrideTrigger)}.tsv");
+    public static readonly LogFuncFile<Scene> LogHeader = new(AnalyzeHeaders, $"{nameof(Scene)}-Header.tsv");
+    public static readonly LogFuncFile<Scene> LogFog = new(AnalyzeFog, $"{nameof(Fog)}.tsv");
+    public static readonly LogFuncFile<Scene> LogFogCurves = new(AnalyzeFogCurves, $"{nameof(FogCurves)}.tsv");
+    public static readonly LogFuncFile<Scene> LogGeneralData = new(AnalyzeGeneralData, $"General Data.tsv");
+    public static readonly LogFuncFile<Scene> LogMiscellaneousTrigger = new(AnalyzeMiscellaneousTriggers, $"{nameof(MiscellaneousTrigger)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSceneObjectDynamic = new(AnalyzeSceneObjectDynamic, $"{nameof(SceneObjectDynamic)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSceneObjectLODs = new(AnalyzeSceneObjectLODs, $"{nameof(SceneObjectLOD)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSceneObjects = new(AnalyzeSceneObjects, $"{nameof(SceneObject)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSceneObjectsAndLod = new(AnalyzeSceneObjectsAndLODs, $"{nameof(SceneObject)}-{nameof(SceneObjectLOD)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSodAnimationClip = new(AnalyzeAnimationClips, $"{nameof(SceneObjectDynamic)}-{nameof(AnimationClip)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSodTextureMetadata = new(AnalyzeTextureMetadata, $"{nameof(SceneObjectDynamic)}-{nameof(TextureScroll)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSodSkeletalAnimator = new(AnalyzeSkeletalAnimator, $"{nameof(SceneObjectDynamic)}-{nameof(SkeletalAnimator)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSodGeometryTri = new(AnalyzeColliderGeometryTri, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Tris.tsv");
+    public static readonly LogFuncFile<Scene> LogSodGeometryQuad = new(AnalyzeColliderGeometryQuad, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Quads.tsv");
+    public static readonly LogFuncFile<Scene> LogStaticColliderMeshManager = new(AnalyzeStaticColliderMeshManagers, $"{nameof(StaticColliderMeshManager)}.tsv");
+    public static readonly LogFuncFile<Scene> LogStaticQuads = new(AnalyzeStaticColliderQuads, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderQuad)}s.tsv");
+    public static readonly LogFuncFile<Scene> LogStaticTriangles = new(AnalyzeStaticColliderTriangles, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderTriangle)}s.tsv");
+    public static readonly LogFuncFile<Scene> LogStoryObjectTrigger = new(AnalyzeStoryObjectTrigger, $"{nameof(StoryObjectTrigger)}.tsv");
+    public static readonly LogFuncFile<Scene> LogSurfaceAttributeArea = new(AnalyzeSurfaceAttributeAreas, $"{nameof(EmbeddedTrackPropertyArea)}.tsv");
+    public static readonly LogFuncFile<Scene> LogTimeExtensionTrigger = new(AnalyzeTimeExtensionTriggers, $"{nameof(TimeExtensionTrigger)}.tsv");
+    public static readonly LogFuncFile<Scene> LogTrackKeyablesAll = new(AnalyzeTrackKeyablesAll, $"Track Keyables All.tsv");
+    public static readonly LogFuncFile<Scene> LogTrackNode = new(AnalyzeTrackNodes, $"{nameof(TrackNode)}.tsv");
+    public static readonly LogFuncFile<Scene> LogTrackSegment = new(AnalyzeTrackSegments, $"{nameof(TrackSegment)}.tsv");
+    public static readonly LogFuncFile<Scene> LogTransform = new(AnalyzeSceneObjectTransforms, $"{nameof(TransformTRXS)}.tsv");
+    public static readonly LogFuncFile<Scene> LogUnknownCollider = new(AnalyzeUnknownColliders, $"{nameof(UnknownCollider)}.tsv");
+    public static readonly LogFuncFile<Scene> LogVisualEffectTrigger = new(AnalyzeVisualEffectTriggers, $"{nameof(VisualEffectTrigger)}.tsv");
 
+    public static readonly LogFuncFile<Scene>[] AllLogFunctionFiles =
+    [
+        LogCullOverrideTrigger,
+        LogHeader,
+        LogFog,
+        LogFogCurves,
+        LogGeneralData,
+        LogMiscellaneousTrigger,
+        LogSceneObjectDynamic,
+        LogSceneObjectLODs,
+        LogSceneObjects,
+        LogSceneObjectsAndLod,
+        LogSodAnimationClip,
+        LogSodTextureMetadata,
+        LogSodSkeletalAnimator,
+        LogSodGeometryTri,
+        LogSodGeometryQuad,
+        LogStaticColliderMeshManager,
+        LogStaticQuads,
+        LogStaticTriangles,
+        LogStoryObjectTrigger,
+        LogSurfaceAttributeArea,
+        LogTimeExtensionTrigger,
+        LogTrackKeyablesAll,
+        LogTrackNode,
+        LogTrackSegment,
+        LogTransform,
+        LogUnknownCollider,
+        LogVisualEffectTrigger
+    ];
 
-    public static class StageTableLogger
+    #region Track Data / Transforms
+
+    public static void AnalyzeTrackKeyablesAll(Scene[] scenes, string filename)
     {
-        // Map functions to output file name
-        public static readonly LogFuncFile LogCullOverrideTrigger = new(AnalyzeCullOverrideTrigger, $"{nameof(CullOverrideTrigger)}.tsv");
-        public static readonly LogFuncFile LogHeader = new(AnalyzeHeaders, $"{nameof(Scene)}-Header.tsv");
-        public static readonly LogFuncFile LogFog = new(AnalyzeFog, $"{nameof(Fog)}.tsv");
-        public static readonly LogFuncFile LogFogCurves = new(AnalyzeFogCurves, $"{nameof(FogCurves)}.tsv");
-        public static readonly LogFuncFile LogGeneralData = new(AnalyzeGeneralData, $"General Data.tsv");
-        public static readonly LogFuncFile LogMiscellaneousTrigger = new(AnalyzeMiscellaneousTriggers, $"{nameof(MiscellaneousTrigger)}.tsv");
-        public static readonly LogFuncFile LogSceneObjectDynamic = new(AnalyzeSceneObjectDynamic, $"{nameof(SceneObjectDynamic)}.tsv");
-        public static readonly LogFuncFile LogSceneObjectLODs = new(AnalyzeSceneObjectLODs, $"{nameof(SceneObjectLOD)}.tsv");
-        public static readonly LogFuncFile LogSceneObjects = new(AnalyzeSceneObjects, $"{nameof(SceneObject)}.tsv");
-        public static readonly LogFuncFile LogSceneObjectsAndLod = new(AnalyzeSceneObjectsAndLODs, $"{nameof(SceneObject)}-{nameof(SceneObjectLOD)}.tsv");
-        public static readonly LogFuncFile LogSodAnimationClip = new(AnalyzeAnimationClips, $"{nameof(SceneObjectDynamic)}-{nameof(AnimationClip)}.tsv");
-        public static readonly LogFuncFile LogSodTextureMetadata = new(AnalyzeTextureMetadata, $"{nameof(SceneObjectDynamic)}-{nameof(TextureScroll)}.tsv");
-        public static readonly LogFuncFile LogSodSkeletalAnimator = new(AnalyzeSkeletalAnimator, $"{nameof(SceneObjectDynamic)}-{nameof(SkeletalAnimator)}.tsv");
-        public static readonly LogFuncFile LogSodGeometryTri = new(AnalyzeColliderGeometryTri, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Tris.tsv");
-        public static readonly LogFuncFile LogSodGeometryQuad = new(AnalyzeColliderGeometryQuad, $"{nameof(SceneObjectDynamic)}-{nameof(ColliderMesh)}-Quads.tsv");
-        public static readonly LogFuncFile LogStaticColliderMeshManager = new(AnalyzeStaticColliderMeshManagers, $"{nameof(StaticColliderMeshManager)}.tsv");
-        public static readonly LogFuncFile LogStaticQuads = new(AnalyzeStaticColliderQuads, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderQuad)}s.tsv");
-        public static readonly LogFuncFile LogStaticTriangles = new(AnalyzeStaticColliderTriangles, $"{nameof(StaticColliderMeshManager)}-{nameof(ColliderTriangle)}s.tsv");
-        public static readonly LogFuncFile LogStoryObjectTrigger = new(AnalyzeStoryObjectTrigger, $"{nameof(StoryObjectTrigger)}.tsv");
-        public static readonly LogFuncFile LogSurfaceAttributeArea = new(AnalyzeSurfaceAttributeAreas, $"{nameof(EmbeddedTrackPropertyArea)}.tsv");
-        public static readonly LogFuncFile LogTimeExtensionTrigger = new(AnalyzeTimeExtensionTriggers, $"{nameof(TimeExtensionTrigger)}.tsv");
-        public static readonly LogFuncFile LogTrackKeyablesAll = new(AnalyzeTrackKeyablesAll, $"Track Keyables All.tsv");
-        public static readonly LogFuncFile LogTrackNode = new(AnalyzeTrackNodes, $"{nameof(TrackNode)}.tsv");
-        public static readonly LogFuncFile LogTrackSegment = new(AnalyzeTrackSegments, $"{nameof(TrackSegment)}.tsv");
-        public static readonly LogFuncFile LogTransform = new(AnalyzeSceneObjectTransforms, $"{nameof(TransformTRXS)}.tsv");
-        public static readonly LogFuncFile LogUnknownCollider = new(AnalyzeUnknownColliders, $"{nameof(UnknownCollider)}.tsv");
-        public static readonly LogFuncFile LogVisualEffectTrigger = new(AnalyzeVisualEffectTriggers, $"{nameof(VisualEffectTrigger)}.tsv");
+        using var writer = new StreamWriter(File.Create(filename));
+        
+        // Write header
+        writer.WriteNextCol("FileName");
+        writer.WriteNextCol("Game");
 
-        public static readonly LogFuncFile[] AllLogFunctionFiles =
-        [
-            LogCullOverrideTrigger,
-            LogHeader,
-            LogFog,
-            LogFogCurves,
-            LogGeneralData,
-            LogMiscellaneousTrigger,
-            LogSceneObjectDynamic,
-            LogSceneObjectLODs,
-            LogSceneObjects,
-            LogSceneObjectsAndLod,
-            LogSodAnimationClip,
-            LogSodTextureMetadata,
-            LogSodSkeletalAnimator,
-            LogSodGeometryTri,
-            LogSodGeometryQuad,
-            LogStaticColliderMeshManager,
-            LogStaticQuads,
-            LogStaticTriangles,
-            LogStoryObjectTrigger,
-            LogSurfaceAttributeArea,
-            LogTimeExtensionTrigger,
-            LogTrackKeyablesAll,
-            LogTrackNode,
-            LogTrackSegment,
-            LogTransform,
-            LogUnknownCollider,
-            LogVisualEffectTrigger
-        ];
+        writer.WriteNextCol(nameof(TrackSegment.SegmentType));
+        writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
+        writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
+        writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
 
-        #region Track Data / Transforms
+        writer.WriteNextCol("TrackTransform Index");
+        writer.WriteNextCol("Keyable /9");
+        writer.WriteNextCol("Keyable Index");
+        writer.WriteNextCol("Keyable Order");
+        writer.WriteNextCol("Nested Depth");
+        writer.WriteNextCol("Address");
+        writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextCol(nameof(KeyableAttribute.Time));
+        writer.WriteNextCol(nameof(KeyableAttribute.Value));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
+        writer.WriteNextRow();
 
-        public static void AnalyzeTrackKeyablesAll(Scene[] scenes, string filename)
+        // foreach File
+        foreach (var scene in scenes)
         {
-            using var writer = new StreamWriter(File.Create(filename));
-            
-            // Write header
-            writer.WriteNextCol("FileName");
-            writer.WriteNextCol("Game");
-
-            writer.WriteNextCol(nameof(TrackSegment.SegmentType));
-            writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
-            writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
-            writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
-
-            writer.WriteNextCol("TrackTransform Index");
-            writer.WriteNextCol("Keyable /9");
-            writer.WriteNextCol("Keyable Index");
-            writer.WriteNextCol("Keyable Order");
-            writer.WriteNextCol("Nested Depth");
-            writer.WriteNextCol("Address");
-            writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextCol(nameof(KeyableAttribute.Time));
-            writer.WriteNextCol(nameof(KeyableAttribute.Value));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
-            writer.WriteNextRow();
-
-            // foreach File
-            foreach (var scene in scenes)
+            // foreach Transform
+            int trackIndex = 0;
+            foreach (var trackTransform in scene.RootTrackSegments)
             {
-                // foreach Transform
-                int trackIndex = 0;
-                foreach (var trackTransform in scene.RootTrackSegments)
+                for (int keyablesIndex = 0; keyablesIndex < AnimationCurveTRS.kCurveCount; keyablesIndex++)
                 {
-                    for (int keyablesIndex = 0; keyablesIndex < AnimationCurveTRS.kCurveCount; keyablesIndex++)
-                    {
-                        WriteTrackKeyableAttributeRecursive(writer, scene, 0, keyablesIndex, ++trackIndex, trackTransform);
-                    }
+                    WriteTrackKeyableAttributeRecursive(writer, scene, 0, keyablesIndex, ++trackIndex, trackTransform);
                 }
             }
-
-            writer.Flush();
         }
-        public static void AnalyzeTrackKeyables(Scene[] scenes, string filename, int keyablesSet)
+
+        writer.Flush();
+    }
+    public static void AnalyzeTrackKeyables(Scene[] scenes, string filename, int keyablesSet)
+    {
+        using var writer = new StreamWriter(File.Create(filename));
+
+        // Write header
+        writer.WriteNextCol("FileName");
+        writer.WriteNextCol("Game");
+
+        writer.WriteNextCol(nameof(TrackSegment.SegmentType));
+        writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
+        writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
+        writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
+
+        writer.WriteNextCol("TrackTransform Index");
+        writer.WriteNextCol("Keyable /9");
+        writer.WriteNextCol("Keyable Index");
+        writer.WriteNextCol("Keyable Order");
+        writer.WriteNextCol("Nested Depth");
+        writer.WriteNextCol("Address");
+        writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextCol(nameof(KeyableAttribute.Time));
+        writer.WriteNextCol(nameof(KeyableAttribute.Value));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
+        writer.WriteNextRow();
+
+        // foreach File
+        foreach (var scene in scenes)
         {
-            using var writer = new StreamWriter(File.Create(filename));
-
-            // Write header
-            writer.WriteNextCol("FileName");
-            writer.WriteNextCol("Game");
-
-            writer.WriteNextCol(nameof(TrackSegment.SegmentType));
-            writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
-            writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
-            writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
-
-            writer.WriteNextCol("TrackTransform Index");
-            writer.WriteNextCol("Keyable /9");
-            writer.WriteNextCol("Keyable Index");
-            writer.WriteNextCol("Keyable Order");
-            writer.WriteNextCol("Nested Depth");
-            writer.WriteNextCol("Address");
-            writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextCol(nameof(KeyableAttribute.Time));
-            writer.WriteNextCol(nameof(KeyableAttribute.Value));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
-            writer.WriteNextRow();
-
-            // foreach File
-            foreach (var scene in scenes)
+            // foreach Transform
+            int trackTransformIndex = 0;
+            foreach (var trackTransform in scene.RootTrackSegments)
             {
-                // foreach Transform
-                int trackTransformIndex = 0;
-                foreach (var trackTransform in scene.RootTrackSegments)
-                {
-                    WriteTrackKeyableAttributeRecursive(writer, scene, nestedDepth: 0, keyablesSet, trackTransformIndex++, trackTransform);
-                }
+                WriteTrackKeyableAttributeRecursive(writer, scene, nestedDepth: 0, keyablesSet, trackTransformIndex++, trackTransform);
             }
-
-            writer.Flush();
         }
-        private static void WriteTrackKeyableAttributeRecursive(StreamWriter writer, Scene scene, int nestedDepth, int animationCurveIndex, int trackTransformIndex, TrackSegment trackTransform)
-        {
-            var animationCurves = trackTransform.AnimationCurveTRS.AnimationCurves;
-            var keyableIndex = 1; // 0-n, depends on number of keyables in array
-            int keyableTotal = animationCurves[animationCurveIndex].Length;
 
-            // Animation data of this curve
-            foreach (var keyables in animationCurves[animationCurveIndex].KeyableAttributes)
+        writer.Flush();
+    }
+    private static void WriteTrackKeyableAttributeRecursive(StreamWriter writer, Scene scene, int nestedDepth, int animationCurveIndex, int trackTransformIndex, TrackSegment trackTransform)
+    {
+        var animationCurves = trackTransform.AnimationCurveTRS.AnimationCurves;
+        var keyableIndex = 1; // 0-n, depends on number of keyables in array
+        int keyableTotal = animationCurves[animationCurveIndex].Length;
+
+        // Animation data of this curve
+        foreach (var keyables in animationCurves[animationCurveIndex].KeyableAttributes)
+        {
+            WriteKeyableAttribute(writer, scene, nestedDepth + 1, keyableIndex++, keyableTotal, animationCurveIndex, trackTransformIndex, keyables, trackTransform);
+        }
+
+        // TODO: do you even care to reimplement this at this point?
+        // Go to track transform children, write their anim data (calls this function)
+        //Debug.LogWarning("You refactored this analysis out!");
+        //foreach (var child in trackTransform.children)
+        //    WriteTrackKeyableAttributeRecursive(writer, sobj, nestedDepth + 1, animationCurveIndex, trackTransformIndex, child);
+    }
+    private static void WriteKeyableAttribute(StreamWriter writer, Scene scene, int nestedDepth, int keyableIndex, int keyableTotal, int keyablesSet, int trackTransformIndex, KeyableAttribute param, TrackSegment tt)
+    {
+        string gameId = scene.IsFileGX ? "GX" : "AX";
+
+        writer.WriteNextCol(scene.FileName);
+        writer.WriteNextCol(gameId);
+
+        writer.WriteNextCol(tt.SegmentType);
+        writer.WriteNextCol(tt.EmbeddedPropertyType);
+        writer.WriteNextCol(tt.PerimeterFlags);
+        writer.WriteNextCol(tt.PipeCylinderFlags);
+        writer.WriteNextCol(tt.Root_unk_0x38);
+        writer.WriteNextCol(tt.Root_unk_0x3A);
+
+        writer.WriteNextCol(trackTransformIndex);
+        writer.WriteNextCol(keyablesSet);
+        writer.WriteNextCol(keyableIndex);
+        writer.WriteNextCol($"[{keyableIndex}/{keyableTotal}]");
+        writer.WriteNextCol($"{nestedDepth}");
+        writer.WriteNextCol(param.AddressRange.PrintStartAddress());
+        writer.WriteNextCol(param.EaseMode);
+        writer.WriteNextCol((int)param.EaseMode);
+        writer.WriteNextCol(param.Time);
+        writer.WriteNextCol(param.Value);
+        writer.WriteNextCol(param.TangentIn);
+        writer.WriteNextCol(param.TangentOut);
+        writer.WriteNextRow();
+    }
+
+
+    // Kicks off recursive write
+    private static int s_order;
+    public static void AnalyzeTrackSegments(Scene[] scenes, string filename)
+    {
+        using var writer = new StreamWriter(File.Create(filename));
+        //
+        writer.WriteNextCol("Filename");
+        writer.WriteNextCol("Order");
+        writer.WriteNextCol("Root Index");
+        writer.WriteNextCol("Transform Depth");
+        writer.WriteNextCol("Address");
+        //
+        writer.WriteNextCol("PosX");
+        writer.WriteNextCol("PosY");
+        writer.WriteNextCol("PosZ");
+        writer.WriteNextCol("RotX");
+        writer.WriteNextCol("RotY");
+        writer.WriteNextCol("RotZ");
+        writer.WriteNextCol("SclX");
+        writer.WriteNextCol("SclY");
+        writer.WriteNextCol("SclZ");
+        //
+        writer.WriteNextCol(nameof(TrackSegment.SegmentType));
+        writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
+        writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
+        writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
+        writer.WriteNextCol(nameof(TrackSegment.AnimationCurvesTrsPtr));
+        writer.WriteNextCol(nameof(TrackSegment.TrackCornerPtr));
+        writer.WriteNextCol(nameof(TrackSegment.ChildrenPtr));
+        writer.WriteNextCol(nameof(TrackSegment.FallbackScale));
+        writer.WriteNextCol(nameof(TrackSegment.FallbackRotation));
+        writer.WriteNextCol(nameof(TrackSegment.FallbackPosition));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
+        writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
+        writer.WriteNextCol(nameof(TrackSegment.RailHeightRight));
+        writer.WriteNextCol(nameof(TrackSegment.RailHeightLeft));
+        writer.WriteNextCol(nameof(TrackSegment.BranchIndex));
+        writer.WriteNextCol();
+        writer.WriteNextColNicify(nameof(TrackCorner.Transform.Position));
+        writer.WriteNextColNicify(nameof(TrackCorner.Transform.Rotation));
+        writer.WriteNextColNicify(nameof(TrackCorner.Transform.Scale));
+        writer.WriteNextColNicify(nameof(TrackCorner.Width));
+        writer.WriteNextColNicify(nameof(TrackCorner.PerimeterOptions));
+        //
+        writer.WriteNextRow();
+
+        // RESET static variable
+        s_order = 0;
+
+        foreach (var scene in scenes)
+        {
+            var index = 0;
+            var total = scene.RootTrackSegments.Length;
+            foreach (var trackTransform in scene.RootTrackSegments)
             {
-                WriteKeyableAttribute(writer, scene, nestedDepth + 1, keyableIndex++, keyableTotal, animationCurveIndex, trackTransformIndex, keyables, trackTransform);
+                WriteTrackSegmentRecursive(writer, scene, 0, ++index, total, trackTransform);
             }
-
-            // TODO: do you even care to reimplement this at this point?
-            // Go to track transform children, write their anim data (calls this function)
-            //Debug.LogWarning("You refactored this analysis out!");
-            //foreach (var child in trackTransform.children)
-            //    WriteTrackKeyableAttributeRecursive(writer, sobj, nestedDepth + 1, animationCurveIndex, trackTransformIndex, child);
-        }
-        private static void WriteKeyableAttribute(StreamWriter writer, Scene scene, int nestedDepth, int keyableIndex, int keyableTotal, int keyablesSet, int trackTransformIndex, KeyableAttribute param, TrackSegment tt)
-        {
-            string gameId = scene.IsFileGX ? "GX" : "AX";
-
-            writer.WriteNextCol(scene.FileName);
-            writer.WriteNextCol(gameId);
-
-            writer.WriteNextCol(tt.SegmentType);
-            writer.WriteNextCol(tt.EmbeddedPropertyType);
-            writer.WriteNextCol(tt.PerimeterFlags);
-            writer.WriteNextCol(tt.PipeCylinderFlags);
-            writer.WriteNextCol(tt.Root_unk_0x38);
-            writer.WriteNextCol(tt.Root_unk_0x3A);
-
-            writer.WriteNextCol(trackTransformIndex);
-            writer.WriteNextCol(keyablesSet);
-            writer.WriteNextCol(keyableIndex);
-            writer.WriteNextCol($"[{keyableIndex}/{keyableTotal}]");
-            writer.WriteNextCol($"{nestedDepth}");
-            writer.WriteNextCol(param.AddressRange.PrintStartAddress());
-            writer.WriteNextCol(param.EaseMode);
-            writer.WriteNextCol((int)param.EaseMode);
-            writer.WriteNextCol(param.Time);
-            writer.WriteNextCol(param.Value);
-            writer.WriteNextCol(param.TangentIn);
-            writer.WriteNextCol(param.TangentOut);
-            writer.WriteNextRow();
         }
 
+        writer.Flush();
+    }
+    // Writes self and children
+    private static void WriteTrackSegmentRecursive(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackSegment)
+    {
+        // Write Parent
+        WriteTrackSegment(writer, scene, depth, index, total, trackSegment);
 
-        // Kicks off recursive write
-        private static int s_order;
-        public static void AnalyzeTrackSegments(Scene[] scenes, string filename)
+        // Write children
+        if (trackSegment.Children == null)
+            return;
+
+        foreach (var child in trackSegment.Children)
         {
-            using var writer = new StreamWriter(File.Create(filename));
-            //
-            writer.WriteNextCol("Filename");
-            writer.WriteNextCol("Order");
-            writer.WriteNextCol("Root Index");
-            writer.WriteNextCol("Transform Depth");
-            writer.WriteNextCol("Address");
-            //
-            writer.WriteNextCol("PosX");
-            writer.WriteNextCol("PosY");
-            writer.WriteNextCol("PosZ");
-            writer.WriteNextCol("RotX");
-            writer.WriteNextCol("RotY");
-            writer.WriteNextCol("RotZ");
-            writer.WriteNextCol("SclX");
-            writer.WriteNextCol("SclY");
-            writer.WriteNextCol("SclZ");
-            //
-            writer.WriteNextCol(nameof(TrackSegment.SegmentType));
-            writer.WriteNextCol(nameof(TrackSegment.EmbeddedPropertyType));
-            writer.WriteNextCol(nameof(TrackSegment.PerimeterFlags));
-            writer.WriteNextCol(nameof(TrackSegment.PipeCylinderFlags));
-            writer.WriteNextCol(nameof(TrackSegment.AnimationCurvesTrsPtr));
-            writer.WriteNextCol(nameof(TrackSegment.TrackCornerPtr));
-            writer.WriteNextCol(nameof(TrackSegment.ChildrenPtr));
-            writer.WriteNextCol(nameof(TrackSegment.FallbackScale));
-            writer.WriteNextCol(nameof(TrackSegment.FallbackRotation));
-            writer.WriteNextCol(nameof(TrackSegment.FallbackPosition));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x38));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
-            writer.WriteNextCol(nameof(TrackSegment.Root_unk_0x3A));
-            writer.WriteNextCol(nameof(TrackSegment.RailHeightRight));
-            writer.WriteNextCol(nameof(TrackSegment.RailHeightLeft));
-            writer.WriteNextCol(nameof(TrackSegment.BranchIndex));
+            WriteTrackSegmentRecursive(writer, scene, depth + 1, index, total, child);
+        }
+    }
+    // The actual writing to file
+    private static void WriteTrackSegment(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackTransform)
+    {
+        writer.WriteNextCol(scene.FileName);
+        writer.WriteNextCol($"{s_order++}");
+        writer.WriteNextCol($"[{index}/{total}]");
+        writer.WriteNextCol($"{depth}");
+        writer.WriteNextCol(trackTransform.AddressRange.PrintStartAddress());
+        //
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionX.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionY.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionZ.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationX.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationY.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationZ.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleX.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleY.Length);
+        writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleZ.Length);
+        //
+        writer.WriteNextCol(trackTransform.SegmentType);
+        writer.WriteNextCol(trackTransform.EmbeddedPropertyType);
+        writer.WriteNextCol(trackTransform.PerimeterFlags);
+        writer.WriteNextCol(trackTransform.PipeCylinderFlags);
+        writer.WriteNextCol(trackTransform.AnimationCurvesTrsPtr);
+        writer.WriteNextCol(trackTransform.TrackCornerPtr);
+        writer.WriteNextCol(trackTransform.ChildrenPtr);
+        writer.WriteNextCol(trackTransform.FallbackScale);
+        writer.WriteNextCol(trackTransform.FallbackRotation);
+        writer.WriteNextCol(trackTransform.FallbackPosition);
+        writer.WriteNextCol(trackTransform.Root_unk_0x38);
+        writer.WriteNextCol($"0x{trackTransform.Root_unk_0x38:x4}");
+        writer.WriteNextCol(trackTransform.Root_unk_0x3A);
+        writer.WriteNextCol($"0x{trackTransform.Root_unk_0x3A:x4}");
+        writer.WriteNextCol(trackTransform.RailHeightRight);
+        writer.WriteNextCol(trackTransform.RailHeightLeft);
+        writer.WriteNextCol(trackTransform.BranchIndex);
+        //
+        if (trackTransform.TrackCornerPtr.IsNotNull)
+        {
             writer.WriteNextCol();
-            writer.WriteNextColNicify(nameof(TrackCorner.Transform.Position));
-            writer.WriteNextColNicify(nameof(TrackCorner.Transform.Rotation));
-            writer.WriteNextColNicify(nameof(TrackCorner.Transform.Scale));
-            writer.WriteNextColNicify(nameof(TrackCorner.Width));
-            writer.WriteNextColNicify(nameof(TrackCorner.PerimeterOptions));
-            //
-            writer.WriteNextRow();
+            writer.WriteNextCol(trackTransform.TrackCorner.Transform.Position);
+            writer.WriteNextCol(trackTransform.TrackCorner.Transform.RotationEuler);
+            writer.WriteNextCol(trackTransform.TrackCorner.Transform.Scale);
+            writer.WriteNextCol(trackTransform.TrackCorner.Width);
+            writer.WriteNextCol(trackTransform.TrackCorner.PerimeterOptions);
+        }
+        //
+        writer.WriteNextRow();
+    }
 
-            // RESET static variable
-            s_order = 0;
 
-            foreach (var scene in scenes)
+    #endregion
+
+    #region Scene Objects' Animation Clips
+
+    public static void AnalyzeAnimationClips(Scene[] scenes, string filename)
+    {
+        using var writer = new StreamWriter(File.Create(filename));
+
+        // Write header
+        writer.WriteNextCol("File Path");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+        writer.WriteNextCol("Anim Addr");
+        writer.WriteNextCol("Key Addr");
+        writer.WriteNextCol("Anim Index [0-10]");
+        writer.WriteNextCol("Unk_0x00");
+        writer.WriteNextCol("Time");
+        writer.WriteNextCol("Value");
+        writer.WriteNextCol("Unk_0x0C");
+        writer.WriteNextCol("Unk_0x10");
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int gameObjectIndex = 0;
+            foreach (var gameObject in scene.dynamicSceneObjects)
             {
-                var index = 0;
-                var total = scene.RootTrackSegments.Length;
-                foreach (var trackTransform in scene.RootTrackSegments)
+                if (gameObject.AnimationClip == null)
+                    continue;
+                if (gameObject.AnimationClip.Curves == null)
+                    continue;
+
+                int animIndex = 0;
+                foreach (var animationClipCurve in gameObject.AnimationClip.Curves)
                 {
-                    WriteTrackSegmentRecursive(writer, scene, 0, ++index, total, trackTransform);
-                }
-            }
-
-            writer.Flush();
-        }
-        // Writes self and children
-        private static void WriteTrackSegmentRecursive(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackSegment)
-        {
-            // Write Parent
-            WriteTrackSegment(writer, scene, depth, index, total, trackSegment);
-
-            // Write children
-            if (trackSegment.Children == null)
-                return;
-
-            foreach (var child in trackSegment.Children)
-            {
-                WriteTrackSegmentRecursive(writer, scene, depth + 1, index, total, child);
-            }
-        }
-        // The actual writing to file
-        private static void WriteTrackSegment(StreamWriter writer, Scene scene, int depth, int index, int total, TrackSegment trackTransform)
-        {
-            writer.WriteNextCol(scene.FileName);
-            writer.WriteNextCol($"{s_order++}");
-            writer.WriteNextCol($"[{index}/{total}]");
-            writer.WriteNextCol($"{depth}");
-            writer.WriteNextCol(trackTransform.AddressRange.PrintStartAddress());
-            //
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionX.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionY.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.PositionZ.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationX.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationY.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.RotationZ.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleX.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleY.Length);
-            writer.WriteNextCol(trackTransform.AnimationCurveTRS.ScaleZ.Length);
-            //
-            writer.WriteNextCol(trackTransform.SegmentType);
-            writer.WriteNextCol(trackTransform.EmbeddedPropertyType);
-            writer.WriteNextCol(trackTransform.PerimeterFlags);
-            writer.WriteNextCol(trackTransform.PipeCylinderFlags);
-            writer.WriteNextCol(trackTransform.AnimationCurvesTrsPtr);
-            writer.WriteNextCol(trackTransform.TrackCornerPtr);
-            writer.WriteNextCol(trackTransform.ChildrenPtr);
-            writer.WriteNextCol(trackTransform.FallbackScale);
-            writer.WriteNextCol(trackTransform.FallbackRotation);
-            writer.WriteNextCol(trackTransform.FallbackPosition);
-            writer.WriteNextCol(trackTransform.Root_unk_0x38);
-            writer.WriteNextCol($"0x{trackTransform.Root_unk_0x38:x4}");
-            writer.WriteNextCol(trackTransform.Root_unk_0x3A);
-            writer.WriteNextCol($"0x{trackTransform.Root_unk_0x3A:x4}");
-            writer.WriteNextCol(trackTransform.RailHeightRight);
-            writer.WriteNextCol(trackTransform.RailHeightLeft);
-            writer.WriteNextCol(trackTransform.BranchIndex);
-            //
-            if (trackTransform.TrackCornerPtr.IsNotNull)
-            {
-                writer.WriteNextCol();
-                writer.WriteNextCol(trackTransform.TrackCorner.Transform.Position);
-                writer.WriteNextCol(trackTransform.TrackCorner.Transform.RotationEuler);
-                writer.WriteNextCol(trackTransform.TrackCorner.Transform.Scale);
-                writer.WriteNextCol(trackTransform.TrackCorner.Width);
-                writer.WriteNextCol(trackTransform.TrackCorner.PerimeterOptions);
-            }
-            //
-            writer.WriteNextRow();
-        }
-
-
-        #endregion
-
-        #region Scene Objects' Animation Clips
-
-        public static void AnalyzeAnimationClips(Scene[] scenes, string filename)
-        {
-            using var writer = new StreamWriter(File.Create(filename));
-
-            // Write header
-            writer.WriteNextCol("File Path");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-            writer.WriteNextCol("Anim Addr");
-            writer.WriteNextCol("Key Addr");
-            writer.WriteNextCol("Anim Index [0-10]");
-            writer.WriteNextCol("Unk_0x00");
-            writer.WriteNextCol("Time");
-            writer.WriteNextCol("Value");
-            writer.WriteNextCol("Unk_0x0C");
-            writer.WriteNextCol("Unk_0x10");
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int gameObjectIndex = 0;
-                foreach (var gameObject in scene.dynamicSceneObjects)
-                {
-                    if (gameObject.AnimationClip == null)
-                        continue;
-                    if (gameObject.AnimationClip.Curves == null)
+                    if (animationClipCurve.AnimationCurve == null)
                         continue;
 
-                    int animIndex = 0;
-                    foreach (var animationClipCurve in gameObject.AnimationClip.Curves)
+                    foreach (var keyable in animationClipCurve.AnimationCurve.KeyableAttributes)
                     {
-                        if (animationClipCurve.AnimationCurve == null)
-                            continue;
-
-                        foreach (var keyable in animationClipCurve.AnimationCurve.KeyableAttributes)
-                        {
-                            writer.WriteNextCol(scene.FileName);
-                            writer.WriteNextCol(gameObjectIndex);
-                            writer.WriteNextCol(gameObject.Name);
-                            writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
-                            writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
-                            writer.WriteNextCol(animIndex);
-                            writer.WriteNextCol(keyable.EaseMode);
-                            writer.WriteNextCol(keyable.Time);
-                            writer.WriteNextCol(keyable.Value);
-                            writer.WriteNextCol(keyable.TangentIn);
-                            writer.WriteNextCol(keyable.TangentOut);
-                            writer.WriteNextRow();
-                        }
-                        animIndex++;
-                    }
-                    gameObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeGameObjectAnimationClipIndex(Scene[] scenes, string filename, int index)
-        {
-            using var writer = new StreamWriter(File.Create(filename));
-
-            // Write header
-            writer.WriteNextCol("File Path");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-            writer.WriteNextCol("Anim Addr");
-            writer.WriteNextCol("Key Addr");
-            writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x00));
-            writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x04));
-            writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x08));
-            writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x0C));
-            writer.WriteNextCol("AnimClip Metadata");
-            writer.WriteNextCol("AnimClip Metadata");
-            writer.WriteNextCol("AnimClip Metadata");
-            writer.WriteNextCol("Anim Index [0-10]");
-            writer.WriteNextColNicify(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextColNicify(nameof(KeyableAttribute.Time));
-            writer.WriteNextColNicify(nameof(KeyableAttribute.Value));
-            writer.WriteNextColNicify(nameof(KeyableAttribute.TangentIn));
-            writer.WriteNextColNicify(nameof(KeyableAttribute.TangentOut));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int objIndex = 0;
-                foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
-                {
-                    if (dynamicSceneObject.AnimationClip == null)
-                        continue;
-                    //if (gameObject.animation.curve == null)
-                    //    continue;
-
-                    int animIndex = 0;
-                    foreach (var animationClipCurve in dynamicSceneObject.AnimationClip.Curves)
-                    {
-                        // Failing for some reason on indexes 6+ :/
-                        if (animationClipCurve.AnimationCurve == null)
-                            continue;
-
-                        foreach (var keyable in animationClipCurve.AnimationCurve.KeyableAttributes)
-                        {
-                            /// HACK, write each anim index as separate file
-                            if (animIndex != index)
-                                continue;
-
-                            writer.WriteNextCol(scene.FileName);
-                            writer.WriteNextCol(objIndex);
-                            writer.WriteNextCol(dynamicSceneObject.Name);
-                            writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
-                            writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
-                            writer.WriteNextCol(animationClipCurve.Unk_0x00);
-                            writer.WriteNextCol(animationClipCurve.Unk_0x04);
-                            writer.WriteNextCol(animationClipCurve.Unk_0x08);
-                            writer.WriteNextCol(animationClipCurve.Unk_0x0C);
-                            writer.WriteNextCol(animIndex);
-                            writer.WriteNextCol(keyable.EaseMode);
-                            writer.WriteNextCol(keyable.Time);
-                            writer.WriteNextCol(keyable.Value);
-                            writer.WriteNextCol(keyable.TangentIn);
-                            writer.WriteNextCol(keyable.TangentOut);
-                            writer.WriteNextRow();
-                        }
-                        animIndex++;
-                    }
-                    objIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        #endregion
-
-        #region Dynamic Scene Objects
-
-        public static void AnalyzeSceneObjectDynamic(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x00));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x00));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x04));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x04));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.SceneObjectPtr));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.Position));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.RotationEuler));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.Scale));
-            //writer.WriteNextCol(nameof(SceneObjectDynamic.zero_0x2C));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.AnimationClipPtr));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.TextureScrollPtr));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.SkeletalAnimatorPtr));
-            writer.WriteNextCol(nameof(SceneObjectDynamic.TransformMatrix3x4Ptr));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int sceneObjectIndex = 0;
-                foreach (var sceneObject in scene.dynamicSceneObjects)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(sceneObjectIndex);
-                    writer.WriteNextCol(sceneObject.Name);
-                    writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
-                    writer.WriteNextCol(sceneObject.ObjectRenderFlags0x00);
-                    writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x00:x8}");
-                    writer.WriteNextCol(sceneObject.ObjectRenderFlags0x04);
-                    writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x04:x8}");
-                    writer.WriteNextCol(sceneObject.SceneObjectPtr.PrintAddress);
-                    writer.WriteNextCol(sceneObject.TransformTRXS.Position);
-                    writer.WriteNextCol(sceneObject.TransformTRXS.RotationEuler);
-                    writer.WriteNextCol(sceneObject.TransformTRXS.Scale);
-                    //writer.WriteNextCol(sceneObject.zero_0x2C);
-                    writer.WriteNextCol(sceneObject.AnimationClipPtr.PrintAddress);
-                    writer.WriteNextCol(sceneObject.TextureScrollPtr.PrintAddress);
-                    writer.WriteNextCol(sceneObject.SkeletalAnimatorPtr.PrintAddress);
-                    writer.WriteNextCol(sceneObject.TransformMatrix3x4Ptr.PrintAddress);
-                    writer.WriteNextRow();
-
-                    sceneObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeTextureMetadata(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-            writer.WriteNextCol("Unknown 1 Index");
-            writer.WriteNextColNicify(nameof(TextureScrollField.u));
-            writer.WriteNextColNicify(nameof(TextureScrollField.v));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int gameObjectIndex = 0;
-                foreach (var sceneObject in scene.dynamicSceneObjects)
-                {
-                    if (sceneObject.TextureScroll == null)
-                        continue;
-
-                    int fieldArrayIndex = 0;
-                    foreach (var field in sceneObject.TextureScroll.Fields)
-                    {
-                        if (field == null)
-                            return;
-
                         writer.WriteNextCol(scene.FileName);
                         writer.WriteNextCol(gameObjectIndex);
-                        writer.WriteNextCol(sceneObject.Name);
-                        writer.WriteNextCol(fieldArrayIndex);
-                        writer.WriteNextCol(field.u);
-                        writer.WriteNextCol(field.v);
+                        writer.WriteNextCol(gameObject.Name);
+                        writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(animIndex);
+                        writer.WriteNextCol(keyable.EaseMode);
+                        writer.WriteNextCol(keyable.Time);
+                        writer.WriteNextCol(keyable.Value);
+                        writer.WriteNextCol(keyable.TangentIn);
+                        writer.WriteNextCol(keyable.TangentOut);
                         writer.WriteNextRow();
-                        fieldArrayIndex++;
                     }
-                    gameObjectIndex++;
+                    animIndex++;
                 }
+                gameObjectIndex++;
             }
-            writer.Flush();
         }
+        writer.Flush();
+    }
 
-        public static void AnalyzeSkeletalAnimator(Scene[] scenes, string fileName)
+    public static void AnalyzeGameObjectAnimationClipIndex(Scene[] scenes, string filename, int index)
+    {
+        using var writer = new StreamWriter(File.Create(filename));
+
+        // Write header
+        writer.WriteNextCol("File Path");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+        writer.WriteNextCol("Anim Addr");
+        writer.WriteNextCol("Key Addr");
+        writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x00));
+        writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x04));
+        writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x08));
+        writer.WriteNextColNicify(nameof(AnimationClipCurve.Unk_0x0C));
+        writer.WriteNextCol("AnimClip Metadata");
+        writer.WriteNextCol("AnimClip Metadata");
+        writer.WriteNextCol("AnimClip Metadata");
+        writer.WriteNextCol("Anim Index [0-10]");
+        writer.WriteNextColNicify(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextColNicify(nameof(KeyableAttribute.Time));
+        writer.WriteNextColNicify(nameof(KeyableAttribute.Value));
+        writer.WriteNextColNicify(nameof(KeyableAttribute.TangentIn));
+        writer.WriteNextColNicify(nameof(KeyableAttribute.TangentOut));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
         {
-            using var writer = new StreamWriter(File.Create(fileName));
-
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-
-            //writer.WriteNextColNicify(nameof(SkeletalAnimator.zero_0x00));
-            //writer.WriteNextColNicify(nameof(SkeletalAnimator.zero_0x04));
-            //writer.WriteNextColNicify(nameof(SkeletalAnimator.one_0x08));
-            writer.WriteNextColNicify(nameof(SkeletalAnimator.PropertiesPtr));
-
-            writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x00));
-            writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x04));
-            writer.WriteFlagNames<EnumFlags32>();
-            writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x08));
-            writer.WriteFlagNames<EnumFlags32>();
-            //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x0C));
-            //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x10));
-            //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x14));
-            //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x18));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
+            int objIndex = 0;
+            foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
             {
-                int gameObjectIndex = 0;
-                foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
+                if (dynamicSceneObject.AnimationClip == null)
+                    continue;
+                //if (gameObject.animation.curve == null)
+                //    continue;
+
+                int animIndex = 0;
+                foreach (var animationClipCurve in dynamicSceneObject.AnimationClip.Curves)
                 {
-                    if (dynamicSceneObject.SkeletalAnimator == null)
-                        continue;
-                    if (dynamicSceneObject.SkeletalAnimator.PropertiesPtr.IsNull)
+                    // Failing for some reason on indexes 6+ :/
+                    if (animationClipCurve.AnimationCurve == null)
                         continue;
 
+                    foreach (var keyable in animationClipCurve.AnimationCurve.KeyableAttributes)
+                    {
+                        /// HACK, write each anim index as separate file
+                        if (animIndex != index)
+                            continue;
+
+                        writer.WriteNextCol(scene.FileName);
+                        writer.WriteNextCol(objIndex);
+                        writer.WriteNextCol(dynamicSceneObject.Name);
+                        writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(animationClipCurve.Unk_0x00);
+                        writer.WriteNextCol(animationClipCurve.Unk_0x04);
+                        writer.WriteNextCol(animationClipCurve.Unk_0x08);
+                        writer.WriteNextCol(animationClipCurve.Unk_0x0C);
+                        writer.WriteNextCol(animIndex);
+                        writer.WriteNextCol(keyable.EaseMode);
+                        writer.WriteNextCol(keyable.Time);
+                        writer.WriteNextCol(keyable.Value);
+                        writer.WriteNextCol(keyable.TangentIn);
+                        writer.WriteNextCol(keyable.TangentOut);
+                        writer.WriteNextRow();
+                    }
+                    animIndex++;
+                }
+                objIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    #endregion
+
+    #region Dynamic Scene Objects
+
+    public static void AnalyzeSceneObjectDynamic(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x00));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x00));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x04));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.ObjectRenderFlags0x04));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.SceneObjectPtr));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.Position));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.RotationEuler));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.TransformTRXS.Scale));
+        //writer.WriteNextCol(nameof(SceneObjectDynamic.zero_0x2C));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.AnimationClipPtr));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.TextureScrollPtr));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.SkeletalAnimatorPtr));
+        writer.WriteNextCol(nameof(SceneObjectDynamic.TransformMatrix3x4Ptr));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int sceneObjectIndex = 0;
+            foreach (var sceneObject in scene.dynamicSceneObjects)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(sceneObjectIndex);
+                writer.WriteNextCol(sceneObject.Name);
+                writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(sceneObject.ObjectRenderFlags0x00);
+                writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x00:x8}");
+                writer.WriteNextCol(sceneObject.ObjectRenderFlags0x04);
+                writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x04:x8}");
+                writer.WriteNextCol(sceneObject.SceneObjectPtr.PrintAddress);
+                writer.WriteNextCol(sceneObject.TransformTRXS.Position);
+                writer.WriteNextCol(sceneObject.TransformTRXS.RotationEuler);
+                writer.WriteNextCol(sceneObject.TransformTRXS.Scale);
+                //writer.WriteNextCol(sceneObject.zero_0x2C);
+                writer.WriteNextCol(sceneObject.AnimationClipPtr.PrintAddress);
+                writer.WriteNextCol(sceneObject.TextureScrollPtr.PrintAddress);
+                writer.WriteNextCol(sceneObject.SkeletalAnimatorPtr.PrintAddress);
+                writer.WriteNextCol(sceneObject.TransformMatrix3x4Ptr.PrintAddress);
+                writer.WriteNextRow();
+
+                sceneObjectIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeTextureMetadata(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+        writer.WriteNextCol("Unknown 1 Index");
+        writer.WriteNextColNicify(nameof(TextureScrollField.u));
+        writer.WriteNextColNicify(nameof(TextureScrollField.v));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int gameObjectIndex = 0;
+            foreach (var sceneObject in scene.dynamicSceneObjects)
+            {
+                if (sceneObject.TextureScroll == null)
+                    continue;
+
+                int fieldArrayIndex = 0;
+                foreach (var field in sceneObject.TextureScroll.Fields)
+                {
+                    if (field == null)
+                        return;
+
+                    writer.WriteNextCol(scene.FileName);
+                    writer.WriteNextCol(gameObjectIndex);
+                    writer.WriteNextCol(sceneObject.Name);
+                    writer.WriteNextCol(fieldArrayIndex);
+                    writer.WriteNextCol(field.u);
+                    writer.WriteNextCol(field.v);
+                    writer.WriteNextRow();
+                    fieldArrayIndex++;
+                }
+                gameObjectIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeSkeletalAnimator(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+
+        //writer.WriteNextColNicify(nameof(SkeletalAnimator.zero_0x00));
+        //writer.WriteNextColNicify(nameof(SkeletalAnimator.zero_0x04));
+        //writer.WriteNextColNicify(nameof(SkeletalAnimator.one_0x08));
+        writer.WriteNextColNicify(nameof(SkeletalAnimator.PropertiesPtr));
+
+        writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x00));
+        writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x04));
+        writer.WriteFlagNames<EnumFlags32>();
+        writer.WriteNextColNicify(nameof(SkeletalProperties.Unk_0x08));
+        writer.WriteFlagNames<EnumFlags32>();
+        //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x0C));
+        //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x10));
+        //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x14));
+        //writer.WriteNextColNicify(nameof(SkeletalProperties.zero_0x18));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int gameObjectIndex = 0;
+            foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
+            {
+                if (dynamicSceneObject.SkeletalAnimator == null)
+                    continue;
+                if (dynamicSceneObject.SkeletalAnimator.PropertiesPtr.IsNull)
+                    continue;
+
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(gameObjectIndex);
+                writer.WriteNextCol(dynamicSceneObject.Name);
+
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x00);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x04);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.one_0x08);
+                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.PropertiesPtr);
+
+                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x00);
+                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
+                writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
+                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
+                writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x0C);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x10);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x14);
+                //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x18);
+                writer.WriteNextRow();
+
+                gameObjectIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeColliderGeometryTri(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+
+        writer.WriteNextCol("Tri Index");
+        writer.WriteNextCol("Addr");
+
+        writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Z");
+
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int gameObjectIndex = 0;
+            foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
+            {
+                if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
+                    dynamicSceneObject.SceneObject.ColliderMesh.Tris is null ||
+                    dynamicSceneObject.SceneObject.ColliderMesh.Tris.Length == 0)
+                    continue;
+
+                int triIndex = 0;
+                foreach (var tri in dynamicSceneObject.SceneObject.ColliderMesh.Tris)
+                {
                     writer.WriteNextCol(scene.FileName);
                     writer.WriteNextCol(gameObjectIndex);
                     writer.WriteNextCol(dynamicSceneObject.Name);
 
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x00);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x04);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.one_0x08);
-                    writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.PropertiesPtr);
-
-                    writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x00);
-                    writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
-                    writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
-                    writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
-                    writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x0C);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x10);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x14);
-                    //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x18);
-                    writer.WriteNextRow();
-
-                    gameObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeColliderGeometryTri(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-
-            writer.WriteNextCol("Tri Index");
-            writer.WriteNextCol("Addr");
-
-            writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Z");
-
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int gameObjectIndex = 0;
-                foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
-                {
-                    if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
-                        dynamicSceneObject.SceneObject.ColliderMesh.Tris is null ||
-                        dynamicSceneObject.SceneObject.ColliderMesh.Tris.Length == 0)
-                        continue;
-
-                    int triIndex = 0;
-                    foreach (var tri in dynamicSceneObject.SceneObject.ColliderMesh.Tris)
-                    {
-                        writer.WriteNextCol(scene.FileName);
-                        writer.WriteNextCol(gameObjectIndex);
-                        writer.WriteNextCol(dynamicSceneObject.Name);
-
-                        writer.WriteNextCol(triIndex++);
-                        writer.WriteStartAddress(tri);
-
-                        writer.WriteNextCol(tri.PlaneDistance);
-                        writer.WriteNextCol(tri.Normal.X);
-                        writer.WriteNextCol(tri.Normal.Y);
-                        writer.WriteNextCol(tri.Normal.Z);
-                        writer.WriteNextCol(tri.Vertex0.X);
-                        writer.WriteNextCol(tri.Vertex0.Y);
-                        writer.WriteNextCol(tri.Vertex0.Z);
-                        writer.WriteNextCol(tri.Vertex1.X);
-                        writer.WriteNextCol(tri.Vertex1.Y);
-                        writer.WriteNextCol(tri.Vertex1.Z);
-                        writer.WriteNextCol(tri.Vertex2.X);
-                        writer.WriteNextCol(tri.Vertex2.Y);
-                        writer.WriteNextCol(tri.Vertex2.Z);
-                        writer.WriteNextCol(tri.EdgeNormal0.X);
-                        writer.WriteNextCol(tri.EdgeNormal0.Y);
-                        writer.WriteNextCol(tri.EdgeNormal0.Z);
-                        writer.WriteNextCol(tri.EdgeNormal1.X);
-                        writer.WriteNextCol(tri.EdgeNormal1.Y);
-                        writer.WriteNextCol(tri.EdgeNormal1.Z);
-                        writer.WriteNextCol(tri.EdgeNormal2.X);
-                        writer.WriteNextCol(tri.EdgeNormal2.Y);
-                        writer.WriteNextCol(tri.EdgeNormal2.Z);
-
-                        writer.WriteNextRow();
-                    }
-                    gameObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeColliderGeometryQuad(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-
-            writer.WriteNextCol("Quad Index");
-            writer.WriteNextCol("Addr");
-
-            writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Z");
-
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int gameObjectIndex = 0;
-                foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
-                {
-                    if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
-                        dynamicSceneObject.SceneObject.ColliderMesh.Quads is null ||
-                        dynamicSceneObject.SceneObject.ColliderMesh.Quads.Length == 0)
-                        continue;
-
-                    int quadIndex = 0;
-                    foreach (var quad in dynamicSceneObject.SceneObject.ColliderMesh.Quads)
-                    {
-                        writer.WriteNextCol(scene.FileName);
-                        writer.WriteNextCol(gameObjectIndex);
-                        writer.WriteNextCol(dynamicSceneObject.Name);
-
-                        writer.WriteNextCol(quadIndex++);
-                        writer.WriteStartAddress(quad);
-
-                        writer.WriteNextCol(quad.PlaneDistance);
-                        writer.WriteNextCol(quad.Normal.X);
-                        writer.WriteNextCol(quad.Normal.Y);
-                        writer.WriteNextCol(quad.Normal.Z);
-                        writer.WriteNextCol(quad.Vertex0.X);
-                        writer.WriteNextCol(quad.Vertex0.Y);
-                        writer.WriteNextCol(quad.Vertex0.Z);
-                        writer.WriteNextCol(quad.Vertex1.X);
-                        writer.WriteNextCol(quad.Vertex1.Y);
-                        writer.WriteNextCol(quad.Vertex1.Z);
-                        writer.WriteNextCol(quad.Vertex2.X);
-                        writer.WriteNextCol(quad.Vertex2.Y);
-                        writer.WriteNextCol(quad.Vertex2.Z);
-                        writer.WriteNextCol(quad.Vertex3.X);
-                        writer.WriteNextCol(quad.Vertex3.Y);
-                        writer.WriteNextCol(quad.Vertex3.Z);
-                        writer.WriteNextCol(quad.EdgeNormal0.X);
-                        writer.WriteNextCol(quad.EdgeNormal0.Y);
-                        writer.WriteNextCol(quad.EdgeNormal0.Z);
-                        writer.WriteNextCol(quad.EdgeNormal1.X);
-                        writer.WriteNextCol(quad.EdgeNormal1.Y);
-                        writer.WriteNextCol(quad.EdgeNormal1.Z);
-                        writer.WriteNextCol(quad.EdgeNormal2.X);
-                        writer.WriteNextCol(quad.EdgeNormal2.Y);
-                        writer.WriteNextCol(quad.EdgeNormal2.Z);
-                        writer.WriteNextCol(quad.EdgeNormal3.X);
-                        writer.WriteNextCol(quad.EdgeNormal3.Y);
-                        writer.WriteNextCol(quad.EdgeNormal3.Z);
-
-                        writer.WriteNextRow();
-                    }
-                    gameObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        #endregion
-
-
-        public static void AnalyzeHeaders(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(Scene.UnkRange0x00) + "." + nameof(ViewRange.near));
-            writer.WriteNextCol(nameof(Scene.UnkRange0x00) + "." + nameof(ViewRange.far));
-            writer.WriteNextCol(nameof(Scene.TrackNodesPtr));
-            writer.WriteNextCol(nameof(Scene.TrackNodesPtr));
-            writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
-            writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
-            writer.WriteNextCol(nameof(Scene.StaticColliderMeshManagerActive));
-            writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
-            //writer.WriteNextCol(nameof(Scene.zeroes0x20Ptr));
-            writer.WriteNextCol(nameof(Scene.TrackMinHeightPtr));
-            //writer.WriteNextCol(nameof(Scene.zeroes0x28));
-            writer.WriteNextCol(nameof(Scene.DynamicSceneObjectCount));
-            writer.WriteNextCol(nameof(Scene.Unk_sceneObjectCount1));
-            writer.WriteNextCol(nameof(Scene.Unk_sceneObjectCount2));
-            writer.WriteNextCol(nameof(Scene.DynamicSceneObjectsPtr));
-            writer.WriteNextCol(nameof(Scene.UnkBool32_0x58));
-            writer.WriteNextCol(nameof(Scene.UnknownCollidersPtr));
-            writer.WriteNextCol(nameof(Scene.UnknownCollidersPtr));
-            writer.WriteNextCol(nameof(Scene.SceneObjectsPtr));
-            writer.WriteNextCol(nameof(Scene.SceneObjectsPtr));
-            writer.WriteNextCol(nameof(Scene.StaticSceneObjectsPtr));
-            writer.WriteNextCol(nameof(Scene.StaticSceneObjectsPtr));
-            //writer.WriteNextCol(nameof(Scene.zero0x74));
-            //writer.WriteNextCol(nameof(Scene.zero0x78));
-            writer.WriteNextCol(nameof(Scene.CircuitType));
-            writer.WriteNextCol(nameof(Scene.FogCurvesPtr));
-            writer.WriteNextCol(nameof(Scene.FogPtr));
-            //writer.WriteNextCol(nameof(Scene.zero0x88));
-            //writer.WriteNextCol(nameof(Scene.zero0x8C));
-            writer.WriteNextCol(nameof(Scene.TrackLengthPtr));
-            writer.WriteNextCol(nameof(Scene.UnknownTriggersPtr)); // len
-            writer.WriteNextCol(nameof(Scene.UnknownTriggersPtr)); // adr
-            writer.WriteNextCol(nameof(Scene.VisualEffectTriggersPtr)); // len
-            writer.WriteNextCol(nameof(Scene.VisualEffectTriggersPtr)); // adr
-            writer.WriteNextCol(nameof(Scene.MiscellaneousTriggersPtr)); // len
-            writer.WriteNextCol(nameof(Scene.MiscellaneousTriggersPtr)); // adr
-            writer.WriteNextCol(nameof(Scene.TimeExtensionTriggersPtr)); // len
-            writer.WriteNextCol(nameof(Scene.TimeExtensionTriggersPtr)); // adr
-            writer.WriteNextCol(nameof(Scene.StoryObjectTriggersPtr)); // len
-            writer.WriteNextCol(nameof(Scene.StoryObjectTriggersPtr)); // adr
-            writer.WriteNextCol(nameof(Scene.CheckpointGridPtr));
-            // Structure
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.Left));
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.Top));
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.SubdivisionWidth));
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.SubdivisionLength));
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.NumSubdivisionsX));
-            writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.NumSubdivisionsZ));
-            // 
-            //writer.WriteNextCol(nameof(Scene.zeroes0xD8));
-            writer.WriteNextCol(nameof(Scene.trackMinHeight));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                writer.WriteNextCol(scene.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(CourseUtility.GetVenueID(scene.CourseIndex).GetDescription());
-                writer.WriteNextCol(((CourseIndexAX)scene.CourseIndex).GetDescription());
-                writer.WriteNextCol(scene.IsFileGX ? "GX" : "AX");
-
-                writer.WriteNextCol(scene.UnkRange0x00.near);
-                writer.WriteNextCol(scene.UnkRange0x00.far);
-                writer.WriteNextCol(scene.TrackNodesPtr.length);
-                writer.WriteNextCol(scene.TrackNodesPtr.PrintAddress);
-                writer.WriteNextCol(scene.EmbeddedTrackPropertyAreasPtr.length);
-                writer.WriteNextCol(scene.EmbeddedTrackPropertyAreasPtr.PrintAddress);
-                writer.WriteNextCol(scene.StaticColliderMeshManagerActive);
-                writer.WriteNextCol(scene.StaticColliderMeshManagerPtr.PrintAddress);
-                //writer.WriteNextCol(scene.zeroes0x20Ptr.PrintAddress);
-                writer.WriteNextCol(scene.TrackMinHeightPtr.PrintAddress);
-                //writer.WriteNextCol(0);// coliHeader.zero_0x28);
-                writer.WriteNextCol(scene.DynamicSceneObjectCount);
-                if (scene.IsFileGX)
-                {
-                    writer.WriteNextCol(scene.Unk_sceneObjectCount1);
-                }
-                else // is AX
-                {
-                    writer.WriteNextCol();
-                }
-                writer.WriteNextCol(scene.Unk_sceneObjectCount2);
-                writer.WriteNextCol(scene.DynamicSceneObjectsPtr.PrintAddress);
-                writer.WriteNextCol(scene.UnkBool32_0x58);
-                writer.WriteNextCol(scene.UnknownCollidersPtr.length);
-                writer.WriteNextCol(scene.UnknownCollidersPtr.PrintAddress);
-                writer.WriteNextCol(scene.SceneObjectsPtr.length);
-                writer.WriteNextCol(scene.SceneObjectsPtr.PrintAddress);
-                writer.WriteNextCol(scene.StaticSceneObjectsPtr.length);
-                writer.WriteNextCol(scene.StaticSceneObjectsPtr.PrintAddress);
-                //writer.WriteNextCol(scene.zero0x74);
-                //writer.WriteNextCol(scene.zero0x78);
-                writer.WriteNextCol(scene.CircuitType);
-                writer.WriteNextCol(scene.FogCurvesPtr.PrintAddress);
-                writer.WriteNextCol(scene.FogPtr.PrintAddress);
-                //writer.WriteNextCol(scene.zero0x88);
-                //writer.WriteNextCol(scene.zero0x8C);
-                writer.WriteNextCol(scene.TrackLengthPtr.PrintAddress);
-                writer.WriteNextCol(scene.UnknownTriggersPtr.length);
-                writer.WriteNextCol(scene.UnknownTriggersPtr.PrintAddress);
-                writer.WriteNextCol(scene.VisualEffectTriggersPtr.length);
-                writer.WriteNextCol(scene.VisualEffectTriggersPtr.PrintAddress);
-                writer.WriteNextCol(scene.MiscellaneousTriggersPtr.length);
-                writer.WriteNextCol(scene.MiscellaneousTriggersPtr.PrintAddress);
-                writer.WriteNextCol(scene.TimeExtensionTriggersPtr.length);
-                writer.WriteNextCol(scene.TimeExtensionTriggersPtr.PrintAddress);
-                writer.WriteNextCol(scene.StoryObjectTriggersPtr.length);
-                writer.WriteNextCol(scene.StoryObjectTriggersPtr.PrintAddress);
-                writer.WriteNextCol(scene.CheckpointGridPtr.PrintAddress);
-                // Structure
-                writer.WriteNextCol(scene.CheckpointGridXZ.Left);
-                writer.WriteNextCol(scene.CheckpointGridXZ.Top);
-                writer.WriteNextCol(scene.CheckpointGridXZ.SubdivisionWidth);
-                writer.WriteNextCol(scene.CheckpointGridXZ.SubdivisionLength);
-                writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsX);
-                writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsZ);
-                //
-                //writer.WriteNextCol(0);// coliHeader.zero_0xD8);
-                writer.WriteNextCol(scene.trackMinHeight.Value);
-                writer.WriteNextRow();
-            }
-            writer.Flush();
-        }
-
-
-        #region TRIGGERS
-
-        public static void AnalyzeTimeExtensionTriggers(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Position));
-            writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.RotationEuler));
-            writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Scale));
-            writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.UnknownOption));
-            writer.WriteNextCol(nameof(TimeExtensionTrigger.Option));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var arcadeCheckpooint in scene.timeExtensionTriggers)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(arcadeCheckpooint.Transform.Position);
-                    writer.WriteNextCol(arcadeCheckpooint.Transform.RotationEuler);
-                    writer.WriteNextCol(arcadeCheckpooint.Transform.Scale);
-                    writer.WriteNextCol(arcadeCheckpooint.Transform.UnknownOption);
-                    writer.WriteNextCol(arcadeCheckpooint.Option);
-                    //
-                    writer.WriteNextRow();
-                }
-                writer.Flush();
-            }
-        }
-
-        public static void AnalyzeMiscellaneousTriggers(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(MiscellaneousTrigger.Position));
-            writer.WriteNextCol(nameof(MiscellaneousTrigger.RotationEuler));
-            writer.WriteNextCol(nameof(MiscellaneousTrigger.Scale) + " / PositionTo");
-            writer.WriteNextCol(nameof(MiscellaneousTrigger.Transform.UnknownOption));
-            writer.WriteNextCol(nameof(MiscellaneousTrigger.MetadataType));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var cmt in scene.miscellaneousTriggers)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(cmt.Position);
-                    writer.WriteNextCol(cmt.RotationEuler);
-                    writer.WriteNextCol(cmt.Scale);
-                    writer.WriteNextCol(cmt.Transform.UnknownOption);
-                    writer.WriteNextCol(cmt.MetadataType);
-                    //
-                    writer.WriteNextRow();
-                }
-                writer.Flush();
-            }
-        }
-
-        public static void AnalyzeStoryObjectTrigger(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            //writer.WriteNextCol(nameof(StoryObjectTrigger.zero_0x00));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroupOrderIndex));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroup));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Difficulty));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Story2BoulderScale));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Story2BoulderPathPtr));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Scale));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Rotation));
-            writer.WriteNextCol(nameof(StoryObjectTrigger.Position));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var item in scene.storyObjectTriggers)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    //writer.WriteNextCol(item.zero_0x00);
-                    writer.WriteNextCol(item.BoulderGroupOrderIndex);
-                    writer.WriteNextCol(item.BoulderGroup);
-                    writer.WriteNextCol(item.Difficulty);
-                    writer.WriteNextCol(item.Story2BoulderScale);
-                    writer.WriteNextCol(item.Story2BoulderPathPtr);
-                    writer.WriteNextCol(item.Scale);
-                    writer.WriteNextCol(item.Rotation);
-                    writer.WriteNextCol(item.Position);
-                    //
-                    writer.WriteNextRow();
-                }
-                writer.Flush();
-            }
-        }
-
-        public static void AnalyzeCullOverrideTrigger(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("Start");
-            writer.WriteNextCol("End");
-            //
-            writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
-            writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
-            //
-            writer.WriteNextCol("Order");
-            writer.WriteNextCol("Index");
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                int count = 0;
-                int total = scene.cullOverrideTriggers.Length;
-                foreach (var item in scene.cullOverrideTriggers)
-                {
-                    count++;
-
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-
-                    writer.WriteNextCol(item.AddressRange.PrintStartAddress());
-                    writer.WriteNextCol(item.AddressRange.PrintEndAddress());
-
-                    writer.WriteNextCol(item.Unk_0x20);
-                    writer.WriteNextCol($"0x{(int)item.Unk_0x20:X8}");
-
-                    writer.WriteNextCol(count);
-                    writer.WriteNextCol($"[{count}/{total}]");
-
-                    writer.WriteNextRow();
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeVisualEffectTriggers(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Position));
-            writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.RotationEuler));
-            writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Scale));
-            writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.UnknownOption));
-            writer.WriteNextCol(nameof(VisualEffectTrigger.Animation));
-            writer.WriteNextCol(nameof(VisualEffectTrigger.VisualEffect));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var vfx in scene.visualEffectTriggers)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(vfx.Transform.Position);
-                    writer.WriteNextCol(vfx.Transform.RotationEuler);
-                    writer.WriteNextCol(vfx.Transform.Scale);
-                    writer.WriteNextCol(vfx.Transform.UnknownOption);
-                    writer.WriteNextCol(vfx.Animation);
-                    writer.WriteNextCol(vfx.VisualEffect);
-                    //
-                    writer.WriteNextRow();
-                }
-                writer.Flush();
-            }
-        }
-
-        #endregion
-
-        #region FOG
-
-        public static void AnalyzeFogCurves(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol("Index");
-            //
-            writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
-            writer.WriteNextCol(nameof(KeyableAttribute.Time));
-            writer.WriteNextCol(nameof(KeyableAttribute.Value));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
-            writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                if (scene.fogCurves == null)
-                    continue;
-
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                var totalD1 = scene.fogCurves.animationCurves.Length;
-                var countD1 = 0;
-                foreach (var animationCurve in scene.fogCurves.animationCurves)
-                {
-                    countD1++;
-                    foreach (var keyableAttribute in animationCurve.KeyableAttributes)
-                    {
-                        writer.WriteNextCol(scene.FileName);
-                        writer.WriteNextCol(scene.CourseIndex);
-                        writer.WriteNextCol(venueID);
-                        writer.WriteNextCol(courseID);
-                        writer.WriteNextCol(isAxGx);
-                        //
-                        writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol($"[{countD1}/{totalD1}]");
-                        //
-                        writer.WriteNextCol(keyableAttribute.EaseMode);
-                        writer.WriteNextCol(keyableAttribute.Time);
-                        writer.WriteNextCol(keyableAttribute.Value);
-                        writer.WriteNextCol(keyableAttribute.TangentIn);
-                        writer.WriteNextCol(keyableAttribute.TangentOut);
-                        //
-                        writer.WriteNextRow();
-                    }
-                }
-                writer.Flush();
-            }
-        }
-
-        public static void AnalyzeFog(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol(nameof(Fog.Interpolation));
-            writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.near));
-            writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.far));
-            writer.WriteNextCol(nameof(Fog.ColorRGB) + ".R");
-            writer.WriteNextCol(nameof(Fog.ColorRGB) + ".G");
-            writer.WriteNextCol(nameof(Fog.ColorRGB) + ".B");
-            //writer.WriteNextCol(nameof(Fog.zero0x18) + ".X");
-            //writer.WriteNextCol(nameof(Fog.zero0x18) + ".Y");
-            //writer.WriteNextCol(nameof(Fog.zero0x18) + ".Z");
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                writer.WriteNextCol(scene.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
-                //
-                writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
-                writer.WriteNextCol(scene.fog.Interpolation);
-                writer.WriteNextCol(scene.fog.FogRange.near);
-                writer.WriteNextCol(scene.fog.FogRange.far);
-                writer.WriteNextCol(scene.fog.ColorRGB.X);
-                writer.WriteNextCol(scene.fog.ColorRGB.Y);
-                writer.WriteNextCol(scene.fog.ColorRGB.Z);
-                //writer.WriteNextCol(scene.fog.zero0x18.X);
-                //writer.WriteNextCol(scene.fog.zero0x18.Y);
-                //writer.WriteNextCol(scene.fog.zero0x18.Z);
-                //
-                writer.WriteNextRow();
-            }
-            writer.Flush();
-        }
-
-        #endregion
-
-
-        public static void AnalyzeSceneObjectTransforms(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Game Object #");
-            writer.WriteNextCol("Game Object");
-            writer.WriteNextCol($"matrix.X");
-            writer.WriteNextCol($"matrix.Y");
-            writer.WriteNextCol($"matrix.Z");
-            writer.WriteNextCol($"euler.X");
-            writer.WriteNextCol($"euler.Y");
-            writer.WriteNextCol($"euler.Z");
-            writer.WriteNextCol("Decomposed phi");
-            writer.WriteNextCol("Decomposed theta");
-            writer.WriteNextCol("Decomposed psi");
-            writer.WriteNextCol(nameof(UnknownTransformOption));
-            writer.WriteNextCol(nameof(ObjectActiveOverride));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int sceneObjectIndex = 0;
-                foreach (var sceneObject in scene.dynamicSceneObjects)
-                {
-                    // Skip objects that don;'t have both matrix and decomposed rotation
-                    // These are not helpful for comparision
-                    if (!sceneObject.TransformMatrix3x4Ptr.IsNotNull)
-                        continue;
-
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(sceneObjectIndex);
-                    writer.WriteNextCol(sceneObject.Name);
-
-                    // Rotation values from clean, uncompressed matrix
-                    var matrix = sceneObject.TransformMatrix3x4.RotationEuler;
-                    writer.WriteNextCol(matrix.X);
-                    writer.WriteNextCol(matrix.Y);
-                    writer.WriteNextCol(matrix.Z);
-
-                    // Rotation values as reconstructed
-                    var euler = sceneObject.TransformTRXS.CompressedRotation.Eulers;
-                    writer.WriteNextCol(euler.X);
-                    writer.WriteNextCol(euler.Y);
-                    writer.WriteNextCol(euler.Z);
-
-                    // Decomposed rotation values, raw, requires processing to be used
-                    var decomposed = sceneObject.TransformTRXS.CompressedRotation;
-                    writer.WriteNextCol(decomposed.X);
-                    writer.WriteNextCol(decomposed.Y);
-                    writer.WriteNextCol(decomposed.Z);
-                    // The other parameters that go with the structure
-                    writer.WriteNextCol(sceneObject.TransformTRXS.UnknownOption);
-                    writer.WriteNextCol(sceneObject.TransformTRXS.ObjectActiveOverride);
-
-                    writer.WriteNextRow();
-                    sceneObjectIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeTrackNodes(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Track Node");
-            writer.WriteNextCol("Track Point");
-            writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeStart));
-            writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeEnd));
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.distance));
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".X");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".Y");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".Z");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".X");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".Y");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".Z");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.distance));
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".X");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".Y");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".Z");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".X");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".Y");
-            writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".Z");
-            writer.WriteNextColNicify(nameof(Checkpoint.StartDistance));
-            writer.WriteNextColNicify(nameof(Checkpoint.EndDistance));
-            writer.WriteNextColNicify(nameof(Checkpoint.TrackWidth));
-            writer.WriteNextColNicify(nameof(Checkpoint.ConnectToTrackIn));
-            writer.WriteNextColNicify(nameof(Checkpoint.ConnectToTrackOut));
-            //writer.WriteNextColNicify(nameof(Checkpoint.zero_0x4E));
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int nodeLength = scene.trackNodes.Length;
-                int nodeIndex = 0;
-                foreach (var trackNode in scene.trackNodes)
-                {
-                    int pointLength = trackNode.Checkpoints.Length;
-                    int pointIndex = 0;
-                    foreach (var trackPoint in trackNode.Checkpoints)
-                    {
-                        writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
-                        writer.WriteNextCol($"[{nodeIndex}/{nodeLength}]");
-                        writer.WriteNextCol($"[{pointIndex}/{pointLength}]");
-
-                        writer.WriteNextCol(trackPoint.CurveTimeStart);
-                        writer.WriteNextCol(trackPoint.CurveTimeEnd);
-                        writer.WriteNextCol(trackPoint.PlaneStart.distance);
-                        writer.WriteNextCol(trackPoint.PlaneStart.normal.X);
-                        writer.WriteNextCol(trackPoint.PlaneStart.normal.Y);
-                        writer.WriteNextCol(trackPoint.PlaneStart.normal.Z);
-                        writer.WriteNextCol(trackPoint.PlaneStart.origin.X);
-                        writer.WriteNextCol(trackPoint.PlaneStart.origin.Y);
-                        writer.WriteNextCol(trackPoint.PlaneStart.origin.Z);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.distance);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.normal.X);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.normal.Y);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.normal.Z);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.origin.X);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.origin.Y);
-                        writer.WriteNextCol(trackPoint.PlaneEnd.origin.Z);
-                        writer.WriteNextCol(trackPoint.StartDistance);
-                        writer.WriteNextCol(trackPoint.EndDistance);
-                        writer.WriteNextCol(trackPoint.TrackWidth);
-                        writer.WriteNextCol(trackPoint.ConnectToTrackIn);
-                        writer.WriteNextCol(trackPoint.ConnectToTrackOut);
-                        //writer.WriteNextCol(trackPoint.zero_0x4E);
-                        writer.WriteNextRow();
-
-                        pointIndex++;
-                    }
-                    nodeIndex++;
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeStaticColliderMeshManagers(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol("Index");
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticColliderTrisPtr));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.TriMeshGridPtrs));
-            writer.WriteNextColNicify(nameof(GridXZ.Left));
-            writer.WriteNextColNicify(nameof(GridXZ.Top));
-            writer.WriteNextColNicify(nameof(GridXZ.SubdivisionWidth));
-            writer.WriteNextColNicify(nameof(GridXZ.SubdivisionLength));
-            writer.WriteNextColNicify(nameof(GridXZ.NumSubdivisionsX));
-            writer.WriteNextColNicify(nameof(GridXZ.NumSubdivisionsZ));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticColliderQuadsPtr));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.QuadMeshGridPtrs));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.BoundingSpherePtr));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticSceneObjectsPtr));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.UnknownCollidersPtr));
-            writer.WriteNextColNicify(nameof(StaticColliderMeshManager.Unk_float));
-            writer.WriteNextCol();
-            writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
-            writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
-            writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
-            writer.WriteNextColNicify(nameof(BoundingSphere.radius));
-            writer.WriteNextRow();
-
-            int index = 0;
-            foreach (var scene in scenes)
-            {
-                var staticColliderMeshes = scene.staticColliderMeshManager;
-
-                writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
-                writer.WriteNextCol(staticColliderMeshes.AddressRange.PrintStartAddress());
-                writer.WriteNextCol(index++);
-                writer.WriteNextCol(staticColliderMeshes.StaticColliderTrisPtr.PrintAddress);
-                writer.WriteNextCol(staticColliderMeshes.TriMeshGridPtrs.Length);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.Left);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.Top);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.SubdivisionWidth);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.SubdivisionLength);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.NumSubdivisionsX);
-                writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.NumSubdivisionsZ);
-                writer.WriteNextCol(staticColliderMeshes.StaticColliderQuadsPtr.PrintAddress);
-                writer.WriteNextCol(staticColliderMeshes.QuadMeshGridPtrs.Length);
-                writer.WriteNextCol(staticColliderMeshes.BoundingSpherePtr.PrintAddress);
-                writer.WriteNextCol(staticColliderMeshes.StaticSceneObjectsPtr.PrintAddress);
-                writer.WriteNextCol(staticColliderMeshes.UnknownCollidersPtr.PrintAddress);
-                writer.WriteNextCol(staticColliderMeshes.Unk_float);
-                writer.WriteNextCol();
-                writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.X);
-                writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.Y);
-                writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.Z);
-                writer.WriteNextCol(staticColliderMeshes.BoundingSphere.radius);
-                writer.WriteNextRow();
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeSceneObjectLODs(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("name");
-            writer.WriteNextCol("Object Type");
-            writer.WriteNextCol("Addr");
-            //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
-            writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
-            //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x08));
-            writer.WriteNextCol(nameof(SceneObjectLOD.LodDistance));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                // Get all the scene object references
-                var sceneObjectLODs = new List<SceneObjectLOD>();
-                foreach (var templateSceneObject in scene.sceneObjects)
-                {
-                    var sceneObjects = templateSceneObject.LODs;
-                    foreach (var sceneObject in sceneObjects)
-                        sceneObjectLODs.Add(sceneObject);
-                }
-                //foreach (var staticSceneObject in scene.staticSceneObjects)
-                //{
-                //    var sceneObjects = staticSceneObject.templateSceneObject.sceneObjects;
-                //    foreach (var sceneObject in sceneObjects)
-                //        objectsList.Add((sceneObject, "Instance"));
-                //}
-
-                // iterate
-                foreach (var sceneObjectLOD in sceneObjectLODs)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(sceneObjectLOD.Name);
-                    writer.WriteNextCol(sceneObjectLOD.AddressRange.PrintStartAddress());
-                    //writer.WriteNextCol(sceneObjectReference.zero_0x00);
-                    writer.WriteNextCol(sceneObjectLOD.LodNamePtr);
-                    //writer.WriteNextCol(sceneObjectReference.zero_0x08);
-                    writer.WriteNextCol(sceneObjectLOD.LodDistance);
-                    //
-                    writer.WriteNextRow();
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeSceneObjects(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("name");
-            writer.WriteNextCol("Object Type");
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
-            writer.WriteNextCol(nameof(SceneObject.LodsPtr));
-            writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                // Get all the scene object references
-                var sceneObjectsList = new List<(SceneObject sceneObject, string soCategory)>();
-                foreach (var sceneInstance in scene.sceneObjects)
-                {
-                    sceneObjectsList.Add((sceneInstance, "Instance"));
-                }
-                foreach (var sceneOriginObject in scene.staticSceneObjects)
-                {
-                    var sceneInstance = sceneOriginObject.SceneObject;
-                    sceneObjectsList.Add((sceneInstance, "Origin"));
-                }
-
-                // iterate, breaking out typle in loop
-                foreach (var (sceneObject, soCategory) in sceneObjectsList)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(sceneObject.PrimaryLOD.Name);
-                    writer.WriteNextCol(soCategory);
-                    writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
-                    writer.WriteNextCol(sceneObject.LodRenderFlags);
-                    writer.WriteNextCol(sceneObject.LodsPtr);
-                    writer.WriteNextCol(sceneObject.ColliderMeshPtr);
-                    //
-                    writer.WriteNextRow();
-                }
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeSceneObjectsAndLODs(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol("name");
-            writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
-            writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Len");
-            writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Adr");
-            writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
-            writer.WriteNextCol(nameof(SceneObjectLOD) + " IDX");
-            //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
-            writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
-            //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x08));
-            writer.WriteNextCol(nameof(SceneObjectLOD.LodDistance));
-            writer.WriteNextCol(nameof(SceneObjectLOD.Name));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var template in scene.sceneObjects)
-                {
-                    var index = 0;
-                    var length = template.LODs.Length;
-                    foreach (var sceneObject in template.LODs)
-                    {
-                        writer.WriteNextCol(scene.FileName);
-                        writer.WriteNextCol(scene.CourseIndex);
-                        writer.WriteNextCol(venueID);
-                        writer.WriteNextCol(courseID);
-                        writer.WriteNextCol(isAxGx);
-                        //
-                        writer.WriteNextCol(template.Name);
-                        writer.WriteNextCol(template.LodRenderFlags);
-                        writer.WriteNextCol(template.LodsPtr.length);
-                        writer.WriteNextCol(template.LodsPtr.PrintAddress);
-                        writer.WriteNextCol(template.ColliderMeshPtr);
-                        writer.WriteNextCol($"[{++index}/{length}]");
-                        //writer.WriteNextCol(sceneObject.zero_0x00);
-                        writer.WriteNextCol(sceneObject.LodNamePtr);
-                        //writer.WriteNextCol(sceneObject.zero_0x08);
-                        writer.WriteNextCol(sceneObject.LodDistance);
-                        writer.WriteNextCol(sceneObject.Name);
-                        writer.WriteNextRow();
-                    }
-                }
-            }
-            writer.Flush();
-        }
-
-
-        public static void AnalyzeGeneralData(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.near));
-            writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.far));
-            writer.WriteNextCol(nameof(Scene.trackMinHeight));
-            writer.WriteNextCol(nameof(Scene.trackLength));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                writer.WriteNextCol(scene.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
-                //
-                writer.WriteNextCol(scene.UnkRange0x00.near);
-                writer.WriteNextCol(scene.UnkRange0x00.far);
-                writer.WriteNextCol(scene.trackMinHeight.Value);
-                writer.WriteNextCol(scene.trackLength.Value);
-                writer.WriteNextRow();
-            }
-            writer.Flush();
-        }
-
-        public static void AnalyzeSurfaceAttributeAreas(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthFrom));
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthTo));
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.WidthLeft));
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.WidthRight));
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.PropertyType));
-            writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.TrackBranchID));
-            //writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.zero_0x12));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var surfaceAttributeArea in scene.embeddedPropertyAreas)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(surfaceAttributeArea.LengthFrom);
-                    writer.WriteNextCol(surfaceAttributeArea.LengthTo);
-                    writer.WriteNextCol(surfaceAttributeArea.WidthLeft);
-                    writer.WriteNextCol(surfaceAttributeArea.WidthRight);
-                    writer.WriteNextCol(surfaceAttributeArea.PropertyType);
-                    writer.WriteNextCol(surfaceAttributeArea.TrackBranchID);
-                    //writer.WriteNextCol(surfaceAttributeArea.zero_0x12);
-                    //
-                    writer.WriteNextRow();
-                }
-            }
-            writer.Flush();
-        }
-
-
-        public static void AnalyzeUnknownColliders(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Index");
-            writer.WriteNextCol("Venue");
-            writer.WriteNextCol("Course");
-            writer.WriteNextCol("AX/GX");
-            //
-            writer.WriteNextCol(nameof(UnknownCollider.SceneObjectPtr));
-            writer.WriteNextCol(nameof(UnknownCollider.Transform.Position));
-            writer.WriteNextCol(nameof(UnknownCollider.Transform.RotationEuler));
-            writer.WriteNextCol(nameof(UnknownCollider.Transform.Scale));
-            writer.WriteNextCol(nameof(UnknownCollider.Transform.UnknownOption));
-            //
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-                var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-                var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
-                foreach (var unkSols in scene.unknownColliders)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
-                    //
-                    writer.WriteNextCol(unkSols.SceneObjectPtr);
-                    writer.WriteNextCol(unkSols.Transform.Position);
-                    writer.WriteNextCol(unkSols.Transform.RotationEuler);
-                    writer.WriteNextCol(unkSols.Transform.Scale);
-                    writer.WriteNextCol(unkSols.Transform.UnknownOption);
-                    //
-                    writer.WriteNextRow();
-                }
-                writer.Flush();
-            }
-        }
-
-
-
-        public static void AnalyzeStaticColliderTriangles(Scene[] scenes, string fileName)
-        {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol("Tri Index");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Z");
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
-            {
-                int triIndex = 0;
-                foreach (var tri in scene.staticColliderMeshManager.ColliderTris)
-                {
-                    writer.WriteNextCol(scene.FileName);
-                    writer.WriteStartAddress(tri);
                     writer.WriteNextCol(triIndex++);
+                    writer.WriteStartAddress(tri);
+
                     writer.WriteNextCol(tri.PlaneDistance);
                     writer.WriteNextCol(tri.Normal.X);
                     writer.WriteNextCol(tri.Normal.Y);
@@ -1912,58 +712,78 @@ namespace GameCube.GFZ.Stage
                     writer.WriteNextCol(tri.EdgeNormal2.X);
                     writer.WriteNextCol(tri.EdgeNormal2.Y);
                     writer.WriteNextCol(tri.EdgeNormal2.Z);
+
                     writer.WriteNextRow();
                 }
+                gameObjectIndex++;
             }
-            writer.Flush();
         }
+        writer.Flush();
+    }
 
-        public static void AnalyzeStaticColliderQuads(Scene[] scenes, string fileName)
+    public static void AnalyzeColliderGeometryQuad(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+
+        writer.WriteNextCol("Quad Index");
+        writer.WriteNextCol("Addr");
+
+        writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Z");
+
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
         {
-            using var writer = new StreamWriter(File.Create(fileName));
-            
-            // Write header
-            writer.WriteNextCol("File");
-            writer.WriteNextCol("Addr");
-            writer.WriteNextCol("Quad Index");
-            writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Z");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".X");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Y");
-            writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Z");
-            writer.WriteNextRow();
-
-            foreach (var scene in scenes)
+            int gameObjectIndex = 0;
+            foreach (var dynamicSceneObject in scene.dynamicSceneObjects)
             {
+                if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
+                    dynamicSceneObject.SceneObject.ColliderMesh.Quads is null ||
+                    dynamicSceneObject.SceneObject.ColliderMesh.Quads.Length == 0)
+                    continue;
+
                 int quadIndex = 0;
-                foreach (var quad in scene.staticColliderMeshManager.ColliderQuads)
+                foreach (var quad in dynamicSceneObject.SceneObject.ColliderMesh.Quads)
                 {
                     writer.WriteNextCol(scene.FileName);
-                    writer.WriteStartAddress(quad);
+                    writer.WriteNextCol(gameObjectIndex);
+                    writer.WriteNextCol(dynamicSceneObject.Name);
+
                     writer.WriteNextCol(quadIndex++);
+                    writer.WriteStartAddress(quad);
+
                     writer.WriteNextCol(quad.PlaneDistance);
                     writer.WriteNextCol(quad.Normal.X);
                     writer.WriteNextCol(quad.Normal.Y);
@@ -1992,11 +812,1189 @@ namespace GameCube.GFZ.Stage
                     writer.WriteNextCol(quad.EdgeNormal3.X);
                     writer.WriteNextCol(quad.EdgeNormal3.Y);
                     writer.WriteNextCol(quad.EdgeNormal3.Z);
+
+                    writer.WriteNextRow();
+                }
+                gameObjectIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    #endregion
+
+
+    public static void AnalyzeHeaders(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(Scene.UnkRange0x00) + "." + nameof(ViewRange.near));
+        writer.WriteNextCol(nameof(Scene.UnkRange0x00) + "." + nameof(ViewRange.far));
+        writer.WriteNextCol(nameof(Scene.TrackNodesPtr));
+        writer.WriteNextCol(nameof(Scene.TrackNodesPtr));
+        writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
+        writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
+        writer.WriteNextCol(nameof(Scene.StaticColliderMeshManagerActive));
+        writer.WriteNextCol(nameof(Scene.EmbeddedTrackPropertyAreasPtr));
+        //writer.WriteNextCol(nameof(Scene.zeroes0x20Ptr));
+        writer.WriteNextCol(nameof(Scene.TrackMinHeightPtr));
+        //writer.WriteNextCol(nameof(Scene.zeroes0x28));
+        writer.WriteNextCol(nameof(Scene.DynamicSceneObjectCount));
+        writer.WriteNextCol(nameof(Scene.Unk_sceneObjectCount1));
+        writer.WriteNextCol(nameof(Scene.Unk_sceneObjectCount2));
+        writer.WriteNextCol(nameof(Scene.DynamicSceneObjectsPtr));
+        writer.WriteNextCol(nameof(Scene.UnkBool32_0x58));
+        writer.WriteNextCol(nameof(Scene.UnknownCollidersPtr));
+        writer.WriteNextCol(nameof(Scene.UnknownCollidersPtr));
+        writer.WriteNextCol(nameof(Scene.SceneObjectsPtr));
+        writer.WriteNextCol(nameof(Scene.SceneObjectsPtr));
+        writer.WriteNextCol(nameof(Scene.StaticSceneObjectsPtr));
+        writer.WriteNextCol(nameof(Scene.StaticSceneObjectsPtr));
+        //writer.WriteNextCol(nameof(Scene.zero0x74));
+        //writer.WriteNextCol(nameof(Scene.zero0x78));
+        writer.WriteNextCol(nameof(Scene.CircuitType));
+        writer.WriteNextCol(nameof(Scene.FogCurvesPtr));
+        writer.WriteNextCol(nameof(Scene.FogPtr));
+        //writer.WriteNextCol(nameof(Scene.zero0x88));
+        //writer.WriteNextCol(nameof(Scene.zero0x8C));
+        writer.WriteNextCol(nameof(Scene.TrackLengthPtr));
+        writer.WriteNextCol(nameof(Scene.UnknownTriggersPtr)); // len
+        writer.WriteNextCol(nameof(Scene.UnknownTriggersPtr)); // adr
+        writer.WriteNextCol(nameof(Scene.VisualEffectTriggersPtr)); // len
+        writer.WriteNextCol(nameof(Scene.VisualEffectTriggersPtr)); // adr
+        writer.WriteNextCol(nameof(Scene.MiscellaneousTriggersPtr)); // len
+        writer.WriteNextCol(nameof(Scene.MiscellaneousTriggersPtr)); // adr
+        writer.WriteNextCol(nameof(Scene.TimeExtensionTriggersPtr)); // len
+        writer.WriteNextCol(nameof(Scene.TimeExtensionTriggersPtr)); // adr
+        writer.WriteNextCol(nameof(Scene.StoryObjectTriggersPtr)); // len
+        writer.WriteNextCol(nameof(Scene.StoryObjectTriggersPtr)); // adr
+        writer.WriteNextCol(nameof(Scene.CheckpointGridPtr));
+        // Structure
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.Left));
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.Top));
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.SubdivisionWidth));
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.SubdivisionLength));
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.NumSubdivisionsX));
+        writer.WriteNextCol(nameof(Scene.CheckpointGridXZ) + "." + nameof(Scene.CheckpointGridXZ.NumSubdivisionsZ));
+        // 
+        //writer.WriteNextCol(nameof(Scene.zeroes0xD8));
+        writer.WriteNextCol(nameof(Scene.trackMinHeight));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            writer.WriteNextCol(scene.FileName);
+            writer.WriteNextCol(scene.CourseIndex);
+            writer.WriteNextCol(CourseUtility.GetVenueID(scene.CourseIndex).GetDescription());
+            writer.WriteNextCol(((CourseIndexAX)scene.CourseIndex).GetDescription());
+            writer.WriteNextCol(scene.IsFileGX ? "GX" : "AX");
+
+            writer.WriteNextCol(scene.UnkRange0x00.near);
+            writer.WriteNextCol(scene.UnkRange0x00.far);
+            writer.WriteNextCol(scene.TrackNodesPtr.length);
+            writer.WriteNextCol(scene.TrackNodesPtr.PrintAddress);
+            writer.WriteNextCol(scene.EmbeddedTrackPropertyAreasPtr.length);
+            writer.WriteNextCol(scene.EmbeddedTrackPropertyAreasPtr.PrintAddress);
+            writer.WriteNextCol(scene.StaticColliderMeshManagerActive);
+            writer.WriteNextCol(scene.StaticColliderMeshManagerPtr.PrintAddress);
+            //writer.WriteNextCol(scene.zeroes0x20Ptr.PrintAddress);
+            writer.WriteNextCol(scene.TrackMinHeightPtr.PrintAddress);
+            //writer.WriteNextCol(0);// coliHeader.zero_0x28);
+            writer.WriteNextCol(scene.DynamicSceneObjectCount);
+            if (scene.IsFileGX)
+            {
+                writer.WriteNextCol(scene.Unk_sceneObjectCount1);
+            }
+            else // is AX
+            {
+                writer.WriteNextCol();
+            }
+            writer.WriteNextCol(scene.Unk_sceneObjectCount2);
+            writer.WriteNextCol(scene.DynamicSceneObjectsPtr.PrintAddress);
+            writer.WriteNextCol(scene.UnkBool32_0x58);
+            writer.WriteNextCol(scene.UnknownCollidersPtr.length);
+            writer.WriteNextCol(scene.UnknownCollidersPtr.PrintAddress);
+            writer.WriteNextCol(scene.SceneObjectsPtr.length);
+            writer.WriteNextCol(scene.SceneObjectsPtr.PrintAddress);
+            writer.WriteNextCol(scene.StaticSceneObjectsPtr.length);
+            writer.WriteNextCol(scene.StaticSceneObjectsPtr.PrintAddress);
+            //writer.WriteNextCol(scene.zero0x74);
+            //writer.WriteNextCol(scene.zero0x78);
+            writer.WriteNextCol(scene.CircuitType);
+            writer.WriteNextCol(scene.FogCurvesPtr.PrintAddress);
+            writer.WriteNextCol(scene.FogPtr.PrintAddress);
+            //writer.WriteNextCol(scene.zero0x88);
+            //writer.WriteNextCol(scene.zero0x8C);
+            writer.WriteNextCol(scene.TrackLengthPtr.PrintAddress);
+            writer.WriteNextCol(scene.UnknownTriggersPtr.length);
+            writer.WriteNextCol(scene.UnknownTriggersPtr.PrintAddress);
+            writer.WriteNextCol(scene.VisualEffectTriggersPtr.length);
+            writer.WriteNextCol(scene.VisualEffectTriggersPtr.PrintAddress);
+            writer.WriteNextCol(scene.MiscellaneousTriggersPtr.length);
+            writer.WriteNextCol(scene.MiscellaneousTriggersPtr.PrintAddress);
+            writer.WriteNextCol(scene.TimeExtensionTriggersPtr.length);
+            writer.WriteNextCol(scene.TimeExtensionTriggersPtr.PrintAddress);
+            writer.WriteNextCol(scene.StoryObjectTriggersPtr.length);
+            writer.WriteNextCol(scene.StoryObjectTriggersPtr.PrintAddress);
+            writer.WriteNextCol(scene.CheckpointGridPtr.PrintAddress);
+            // Structure
+            writer.WriteNextCol(scene.CheckpointGridXZ.Left);
+            writer.WriteNextCol(scene.CheckpointGridXZ.Top);
+            writer.WriteNextCol(scene.CheckpointGridXZ.SubdivisionWidth);
+            writer.WriteNextCol(scene.CheckpointGridXZ.SubdivisionLength);
+            writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsX);
+            writer.WriteNextCol(scene.CheckpointGridXZ.NumSubdivisionsZ);
+            //
+            //writer.WriteNextCol(0);// coliHeader.zero_0xD8);
+            writer.WriteNextCol(scene.trackMinHeight.Value);
+            writer.WriteNextRow();
+        }
+        writer.Flush();
+    }
+
+
+    #region TRIGGERS
+
+    public static void AnalyzeTimeExtensionTriggers(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Position));
+        writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.RotationEuler));
+        writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Scale));
+        writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.UnknownOption));
+        writer.WriteNextCol(nameof(TimeExtensionTrigger.Option));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var arcadeCheckpooint in scene.timeExtensionTriggers)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(arcadeCheckpooint.Transform.Position);
+                writer.WriteNextCol(arcadeCheckpooint.Transform.RotationEuler);
+                writer.WriteNextCol(arcadeCheckpooint.Transform.Scale);
+                writer.WriteNextCol(arcadeCheckpooint.Transform.UnknownOption);
+                writer.WriteNextCol(arcadeCheckpooint.Option);
+                //
+                writer.WriteNextRow();
+            }
+            writer.Flush();
+        }
+    }
+
+    public static void AnalyzeMiscellaneousTriggers(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(MiscellaneousTrigger.Position));
+        writer.WriteNextCol(nameof(MiscellaneousTrigger.RotationEuler));
+        writer.WriteNextCol(nameof(MiscellaneousTrigger.Scale) + " / PositionTo");
+        writer.WriteNextCol(nameof(MiscellaneousTrigger.Transform.UnknownOption));
+        writer.WriteNextCol(nameof(MiscellaneousTrigger.MetadataType));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var cmt in scene.miscellaneousTriggers)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(cmt.Position);
+                writer.WriteNextCol(cmt.RotationEuler);
+                writer.WriteNextCol(cmt.Scale);
+                writer.WriteNextCol(cmt.Transform.UnknownOption);
+                writer.WriteNextCol(cmt.MetadataType);
+                //
+                writer.WriteNextRow();
+            }
+            writer.Flush();
+        }
+    }
+
+    public static void AnalyzeStoryObjectTrigger(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        //writer.WriteNextCol(nameof(StoryObjectTrigger.zero_0x00));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroupOrderIndex));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroup));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Difficulty));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Story2BoulderScale));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Story2BoulderPathPtr));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Scale));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Rotation));
+        writer.WriteNextCol(nameof(StoryObjectTrigger.Position));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var item in scene.storyObjectTriggers)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                //writer.WriteNextCol(item.zero_0x00);
+                writer.WriteNextCol(item.BoulderGroupOrderIndex);
+                writer.WriteNextCol(item.BoulderGroup);
+                writer.WriteNextCol(item.Difficulty);
+                writer.WriteNextCol(item.Story2BoulderScale);
+                writer.WriteNextCol(item.Story2BoulderPathPtr);
+                writer.WriteNextCol(item.Scale);
+                writer.WriteNextCol(item.Rotation);
+                writer.WriteNextCol(item.Position);
+                //
+                writer.WriteNextRow();
+            }
+            writer.Flush();
+        }
+    }
+
+    public static void AnalyzeCullOverrideTrigger(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("Start");
+        writer.WriteNextCol("End");
+        //
+        writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
+        writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
+        //
+        writer.WriteNextCol("Order");
+        writer.WriteNextCol("Index");
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            int count = 0;
+            int total = scene.cullOverrideTriggers.Length;
+            foreach (var item in scene.cullOverrideTriggers)
+            {
+                count++;
+
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+
+                writer.WriteNextCol(item.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(item.AddressRange.PrintEndAddress());
+
+                writer.WriteNextCol(item.Unk_0x20);
+                writer.WriteNextCol($"0x{(int)item.Unk_0x20:X8}");
+
+                writer.WriteNextCol(count);
+                writer.WriteNextCol($"[{count}/{total}]");
+
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeVisualEffectTriggers(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Position));
+        writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.RotationEuler));
+        writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Scale));
+        writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.UnknownOption));
+        writer.WriteNextCol(nameof(VisualEffectTrigger.Animation));
+        writer.WriteNextCol(nameof(VisualEffectTrigger.VisualEffect));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var vfx in scene.visualEffectTriggers)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(vfx.Transform.Position);
+                writer.WriteNextCol(vfx.Transform.RotationEuler);
+                writer.WriteNextCol(vfx.Transform.Scale);
+                writer.WriteNextCol(vfx.Transform.UnknownOption);
+                writer.WriteNextCol(vfx.Animation);
+                writer.WriteNextCol(vfx.VisualEffect);
+                //
+                writer.WriteNextRow();
+            }
+            writer.Flush();
+        }
+    }
+
+    #endregion
+
+    #region FOG
+
+    public static void AnalyzeFogCurves(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol("Index");
+        //
+        writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
+        writer.WriteNextCol(nameof(KeyableAttribute.Time));
+        writer.WriteNextCol(nameof(KeyableAttribute.Value));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
+        writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            if (scene.fogCurves == null)
+                continue;
+
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            var totalD1 = scene.fogCurves.animationCurves.Length;
+            var countD1 = 0;
+            foreach (var animationCurve in scene.fogCurves.animationCurves)
+            {
+                countD1++;
+                foreach (var keyableAttribute in animationCurve.KeyableAttributes)
+                {
+                    writer.WriteNextCol(scene.FileName);
+                    writer.WriteNextCol(scene.CourseIndex);
+                    writer.WriteNextCol(venueID);
+                    writer.WriteNextCol(courseID);
+                    writer.WriteNextCol(isAxGx);
+                    //
+                    writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
+                    writer.WriteNextCol($"[{countD1}/{totalD1}]");
+                    //
+                    writer.WriteNextCol(keyableAttribute.EaseMode);
+                    writer.WriteNextCol(keyableAttribute.Time);
+                    writer.WriteNextCol(keyableAttribute.Value);
+                    writer.WriteNextCol(keyableAttribute.TangentIn);
+                    writer.WriteNextCol(keyableAttribute.TangentOut);
+                    //
                     writer.WriteNextRow();
                 }
             }
             writer.Flush();
         }
-
     }
+
+    public static void AnalyzeFog(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol(nameof(Fog.Interpolation));
+        writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.near));
+        writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.far));
+        writer.WriteNextCol(nameof(Fog.ColorRGB) + ".R");
+        writer.WriteNextCol(nameof(Fog.ColorRGB) + ".G");
+        writer.WriteNextCol(nameof(Fog.ColorRGB) + ".B");
+        //writer.WriteNextCol(nameof(Fog.zero0x18) + ".X");
+        //writer.WriteNextCol(nameof(Fog.zero0x18) + ".Y");
+        //writer.WriteNextCol(nameof(Fog.zero0x18) + ".Z");
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            writer.WriteNextCol(scene.FileName);
+            writer.WriteNextCol(scene.CourseIndex);
+            writer.WriteNextCol(venueID);
+            writer.WriteNextCol(courseID);
+            writer.WriteNextCol(isAxGx);
+            //
+            writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
+            writer.WriteNextCol(scene.fog.Interpolation);
+            writer.WriteNextCol(scene.fog.FogRange.near);
+            writer.WriteNextCol(scene.fog.FogRange.far);
+            writer.WriteNextCol(scene.fog.ColorRGB.X);
+            writer.WriteNextCol(scene.fog.ColorRGB.Y);
+            writer.WriteNextCol(scene.fog.ColorRGB.Z);
+            //writer.WriteNextCol(scene.fog.zero0x18.X);
+            //writer.WriteNextCol(scene.fog.zero0x18.Y);
+            //writer.WriteNextCol(scene.fog.zero0x18.Z);
+            //
+            writer.WriteNextRow();
+        }
+        writer.Flush();
+    }
+
+    #endregion
+
+
+    public static void AnalyzeSceneObjectTransforms(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Game Object #");
+        writer.WriteNextCol("Game Object");
+        writer.WriteNextCol($"matrix.X");
+        writer.WriteNextCol($"matrix.Y");
+        writer.WriteNextCol($"matrix.Z");
+        writer.WriteNextCol($"euler.X");
+        writer.WriteNextCol($"euler.Y");
+        writer.WriteNextCol($"euler.Z");
+        writer.WriteNextCol("Decomposed phi");
+        writer.WriteNextCol("Decomposed theta");
+        writer.WriteNextCol("Decomposed psi");
+        writer.WriteNextCol(nameof(UnknownTransformOption));
+        writer.WriteNextCol(nameof(ObjectActiveOverride));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int sceneObjectIndex = 0;
+            foreach (var sceneObject in scene.dynamicSceneObjects)
+            {
+                // Skip objects that don;'t have both matrix and decomposed rotation
+                // These are not helpful for comparision
+                if (!sceneObject.TransformMatrix3x4Ptr.IsNotNull)
+                    continue;
+
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(sceneObjectIndex);
+                writer.WriteNextCol(sceneObject.Name);
+
+                // Rotation values from clean, uncompressed matrix
+                var matrix = sceneObject.TransformMatrix3x4.RotationEuler;
+                writer.WriteNextCol(matrix.X);
+                writer.WriteNextCol(matrix.Y);
+                writer.WriteNextCol(matrix.Z);
+
+                // Rotation values as reconstructed
+                var euler = sceneObject.TransformTRXS.CompressedRotation.Eulers;
+                writer.WriteNextCol(euler.X);
+                writer.WriteNextCol(euler.Y);
+                writer.WriteNextCol(euler.Z);
+
+                // Decomposed rotation values, raw, requires processing to be used
+                var decomposed = sceneObject.TransformTRXS.CompressedRotation;
+                writer.WriteNextCol(decomposed.X);
+                writer.WriteNextCol(decomposed.Y);
+                writer.WriteNextCol(decomposed.Z);
+                // The other parameters that go with the structure
+                writer.WriteNextCol(sceneObject.TransformTRXS.UnknownOption);
+                writer.WriteNextCol(sceneObject.TransformTRXS.ObjectActiveOverride);
+
+                writer.WriteNextRow();
+                sceneObjectIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeTrackNodes(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Track Node");
+        writer.WriteNextCol("Track Point");
+        writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeStart));
+        writer.WriteNextColNicify(nameof(Checkpoint.CurveTimeEnd));
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.distance));
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".X");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".Y");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.normal) + ".Z");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".X");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".Y");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneStart.origin) + ".Z");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.distance));
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".X");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".Y");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.normal) + ".Z");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".X");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".Y");
+        writer.WriteNextColNicify(nameof(Checkpoint.PlaneEnd.origin) + ".Z");
+        writer.WriteNextColNicify(nameof(Checkpoint.StartDistance));
+        writer.WriteNextColNicify(nameof(Checkpoint.EndDistance));
+        writer.WriteNextColNicify(nameof(Checkpoint.TrackWidth));
+        writer.WriteNextColNicify(nameof(Checkpoint.ConnectToTrackIn));
+        writer.WriteNextColNicify(nameof(Checkpoint.ConnectToTrackOut));
+        //writer.WriteNextColNicify(nameof(Checkpoint.zero_0x4E));
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int nodeLength = scene.trackNodes.Length;
+            int nodeIndex = 0;
+            foreach (var trackNode in scene.trackNodes)
+            {
+                int pointLength = trackNode.Checkpoints.Length;
+                int pointIndex = 0;
+                foreach (var trackPoint in trackNode.Checkpoints)
+                {
+                    writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
+                    writer.WriteNextCol($"[{nodeIndex}/{nodeLength}]");
+                    writer.WriteNextCol($"[{pointIndex}/{pointLength}]");
+
+                    writer.WriteNextCol(trackPoint.CurveTimeStart);
+                    writer.WriteNextCol(trackPoint.CurveTimeEnd);
+                    writer.WriteNextCol(trackPoint.PlaneStart.distance);
+                    writer.WriteNextCol(trackPoint.PlaneStart.normal.X);
+                    writer.WriteNextCol(trackPoint.PlaneStart.normal.Y);
+                    writer.WriteNextCol(trackPoint.PlaneStart.normal.Z);
+                    writer.WriteNextCol(trackPoint.PlaneStart.origin.X);
+                    writer.WriteNextCol(trackPoint.PlaneStart.origin.Y);
+                    writer.WriteNextCol(trackPoint.PlaneStart.origin.Z);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.distance);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.X);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.Y);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.Z);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.X);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.Y);
+                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.Z);
+                    writer.WriteNextCol(trackPoint.StartDistance);
+                    writer.WriteNextCol(trackPoint.EndDistance);
+                    writer.WriteNextCol(trackPoint.TrackWidth);
+                    writer.WriteNextCol(trackPoint.ConnectToTrackIn);
+                    writer.WriteNextCol(trackPoint.ConnectToTrackOut);
+                    //writer.WriteNextCol(trackPoint.zero_0x4E);
+                    writer.WriteNextRow();
+
+                    pointIndex++;
+                }
+                nodeIndex++;
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeStaticColliderMeshManagers(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol("Index");
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticColliderTrisPtr));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.TriMeshGridPtrs));
+        writer.WriteNextColNicify(nameof(GridXZ.Left));
+        writer.WriteNextColNicify(nameof(GridXZ.Top));
+        writer.WriteNextColNicify(nameof(GridXZ.SubdivisionWidth));
+        writer.WriteNextColNicify(nameof(GridXZ.SubdivisionLength));
+        writer.WriteNextColNicify(nameof(GridXZ.NumSubdivisionsX));
+        writer.WriteNextColNicify(nameof(GridXZ.NumSubdivisionsZ));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticColliderQuadsPtr));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.QuadMeshGridPtrs));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.BoundingSpherePtr));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.StaticSceneObjectsPtr));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.UnknownCollidersPtr));
+        writer.WriteNextColNicify(nameof(StaticColliderMeshManager.Unk_float));
+        writer.WriteNextCol();
+        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
+        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
+        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
+        writer.WriteNextColNicify(nameof(BoundingSphere.radius));
+        writer.WriteNextRow();
+
+        int index = 0;
+        foreach (var scene in scenes)
+        {
+            var staticColliderMeshes = scene.staticColliderMeshManager;
+
+            writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
+            writer.WriteNextCol(staticColliderMeshes.AddressRange.PrintStartAddress());
+            writer.WriteNextCol(index++);
+            writer.WriteNextCol(staticColliderMeshes.StaticColliderTrisPtr.PrintAddress);
+            writer.WriteNextCol(staticColliderMeshes.TriMeshGridPtrs.Length);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.Left);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.Top);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.SubdivisionWidth);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.SubdivisionLength);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.NumSubdivisionsX);
+            writer.WriteNextCol(staticColliderMeshes.MeshGridXZ.NumSubdivisionsZ);
+            writer.WriteNextCol(staticColliderMeshes.StaticColliderQuadsPtr.PrintAddress);
+            writer.WriteNextCol(staticColliderMeshes.QuadMeshGridPtrs.Length);
+            writer.WriteNextCol(staticColliderMeshes.BoundingSpherePtr.PrintAddress);
+            writer.WriteNextCol(staticColliderMeshes.StaticSceneObjectsPtr.PrintAddress);
+            writer.WriteNextCol(staticColliderMeshes.UnknownCollidersPtr.PrintAddress);
+            writer.WriteNextCol(staticColliderMeshes.Unk_float);
+            writer.WriteNextCol();
+            writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.X);
+            writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.Y);
+            writer.WriteNextCol(staticColliderMeshes.BoundingSphere.origin.Z);
+            writer.WriteNextCol(staticColliderMeshes.BoundingSphere.radius);
+            writer.WriteNextRow();
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeSceneObjectLODs(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("name");
+        writer.WriteNextCol("Object Type");
+        writer.WriteNextCol("Addr");
+        //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
+        writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
+        //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x08));
+        writer.WriteNextCol(nameof(SceneObjectLOD.LodDistance));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            // Get all the scene object references
+            var sceneObjectLODs = new List<SceneObjectLOD>();
+            foreach (var templateSceneObject in scene.sceneObjects)
+            {
+                var sceneObjects = templateSceneObject.LODs;
+                foreach (var sceneObject in sceneObjects)
+                    sceneObjectLODs.Add(sceneObject);
+            }
+            //foreach (var staticSceneObject in scene.staticSceneObjects)
+            //{
+            //    var sceneObjects = staticSceneObject.templateSceneObject.sceneObjects;
+            //    foreach (var sceneObject in sceneObjects)
+            //        objectsList.Add((sceneObject, "Instance"));
+            //}
+
+            // iterate
+            foreach (var sceneObjectLOD in sceneObjectLODs)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(sceneObjectLOD.Name);
+                writer.WriteNextCol(sceneObjectLOD.AddressRange.PrintStartAddress());
+                //writer.WriteNextCol(sceneObjectReference.zero_0x00);
+                writer.WriteNextCol(sceneObjectLOD.LodNamePtr);
+                //writer.WriteNextCol(sceneObjectReference.zero_0x08);
+                writer.WriteNextCol(sceneObjectLOD.LodDistance);
+                //
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeSceneObjects(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("name");
+        writer.WriteNextCol("Object Type");
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
+        writer.WriteNextCol(nameof(SceneObject.LodsPtr));
+        writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            // Get all the scene object references
+            var sceneObjectsList = new List<(SceneObject sceneObject, string soCategory)>();
+            foreach (var sceneInstance in scene.sceneObjects)
+            {
+                sceneObjectsList.Add((sceneInstance, "Instance"));
+            }
+            foreach (var sceneOriginObject in scene.staticSceneObjects)
+            {
+                var sceneInstance = sceneOriginObject.SceneObject;
+                sceneObjectsList.Add((sceneInstance, "Origin"));
+            }
+
+            // iterate, breaking out typle in loop
+            foreach (var (sceneObject, soCategory) in sceneObjectsList)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(sceneObject.PrimaryLOD.Name);
+                writer.WriteNextCol(soCategory);
+                writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(sceneObject.LodRenderFlags);
+                writer.WriteNextCol(sceneObject.LodsPtr);
+                writer.WriteNextCol(sceneObject.ColliderMeshPtr);
+                //
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeSceneObjectsAndLODs(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol("name");
+        writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
+        writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Len");
+        writer.WriteNextCol(nameof(SceneObject.LodsPtr) + " Adr");
+        writer.WriteNextCol(nameof(SceneObject.ColliderMeshPtr));
+        writer.WriteNextCol(nameof(SceneObjectLOD) + " IDX");
+        //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
+        writer.WriteNextCol(nameof(SceneObjectLOD.LodNamePtr));
+        //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x08));
+        writer.WriteNextCol(nameof(SceneObjectLOD.LodDistance));
+        writer.WriteNextCol(nameof(SceneObjectLOD.Name));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var template in scene.sceneObjects)
+            {
+                var index = 0;
+                var length = template.LODs.Length;
+                foreach (var sceneObject in template.LODs)
+                {
+                    writer.WriteNextCol(scene.FileName);
+                    writer.WriteNextCol(scene.CourseIndex);
+                    writer.WriteNextCol(venueID);
+                    writer.WriteNextCol(courseID);
+                    writer.WriteNextCol(isAxGx);
+                    //
+                    writer.WriteNextCol(template.Name);
+                    writer.WriteNextCol(template.LodRenderFlags);
+                    writer.WriteNextCol(template.LodsPtr.length);
+                    writer.WriteNextCol(template.LodsPtr.PrintAddress);
+                    writer.WriteNextCol(template.ColliderMeshPtr);
+                    writer.WriteNextCol($"[{++index}/{length}]");
+                    //writer.WriteNextCol(sceneObject.zero_0x00);
+                    writer.WriteNextCol(sceneObject.LodNamePtr);
+                    //writer.WriteNextCol(sceneObject.zero_0x08);
+                    writer.WriteNextCol(sceneObject.LodDistance);
+                    writer.WriteNextCol(sceneObject.Name);
+                    writer.WriteNextRow();
+                }
+            }
+        }
+        writer.Flush();
+    }
+
+
+    public static void AnalyzeGeneralData(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.near));
+        writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.far));
+        writer.WriteNextCol(nameof(Scene.trackMinHeight));
+        writer.WriteNextCol(nameof(Scene.trackLength));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            writer.WriteNextCol(scene.FileName);
+            writer.WriteNextCol(scene.CourseIndex);
+            writer.WriteNextCol(venueID);
+            writer.WriteNextCol(courseID);
+            writer.WriteNextCol(isAxGx);
+            //
+            writer.WriteNextCol(scene.UnkRange0x00.near);
+            writer.WriteNextCol(scene.UnkRange0x00.far);
+            writer.WriteNextCol(scene.trackMinHeight.Value);
+            writer.WriteNextCol(scene.trackLength.Value);
+            writer.WriteNextRow();
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeSurfaceAttributeAreas(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthFrom));
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthTo));
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.WidthLeft));
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.WidthRight));
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.PropertyType));
+        writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.TrackBranchID));
+        //writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.zero_0x12));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var surfaceAttributeArea in scene.embeddedPropertyAreas)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(surfaceAttributeArea.LengthFrom);
+                writer.WriteNextCol(surfaceAttributeArea.LengthTo);
+                writer.WriteNextCol(surfaceAttributeArea.WidthLeft);
+                writer.WriteNextCol(surfaceAttributeArea.WidthRight);
+                writer.WriteNextCol(surfaceAttributeArea.PropertyType);
+                writer.WriteNextCol(surfaceAttributeArea.TrackBranchID);
+                //writer.WriteNextCol(surfaceAttributeArea.zero_0x12);
+                //
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
+
+    public static void AnalyzeUnknownColliders(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Venue");
+        writer.WriteNextCol("Course");
+        writer.WriteNextCol("AX/GX");
+        //
+        writer.WriteNextCol(nameof(UnknownCollider.SceneObjectPtr));
+        writer.WriteNextCol(nameof(UnknownCollider.Transform.Position));
+        writer.WriteNextCol(nameof(UnknownCollider.Transform.RotationEuler));
+        writer.WriteNextCol(nameof(UnknownCollider.Transform.Scale));
+        writer.WriteNextCol(nameof(UnknownCollider.Transform.UnknownOption));
+        //
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
+            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
+            var isAxGx = scene.IsFileGX ? "GX" : "AX";
+
+            foreach (var unkSols in scene.unknownColliders)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteNextCol(scene.CourseIndex);
+                writer.WriteNextCol(venueID);
+                writer.WriteNextCol(courseID);
+                writer.WriteNextCol(isAxGx);
+                //
+                writer.WriteNextCol(unkSols.SceneObjectPtr);
+                writer.WriteNextCol(unkSols.Transform.Position);
+                writer.WriteNextCol(unkSols.Transform.RotationEuler);
+                writer.WriteNextCol(unkSols.Transform.Scale);
+                writer.WriteNextCol(unkSols.Transform.UnknownOption);
+                //
+                writer.WriteNextRow();
+            }
+            writer.Flush();
+        }
+    }
+
+
+
+    public static void AnalyzeStaticColliderTriangles(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol("Tri Index");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.Vertex2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Z");
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int triIndex = 0;
+            foreach (var tri in scene.staticColliderMeshManager.ColliderTris)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteStartAddress(tri);
+                writer.WriteNextCol(triIndex++);
+                writer.WriteNextCol(tri.PlaneDistance);
+                writer.WriteNextCol(tri.Normal.X);
+                writer.WriteNextCol(tri.Normal.Y);
+                writer.WriteNextCol(tri.Normal.Z);
+                writer.WriteNextCol(tri.Vertex0.X);
+                writer.WriteNextCol(tri.Vertex0.Y);
+                writer.WriteNextCol(tri.Vertex0.Z);
+                writer.WriteNextCol(tri.Vertex1.X);
+                writer.WriteNextCol(tri.Vertex1.Y);
+                writer.WriteNextCol(tri.Vertex1.Z);
+                writer.WriteNextCol(tri.Vertex2.X);
+                writer.WriteNextCol(tri.Vertex2.Y);
+                writer.WriteNextCol(tri.Vertex2.Z);
+                writer.WriteNextCol(tri.EdgeNormal0.X);
+                writer.WriteNextCol(tri.EdgeNormal0.Y);
+                writer.WriteNextCol(tri.EdgeNormal0.Z);
+                writer.WriteNextCol(tri.EdgeNormal1.X);
+                writer.WriteNextCol(tri.EdgeNormal1.Y);
+                writer.WriteNextCol(tri.EdgeNormal1.Z);
+                writer.WriteNextCol(tri.EdgeNormal2.X);
+                writer.WriteNextCol(tri.EdgeNormal2.Y);
+                writer.WriteNextCol(tri.EdgeNormal2.Z);
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
+    public static void AnalyzeStaticColliderQuads(Scene[] scenes, string fileName)
+    {
+        using var writer = new StreamWriter(File.Create(fileName));
+        
+        // Write header
+        writer.WriteNextCol("File");
+        writer.WriteNextCol("Addr");
+        writer.WriteNextCol("Quad Index");
+        writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.Vertex3) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal0) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal1) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal2) + ".Z");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".X");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Y");
+        writer.WriteNextColNicify(nameof(ColliderQuad.EdgeNormal3) + ".Z");
+        writer.WriteNextRow();
+
+        foreach (var scene in scenes)
+        {
+            int quadIndex = 0;
+            foreach (var quad in scene.staticColliderMeshManager.ColliderQuads)
+            {
+                writer.WriteNextCol(scene.FileName);
+                writer.WriteStartAddress(quad);
+                writer.WriteNextCol(quadIndex++);
+                writer.WriteNextCol(quad.PlaneDistance);
+                writer.WriteNextCol(quad.Normal.X);
+                writer.WriteNextCol(quad.Normal.Y);
+                writer.WriteNextCol(quad.Normal.Z);
+                writer.WriteNextCol(quad.Vertex0.X);
+                writer.WriteNextCol(quad.Vertex0.Y);
+                writer.WriteNextCol(quad.Vertex0.Z);
+                writer.WriteNextCol(quad.Vertex1.X);
+                writer.WriteNextCol(quad.Vertex1.Y);
+                writer.WriteNextCol(quad.Vertex1.Z);
+                writer.WriteNextCol(quad.Vertex2.X);
+                writer.WriteNextCol(quad.Vertex2.Y);
+                writer.WriteNextCol(quad.Vertex2.Z);
+                writer.WriteNextCol(quad.Vertex3.X);
+                writer.WriteNextCol(quad.Vertex3.Y);
+                writer.WriteNextCol(quad.Vertex3.Z);
+                writer.WriteNextCol(quad.EdgeNormal0.X);
+                writer.WriteNextCol(quad.EdgeNormal0.Y);
+                writer.WriteNextCol(quad.EdgeNormal0.Z);
+                writer.WriteNextCol(quad.EdgeNormal1.X);
+                writer.WriteNextCol(quad.EdgeNormal1.Y);
+                writer.WriteNextCol(quad.EdgeNormal1.Z);
+                writer.WriteNextCol(quad.EdgeNormal2.X);
+                writer.WriteNextCol(quad.EdgeNormal2.Y);
+                writer.WriteNextCol(quad.EdgeNormal2.Z);
+                writer.WriteNextCol(quad.EdgeNormal3.X);
+                writer.WriteNextCol(quad.EdgeNormal3.Y);
+                writer.WriteNextCol(quad.EdgeNormal3.Z);
+                writer.WriteNextRow();
+            }
+        }
+        writer.Flush();
+    }
+
 }
