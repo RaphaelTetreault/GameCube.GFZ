@@ -18,12 +18,10 @@ namespace GameCube.GFZ.Stage
     public sealed class Scene :
         IBinaryAddressable,
         IBinarySerializable,
-        IBinaryFileType,
         IHasReference,
         ITextPrintable
     {
         // CONSTANTS
-        public const Endianness endianness = Endianness.BigEndian;
         public const int kSizeOfZeroes0x20 = 0x14; // 20
         public const int kSizeOfZeroes0x28 = 0x20; // 32
         public const int kSizeOfZeroes0xD8 = 0x10; // 16
@@ -95,24 +93,12 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// The course's author.
         /// </summary>
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
 
         /// <summary>
         /// The course's name.
         /// </summary>
-        public string CourseName { get; set; }
-
-        public Endianness Endianness => endianness;
-
-        /// <summary>
-        /// The file extension for Scene (COLI_COURSE##). There is none.
-        /// </summary>
-        public string FileExtension => "";
-
-        /// <summary>
-        /// The Scene's file name. 
-        /// </summary>
-        public string FileName { get; set; }
+        public string CourseName { get; set; } = string.Empty;
 
         /// <summary>
         /// How large the file is in bytes.
@@ -162,22 +148,22 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// An array of all the track segments in this scene.
         /// </summary>
-        public TrackSegment[] AllTrackSegments { get; set; }
+        public TrackSegment[] AllTrackSegments { get; set; } = [];
 
         /// <summary>
         /// An array of the only the root track segments in this scene. 
         /// </summary>
-        public TrackSegment[] RootTrackSegments { get; set; }
+        public TrackSegment[] RootTrackSegments { get; set; } = [];
 
         /// <summary>
         /// An array of all the scene object names.
         /// </summary>
-        public List<ShiftJisCString> SceneObjectNames { get; set; } = new();
+        public List<ShiftJisCString> SceneObjectNames { get; set; } = [];
 
         /// <summary>
         /// An array of all the scene objecy LODs.
         /// </summary>
-        public List<SceneObjectLOD> SceneObjectLODs { get; set; } = new();
+        public List<SceneObjectLOD> SceneObjectLODs { get; set; } = [];
 
 
         public ViewRange UnkRange0x00 { get => unkRange0x00; set => unkRange0x00 = value; }
@@ -236,13 +222,14 @@ namespace GameCube.GFZ.Stage
             // CAPTURE METADATA
             FileSize = (int)reader.BaseStream.Length;
 
-            bool hasFileName = !string.IsNullOrWhiteSpace(FileName);
-            if (hasFileName)
-            {
-                // Store the stage index, can solve venue and course name from this using hashes
-                var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
-                CourseIndex = int.Parse(matchDigits.Value);
-            }
+            //// Old hack to get stage index
+            //bool hasFileName = !string.IsNullOrWhiteSpace(FileName);
+            //if (hasFileName)
+            //{
+            //    // Store the stage index, can solve venue and course name from this using hashes
+            //    var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
+            //    CourseIndex = int.Parse(matchDigits.Value);
+            //}
 
             // TODO: use file hash + DB instead of hardcoded guesses.
             Venue = CourseUtility.GetVenue(CourseIndex);
@@ -490,8 +477,8 @@ namespace GameCube.GFZ.Stage
             writer.CommentLineWide("Verbose:", SerializeVerbose, true);
             writer.CommentLineWide("Universal:", false, true);
             writer.CommentNewLine(true, '-');
-            writer.Comment("File name:", true);
-            writer.Comment(FileName, true);
+            //writer.Comment("File name:", true);
+            //writer.Comment(FileName, true);
             writer.CommentNewLine(true, ' ');
             writer.Comment("Course Name:", true);
             writer.Comment(VenueName, true);

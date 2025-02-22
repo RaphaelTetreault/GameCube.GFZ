@@ -1,5 +1,4 @@
-﻿using Manifold;
-using Manifold.IO;
+﻿using Manifold.IO;
 using System;
 using System.IO;
 using System.Numerics;
@@ -9,20 +8,13 @@ namespace GameCube.GFZ.Camera
     [Serializable]
     public sealed class LiveCameraStage :
         IBinarySerializable,
-        IBinaryFileType,
         ITsvSerializable
     {
-        public const Endianness endianness = Endianness.BigEndian;
-
         // FIELDS
-        private CameraPan[] pans = new CameraPan[0];
+        private CameraPan[] pans = [];
 
 
         // PROPERTIES
-        public Endianness Endianness => endianness;
-        public string FileName { get; set; } = string.Empty;
-        public string FileExtension => ".bin";
-
         public CameraPan[] Pans
         {
             get => pans;

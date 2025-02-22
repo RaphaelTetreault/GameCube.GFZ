@@ -3,6 +3,9 @@ using System.IO;
 
 namespace GameCube.GFZ.LineREL
 {
+    /// <summary>
+    ///     line__.rel
+    /// </summary>
     public class Line :
         IBinaryFileType
     {
