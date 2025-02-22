@@ -1,16 +1,13 @@
-﻿using Manifold;
-using Manifold.IO;
+﻿using Manifold.IO;
 using Manifold.Text.Tables;
 using System;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 
 namespace GameCube.GFZ.CarData
 {
     public class CarData :
         IBinarySerializable,
-        IBinaryFileType,
         ITableCollectionSerializable
     {
         // CONSTANTS
@@ -23,8 +20,6 @@ namespace GameCube.GFZ.CarData
         public const int kPaddingSize = 12;
         public const int kMachineNameTable = MachineCount;
         public const int kPartsInternalTable = 30;
-        //
-        public const Endianness endianness = Endianness.LittleEndian;
 
         // FIELDS
         // String table
@@ -155,14 +150,6 @@ namespace GameCube.GFZ.CarData
         public VehicleParameters Comet_V => BoosterParts[22];
         public VehicleParameters Crown_77 => BoosterParts[23];
         public VehicleParameters Triple_Z => BoosterParts[24];
-
-
-        // Properties
-        public string FileName { get; set; } = string.Empty;
-
-        public Endianness Endianness => endianness;
-
-        public string FileExtension => "";
 
 
         /// <summary>

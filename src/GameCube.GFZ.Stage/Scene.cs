@@ -30,7 +30,6 @@ namespace GameCube.GFZ.Stage
         public const int kGxConstPtr0x20 = 0xE8;
         public const int kGxConstPtr0x24 = 0xFC;
 
-
         // FIELDS
         private ViewRange unkRange0x00;
         private ArrayPointer trackNodesPtr;
@@ -91,59 +90,29 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
 
         /// <summary>
-        /// The course's author.
-        /// </summary>
-        public string Author { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The course's name.
-        /// </summary>
-        public string CourseName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// How large the file is in bytes.
-        /// </summary>
-        public int FileSize { get; private set; }
-
-        /// <summary>
-        /// The serialization format to use on Serialize().
+        ///     The serialization format to use on Serialize().
         /// </summary>
         public SerializeFormat Format { get; set; }
 
         /// <summary>
-        /// The course index as indicated by the file name COLI_COURSE## where ## is the index.
+        ///     Returns true if this <see cref="Scene"/> is in F-Zero AX format.
         /// </summary>
-        public int CourseIndex { get; set; }
+        public bool IsFormatAX { get; private set; }
 
         /// <summary>
-        /// Returns true if this Scene is in F-Zero AX format.
+        ///     Returns true if this <see cref="Scene"/> is in F-Zero GX format.
         /// </summary>
-        public bool IsFileAX { get; private set; }
+        public bool IsFormatGX { get; private set; }
 
         /// <summary>
-        /// Returns true if this Scene is in F-Zero GX format.
+        ///     Returns true if <see cref="Scene"/> is properly tagged as either AX or GX (mutually exclusive).
         /// </summary>
-        public bool IsFileGX { get; private set; }
+        public bool IsValidFormat => IsFormatAX ^ IsFormatGX;
 
         /// <summary>
-        /// Returns true if file is properly tagged as either AX or GX (mutually exclusive).
-        /// </summary>
-        public bool IsValidFile => IsFileAX ^ IsFileGX;
-
-        /// <summary>
-        /// If set to true, serialization prints text inlined into the resulting binary output file.
+        ///     If set to true, serialization prints text inlined into the resulting binary output file.
         /// </summary>
         public bool SerializeVerbose { get; set; }
-
-        /// <summary>
-        /// The venue for this course.
-        /// </summary>
-        public Venue Venue { get; set; }
-
-        /// <summary>
-        /// Gets the venue's name
-        /// </summary>
-        public string VenueName => EnumExtensions.GetDescription(Venue);
 
         /// <summary>
         /// An array of all the track segments in this scene.
@@ -193,7 +162,6 @@ namespace GameCube.GFZ.Stage
         public GridXZ CheckpointGridXZ { get => checkpointGridXZ; set => checkpointGridXZ = value; }
 
 
-
         public static bool IsAX(Pointer ptr0x20, Pointer ptr0x24)
         {
             bool isAx0x20 = ptr0x20.address == kAxConstPtr0x20;
@@ -212,31 +180,14 @@ namespace GameCube.GFZ.Stage
 
         public void ValidateFileFormatPointers()
         {
-            IsFileAX = IsAX(zeroes0x20Ptr, TrackMinHeightPtr);
-            IsFileGX = IsGX(zeroes0x20Ptr, TrackMinHeightPtr);
-            Assert.IsTrue(IsValidFile);
+            IsFormatAX = IsAX(zeroes0x20Ptr, TrackMinHeightPtr);
+            IsFormatGX = IsGX(zeroes0x20Ptr, TrackMinHeightPtr);
+            Assert.IsTrue(IsValidFormat);
         }
+
 
         public void Deserialize(EndianBinaryReader reader)
         {
-            // CAPTURE METADATA
-            FileSize = (int)reader.BaseStream.Length;
-
-            //// Old hack to get stage index
-            //bool hasFileName = !string.IsNullOrWhiteSpace(FileName);
-            //if (hasFileName)
-            //{
-            //    // Store the stage index, can solve venue and course name from this using hashes
-            //    var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
-            //    CourseIndex = int.Parse(matchDigits.Value);
-            //}
-
-            // TODO: use file hash + DB instead of hardcoded guesses.
-            Venue = CourseUtility.GetVenue(CourseIndex);
-            CourseName = CourseUtility.GetCourseName(CourseIndex);
-            Author = "Amusement Vision";
-
-
             // Read COLI_COURSE## file header
             DeserializeHeader(reader);
 
@@ -467,7 +418,7 @@ namespace GameCube.GFZ.Stage
                 ValidateFileFormatPointers();
             }
             // Offset pointer address if AX file. Applies to pointers from 0x54 onwards
-            int offset = IsFileAX ? -4 : 0;
+            int offset = IsFormatAX ? -4 : 0;
 
             // CREDIT / DEBUG INFO / METADATA
             // Write credit and useful debugging info
@@ -475,17 +426,6 @@ namespace GameCube.GFZ.Stage
             writer.Comment("File Information", true);
             writer.CommentLineWide("Format:", Format, true);
             writer.CommentLineWide("Verbose:", SerializeVerbose, true);
-            writer.CommentLineWide("Universal:", false, true);
-            writer.CommentNewLine(true, '-');
-            //writer.Comment("File name:", true);
-            //writer.Comment(FileName, true);
-            writer.CommentNewLine(true, ' ');
-            writer.Comment("Course Name:", true);
-            writer.Comment(VenueName, true);
-            writer.Comment(CourseName, true);
-            writer.CommentNewLine(true, ' ');
-            writer.Comment("Stage Author(s):", true);
-            writer.Comment(Author, true);
             writer.CommentNewLine(true, '-');
 
 
@@ -914,9 +854,6 @@ namespace GameCube.GFZ.Stage
             SerializeHeader(writer);
             // Validate this structure before finishing.
             ValidateReferences();
-
-            //
-            FileSize = (int)writer.BaseStream.Length;
         }
 
         /// <summary>
@@ -1108,7 +1045,7 @@ namespace GameCube.GFZ.Stage
                 reader.Read(ref zeroes0x28, kSizeOfZeroes0x28);
                 reader.Read(ref dynamicSceneObjectCount);
                 reader.Read(ref unk_sceneObjectCount1);
-                if (IsFileGX) reader.Read(ref unk_sceneObjectCount2);
+                if (IsFormatGX) reader.Read(ref unk_sceneObjectCount2);
                 reader.Read(ref dynamicSceneObjectsPtr);
                 reader.Read(ref unkBool32_0x58);
                 reader.Read(ref unknownCollidersPtr);
@@ -1145,7 +1082,7 @@ namespace GameCube.GFZ.Stage
                     Assert.IsTrue(zeroes0xD8[i] == 0);
 
                 // Record some metadata
-                Format = IsFileAX ? SerializeFormat.AX : SerializeFormat.GX;
+                Format = IsFormatAX ? SerializeFormat.AX : SerializeFormat.GX;
             }
         }
 
@@ -1153,8 +1090,8 @@ namespace GameCube.GFZ.Stage
         {
             {
                 // Refresh metadata
-                IsFileAX = Format == SerializeFormat.AX;
-                IsFileGX = Format == SerializeFormat.GX;
+                IsFormatAX = Format == SerializeFormat.AX;
+                IsFormatGX = Format == SerializeFormat.GX;
                 Assert.IsTrue(Format == SerializeFormat.AX || Format == SerializeFormat.GX);
 
                 // UPDATE POINTERS AND COUNTS
@@ -1313,7 +1250,7 @@ namespace GameCube.GFZ.Stage
 
         public string PrintSingleLine()
         {
-            return $"{nameof(Scene)}({Venue} [{CourseName}] by {Author}, {nameof(CourseIndex)}({CourseIndex}), {Format})";
+            return $"{nameof(Scene)}({Format})";
         }
 
         //// FIELDS (that require extra processing)
@@ -1329,12 +1266,8 @@ namespace GameCube.GFZ.Stage
 
             builder.AppendLineIndented(indent, indentLevel, nameof(Scene));
             indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, $"Course: {Venue} [{CourseName}]");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Author)}: {Author}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(CourseIndex)}: {CourseIndex} (0x{CourseIndex:x2})");
             builder.AppendLineIndented(indent, indentLevel, $"{nameof(SerializeFormat)}: {Format}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(FileSize)}: {FileSize:n0}, {FileSize:x8}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(IsValidFile)}: {IsValidFile}");
+            builder.AppendLineIndented(indent, indentLevel, $"{nameof(IsValidFormat)}: {IsValidFormat}");
             builder.AppendLine();
             indentLevel--;
 

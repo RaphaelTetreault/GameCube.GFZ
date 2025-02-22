@@ -181,10 +181,8 @@ public static class StageTableLogger
     }
     private static void WriteKeyableAttribute(StreamWriter writer, SceneFile sceneFile, int nestedDepth, int keyableIndex, int keyableTotal, int keyablesSet, int trackTransformIndex, KeyableAttribute param, TrackSegment tt)
     {
-        string gameId = sceneFile.Value.IsFileGX ? "GX" : "AX";
-
         writer.WriteNextCol(sceneFile.FileName);
-        writer.WriteNextCol(gameId);
+        writer.WriteNextCol(sceneFile.FileFormatDescription);
 
         writer.WriteNextCol(tt.SegmentType);
         writer.WriteNextCol(tt.EmbeddedPropertyType);
@@ -892,10 +890,10 @@ public static class StageTableLogger
         {
             Scene scene = sceneFile;
             writer.WriteNextCol(sceneFile.FileName);
-            writer.WriteNextCol(scene.CourseIndex);
-            writer.WriteNextCol(CourseUtility.GetVenueID(scene.CourseIndex).GetDescription());
-            writer.WriteNextCol(((CourseIndexAX)scene.CourseIndex).GetDescription());
-            writer.WriteNextCol(scene.IsFileGX ? "GX" : "AX");
+            writer.WriteNextCol(sceneFile.CourseIndex);
+            writer.WriteNextCol(sceneFile.VenueDescription);
+            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.FileFormatDescription);
 
             writer.WriteNextCol(scene.UnkRange0x00.near);
             writer.WriteNextCol(scene.UnkRange0x00.far);
@@ -909,7 +907,7 @@ public static class StageTableLogger
             writer.WriteNextCol(scene.TrackMinHeightPtr.PrintAddress);
             //writer.WriteNextCol(0);// coliHeader.zero_0x28);
             writer.WriteNextCol(scene.DynamicSceneObjectCount);
-            if (scene.IsFileGX)
+            if (scene.IsFormatGX)
             {
                 writer.WriteNextCol(scene.Unk_sceneObjectCount1);
             }
@@ -985,17 +983,14 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
 
             foreach (var arcadeCheckpooint in scene.timeExtensionTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(arcadeCheckpooint.Transform.Position);
                 writer.WriteNextCol(arcadeCheckpooint.Transform.RotationEuler);
@@ -1031,17 +1026,13 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var cmt in scene.miscellaneousTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(cmt.Position);
                 writer.WriteNextCol(cmt.RotationEuler);
@@ -1081,17 +1072,13 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var item in scene.storyObjectTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 //writer.WriteNextCol(item.zero_0x00);
                 writer.WriteNextCol(item.BoulderGroupOrderIndex);
@@ -1133,10 +1120,6 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             int count = 0;
             int total = scene.cullOverrideTriggers.Length;
             foreach (var item in scene.cullOverrideTriggers)
@@ -1144,10 +1127,10 @@ public static class StageTableLogger
                 count++;
 
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
 
                 writer.WriteNextCol(item.AddressRange.PrintStartAddress());
                 writer.WriteNextCol(item.AddressRange.PrintEndAddress());
@@ -1187,17 +1170,13 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var vfx in scene.visualEffectTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(vfx.Transform.Position);
                 writer.WriteNextCol(vfx.Transform.RotationEuler);
@@ -1244,10 +1223,6 @@ public static class StageTableLogger
             if (scene.fogCurves == null)
                 continue;
 
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             var totalD1 = scene.fogCurves.animationCurves.Length;
             var countD1 = 0;
             foreach (var animationCurve in scene.fogCurves.animationCurves)
@@ -1256,10 +1231,10 @@ public static class StageTableLogger
                 foreach (var keyableAttribute in animationCurve.KeyableAttributes)
                 {
                     writer.WriteNextCol(sceneFile.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
+                    writer.WriteNextCol(sceneFile.CourseIndex);
+                    writer.WriteNextCol(sceneFile.VenueDescription);
+                    writer.WriteNextCol(sceneFile.CourseDescription);
+                    writer.WriteNextCol(sceneFile.FileFormatDescription);
                     //
                     writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
                     writer.WriteNextCol($"[{countD1}/{totalD1}]");
@@ -1304,15 +1279,11 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             writer.WriteNextCol(sceneFile.FileName);
-            writer.WriteNextCol(scene.CourseIndex);
-            writer.WriteNextCol(venueID);
-            writer.WriteNextCol(courseID);
-            writer.WriteNextCol(isAxGx);
+            writer.WriteNextCol(sceneFile.CourseIndex);
+            writer.WriteNextCol(sceneFile.VenueDescription);
+            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.FileFormatDescription);
             //
             writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
             writer.WriteNextCol(scene.fog.Interpolation);
@@ -1440,7 +1411,7 @@ public static class StageTableLogger
                 int pointIndex = 0;
                 foreach (var trackPoint in trackNode.Checkpoints)
                 {
-                    writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
+                    writer.WriteNextCol($"COLI_COURSE{sceneFile.CourseIndex:d2}");
                     writer.WriteNextCol($"[{nodeIndex}/{nodeLength}]");
                     writer.WriteNextCol($"[{pointIndex}/{pointLength}]");
 
@@ -1511,7 +1482,7 @@ public static class StageTableLogger
             Scene scene = sceneFile;
             var staticColliderMeshes = scene.staticColliderMeshManager;
 
-            writer.WriteNextCol($"COLI_COURSE{scene.CourseIndex:d2}");
+            writer.WriteNextCol($"COLI_COURSE{sceneFile.CourseIndex:d2}");
             writer.WriteNextCol(staticColliderMeshes.AddressRange.PrintStartAddress());
             writer.WriteNextCol(index++);
             writer.WriteNextCol(staticColliderMeshes.StaticColliderTrisPtr.PrintAddress);
@@ -1562,10 +1533,6 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             // Get all the scene object references
             var sceneObjectLODs = new List<SceneObjectLOD>();
             foreach (var templateSceneObject in scene.sceneObjects)
@@ -1585,10 +1552,10 @@ public static class StageTableLogger
             foreach (var sceneObjectLOD in sceneObjectLODs)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(sceneObjectLOD.Name);
                 writer.WriteNextCol(sceneObjectLOD.AddressRange.PrintStartAddress());
@@ -1626,10 +1593,6 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             // Get all the scene object references
             var sceneObjectsList = new List<(SceneObject sceneObject, string soCategory)>();
             foreach (var sceneInstance in scene.sceneObjects)
@@ -1646,10 +1609,10 @@ public static class StageTableLogger
             foreach (var (sceneObject, soCategory) in sceneObjectsList)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(sceneObject.PrimaryLOD.Name);
                 writer.WriteNextCol(soCategory);
@@ -1692,10 +1655,6 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var template in scene.sceneObjects)
             {
                 var index = 0;
@@ -1703,10 +1662,10 @@ public static class StageTableLogger
                 foreach (var sceneObject in template.LODs)
                 {
                     writer.WriteNextCol(sceneFile.FileName);
-                    writer.WriteNextCol(scene.CourseIndex);
-                    writer.WriteNextCol(venueID);
-                    writer.WriteNextCol(courseID);
-                    writer.WriteNextCol(isAxGx);
+                    writer.WriteNextCol(sceneFile.CourseIndex);
+                    writer.WriteNextCol(sceneFile.VenueDescription);
+                    writer.WriteNextCol(sceneFile.CourseDescription);
+                    writer.WriteNextCol(sceneFile.FileFormatDescription);
                     //
                     writer.WriteNextCol(template.Name);
                     writer.WriteNextCol(template.LodRenderFlags);
@@ -1748,15 +1707,12 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
+            //
             writer.WriteNextCol(sceneFile.FileName);
-            writer.WriteNextCol(scene.CourseIndex);
-            writer.WriteNextCol(venueID);
-            writer.WriteNextCol(courseID);
-            writer.WriteNextCol(isAxGx);
+            writer.WriteNextCol(sceneFile.CourseIndex);
+            writer.WriteNextCol(sceneFile.VenueDescription);
+            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.FileFormatDescription);
             //
             writer.WriteNextCol(scene.UnkRange0x00.near);
             writer.WriteNextCol(scene.UnkRange0x00.far);
@@ -1791,17 +1747,13 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var surfaceAttributeArea in scene.embeddedPropertyAreas)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(surfaceAttributeArea.LengthFrom);
                 writer.WriteNextCol(surfaceAttributeArea.LengthTo);
@@ -1840,17 +1792,13 @@ public static class StageTableLogger
         foreach (var sceneFile in sceneFiles)
         {
             Scene scene = sceneFile;
-            var venueID = CourseUtility.GetVenueID(scene.CourseIndex).GetDescription();
-            var courseID = ((CourseIndexAX)scene.CourseIndex).GetDescription();
-            var isAxGx = scene.IsFileGX ? "GX" : "AX";
-
             foreach (var unkSols in scene.unknownColliders)
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(scene.CourseIndex);
-                writer.WriteNextCol(venueID);
-                writer.WriteNextCol(courseID);
-                writer.WriteNextCol(isAxGx);
+                writer.WriteNextCol(sceneFile.CourseIndex);
+                writer.WriteNextCol(sceneFile.VenueDescription);
+                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(unkSols.SceneObjectPtr);
                 writer.WriteNextCol(unkSols.Transform.Position);
