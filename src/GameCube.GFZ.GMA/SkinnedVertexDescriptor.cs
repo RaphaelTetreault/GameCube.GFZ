@@ -1,61 +1,60 @@
 ﻿using Manifold.IO;
-using System;
-using System.IO;
 
-namespace GameCube.GFZ.GMA
+namespace GameCube.GFZ.GMA;
+
+/// <summary>
+///     
+/// </summary>
+public class SkinnedVertexDescriptor :
+    IBinaryAddressable,
+    IBinarySerializable
 {
-    public class SkinnedVertexDescriptor :
-        IBinaryAddressable,
-        IBinarySerializable
+    // FIELDS
+    private int skinnedVertexBCount;
+    private Offset skinnedVerticesAPtrOffset;
+    private Offset skinnedVerticesBPtrOffset;
+    private Offset skinBoneBindingsPtrOffset;
+    private Offset unkBoneIndicesPtrOffset;
+
+
+    // PROPERTIES
+    public AddressRange AddressRange { get; set; }
+    public int SkinnedVerticesACount
     {
-        // FIELDS
-        private int skinnedVertexBCount;
-        private Offset skinnedVerticesAPtrOffset;
-        private Offset skinnedVerticesBPtrOffset;
-        private Offset skinBoneBindingsPtrOffset;
-        private Offset unkBoneIndicesPtrOffset;
+        get => (UnkBoneIndicesPtrOffset - SkinnedVerticesAPtrOffset) / 0x20;
+    }
+    public int SkinnedVerticesBCount { get => skinnedVertexBCount; set => skinnedVertexBCount = value; }
+    public Offset SkinnedVerticesAPtrOffset { get => skinnedVerticesAPtrOffset; set => skinnedVerticesAPtrOffset = value; }
+    public Offset SkinnedVerticesBPtrOffset { get => skinnedVerticesBPtrOffset; set => skinnedVerticesBPtrOffset = value; }
+    public Offset SkinBoneBindingsPtrOffset { get => skinBoneBindingsPtrOffset; set => skinBoneBindingsPtrOffset = value; }
+    public Offset UnkBoneIndicesPtrOffset { get => unkBoneIndicesPtrOffset; set => unkBoneIndicesPtrOffset = value; }
 
 
-        // PROPERTIES
-        public AddressRange AddressRange { get; set; }
-        public int SkinnedVerticesACount
+    // METHODS
+    public void Deserialize(EndianBinaryReader reader)
+    {
+        this.RecordStartAddress(reader);
         {
-            get => (UnkBoneIndicesPtrOffset - SkinnedVerticesAPtrOffset) / 0x20;
+            reader.Read(ref skinnedVertexBCount);
+            reader.Read(ref skinnedVerticesAPtrOffset);
+            reader.Read(ref skinnedVerticesBPtrOffset);
+            reader.Read(ref skinBoneBindingsPtrOffset);
+            reader.Read(ref unkBoneIndicesPtrOffset);
         }
-        public int SkinnedVerticesBCount { get => skinnedVertexBCount; set => skinnedVertexBCount = value; }
-        public Offset SkinnedVerticesAPtrOffset { get => skinnedVerticesAPtrOffset; set => skinnedVerticesAPtrOffset = value; }
-        public Offset SkinnedVerticesBPtrOffset { get => skinnedVerticesBPtrOffset; set => skinnedVerticesBPtrOffset = value; }
-        public Offset SkinBoneBindingsPtrOffset { get => skinBoneBindingsPtrOffset; set => skinBoneBindingsPtrOffset = value; }
-        public Offset UnkBoneIndicesPtrOffset { get => unkBoneIndicesPtrOffset; set => unkBoneIndicesPtrOffset = value; }
+        this.RecordEndAddress(reader);
+    }
 
-
-        // METHODS
-        public void Deserialize(EndianBinaryReader reader)
+    public void Serialize(EndianBinaryWriter writer)
+    {
+        this.RecordStartAddress(writer);
         {
-            this.RecordStartAddress(reader);
-            {
-                reader.Read(ref skinnedVertexBCount);
-                reader.Read(ref skinnedVerticesAPtrOffset);
-                reader.Read(ref skinnedVerticesBPtrOffset);
-                reader.Read(ref skinBoneBindingsPtrOffset);
-                reader.Read(ref unkBoneIndicesPtrOffset);
-            }
-            this.RecordEndAddress(reader);
+            writer.Write(skinnedVertexBCount);
+            writer.Write(skinnedVerticesAPtrOffset);
+            writer.Write(skinnedVerticesBPtrOffset);
+            writer.Write(skinBoneBindingsPtrOffset);
+            writer.Write(unkBoneIndicesPtrOffset);
         }
-
-        public void Serialize(EndianBinaryWriter writer)
-        {
-            this.RecordStartAddress(writer);
-            {
-                writer.Write(skinnedVertexBCount);
-                writer.Write(skinnedVerticesAPtrOffset);
-                writer.Write(skinnedVerticesBPtrOffset);
-                writer.Write(skinBoneBindingsPtrOffset);
-                writer.Write(unkBoneIndicesPtrOffset);
-            }
-            this.RecordEndAddress(writer);
-        }
-
+        this.RecordEndAddress(writer);
     }
 
 }

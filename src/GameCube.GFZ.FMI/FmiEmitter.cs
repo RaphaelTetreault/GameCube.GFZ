@@ -10,7 +10,6 @@ namespace GameCube.GFZ.FMI;
 /// <remarks>
 ///     `targetOffset` only applies to booster custom parts 6, 7, and 23 (angled thrusters).
 /// </remarks>
-[Serializable]
 public class FmiEmitter :
     IBinarySerializable,
     IBinaryAddressable,

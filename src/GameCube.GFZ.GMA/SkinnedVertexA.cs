@@ -1,57 +1,55 @@
 ﻿using Manifold.IO;
-using System.IO;
 using System.Numerics;
 
-namespace GameCube.GFZ.GMA
+namespace GameCube.GFZ.GMA;
+
+/// <summary>
+///     Appears to be a GX vertex meant for skinning. It is not part of a formal
+///     display list. The GXAttributes properly describe this as having position,
+///     normal, and texture0. May have something to do with GXAttributes.GX_VA_PNMTXIDX.
+/// </summary>
+/// <remarks>
+///     Notes: regarding textureUV0: it is indeed stored as TEX0 in the GXAttributes.
+///     However, the data does not need to be for texturing. TEX0.u stores some 
+///     "magic bits" while TEX0.v stores a (normalized?) float, perhaps for weighting.
+/// </remarks>
+public class SkinnedVertexA :
+    IBinaryAddressable,
+    IBinarySerializable
 {
-    /// <summary>
-    /// Appears to be a GX vertex meant for skinning. It is not part of a formal
-    /// display list. The GXAttributes properly describe this as having position,
-    /// normal, and texture0. May have something to do with GXAttributes.GX_VA_PNMTXIDX.
-    /// </summary>
-    /// <remarks>
-    /// Notes: regarding textureUV0: it is indeed stored as TEX0 in the GXAttributes.
-    /// However, the data does not need to be for texturing. TEX0.u stores some 
-    /// "magic bits" while TEX0.v stores a (normalized?) float, perhaps for weighting.
-    /// </remarks>
-    public class SkinnedVertexA :
-        IBinaryAddressable,
-        IBinarySerializable
+    // FIELDS
+    private Vector3 position;
+    private Vector3 normal;
+    private Vector2 textureUV0;
+
+    // PROPERTIES
+    public AddressRange AddressRange { get; set; }
+    public Vector3 Position { get => position; set => position = value; }
+    public Vector3 Normal { get => normal; set => normal = value; }
+    public Vector2 TextureUV0 { get => textureUV0; set => textureUV0 = value; }
+
+
+    // METHODS
+    public void Deserialize(EndianBinaryReader reader)
     {
-        // FIELDS
-        private Vector3 position;
-        private Vector3 normal;
-        private Vector2 textureUV0;
-
-        // PROPERTIES
-        public AddressRange AddressRange { get; set; }
-        public Vector3 Position { get => position; set => position = value; }
-        public Vector3 Normal { get => normal; set => normal = value; }
-        public Vector2 TextureUV0 { get => textureUV0; set => textureUV0 = value; }
-
-
-        // METHODS
-        public void Deserialize(EndianBinaryReader reader)
+        this.RecordStartAddress(reader);
         {
-            this.RecordStartAddress(reader);
-            {
-                reader.Read(ref position);
-                reader.Read(ref normal);
-                reader.Read(ref textureUV0);
-            }
-            this.RecordEndAddress(reader);
+            reader.Read(ref position);
+            reader.Read(ref normal);
+            reader.Read(ref textureUV0);
         }
-
-        public void Serialize(EndianBinaryWriter writer)
-        {
-            this.RecordStartAddress(writer);
-            {
-                writer.Write(position);
-                writer.Write(normal);
-                writer.Write(textureUV0);
-            }
-            this.RecordEndAddress(writer);
-        }
-
+        this.RecordEndAddress(reader);
     }
+
+    public void Serialize(EndianBinaryWriter writer)
+    {
+        this.RecordStartAddress(writer);
+        {
+            writer.Write(position);
+            writer.Write(normal);
+            writer.Write(textureUV0);
+        }
+        this.RecordEndAddress(writer);
+    }
+
 }
