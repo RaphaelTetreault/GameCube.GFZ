@@ -1,17 +1,14 @@
 using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
     /// <summary>
-    /// Represents a transformation. This is used on scene objects specifically. TRXS is 
-    /// indicative of the values stored. T:translation, R:rotation, X:extra, S: scale.
-    /// As noted, it contains "extra" bits.
+    ///     Represents a transformation. This is used on scene objects specifically. TRXS is 
+    ///     indicative of the values stored. T:translation, R:rotation, X:extra, S: scale.
+    ///     As noted, it contains "extra" bits.
     /// </summary>
-    [Serializable]
     public sealed class TransformTRXS :
         IBinarySerializable,
         IBinaryAddressable,
@@ -23,7 +20,7 @@ namespace GameCube.GFZ.Stage
         private CompressedRotation compressedRotation;
         private UnknownTransformOption unknownOption;
         private ObjectActiveOverride objectActiveOverride;
-        private Vector3 scale = new Vector3(1,1,1);
+        private Vector3 scale = Vector3.One;
 
 
         // PROPERTIES

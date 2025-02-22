@@ -1,155 +1,151 @@
 using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 using System.Numerics;
 
-namespace GameCube.GFZ.Stage
+namespace GameCube.GFZ.Stage;
+
+/// <summary>
+///     A trigger for special Story Mode objects.
+/// </summary>
+/// <remarks>
+///     This structure is used for the following missions:
+///     <list type="bullet">
+///         <description></description>
+///         <item>
+///             <term>Story 1: Captain Falcon Trains</term>
+///             <description>
+///                 F-Zero GX only! Represents collectable capsule's trigger.
+///                 AX Story 1 capsule data was previously in the <see cref="MiscellaneousTrigger "/> type.
+///             </description>
+///        </item>
+///        <item>
+///            <term>Story 2: Goroh the Vengeful Samurai</term>
+///            <description>Represents boulders, their trigger, and their animation paths.</description>
+///        </item>
+///        <item>
+///            <term>Story 5: Save Jody!</term>
+///            <description>Represents energy capsule's trigger.</description>
+///        </item>
+///     </list>
+/// </remarks>
+public sealed class StoryObjectTrigger :
+    IBinaryAddressable,
+    IBinarySerializable,
+    IHasReference,
+    ITextPrintable
 {
-    /// <summary>
-    /// A trigger for special Story Mode objects.
-    /// </summary>
-    /// <remarks>
-    /// This structure is used for the following missions:
-    /// <list type="bullet">
-    ///     <description></description>
-    ///     <item>
-    ///         <term>Story 1: Captain Falcon Trains</term>
-    ///         <description>
-    ///             F-Zero GX only! Represents collectable capsule's trigger.
-    ///             AX Story 1 capsule data was previously in the <see cref="MiscellaneousTrigger "/> type.
-    ///         </description>
-    ///     </item>
-    ///     <item>
-    ///         <term>Story 2: Goroh the Vengeful Samurai</term>
-    ///         <description>Represents boulders, their trigger, and their animation paths.</description>
-    ///     </item>
-    ///     <item>
-    ///         <term>Story 5: Save Jody!</term>
-    ///         <description>Represents energy capsule's trigger.</description>
-    ///     </item>
-    /// </list>
-    /// </remarks>
-    [Serializable]
-    public sealed class StoryObjectTrigger :
-        IBinaryAddressable,
-        IBinarySerializable,
-        IHasReference,
-        ITextPrintable
+    // FIELDS
+    private ushort zero_0x00;
+    private byte boulderGroupOrderIndex;
+    private byte boulderGroupAndDifficulty; // split lower/upper 4 bits, see properties
+    private Vector3 story2BoulderScale;
+    private Pointer story2BoulderPathPtr;
+    private Vector3 scale;    // trigger scale
+    private Vector3 rotation; // trigger rotation
+    private Vector3 position; // trigger position
+    // FIELDS (deserialized from pointers)
+    private StoryObjectPath storyObjectPath;
+
+
+    // PROPERTIES
+    public AddressRange AddressRange { get; set; }
+    public StoryDifficulty Difficulty
     {
-        // FIELDS
-        private ushort zero_0x00;
-        private byte boulderGroupOrderIndex;
-        private byte boulderGroupAndDifficulty; // split lower/upper 4 bits, see properties
-        private Vector3 story2BoulderScale;
-        private Pointer story2BoulderPathPtr;
-        private Vector3 scale;    // trigger scale
-        private Vector3 rotation; // trigger rotation
-        private Vector3 position; // trigger position
-        // FIELDS (deserialized from pointers)
-        private StoryObjectPath storyObjectPath;
-
-
-        // PROPERTIES
-        public AddressRange AddressRange { get; set; }
-        public StoryDifficulty Difficulty
+        get
         {
-            get
-            {
-                // Lower 4 bits are for difficulty
-                return (StoryDifficulty)(BoulderGroupAndDifficulty & 0b00001111);
-            }
+            // Lower 4 bits are for difficulty
+            return (StoryDifficulty)(BoulderGroupAndDifficulty & 0b00001111);
         }
-        public byte BoulderGroup
-        {
-            get
-            {
-                // Upper 4 bits are for group of boulders which fall
-                return (byte)(BoulderGroupAndDifficulty >> 4);
-            }
-        }
-        public byte BoulderGroupOrderIndex { get => boulderGroupOrderIndex; set => boulderGroupOrderIndex = value; }
-        public byte BoulderGroupAndDifficulty { get => boulderGroupAndDifficulty; set => boulderGroupAndDifficulty = value; }
-        public Vector3 Story2BoulderScale { get => story2BoulderScale; set => story2BoulderScale = value; }
-        public Pointer Story2BoulderPathPtr { get => story2BoulderPathPtr; set => story2BoulderPathPtr = value; }
-        public Vector3 Scale { get => scale; set => scale = value; }
-        public Vector3 Rotation { get => rotation; set => rotation = value; }
-        public Vector3 Position { get => position; set => position = value; }
-        public StoryObjectPath StoryObjectPath { get => storyObjectPath; set => storyObjectPath = value; }
-
-
-        // METHODS
-        public void Deserialize(EndianBinaryReader reader)
-        {
-            this.RecordStartAddress(reader);
-            {
-                reader.Read(ref zero_0x00);
-                reader.Read(ref boulderGroupOrderIndex);
-                reader.Read(ref boulderGroupAndDifficulty);
-                reader.Read(ref story2BoulderScale);
-                reader.Read(ref story2BoulderPathPtr);
-                reader.Read(ref scale);
-                reader.Read(ref rotation);
-                reader.Read(ref position);
-            }
-            this.RecordEndAddress(reader);
-            {
-                if (story2BoulderPathPtr.IsNotNull)
-                {
-                    // Read array pointer
-                    reader.JumpToAddress(story2BoulderPathPtr);
-                    reader.Read(ref storyObjectPath);
-                }
-                Assert.IsTrue(zero_0x00 == 0);
-            }
-            this.SetReaderToEndAddress(reader);
-        }
-
-        public void Serialize(EndianBinaryWriter writer)
-        {
-            {
-                Assert.IsTrue(zero_0x00 == 0);
-                story2BoulderPathPtr = storyObjectPath.GetPointer();
-            }
-            this.RecordStartAddress(writer);
-            {
-                writer.Write(zero_0x00);
-                writer.Write(boulderGroupOrderIndex);
-                writer.Write(boulderGroupAndDifficulty);
-                writer.Write(story2BoulderScale);
-                writer.Write(story2BoulderPathPtr);
-                writer.Write(scale);
-                writer.Write(rotation);
-                writer.Write(position);
-            }
-            this.RecordEndAddress(writer);
-        }
-
-        public void ValidateReferences()
-        {
-            Assert.ReferencePointer(StoryObjectPath, Story2BoulderPathPtr);
-        }
-
-        public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
-        {
-            builder.AppendLineIndented(indent, indentLevel, nameof(StoryObjectTrigger));
-            indentLevel++;
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Position)}: {Position}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Rotation)}: {Rotation}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Scale)}: {Scale}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroupOrderIndex)}: {BoulderGroupOrderIndex}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroup)}: {BoulderGroup}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Difficulty)}: {Difficulty}");
-            builder.AppendLineIndented(indent, indentLevel, $"{nameof(Story2BoulderScale)}: {Story2BoulderScale}");
-            builder.AppendMultiLineIndented(indent, indentLevel, StoryObjectPath);
-        }
-
-        public string PrintSingleLine()
-        {
-            return nameof(StoryObjectTrigger);
-        }
-
-        public override string ToString() => PrintSingleLine();
-
     }
+    public byte BoulderGroup
+    {
+        get
+        {
+            // Upper 4 bits are for group of boulders which fall
+            return (byte)(BoulderGroupAndDifficulty >> 4);
+        }
+    }
+    public byte BoulderGroupOrderIndex { get => boulderGroupOrderIndex; set => boulderGroupOrderIndex = value; }
+    public byte BoulderGroupAndDifficulty { get => boulderGroupAndDifficulty; set => boulderGroupAndDifficulty = value; }
+    public Vector3 Story2BoulderScale { get => story2BoulderScale; set => story2BoulderScale = value; }
+    public Pointer Story2BoulderPathPtr { get => story2BoulderPathPtr; set => story2BoulderPathPtr = value; }
+    public Vector3 Scale { get => scale; set => scale = value; }
+    public Vector3 Rotation { get => rotation; set => rotation = value; }
+    public Vector3 Position { get => position; set => position = value; }
+    public StoryObjectPath StoryObjectPath { get => storyObjectPath; set => storyObjectPath = value; }
+
+
+    // METHODS
+    public void Deserialize(EndianBinaryReader reader)
+    {
+        this.RecordStartAddress(reader);
+        {
+            reader.Read(ref zero_0x00);
+            reader.Read(ref boulderGroupOrderIndex);
+            reader.Read(ref boulderGroupAndDifficulty);
+            reader.Read(ref story2BoulderScale);
+            reader.Read(ref story2BoulderPathPtr);
+            reader.Read(ref scale);
+            reader.Read(ref rotation);
+            reader.Read(ref position);
+        }
+        this.RecordEndAddress(reader);
+        {
+            if (story2BoulderPathPtr.IsNotNull)
+            {
+                // Read array pointer
+                reader.JumpToAddress(story2BoulderPathPtr);
+                reader.Read(ref storyObjectPath);
+            }
+            Assert.IsTrue(zero_0x00 == 0);
+        }
+        this.SetReaderToEndAddress(reader);
+    }
+
+    public void Serialize(EndianBinaryWriter writer)
+    {
+        {
+            Assert.IsTrue(zero_0x00 == 0);
+            story2BoulderPathPtr = storyObjectPath.GetPointer();
+        }
+        this.RecordStartAddress(writer);
+        {
+            writer.Write(zero_0x00);
+            writer.Write(boulderGroupOrderIndex);
+            writer.Write(boulderGroupAndDifficulty);
+            writer.Write(story2BoulderScale);
+            writer.Write(story2BoulderPathPtr);
+            writer.Write(scale);
+            writer.Write(rotation);
+            writer.Write(position);
+        }
+        this.RecordEndAddress(writer);
+    }
+
+    public void ValidateReferences()
+    {
+        Assert.ReferencePointer(StoryObjectPath, Story2BoulderPathPtr);
+    }
+
+    public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
+    {
+        builder.AppendLineIndented(indent, indentLevel, nameof(StoryObjectTrigger));
+        indentLevel++;
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(Position)}: {Position}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(Rotation)}: {Rotation}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(Scale)}: {Scale}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroupOrderIndex)}: {BoulderGroupOrderIndex}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(BoulderGroup)}: {BoulderGroup}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(Difficulty)}: {Difficulty}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(Story2BoulderScale)}: {Story2BoulderScale}");
+        builder.AppendMultiLineIndented(indent, indentLevel, StoryObjectPath);
+    }
+
+    public string PrintSingleLine()
+    {
+        return nameof(StoryObjectTrigger);
+    }
+
+    public override string ToString() => PrintSingleLine();
+
 }

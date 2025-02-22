@@ -1,11 +1,10 @@
-﻿namespace GameCube.GFZ.Stage
+﻿namespace GameCube.GFZ.Stage;
+
+/// <summary>
+///     
+/// </summary>
+public enum SerializeFormat
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum SerializeFormat
-    {
-        AX = 2,
-        GX = 1,
-    }
+    AX = 2,
+    GX = 1,
 }

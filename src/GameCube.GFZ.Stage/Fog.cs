@@ -1,39 +1,37 @@
 using Manifold;
 using Manifold.IO;
 using System;
-using System.IO;
 using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
     /// <summary>
-    /// Defines parameters to produce and render fog.
+    ///     Defines parameters to produce and render fog.
     /// </summary>
     /// <remarks>
     /// These are notes on the observed fog color values in all stage files for AX and GX.
-    /// + Inline comments for Aeropolis and Green Plant. They have quirks.
-    /// + GPI and GPMR differ from GPS. Soft dull blue vs soft dull green, respectively.
-    ///
-    /// Imprecision Differences
-    /// Some color values are barely different between stages/venues. It appears that
-    /// someone went and standardize this later on, but some differences still exist.
-    /// 
-    /// + Aeropolis - GX tracks AM ADS vs AX track ASD (track, not game)
-    /// + Port Town - GX tracks PTAD PTLP vs AX track PTCW (track, not game)
-    /// + Green Plant - between GX tracks.
-    ///
-    /// AX Color Differences
-    /// I did not write template fields methods for AX _story_ stages since they are WIP values.
-    ///
-    /// + Big Blue Story. AX has default value of black. This changed in GX.
-    /// + Casino Palace [Double Branches]. AX has non-black value #0a0a0a. In anim data, is #18303c (blue). GX uses black.
-    /// + Phantom Road. AX has near-black value #00001a. GX uses black.
-    /// + Port Town [Long Pipe]. AX has different value, #785028 deeper brown than GX's #81634a.
-    /// + Port Town Story. AX has near-black #050505. GX uses black.
-    /// + Sand Ocean. AX has non-black value #FFFFFF pure white. GX uses black.
-    /// + AX Loop Cross test (broken) has #0a050f, near black purple value. GX uses #181a1e - very dark blue.
+    ///     + Inline comments for Aeropolis and Green Plant. They have quirks.
+    ///     + GPI and GPMR differ from GPS. Soft dull blue vs soft dull green, respectively.
+    ///     
+    ///     Imprecision Differences
+    ///     Some color values are barely different between stages/venues. It appears that
+    ///     someone went and standardize this later on, but some differences still exist.
+    ///     
+    ///     + Aeropolis - GX tracks AM ADS vs AX track ASD (track, not game)
+    ///     + Port Town - GX tracks PTAD PTLP vs AX track PTCW (track, not game)
+    ///     + Green Plant - between GX tracks.
+    ///     
+    ///     AX Color Differences
+    ///     I did not write template fields methods for AX _story_ stages since they are WIP values.
+    ///     
+    ///     + Big Blue Story. AX has default value of black. This changed in GX.
+    ///     + Casino Palace [Double Branches]. AX has non-black value #0a0a0a. In anim data, is #18303c (blue). GX uses black.
+    ///     + Phantom Road. AX has near-black value #00001a. GX uses black.
+    ///     + Port Town [Long Pipe]. AX has different value, #785028 deeper brown than GX's #81634a.
+    ///     + Port Town Story. AX has near-black #050505. GX uses black.
+    ///     + Sand Ocean. AX has non-black value #FFFFFF pure white. GX uses black.
+    ///     + AX Loop Cross test (broken) has #0a050f, near black purple value. GX uses #181a1e - very dark blue.
     /// </remarks>
-    [Serializable]
     public sealed class Fog :
         IBinaryAddressable,
         IBinarySerializable,

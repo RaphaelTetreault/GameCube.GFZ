@@ -1,33 +1,30 @@
 using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 using System.Numerics;
 
 namespace GameCube.GFZ.Stage
 {
     /// <summary>
-    /// Defines an absolute, untransformed bounds along the X and Z axes. This is used as metadata to know
-    /// the dimensions of the course as viewed from a top-down view. It is used to deconstruct the racing 
-    /// checkpoint grid (8x8 overlapping grid inside bounds) and the triangle and quad collision grid 
-    /// (16x16 overlapping grid inside bounds).
+    ///     Defines an absolute, untransformed bounds along the X and Z axes. This is used as metadata to know
+    ///     the dimensions of the course as viewed from a top-down view. It is used to deconstruct the racing 
+    ///     checkpoint grid (8x8 overlapping grid inside bounds) and the triangle and quad collision grid 
+    ///     (16x16 overlapping grid inside bounds).
     /// </summary>
     /// <remarks>
-    /// NOTE: OVERLAP GENERATION
-    /// I think the math to compute the overlapping grid is something like:
-    /// 1) Take total subdivisions along axis, subtract 1 from each axis
-    /// 2) Create grid: (n-1 by n-1). Ex: 8x8 subdivisions = 7x7 grid.
-    /// 3) For each cell, use elements that fall inside grid at index and index+1
-    ///      Example: cell 0,0 uses subdivision (0,0), (0,1), (1,0), and (1,1)
-    /// This effectively creates cells with some overlap between each other
-    /// This concept could be further enhanced by creating more subdivisions and overlapping
-    /// a small amount of cells. This is ideal in reducing reference counts.
-    ///
-    /// Notes from the future: looks like it's using (more or less) index +-2 cells in X/Z
-    /// direction. There appears to be a min include sive. Though, I think what you generate
-    /// will work using this.
+    ///     NOTE: OVERLAP GENERATION
+    ///     I think the math to compute the overlapping grid is something like:
+    ///     1) Take total subdivisions along axis, subtract 1 from each axis
+    ///     2) Create grid: (n-1 by n-1). Ex: 8x8 subdivisions = 7x7 grid.
+    ///     3) For each cell, use elements that fall inside grid at index and index+1
+    ///          Example: cell 0,0 uses subdivision (0,0), (0,1), (1,0), and (1,1)
+    ///     This effectively creates cells with some overlap between each other
+    ///     This concept could be further enhanced by creating more subdivisions and overlapping
+    ///     a small amount of cells. This is ideal in reducing reference counts.
+    ///     
+    ///     Notes from the future: looks like it's using (more or less) index +-2 cells in X/Z
+    ///     direction. There appears to be a min include sive. Though, I think what you generate
+    ///     will work using this.
     /// </remarks>
-    [Serializable]
     public sealed class GridXZ :
         IBinaryAddressable,
         IBinarySerializable,

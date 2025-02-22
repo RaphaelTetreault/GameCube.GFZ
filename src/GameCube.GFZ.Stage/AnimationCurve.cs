@@ -1,30 +1,26 @@
 ﻿using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 
 namespace GameCube.GFZ.Stage
 {
     /// <summary>
-    /// A series of animation keys to define how a singular float value changes over "time"
+    ///     A series of animation keys to define how a singular float value changes over "time"
     /// </summary>
     /// <remarks>
-    /// Structurally, this class is a simple wrapper around a KeyableAttribute[].
+    ///     Structurally, this class is a simple wrapper around a KeyableAttribute[].
     /// </remarks>
-    [Serializable]
     public sealed class AnimationCurve :
         IBinaryAddressable,
         IBinarySerializable,
         ITextPrintable
     {
         // FIELDS
-        private KeyableAttribute[] keyableAttributes = new KeyableAttribute[0];
+        private KeyableAttribute[] keyableAttributes = [];
 
 
         // CONSTRUCTORS
         public AnimationCurve()
         {
-            keyableAttributes = new KeyableAttribute[0];
         }
         public AnimationCurve(int numKeyables)
         {

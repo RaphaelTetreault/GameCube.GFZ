@@ -1,37 +1,36 @@
-namespace GameCube.GFZ.Stage
+namespace GameCube.GFZ.Stage;
+
+/// <summary>
+///     Metadata which defines the purpose of <see cref="TrackSegment"/>.
+/// </summary>
+public enum TrackSegmentType : byte
 {
     /// <summary>
-    /// 
+    ///     When set to nothing, TrackProperty has a value.
     /// </summary>
-    public enum TrackSegmentType : byte
-    {
-        /// <summary>
-        /// When set to nothing, TrackProperty has a value.
-        /// </summary>
-        IsEmbed = 0, // 0x00
+    IsEmbed = 0, // 0x00
 
-        /// <summary>
-        /// The flag for pipes or cylinders when NOT using TrackProperty?
-        /// </summary>
-        IsPipeOrCylinder = 1 << 0, // 0x01
+    /// <summary>
+    ///     The flag for pipes or cylinders when NOT using TrackProperty?
+    /// </summary>
+    IsPipeOrCylinder = 1 << 0, // 0x01
 
-        /// <summary>
-        /// Flag when this is the final node EXCLUDING children for TrackProperties
-        /// If children is ice, dirt, etc, then will have this flag ON
-        /// If children is pipe type, then flag will be [1 << 3] and have no [1 << 1]
-        /// </summary>
-        IsTrack = 1 << 1, // 0x02
+    /// <summary>
+    ///     Flag when this is the final node EXCLUDING children for TrackProperties
+    ///     If children is ice, dirt, etc, then will have this flag ON
+    ///     If children is pipe type, then flag will be [1 << 3] and have no [1 << 1]
+    /// </summary>
+    IsTrack = 1 << 1, // 0x02
 
-        /// <summary>
-        /// Node is one of multiple children (parent of this has multiple children).
-        /// Often used for double dirt on sides, branching paths, etc? (are there more cases?)
-        /// </summary>
-        IsBranch = 1 << 2, // 0x04
+    /// <summary>
+    ///     Node is one of multiple children (parent of this has multiple children).
+    ///     Often used for double dirt on sides, branching paths, etc? (are there more cases?)
+    /// </summary>
+    IsBranch = 1 << 2, // 0x04
 
-        /// <summary>
-        /// Node will always have a child (assert assumption) with the same code or "IsTransformLeaf".
-        /// </summary>
-        IsMatrix = 1 << 3, // 0x08
-    }
+    /// <summary>
+    ///     Node will always have a child (assert assumption) with the same code or "IsTransformLeaf".
+    /// </summary>
+    IsMatrix = 1 << 3, // 0x08
 }
 

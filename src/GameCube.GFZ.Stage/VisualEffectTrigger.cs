@@ -1,15 +1,12 @@
 using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 
 namespace GameCube.GFZ.Stage
 {
     /// <summary>
-    /// A volume which triggers some visial effect.
-    /// NOTE: assumed mesh scale for trigger is 10xyz
+    ///     A volume which triggers some visial effect.
+    ///     NOTE: assumed mesh scale for trigger is 10xyz
     /// </summary>
-    [Serializable]
     public sealed class VisualEffectTrigger :
         IBinaryAddressable,
         IBinarySerializable,

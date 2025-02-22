@@ -1,111 +1,107 @@
-﻿using Manifold;
+﻿// NOTES:
+// Indexes 0-3 ARE USED
+//  idx0: uv.Xy scrolling (or, at least, on some models)
+//  idx1: ?
+//  idx2: ?
+//  idx3: ?
+// Indexes 4-11 unused, always (0f, 0f)
+
+using Manifold;
 using Manifold.IO;
-using System;
-using System.IO;
 
-namespace GameCube.GFZ.Stage
+namespace GameCube.GFZ.Stage;
+
+/// <summary>
+///     Texture metadata. In some instasnces defines how a texture scrolls.
+/// </summary>
+public sealed class TextureScroll :
+    IBinaryAddressable,
+    IBinarySerializable,
+    IHasReference,
+    ITextPrintable
 {
-    // NOTES:
-    // Indexes 0-3 ARE USED
-    //  idx0: uv.Xy scrolling (or, at least, on some models)
-    //  idx1: ?
-    //  idx2: ?
-    //  idx3: ?
-    // Indexes 4-11 unused, always (0f, 0f)
+    // CONSTANTS
+    public const int kCount = 12;
+    public const int kUsedCount = 4;
 
-    /// <summary>
-    /// Texture metadata. In some instasnces defines how a texture scrolls.
-    /// </summary>
-    [Serializable]
-    public sealed class TextureScroll :
-        IBinaryAddressable,
-        IBinarySerializable,
-        IHasReference,
-        ITextPrintable
+
+    // FIELDS
+    private Pointer[] fieldPtrs;
+    // REFERENCE FIELDS
+    private TextureScrollField[] fields = new TextureScrollField[0]; // could you not init to size 12?
+
+
+    // PROPERTIES
+    public AddressRange AddressRange { get; set; }
+    public TextureScrollField[] Fields { get => fields; set => fields = value; }
+    public Pointer[] FieldPtrs { get => fieldPtrs; set => fieldPtrs = value; }
+
+
+    // METHODS
+    public void Deserialize(EndianBinaryReader reader)
     {
-        // CONSTANTS
-        public const int kCount = 12;
-        public const int kUsedCount = 4;
-
-
-        // FIELDS
-        private Pointer[] fieldPtrs;
-        // REFERENCE FIELDS
-        private TextureScrollField[] fields = new TextureScrollField[0]; // could you not init to size 12?
-
-
-        // PROPERTIES
-        public AddressRange AddressRange { get; set; }
-        public TextureScrollField[] Fields { get => fields; set => fields = value; }
-        public Pointer[] FieldPtrs { get => fieldPtrs; set => fieldPtrs = value; }
-
-
-        // METHODS
-        public void Deserialize(EndianBinaryReader reader)
+        this.RecordStartAddress(reader);
         {
-            this.RecordStartAddress(reader);
-            {
-                reader.Read(ref fieldPtrs, kCount);
-            }
-            this.RecordEndAddress(reader);
-            {
-                fields = new TextureScrollField[kCount];
-                for (int i = 0; i < kCount; i++)
-                {
-                    var pointer = fieldPtrs[i];
-                    if (pointer.IsNotNull)
-                    {
-                        reader.JumpToAddress(pointer);
-                        reader.Read(ref fields[i]);
-                    }
-                }
-            }
-            this.SetReaderToEndAddress(reader);
+            reader.Read(ref fieldPtrs, kCount);
         }
-
-        public void Serialize(EndianBinaryWriter writer)
+        this.RecordEndAddress(reader);
         {
-            {
-                fieldPtrs = fields.GetPointers();
-            }
-            this.RecordStartAddress(writer);
-            {
-                writer.Write(fieldPtrs);
-            }
-            this.RecordEndAddress(writer);
-        }
-
-        public void ValidateReferences()
-        {
-            // Validate each field/pointer
+            fields = new TextureScrollField[kCount];
             for (int i = 0; i < kCount; i++)
             {
-                // reference can be to Vector2(0, 0)
-                Assert.ReferencePointer(fields[i], fieldPtrs[i]);
-
-                //if (fields[i] != null)
-                //    Assert.IsTrue(fields[i].X != 0 && fields[i].Y != 0);
+                var pointer = fieldPtrs[i];
+                if (pointer.IsNotNull)
+                {
+                    reader.JumpToAddress(pointer);
+                    reader.Read(ref fields[i]);
+                }
             }
         }
-
-        public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
-        {
-            builder.AppendLineIndented(indent, indentLevel, nameof(TextureScroll));
-            indentLevel++;
-            for (int i = 0; i < fields.Length; i++)
-            {
-                if (fields[i] == null)
-                    continue;
-                builder.AppendLineIndented(indent, indentLevel, $"[{i}] {fields[i]}");
-            }
-        }
-
-        public string PrintSingleLine()
-        {
-            return nameof(TextureScroll);
-        }
-
-        public override string ToString() => PrintSingleLine();
-
+        this.SetReaderToEndAddress(reader);
     }
+
+    public void Serialize(EndianBinaryWriter writer)
+    {
+        {
+            fieldPtrs = fields.GetPointers();
+        }
+        this.RecordStartAddress(writer);
+        {
+            writer.Write(fieldPtrs);
+        }
+        this.RecordEndAddress(writer);
+    }
+
+    public void ValidateReferences()
+    {
+        // Validate each field/pointer
+        for (int i = 0; i < kCount; i++)
+        {
+            // reference can be to Vector2(0, 0)
+            Assert.ReferencePointer(fields[i], fieldPtrs[i]);
+
+            //if (fields[i] != null)
+            //    Assert.IsTrue(fields[i].X != 0 && fields[i].Y != 0);
+        }
+    }
+
+    public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")
+    {
+        builder.AppendLineIndented(indent, indentLevel, nameof(TextureScroll));
+        indentLevel++;
+        for (int i = 0; i < fields.Length; i++)
+        {
+            if (fields[i] == null)
+                continue;
+            builder.AppendLineIndented(indent, indentLevel, $"[{i}] {fields[i]}");
+        }
+    }
+
+    public string PrintSingleLine()
+    {
+        return nameof(TextureScroll);
+    }
+
+    public override string ToString() => PrintSingleLine();
+
 }
