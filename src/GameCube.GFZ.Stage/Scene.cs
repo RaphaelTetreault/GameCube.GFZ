@@ -2,10 +2,8 @@
 using Manifold.IO;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace GameCube.GFZ.Stage
 {
@@ -90,7 +88,7 @@ namespace GameCube.GFZ.Stage
         public AddressRange AddressRange { get; set; }
 
         /// <summary>
-        ///     The serialization format to use on Serialize().
+        ///     The serialization format (Ax or GX) to use on Serialize().
         /// </summary>
         public SerializeFormat Format { get; set; }
 
@@ -115,22 +113,22 @@ namespace GameCube.GFZ.Stage
         public bool SerializeVerbose { get; set; }
 
         /// <summary>
-        /// An array of all the track segments in this scene.
+        ///     An array of all the track segments in this scene.
         /// </summary>
         public TrackSegment[] AllTrackSegments { get; set; } = [];
 
         /// <summary>
-        /// An array of the only the root track segments in this scene. 
+        ///     An array of the only the root track segments in this scene. 
         /// </summary>
         public TrackSegment[] RootTrackSegments { get; set; } = [];
 
         /// <summary>
-        /// An array of all the scene object names.
+        ///     An array of all the scene object names.
         /// </summary>
         public List<ShiftJisCString> SceneObjectNames { get; set; } = [];
 
         /// <summary>
-        /// An array of all the scene objecy LODs.
+        ///     An array of all the scene objecy LODs.
         /// </summary>
         public List<SceneObjectLOD> SceneObjectLODs { get; set; } = [];
 
