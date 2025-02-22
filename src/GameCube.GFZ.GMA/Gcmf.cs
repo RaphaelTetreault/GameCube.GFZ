@@ -41,7 +41,7 @@ public class Gcmf :
     private short[] unkBoneIndices = [];
 
     //
-    public string CRC32 { get; set; } = string.Empty;
+    public uint CRC32 { get; set; } = 0;
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
@@ -243,8 +243,13 @@ public class Gcmf :
             AddBytes(reader, vertBytes, submesh.SecondaryFrontFacing);
             AddBytes(reader, vertBytes, submesh.SecondaryBackFacing);
         }
-        // Compute CRC32 hash of texture data
-        CRC32 = System.IO.Hashing.Crc32.Hash(vertBytes.ToArray()).ConcatElements((byte b) => { return b.ToString("x2"); });
+
+        // Compute CRC32 hash of model data
+        byte[] hashBytes = System.IO.Hashing.Crc32.Hash([.. vertBytes]);
+        // Convert to big endian (the good endianness; fight me)
+        if (System.BitConverter.IsLittleEndian)
+            System.Array.Reverse(hashBytes);
+        CRC32 = System.BitConverter.ToUInt32(hashBytes, 0);
 
         reader.JumpToAddress(currentAddress);
     }
