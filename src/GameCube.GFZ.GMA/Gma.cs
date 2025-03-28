@@ -93,7 +93,7 @@ public class Gma :
         for (int i = 0; i < modelGCMFs.Count; i++)
         {
             var name = modelNames[i];
-            nameWriter.Write<IBinarySerializable>(name);
+            nameWriter.Write(name);
             nameOffsets[i] = name.GetPointer().address;
         }
         nameWriter.SeekBegin();

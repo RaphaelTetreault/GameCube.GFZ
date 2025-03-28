@@ -256,12 +256,12 @@ public class CarData :
     {
         reader.Read(ref Machines, MachineCount);
         SkipPadding(reader, ZerosPadding);
-        reader.Read<ShiftJisCString>(ref machineNames, kMachineNameTable);
+        reader.Read(ref machineNames, kMachineNameTable);
         SkipPadding(reader, DigitsPadding);
         reader.Read(ref BodyParts, BodyCount);
         reader.Read(ref CockpitParts, CockpitCount);
         reader.Read(ref BoosterParts, BoosterCount);
-        reader.Read<ShiftJisCString>(ref partsInternalNames, kPartsInternalTable);
+        reader.Read(ref partsInternalNames, kPartsInternalTable);
         SkipPadding(reader, DigitsPadding);
 
         // Name table is reversed, so swap it around.
@@ -284,12 +284,12 @@ public class CarData :
 
         writer.Write(Machines);
         writer.Write(ZerosPadding);
-        writer.Write<ShiftJisCString>(machineNamesReverse);
+        writer.Write(machineNamesReverse);
         writer.Write(DigitsPadding);
         writer.Write(BodyParts);
         writer.Write(CockpitParts);
         writer.Write(BoosterParts);
-        writer.Write<ShiftJisCString>(partsInternalNames);
+        writer.Write(partsInternalNames);
         writer.Write(DigitsPadding);
     }
 

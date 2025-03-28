@@ -75,7 +75,7 @@ public class GhostData :
         writer.Write(zero0x02);
         writer.Write(unkBoolean);
         writer.Write(unk_prob_custom_machine_indices);
-        writer.Write<ShiftJisCString>(playerName);
+        writer.Write(playerName);
         writer.AlignTo(0x18, 0x00); // hm
         writer.Write(totalChunks);
         writer.Write(unk0x19);

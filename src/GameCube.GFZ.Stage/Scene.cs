@@ -575,7 +575,7 @@ public sealed class Scene :
         writer.CommentNewLine(SerializeVerbose, '-');
         foreach (var sceneObjectName in SceneObjectNames)
         {
-            writer.Write<IBinarySerializable>(sceneObjectName);
+            writer.Write(sceneObjectName);
             //writer.AlignTo(4);
         }
 
