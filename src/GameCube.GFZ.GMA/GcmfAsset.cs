@@ -21,6 +21,7 @@ public class GcmfAsset :
     // FIELDS
     private string name = string.Empty;
     private string[] tevTextures = [];
+    private int tevTexturesCount = 0;
     private Gcmf gcmf = defaultGcmf;
 
     // PROPERTIES
@@ -35,7 +36,8 @@ public class GcmfAsset :
         reader.Read(ref magic);
         Assert.IsTrue(magic == kMagic);
         reader.Read(ref name, encoding);
-        reader.Read(ref tevTextures, 3, encoding);
+        reader.Read(ref tevTexturesCount);
+        reader.Read(ref tevTextures, tevTexturesCount, encoding);
         reader.AlignTo(kAlignment);
         reader.Read(ref gcmf);
     }
@@ -44,6 +46,7 @@ public class GcmfAsset :
     {
         writer.Write(kMagic);
         writer.Write(name, encoding, true);
+        writer.Write(tevTextures.Length);
         writer.Write(tevTextures, encoding);
         writer.AlignTo(kAlignment, 0xFF);
         writer.Write(gcmf);
