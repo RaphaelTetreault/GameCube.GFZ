@@ -126,57 +126,46 @@ public struct VehicleParameters :
         this.RecordEndAddress(reader);
     }
 
-    public void ReadCells(Table table)
+    public void Serialize(EndianBinaryWriter writer)
     {
-        table.GetNext(ref weight);
-        table.GetNext(ref acceleration);
-        table.GetNext(ref maxSpeed);
-        table.GetNext(ref grip1);
-        table.GetNext(ref grip3);
-        table.GetNext(ref turnTension);
-        table.GetNext(ref driftAcceleration);
-        table.GetNext(ref turnMovement);
-        table.GetNext(ref strafeTurn);
-        table.GetNext(ref strafe);
-        table.GetNext(ref turnReaction);
-        table.GetNext(ref grip2);
-        table.GetNext(ref boostStrength);
-        table.GetNext(ref boostDuration);
-        table.GetNext(ref turnDeceleration);
-        table.GetNext(ref drag);
-        table.GetNext(ref body);
-        table.GetNext(ref jerkHighGripFrames);
-        table.GetNext(ref unk_0x49);
-        table.GetNext(ref zero_0x4A);
-        table.GetNext(ref cameraReorientation);
-        table.GetNext(ref cameraRepositioning);
-        table.GetNext(ref tiltFrontRight.X);
-        table.GetNext(ref tiltFrontRight.Y);
-        table.GetNext(ref tiltFrontRight.Z);
-        table.GetNext(ref tiltFrontLeft.X);
-        table.GetNext(ref tiltFrontLeft.Y);
-        table.GetNext(ref tiltFrontLeft.Z);
-        table.GetNext(ref tiltBackRight.X);
-        table.GetNext(ref tiltBackRight.Y);
-        table.GetNext(ref tiltBackRight.Z);
-        table.GetNext(ref tiltBackLeft.X);
-        table.GetNext(ref tiltBackLeft.Y);
-        table.GetNext(ref tiltBackLeft.Z);
-        table.GetNext(ref wallCollisionFrontRight.X);
-        table.GetNext(ref wallCollisionFrontRight.Y);
-        table.GetNext(ref wallCollisionFrontRight.Z);
-        table.GetNext(ref wallCollisionFrontLeft.X);
-        table.GetNext(ref wallCollisionFrontLeft.Y);
-        table.GetNext(ref wallCollisionFrontLeft.Z);
-        table.GetNext(ref wallCollisionBackRight.X);
-        table.GetNext(ref wallCollisionBackRight.Y);
-        table.GetNext(ref wallCollisionBackRight.Z);
-        table.GetNext(ref wallCollisionBackLeft.X);
-        table.GetNext(ref wallCollisionBackLeft.Y);
-        table.GetNext(ref wallCollisionBackLeft.Z);
+        this.RecordStartAddress(writer);
+        {
+            writer.Write(runtimeNamePtr);
+            writer.Write(weight);
+            writer.Write(acceleration);
+            writer.Write(maxSpeed);
+            writer.Write(grip1);
+            writer.Write(grip3);
+            writer.Write(turnTension);
+            writer.Write(driftAcceleration);
+            writer.Write(turnMovement);
+            writer.Write(strafeTurn);
+            writer.Write(strafe);
+            writer.Write(turnReaction);
+            writer.Write(grip2);
+            writer.Write(boostStrength);
+            writer.Write(boostDuration);
+            writer.Write(turnDeceleration);
+            writer.Write(drag);
+            writer.Write(body);
+            writer.Write(jerkHighGripFrames);
+            writer.Write(unk_0x49);
+            writer.Write(zero_0x4A);
+            writer.Write(cameraReorientation);
+            writer.Write(cameraRepositioning);
+            writer.Write(tiltFrontRight);
+            writer.Write(tiltFrontLeft);
+            writer.Write(tiltBackRight);
+            writer.Write(tiltBackLeft);
+            writer.Write(wallCollisionFrontRight);
+            writer.Write(wallCollisionFrontLeft);
+            writer.Write(wallCollisionBackRight);
+            writer.Write(wallCollisionBackLeft);
+        }
+        this.RecordEndAddress(writer);
     }
 
-    public string[] GetHeaders()
+    public readonly string[] GetHeaders()
     {
         return new string[]
         {
@@ -229,46 +218,57 @@ public struct VehicleParameters :
         };
     }
 
-    public void Serialize(EndianBinaryWriter writer)
+    public void ReadCells(Table table)
     {
-        this.RecordStartAddress(writer);
-        {
-            writer.Write(runtimeNamePtr);
-            writer.Write(weight);
-            writer.Write(acceleration);
-            writer.Write(maxSpeed);
-            writer.Write(grip1);
-            writer.Write(grip3);
-            writer.Write(turnTension);
-            writer.Write(driftAcceleration);
-            writer.Write(turnMovement);
-            writer.Write(strafeTurn);
-            writer.Write(strafe);
-            writer.Write(turnReaction);
-            writer.Write(grip2);
-            writer.Write(boostStrength);
-            writer.Write(boostDuration);
-            writer.Write(turnDeceleration);
-            writer.Write(drag);
-            writer.Write(body);
-            writer.Write(jerkHighGripFrames);
-            writer.Write(unk_0x49);
-            writer.Write(zero_0x4A);
-            writer.Write(cameraReorientation);
-            writer.Write(cameraRepositioning);
-            writer.Write(tiltFrontRight);
-            writer.Write(tiltFrontLeft);
-            writer.Write(tiltBackRight);
-            writer.Write(tiltBackLeft);
-            writer.Write(wallCollisionFrontRight);
-            writer.Write(wallCollisionFrontLeft);
-            writer.Write(wallCollisionBackRight);
-            writer.Write(wallCollisionBackLeft);
-        }
-        this.RecordEndAddress(writer);
+        table.GetNext(ref weight);
+        table.GetNext(ref acceleration);
+        table.GetNext(ref maxSpeed);
+        table.GetNext(ref grip1);
+        table.GetNext(ref grip3);
+        table.GetNext(ref turnTension);
+        table.GetNext(ref driftAcceleration);
+        table.GetNext(ref turnMovement);
+        table.GetNext(ref strafeTurn);
+        table.GetNext(ref strafe);
+        table.GetNext(ref turnReaction);
+        table.GetNext(ref grip2);
+        table.GetNext(ref boostStrength);
+        table.GetNext(ref boostDuration);
+        table.GetNext(ref turnDeceleration);
+        table.GetNext(ref drag);
+        table.GetNext(ref body);
+        table.GetNext(ref jerkHighGripFrames);
+        table.GetNext(ref unk_0x49);
+        table.GetNext(ref zero_0x4A);
+        table.GetNext(ref cameraReorientation);
+        table.GetNext(ref cameraRepositioning);
+        table.GetNext(ref tiltFrontRight.X);
+        table.GetNext(ref tiltFrontRight.Y);
+        table.GetNext(ref tiltFrontRight.Z);
+        table.GetNext(ref tiltFrontLeft.X);
+        table.GetNext(ref tiltFrontLeft.Y);
+        table.GetNext(ref tiltFrontLeft.Z);
+        table.GetNext(ref tiltBackRight.X);
+        table.GetNext(ref tiltBackRight.Y);
+        table.GetNext(ref tiltBackRight.Z);
+        table.GetNext(ref tiltBackLeft.X);
+        table.GetNext(ref tiltBackLeft.Y);
+        table.GetNext(ref tiltBackLeft.Z);
+        table.GetNext(ref wallCollisionFrontRight.X);
+        table.GetNext(ref wallCollisionFrontRight.Y);
+        table.GetNext(ref wallCollisionFrontRight.Z);
+        table.GetNext(ref wallCollisionFrontLeft.X);
+        table.GetNext(ref wallCollisionFrontLeft.Y);
+        table.GetNext(ref wallCollisionFrontLeft.Z);
+        table.GetNext(ref wallCollisionBackRight.X);
+        table.GetNext(ref wallCollisionBackRight.Y);
+        table.GetNext(ref wallCollisionBackRight.Z);
+        table.GetNext(ref wallCollisionBackLeft.X);
+        table.GetNext(ref wallCollisionBackLeft.Y);
+        table.GetNext(ref wallCollisionBackLeft.Z);
     }
 
-    public void WriteCells(Table table)
+    public readonly void WriteCells(Table table)
     {
         table.SetNextCell(weight);
         table.SetNextCell(acceleration);
