@@ -9,7 +9,7 @@
     <None Remove="GameCube.GFZ.GMA.asmdef.meta" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.IO.Hashing" Version="8.0.0" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GameCube.Core\src\GameCube.Common\GameCube.Common.csproj" />
