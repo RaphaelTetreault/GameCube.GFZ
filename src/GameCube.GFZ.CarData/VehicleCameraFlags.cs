@@ -1,9 +1,10 @@
 ﻿namespace GameCube.GFZ.CarData;
 
 /// <summary>
-///     
+///     Flags for vehicle camera. Defines camera position and
+///     how it follows vehicle.
 /// </summary>
-public enum CarDataFlags0x48 : byte
+public enum VehicleCameraFlags : byte
 {
     UNK_FLAG_0 = 1 << 0,
     UNK_FLAG_1 = 1 << 1,

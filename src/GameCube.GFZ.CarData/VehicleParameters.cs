@@ -33,8 +33,8 @@ public struct VehicleParameters :
     private float turnDeceleration;
     private float drag;
     private float body;
-    private CarDataFlags0x48 unk_0x48;
-    private CarDataFlags0x49 unk_0x49;
+    private byte jerkHighGripFrames;
+    private VehicleCameraFlags unk_0x49;
     private ushort zero_0x4A;
     private float cameraReorientation;
     private float cameraRepositioning;
@@ -52,38 +52,38 @@ public struct VehicleParameters :
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public Pointer RuntimeNamePtr { get => runtimeNamePtr; set => runtimeNamePtr = value; }
-    public float Weight { get => weight; set => weight = value; }
-    public float Acceleration { get => acceleration; set => acceleration = value; }
-    public float MaxSpeed { get => maxSpeed; set => maxSpeed = value; }
-    public float Grip1 { get => grip1; set => grip1 = value; }
-    public float Grip3 { get => grip3; set => grip3 = value; }
-    public float TurnTension { get => turnTension; set => turnTension = value; }
-    public float DriftAcceleration { get => driftAcceleration; set => driftAcceleration = value; }
-    public float TurnMovement { get => turnMovement; set => turnMovement = value; }
-    public float StrafeTurn { get => strafeTurn; set => strafeTurn = value; }
-    public float Strafe { get => strafe; set => strafe = value; }
-    public float TurnReaction { get => turnReaction; set => turnReaction = value; }
-    public float Grip2 { get => grip2; set => grip2 = value; }
-    public float BoostStrength { get => boostStrength; set => boostStrength = value; }
-    public float BoostDuration { get => boostDuration; set => boostDuration = value; }
-    public float TurnDeceleration { get => turnDeceleration; set => turnDeceleration = value; }
-    public float Drag { get => drag; set => drag = value; }
-    public float Body { get => body; set => body = value; }
-    public CarDataFlags0x48 Unk_0x48 { get => unk_0x48; set => unk_0x48 = value; }
-    public CarDataFlags0x49 Unk_0x49 { get => unk_0x49; set => unk_0x49 = value; }
-    public ushort Zero_0x4A { get => zero_0x4A; set => zero_0x4A = value; }
-    public float CameraReorientation { get => cameraReorientation; set => cameraReorientation = value; }
-    public float CameraRepositioning { get => cameraRepositioning; set => cameraRepositioning = value; }
-    public Vector3 TiltFrontRight { get => tiltFrontRight; set => tiltFrontRight = value; }
-    public Vector3 TiltFrontLeft { get => tiltFrontLeft; set => tiltFrontLeft = value; }
-    public Vector3 TiltBackRight { get => tiltBackRight; set => tiltBackRight = value; }
-    public Vector3 TiltBackLeft { get => tiltBackLeft; set => tiltBackLeft = value; }
-    public Vector3 WallCollisionFrontRight { get => wallCollisionFrontRight; set => wallCollisionFrontRight = value; }
-    public Vector3 WallCollisionFrontLeft { get => wallCollisionFrontLeft; set => wallCollisionFrontLeft = value; }
-    public Vector3 WallCollisionBackRight { get => wallCollisionBackRight; set => wallCollisionBackRight = value; }
-    public Vector3 WallCollisionBackLeft { get => wallCollisionBackLeft; set => wallCollisionBackLeft = value; }
-    public ShiftJisCString RuntimeName { get => runtimeName; set => runtimeName = value; }
+    public Pointer RuntimeNamePtr { readonly get => runtimeNamePtr; set => runtimeNamePtr = value; }
+    public float Weight { readonly get => weight; set => weight = value; }
+    public float Acceleration { readonly get => acceleration; set => acceleration = value; }
+    public float MaxSpeed { readonly get => maxSpeed; set => maxSpeed = value; }
+    public float Grip1 { readonly get => grip1; set => grip1 = value; }
+    public float Grip3 { readonly get => grip3; set => grip3 = value; }
+    public float TurnTension { readonly get => turnTension; set => turnTension = value; }
+    public float DriftAcceleration { readonly get => driftAcceleration; set => driftAcceleration = value; }
+    public float TurnMovement { readonly get => turnMovement; set => turnMovement = value; }
+    public float StrafeTurn { readonly get => strafeTurn; set => strafeTurn = value; }
+    public float Strafe { readonly get => strafe; set => strafe = value; }
+    public float TurnReaction { readonly get => turnReaction; set => turnReaction = value; }
+    public float Grip2 { readonly get => grip2; set => grip2 = value; }
+    public float BoostStrength { readonly get => boostStrength; set => boostStrength = value; }
+    public float BoostDuration { readonly get => boostDuration; set => boostDuration = value; }
+    public float TurnDeceleration { readonly get => turnDeceleration; set => turnDeceleration = value; }
+    public float Drag { readonly get => drag; set => drag = value; }
+    public float Body { readonly get => body; set => body = value; }
+    public byte AccelImpulseHighGripFrames { readonly get => jerkHighGripFrames; set => jerkHighGripFrames = value; }
+    public VehicleCameraFlags Unk_0x49 { readonly get => unk_0x49; set => unk_0x49 = value; }
+    public ushort Zero_0x4A { readonly get => zero_0x4A; set => zero_0x4A = value; }
+    public float CameraReorientation { readonly get => cameraReorientation; set => cameraReorientation = value; }
+    public float CameraRepositioning { readonly get => cameraRepositioning; set => cameraRepositioning = value; }
+    public Vector3 TiltFrontRight { readonly get => tiltFrontRight; set => tiltFrontRight = value; }
+    public Vector3 TiltFrontLeft { readonly get => tiltFrontLeft; set => tiltFrontLeft = value; }
+    public Vector3 TiltBackRight { readonly get => tiltBackRight; set => tiltBackRight = value; }
+    public Vector3 TiltBackLeft { readonly get => tiltBackLeft; set => tiltBackLeft = value; }
+    public Vector3 WallCollisionFrontRight { readonly get => wallCollisionFrontRight; set => wallCollisionFrontRight = value; }
+    public Vector3 WallCollisionFrontLeft { readonly get => wallCollisionFrontLeft; set => wallCollisionFrontLeft = value; }
+    public Vector3 WallCollisionBackRight { readonly get => wallCollisionBackRight; set => wallCollisionBackRight = value; }
+    public Vector3 WallCollisionBackLeft { readonly get => wallCollisionBackLeft; set => wallCollisionBackLeft = value; }
+    public ShiftJisCString RuntimeName { readonly get => runtimeName; set => runtimeName = value; }
 
 
     // METHODS
@@ -109,7 +109,7 @@ public struct VehicleParameters :
             reader.Read(ref turnDeceleration);
             reader.Read(ref drag);
             reader.Read(ref body);
-            reader.Read(ref unk_0x48);
+            reader.Read(ref jerkHighGripFrames);
             reader.Read(ref unk_0x49);
             reader.Read(ref zero_0x4A);
             reader.Read(ref cameraReorientation);
@@ -145,7 +145,7 @@ public struct VehicleParameters :
         table.GetNext(ref turnDeceleration);
         table.GetNext(ref drag);
         table.GetNext(ref body);
-        table.GetNext(ref unk_0x48);
+        table.GetNext(ref jerkHighGripFrames);
         table.GetNext(ref unk_0x49);
         table.GetNext(ref zero_0x4A);
         table.GetNext(ref cameraReorientation);
@@ -197,7 +197,7 @@ public struct VehicleParameters :
             nameof(turnDeceleration),
             nameof(drag),
             nameof(body),
-            nameof(unk_0x48),
+            nameof(jerkHighGripFrames),
             nameof(unk_0x49),
             nameof(zero_0x4A),
             nameof(cameraReorientation),
@@ -251,7 +251,7 @@ public struct VehicleParameters :
             writer.Write(turnDeceleration);
             writer.Write(drag);
             writer.Write(body);
-            writer.Write(unk_0x48);
+            writer.Write(jerkHighGripFrames);
             writer.Write(unk_0x49);
             writer.Write(zero_0x4A);
             writer.Write(cameraReorientation);
@@ -287,7 +287,7 @@ public struct VehicleParameters :
         table.SetNextCell(turnDeceleration);
         table.SetNextCell(drag);
         table.SetNextCell(body);
-        table.SetNextCell(unk_0x48);
+        table.SetNextCell(jerkHighGripFrames);
         table.SetNextCell(unk_0x49);
         table.SetNextCell(zero_0x4A);
         table.SetNextCell(cameraReorientation);
