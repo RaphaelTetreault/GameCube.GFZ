@@ -5,14 +5,14 @@
 /// </summary>
 public readonly record struct TplEntryInfo
 {
-    public TplEntryInfo(string crc32Name, TextureBundle textureBundle)
+    public TplEntryInfo(string crc32Name, TextureSequence textureSequence)
     {
         Crc32Name = crc32Name;
-        TextureBundle = textureBundle;
+        TextureSequence = textureSequence;
     }
 
     public required string Crc32Name { get; init; }
-    public required TextureBundle TextureBundle { get; init; }
+    public required TextureSequence TextureSequence { get; init; }
 }
 
 public static class TplEntryInfoExt
@@ -25,11 +25,11 @@ public static class TplEntryInfoExt
         return crc32Names;
     }
 
-    public static TextureBundle[] GetTextureBundles(this TplEntryInfo[] infos)
+    public static TextureSequence[] GetTextureSequences(this TplEntryInfo[] infos)
     {
-        var textureBundle = new TextureBundle[infos.Length];
+        var textureSequence = new TextureSequence[infos.Length];
         for (int i = 0; i < infos.Length; i++)
-            textureBundle[i] = infos[i].TextureBundle;
-        return textureBundle;
+            textureSequence[i] = infos[i].TextureSequence;
+        return textureSequence;
     }
 }

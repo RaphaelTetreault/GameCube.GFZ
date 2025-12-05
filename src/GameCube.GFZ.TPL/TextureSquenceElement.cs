@@ -4,9 +4,9 @@ using Manifold.IO;
 namespace GameCube.GFZ.TPL;
 
 /// <summary>
-///     Describes a texture/mipmap in <see cref="TextureBundle"/>.
+///     Describes a texture/mipmap in <see cref="TextureSequence"/>.
 /// </summary>
-public class TextureBundleElement
+public class TextureSquenceElement
 {
     private static readonly Texture defaultTexture = new();
 

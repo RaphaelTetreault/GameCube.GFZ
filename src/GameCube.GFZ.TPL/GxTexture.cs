@@ -59,9 +59,9 @@ public class GxTexture :
         writer.Write(data);
     }
 
-    public TextureBundleDescription GetDescription()
+    public TextureSequenceDescription GetDescription()
     {
-        TextureBundleDescription description = new()
+        TextureSequenceDescription description = new()
         {
             IsNull = false,
             TextureFormat = format,

@@ -16,20 +16,20 @@ public class Tpl :
 
     // MEMBERS
     private int textureDescriptionsCount;
-    private TextureBundleDescription[] textureBundlesDescription = [];
-    private TextureBundle[] textureBundles = [];
+    private TextureSequenceDescription[] textureSequencesDescription = [];
+    private TextureSequence[] textureSequences = [];
 
     // PROPERTIES
-    public TextureBundleDescription[] TextureBundleDescriptions { get => textureBundlesDescription; set => textureBundlesDescription = value; }
-    public TextureBundle[] TextureBundles { get => textureBundles; set => textureBundles = value; }
+    public TextureSequenceDescription[] TextureSequenceDescriptions { get => textureSequencesDescription; set => textureSequencesDescription = value; }
+    public TextureSequence[] TextureSequences { get => textureSequences; set => textureSequences = value; }
 
 
     public void Deserialize(EndianBinaryReader reader)
     {
         // Read `count` texture descriptions
         reader.Read(ref textureDescriptionsCount);
-        reader.Read(ref textureBundlesDescription, textureDescriptionsCount);
-        textureBundles = new TextureBundle[textureDescriptionsCount];
+        reader.Read(ref textureSequencesDescription, textureDescriptionsCount);
+        textureSequences = new TextureSequence[textureDescriptionsCount];
 
         // File has padding after descriptions that increment continuously.
         int paddingLength = (int)StreamExtensions.GetLengthOfAlignment(reader.BaseStream, GXUtility.GX_FIFO_ALIGN);
@@ -37,40 +37,40 @@ public class Tpl :
         for (byte i = 0; i < padding.Length; i++)
             Assert.IsTrue(padding[i] == i);
 
-        for (int i = 0; i < textureBundlesDescription.Length; i++)
+        for (int i = 0; i < textureSequencesDescription.Length; i++)
         {
-            var textureBundleDescription = this.textureBundlesDescription[i];
-            if (textureBundleDescription.IsNull)
+            var textureSequenceDescription = this.textureSequencesDescription[i];
+            if (textureSequenceDescription.IsNull)
                 continue;
 
             // Some TPLs come with garbage data in the first 0x30 bytes of the file (in the first 4 bytes of affected descriptions).
             // Make sure the null check above never fails. Otherwise you need to find a different way to check for this garbage.
-            var msg1 = $"Uncaught garbage entry {i} addr {textureBundleDescription.AddressRange.PrintStartAddress()}";
-            Assert.IsFalse(textureBundleDescription.IsGarbageEntry, msg1);
+            var msg1 = $"Uncaught garbage entry {i} addr {textureSequenceDescription.AddressRange.PrintStartAddress()}";
+            Assert.IsFalse(textureSequenceDescription.IsGarbageEntry, msg1);
 
             // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
-            var encoding = Encoding.GetEncoding(textureBundleDescription.TextureFormat);
+            var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
             var msg2 = "Encoding is not direct. GFZ does not use (handle?) indirect modes.";
             Assert.IsTrue(encoding.IsDirect, msg2);
 
             // Assert game uses all power-of-two textures.
-            int isWidthPowerOfTwo = textureBundleDescription.Width % encoding.BlockWidth;
-            int isHeightPowerOfTwo = textureBundleDescription.Height % encoding.BlockHeight;
+            int isWidthPowerOfTwo = textureSequenceDescription.Width % encoding.BlockWidth;
+            int isHeightPowerOfTwo = textureSequenceDescription.Height % encoding.BlockHeight;
             if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
             {
                 string msg3 =
-                    $"Texture index {i} has size (x:{textureBundleDescription.Width}, " +
-                    $"y:{textureBundleDescription.Height}). Not a power of two.";
+                    $"Texture index {i} has size (x:{textureSequenceDescription.Width}, " +
+                    $"y:{textureSequenceDescription.Height}). Not a power of two.";
                 Assert.IsTrue(false, msg3);
             }
 
-            // Read the texture bundle.
-            reader.JumpToAddress(textureBundleDescription.TextureBundlePtr);
-            textureBundles[i] = ReadDirectTextureBundle(reader, textureBundleDescription);
+            // Read the texture sequence.
+            reader.JumpToAddress(textureSequenceDescription.TextureSequencePtr);
+            textureSequences[i] = ReadDirectTextureSequence(reader, textureSequenceDescription);
             // Record some useful metadata about this texture
-            textureBundles[i].AddressRange = new AddressRange()
+            textureSequences[i].AddressRange = new AddressRange()
             {
-                startAddress = textureBundleDescription.TextureBundlePtr,
+                startAddress = textureSequenceDescription.TextureSequencePtr,
                 endAddress = reader.GetPositionAsPointer(),
             };
         }
@@ -78,25 +78,25 @@ public class Tpl :
 
     public void Serialize(EndianBinaryWriter writer)
     {
-        // Write texture bundle descriptions
-        writer.Write(TextureBundleDescriptions.Length);
-        writer.Write(TextureBundleDescriptions);
+        // Write texture sequence descriptions
+        writer.Write(TextureSequenceDescriptions.Length);
+        writer.Write(TextureSequenceDescriptions);
 
         // Write incrementing padding
         int paddingLength = (int)StreamExtensions.GetLengthOfAlignment(writer.BaseStream, GXUtility.GX_FIFO_ALIGN);
         for (byte i = 0; i < paddingLength; i++)
             writer.Write(i);
 
-        // Write each texture of each texture bundle
-        foreach (var textureBundle in textureBundles)
+        // Write each texture of each texture sequence
+        foreach (var textureSequence in textureSequences)
         {
-            // Skip any null bundle
+            // Skip any null sequence
             // TODO: consider making the entries in the array zeroed rather than leave true nulls around.
-            if (textureBundle is null)
+            if (textureSequence is null)
                 continue;
 
-            var directEncoding = DirectEncoding.GetEncoding(textureBundle.Description.TextureFormat);
-            foreach (var entry in textureBundle.Elements)
+            var directEncoding = DirectEncoding.GetEncoding(textureSequence.Description.TextureFormat);
+            foreach (var entry in textureSequence.Elements)
             {
                 var texture = entry.Texture;
                 var blocks = Texture.CreateDirectColorBlocksFromTexture(texture, directEncoding);
@@ -109,26 +109,26 @@ public class Tpl :
     /// Reads texture and all associated mipmaps.
     /// </summary>
     /// <param name="reader"></param>
-    /// <param name="textureBundleDescription"></param>
+    /// <param name="textureSequenceDescription"></param>
     /// <param name="encoding"></param>
     /// <returns></returns>
-    public static TextureBundle ReadDirectTextureBundle(EndianBinaryReader reader, TextureBundleDescription textureBundleDescription)
+    public static TextureSequence ReadDirectTextureSequence(EndianBinaryReader reader, TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = Encoding.GetEncoding(textureBundleDescription.TextureFormat);
-        int pixelWidth = textureBundleDescription.Width;
-        int pixelHeight = textureBundleDescription.Height;
-        var textureBundle = new TextureBundle(textureBundleDescription);
+        var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        int pixelWidth = textureSequenceDescription.Width;
+        int pixelHeight = textureSequenceDescription.Height;
+        var textureSequence = new TextureSequence(textureSequenceDescription);
 
-        int totalBlocksEncoded = GetTotalBlocksEncodedCount(textureBundleDescription);
+        int totalBlocksEncoded = GetTotalBlocksEncodedCount(textureSequenceDescription);
         int totalBlocksRead = 0;
 
-        for (int i = 0; i < textureBundle.Elements.Length; i++)
+        for (int i = 0; i < textureSequence.Elements.Length; i++)
         {
             // Some textures have invalid mipmap sizes. Prevent them from doing anything.
             bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
             if (isInvalidTextureSize)
             {
-                textureBundle.Elements[i].Texture = new Texture(0, 0, textureBundleDescription.TextureFormat);
+                textureSequence.Elements[i].Texture = new Texture(0, 0, textureSequenceDescription.TextureFormat);
                 pixelWidth >>= 1;
                 pixelHeight >>= 1;
                 continue;
@@ -157,12 +157,12 @@ public class Tpl :
                     totalBlocksRead += blocksRequired;
                     // Create an invalid texture. Unset pixels will be magenta.
                     var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, widthBlocks, heightBlocks, Magenta);
-                    textureBundle.Elements[i].Texture = Texture.Crop(invalidTexture, pixelWidth, pixelHeight);
+                    textureSequence.Elements[i].Texture = Texture.Crop(invalidTexture, pixelWidth, pixelHeight);
                 }
                 else
                 {
                     // If no more blocks to read, make fully magenta texture.
-                    textureBundle.Elements[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureBundleDescription.TextureFormat);
+                    textureSequence.Elements[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureSequenceDescription.TextureFormat);
                 }
                 pixelWidth >>= 1;
                 pixelHeight >>= 1;
@@ -179,8 +179,8 @@ public class Tpl :
             // Make new texture. Crop it to width/height on occasions where pixel width or height
             // is lesser than the block size.
             var texture = Texture.FromDirectBlocks(directBlocks, widthBlocks, heightBlocks);
-            textureBundle.Elements[i].Texture = Texture.Crop(texture, pixelWidth, pixelHeight);
-            textureBundle.Elements[i].IsValid = true;
+            textureSequence.Elements[i].Texture = Texture.Crop(texture, pixelWidth, pixelHeight);
+            textureSequence.Elements[i].IsValid = true;
 
             // Halve the size for the next mipmap.
             pixelWidth >>= 1;
@@ -191,7 +191,7 @@ public class Tpl :
             reader.JumpToAddress(textureRange.startAddress);
             var bytes = reader.ReadBytes(textureRange.Size);
             reader.JumpToAddress(textureRange.endAddress);
-            textureBundle.Elements[i].RawTextureData = bytes;
+            textureSequence.Elements[i].RawTextureData = bytes;
 
             // Compute CRC32 hash of texture data
             byte[] hashBytes = System.IO.Hashing.Crc32.Hash(bytes);
@@ -199,16 +199,16 @@ public class Tpl :
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(hashBytes);
             uint crc32 = BitConverter.ToUInt32(hashBytes, 0);
-            textureBundle.Elements[i].CRC32 = crc32;
+            textureSequence.Elements[i].CRC32 = crc32;
 
             // Some mipmaps are "valid" but in fact are just black.
             // Catch those cases and flag validity afterwards.
             System.Collections.Generic.List<uint> invalidTextureCRC32s =
                 [0xad550a19]; // 2x8 or 8x2 black
             bool isInvalid = invalidTextureCRC32s.Contains(crc32);
-            textureBundle.Elements[i].IsValid = !isInvalid;
+            textureSequence.Elements[i].IsValid = !isInvalid;
         }
-        return textureBundle;
+        return textureSequence;
     }
 
     /// <summary>
@@ -318,19 +318,19 @@ public class Tpl :
     }
 
     /// <summary>
-    ///     Provides the amount of blocks the game used to encode <paramref name="textureBundleDescription"/>'s
+    ///     Provides the amount of blocks the game used to encode <paramref name="textureSequenceDescription"/>'s
     ///     texture data using <paramref name="encoding"/>.
     /// </summary>
-    /// <param name="textureBundleDescription"></param>
+    /// <param name="textureSequenceDescription"></param>
     /// <returns>
     /// 
     /// </returns>
-    public static int GetTotalBlocksEncodedCount(TextureBundleDescription textureBundleDescription)
+    public static int GetTotalBlocksEncodedCount(TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = Encoding.GetEncoding(textureBundleDescription.TextureFormat);
-        int pixelWidth = textureBundleDescription.Width;
-        int pixelHeight = textureBundleDescription.Height;
-        int numTextures = textureBundleDescription.NumberOfTextures;
+        var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        int pixelWidth = textureSequenceDescription.Width;
+        int pixelHeight = textureSequenceDescription.Height;
+        int numTextures = textureSequenceDescription.NumberOfTextures;
         int totalBlocksRead = 0;
 
         for (int i = 0; i < numTextures; i++)
