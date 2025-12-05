@@ -20,10 +20,10 @@ public class SkinnedVertexB :
     private Vector2 textureUV0;
     private Vector2 textureUV1;
     private Vector2 textureUV2;
-    private GXColor color0 = new(ComponentType.GX_RGBA8); // RGBA. Appears to truly be a color.
-    private GXColor color1 = new(ComponentType.GX_RGBA8); // Magic bits. Variations: 00000000, 00010100, 02000002, 01000001, 03000003
-    private GXColor color2 = new(ComponentType.GX_RGBA8); // RGBA. Color-looking, but does use alpha channel.
-    private GXColor color3 = new(ComponentType.GX_RGBA8); // RGBA. Color-looking, but does use alpha channel. 00000004 is the only magic-bit looking value.
+    private GXColor color0 = new(GXComponentType.GX_RGBA8); // RGBA. Appears to truly be a color.
+    private GXColor color1 = new(GXComponentType.GX_RGBA8); // Magic bits. Variations: 00000000, 00010100, 02000002, 01000001, 03000003
+    private GXColor color2 = new(GXComponentType.GX_RGBA8); // RGBA. Color-looking, but does use alpha channel.
+    private GXColor color3 = new(GXComponentType.GX_RGBA8); // RGBA. Color-looking, but does use alpha channel. 00000004 is the only magic-bit looking value.
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }

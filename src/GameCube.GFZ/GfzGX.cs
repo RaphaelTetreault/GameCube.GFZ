@@ -10,31 +10,31 @@ public static class GfzGX
     /// <summary>
     /// GFZ's Vertex Attribute Table
     /// </summary>
-    public static VertexAttributeTable VAT { get => vat; }
+    public static GXVertexAttributeTable VAT { get => vat; }
 
-    private static readonly VertexAttributeTable vat = new(
+    private static readonly GXVertexAttributeTable vat = new(
         [
             // VAT 0
-            new VertexAttributeFormat()
+            new GXVertexAttributeFormat()
             {
-                pos = new VertexAttribute(ComponentCount.GX_POS_XYZ, ComponentType.GX_F32),
-                nrm = new VertexAttribute(ComponentCount.GX_NRM_XYZ, ComponentType.GX_F32),
-                nbt = new VertexAttribute(ComponentCount.GX_NRM_NBT, ComponentType.GX_F32),
-                clr0 = new VertexAttribute(ComponentCount.GX_CLR_RGBA, ComponentType.GX_RGBA8),
-                tex0 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_F32),
-                tex1 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_F32),
-                tex2 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_F32),
+                pos = new GXVertexAttribute(GXComponentCount.GX_POS_XYZ, GXComponentType.GX_F32),
+                nrm = new GXVertexAttribute(GXComponentCount.GX_NRM_XYZ, GXComponentType.GX_F32),
+                nbt = new GXVertexAttribute(GXComponentCount.GX_NRM_NBT, GXComponentType.GX_F32),
+                clr0 = new GXVertexAttribute(GXComponentCount.GX_CLR_RGBA, GXComponentType.GX_RGBA8),
+                tex0 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_F32),
+                tex1 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_F32),
+                tex2 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_F32),
             },
 
             // VAT 1
-            new VertexAttributeFormat()
+            new GXVertexAttributeFormat()
             {
-                pos = new VertexAttribute(ComponentCount.GX_POS_XYZ, ComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
-                nrm = new VertexAttribute(ComponentCount.GX_NRM_XYZ, ComponentType.GX_S16, 14), // TODO: RE-VERIFY
-                clr0 = new VertexAttribute(ComponentCount.GX_CLR_RGBA, ComponentType.GX_RGBA8), // Raphaël verified 2019 (?)
-                tex0 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
-                tex1 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // UNVERIFIED
-                tex2 = new VertexAttribute(ComponentCount.GX_TEX_ST, ComponentType.GX_S16, 13), // UNVERIFIED
+                pos = new GXVertexAttribute(GXComponentCount.GX_POS_XYZ, GXComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
+                nrm = new GXVertexAttribute(GXComponentCount.GX_NRM_XYZ, GXComponentType.GX_S16, 14), // TODO: RE-VERIFY
+                clr0 = new GXVertexAttribute(GXComponentCount.GX_CLR_RGBA, GXComponentType.GX_RGBA8), // Raphaël verified 2019 (?)
+                tex0 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_S16, 13), // CHMCL verified 2024/09/05
+                tex1 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_S16, 13), // UNVERIFIED
+                tex2 = new GXVertexAttribute(GXComponentCount.GX_TEX_ST, GXComponentType.GX_S16, 13), // UNVERIFIED
             },
         ]
     );

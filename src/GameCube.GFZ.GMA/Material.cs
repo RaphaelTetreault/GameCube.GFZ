@@ -13,9 +13,9 @@ public class Material :
     IBinarySerializable
 {
     // FIELDS    
-    private GXColor materialColor = new GXColor(0xFFFFFFFF, ComponentType.GX_RGBA8);
-    private GXColor ambientColor = new GXColor(0xFFFFFFFF, ComponentType.GX_RGBA8);
-    private GXColor specularColor = new GXColor(0x00000000, ComponentType.GX_RGBA8);
+    private GXColor materialColor = new GXColor(0xFFFFFFFF, GXComponentType.GX_RGBA8);
+    private GXColor ambientColor = new GXColor(0xFFFFFFFF, GXComponentType.GX_RGBA8);
+    private GXColor specularColor = new GXColor(0x00000000, GXComponentType.GX_RGBA8);
     private MatFlags0x10 unk0x10 = 0; // 2022/07/08: maybe tells GPU how to use color? Fails on non-textured objects. (TEV?)
     private byte alpha = 255;
     private byte tevLayerCount = 0;
@@ -66,9 +66,9 @@ public class Material :
     public void Serialize(EndianBinaryWriter writer)
     {
         {
-            Assert.IsTrue(materialColor.ComponentType == ComponentType.GX_RGBA8);
-            Assert.IsTrue(ambientColor.ComponentType == ComponentType.GX_RGBA8);
-            Assert.IsTrue(specularColor.ComponentType == ComponentType.GX_RGBA8);
+            Assert.IsTrue(materialColor.ComponentType == GXComponentType.GX_RGBA8);
+            Assert.IsTrue(ambientColor.ComponentType == GXComponentType.GX_RGBA8);
+            Assert.IsTrue(specularColor.ComponentType == GXComponentType.GX_RGBA8);
         }
         this.RecordStartAddress(writer);
         {

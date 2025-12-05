@@ -24,14 +24,14 @@ public class Submesh :
     // FIELDS
     private RenderFlags renderFlags;
     private Material material = new();
-    private AttributeFlags vertexAttributes;
+    private GXAttributeFlags vertexAttributes;
     private DisplayListDescriptor primaryDisplayListDescriptor = new();
     private UnkAlphaOptions unknownAlphaOptions = new();
-    private DisplayList[] primaryDisplayListsOpaque = [];
-    private DisplayList[] primaryDisplayListsTranslucid = [];
+    private GXDisplayList[] primaryDisplayListsOpaque = [];
+    private GXDisplayList[] primaryDisplayListsTranslucid = [];
     private DisplayListDescriptor secondaryDisplayListDescriptor = new();
-    private DisplayList[] secondaryDisplayListsOpaque = [];
-    private DisplayList[] secondaryDisplayListsTranslucid = [];
+    private GXDisplayList[] secondaryDisplayListsOpaque = [];
+    private GXDisplayList[] secondaryDisplayListsTranslucid = [];
 
 
     // PROPERTIES
@@ -47,18 +47,18 @@ public class Submesh :
     //
     public RenderFlags RenderFlags { get => renderFlags; set => renderFlags = value; }
     public Material Material { get => material; set => material = value; }
-    public AttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
+    public GXAttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
     public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
-    public DisplayList[] PrimaryBackFacing { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
-    public DisplayList[] PrimaryFrontFacing { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
+    public GXDisplayList[] PrimaryBackFacing { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
+    public GXDisplayList[] PrimaryFrontFacing { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
     public bool RenderPrimaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryFrontCull);
     public bool RenderPrimaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.PrimaryBackCull);
     public bool RenderSecondary => RenderSecondaryFrontFaceCull || RenderSecondaryBackFaceCull;
     public bool RenderSecondaryFrontFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryFrontCull);
     public bool RenderSecondaryBackFaceCull => material.MaterialDestination.HasFlag(MaterialDestination.SecondaryBackCull);
     public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
-    public DisplayList[] SecondaryBackFacing { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
-    public DisplayList[] SecondaryFrontFacing { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
+    public GXDisplayList[] SecondaryBackFacing { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
+    public GXDisplayList[] SecondaryFrontFacing { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
     public UnkAlphaOptions UnkAlphaOptions { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
 
     // METHODS
@@ -184,9 +184,9 @@ public class Submesh :
         this.SetWriterToEndAddress(writer);
     }
 
-    private DisplayList[] ReadDisplayLists(EndianBinaryReader reader, int endAddress)
+    private GXDisplayList[] ReadDisplayLists(EndianBinaryReader reader, int endAddress)
     {
-        var displayLists = new List<DisplayList>();
+        var displayLists = new List<GXDisplayList>();
 
         var gxNOP = reader.ReadByte();
         Assert.IsTrue(gxNOP == GX_NOP);
@@ -199,7 +199,7 @@ public class Submesh :
             if (isAtEnd || isFifoPadding)
                 break;
 
-            var displayList = new DisplayList(vertexAttributes, GfzGX.VAT);
+            var displayList = new GXDisplayList(vertexAttributes, GfzGX.VAT);
             displayList.Deserialize(reader);
             displayLists.Add(displayList);
         }
@@ -208,7 +208,7 @@ public class Submesh :
         return displayLists.ToArray();
     }
 
-    private void WriteDisplayLists(EndianBinaryWriter writer, DisplayList[] displayLists, out AddressRange addressRange)
+    private void WriteDisplayLists(EndianBinaryWriter writer, GXDisplayList[] displayLists, out AddressRange addressRange)
     {
         addressRange = new AddressRange();
         addressRange.RecordStartAddress(writer);
@@ -220,7 +220,7 @@ public class Submesh :
         addressRange.RecordEndAddress(writer);
     }
 
-    private int DisplayListsSizeOnDisk(DisplayList[] displayLists)
+    private int DisplayListsSizeOnDisk(GXDisplayList[] displayLists)
     {
         int size = 0;
 
