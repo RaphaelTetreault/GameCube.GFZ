@@ -14,6 +14,7 @@ public class Replay :
     IBinaryFileType,
     IBinarySerializable
 {
+    // TODO: separate file params out into ReplayFile (see GamCube.GFZ.Asset).
     public AddressRange AddressRange { get; set; }
     public Endianness Endianness => Endianness.BigEndian;
     public string FileExtension => "";
