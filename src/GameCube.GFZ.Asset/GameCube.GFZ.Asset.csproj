@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.GMA\GameCube.GFZ.GMA.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.TPL\GameCube.GFZ.TPL.csproj" />
   </ItemGroup>
 
 </Project>

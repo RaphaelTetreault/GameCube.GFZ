@@ -1,11 +1,12 @@
-﻿using Manifold.IO;
+﻿using GameCube.GFZ.TPL;
+using Manifold.IO;
 
-namespace GameCube.GFZ.TPL;
+namespace GameCube.GFZ.Asset;
 
 /// <summary>
-///     File wrapper for <see cref="GxTexture"/>.
+///     File wrapper for <see cref="GxTextureAsset"/>.
 /// </summary>
-public class GxTextureFile : BinaryFileWrapper<GxTexture>
+public class GxTextureAssetFile : BinaryFileWrapper<GxTextureAsset>
 {
     // CONSTANTS
     public const Endianness endianness = TplFile.endianness;
@@ -17,6 +18,6 @@ public class GxTextureFile : BinaryFileWrapper<GxTexture>
     public override string FileName { get; set; } = string.Empty;
 
     // CONSTRUCTORS, override base helpers
-    public GxTextureFile() : base() { }
-    public GxTextureFile(string inputPath) : base(inputPath) { }
+    public GxTextureAssetFile() : base() { }
+    public GxTextureAssetFile(string inputPath) : base(inputPath) { }
 }

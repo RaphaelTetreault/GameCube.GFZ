@@ -1,8 +1,9 @@
 ﻿using GameCube.GX.Texture;
+using GameCube.GFZ.TPL;
 using Manifold.IO;
 using System.IO;
 
-namespace GameCube.GFZ.TPL;
+namespace GameCube.GFZ.Asset;
 
 /// <summary>
 ///     An assetized version of <see cref="Texture"/>.
@@ -10,7 +11,7 @@ namespace GameCube.GFZ.TPL;
 /// <remarks>
 ///     TODO: Convert this to BinaryFileWrapper(Texture)?
 /// </remarks>
-public class GxTexture :
+public class GxTextureAsset :
     IBinarySerializable
 {
     private const uint magic = 0x47585458; // GXTX
@@ -19,13 +20,13 @@ public class GxTexture :
     // Fields
     private ushort width;
     private ushort height;
-    private byte count;
+    private byte textureCount;
     private TextureFormat format;
     private int dataLength;
     private byte[] data = [];
 
     // Properties
-    public byte Count { get => count; set => count = value; }
+    public byte TextureCount { get => textureCount; set => textureCount = value; }
     public byte[] Data { get => data; set => data = value; }
     public int DataLength { get => dataLength; set => dataLength = value; }
     public TextureFormat Format { get => format; set => format = value; }
@@ -41,7 +42,7 @@ public class GxTexture :
         reader.Read(ref width);
         reader.Read(ref height);
         reader.Read(ref format);
-        reader.Read(ref count);
+        reader.Read(ref textureCount);
         reader.Read(ref dataLength);
         reader.AlignTo(alignment);
         reader.Read(ref data, dataLength);
@@ -53,7 +54,7 @@ public class GxTexture :
         writer.Write(width);
         writer.Write(height);
         writer.Write(format);
-        writer.Write(count);
+        writer.Write(textureCount);
         writer.Write(dataLength);
         writer.AlignTo(alignment, 0xFF);
         writer.Write(data);
@@ -67,7 +68,7 @@ public class GxTexture :
             TextureFormat = format,
             Width = width,
             Height = height,
-            MipmapLevels = checked((ushort)(count - 1)),
+            MipmapLevels = checked((ushort)(textureCount - 1)),
         };
         return description;
     }
@@ -75,7 +76,7 @@ public class GxTexture :
     {
         using var reader = new EndianBinaryReader(new MemoryStream(data), TplFile.endianness);
 
-        Texture[] textures = new Texture[count];
+        Texture[] textures = new Texture[textureCount];
         int width = this.width;
         int height = this.height;
 
