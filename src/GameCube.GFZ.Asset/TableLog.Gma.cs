@@ -1,8 +1,9 @@
-﻿using Manifold.IO;
+﻿using GameCube.GFZ.GMA;
+using Manifold.IO;
 using System.IO;
 using static Manifold.IO.TableLogger;
 
-namespace GameCube.GFZ.GMA;
+namespace GameCube.GFZ.Asset;
 
 public class GmaTableLogger
 {

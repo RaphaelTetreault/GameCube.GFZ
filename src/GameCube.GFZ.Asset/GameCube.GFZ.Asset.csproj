@@ -8,8 +8,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Manifold.Core\src\Manifold.IO\Manifold.IO.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.Camera\GameCube.GFZ.Camera.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.CarData\GameCube.GFZ.CarData.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.Emblem\GameCube.GFZ.Emblem.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.FMI\GameCube.GFZ.FMI.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.GameData\GameCube.GFZ.GameData.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.GCI\GameCube.GFZ.GCI.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.Ghosts\GameCube.GFZ.Ghosts.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.GMA\GameCube.GFZ.GMA.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.LZ\GameCube.GFZ.LZ.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.REL\GameCube.GFZ.LineREL.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.Replay\GameCube.GFZ.Replay.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ.Stage\GameCube.GFZ.Stage.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.TPL\GameCube.GFZ.TPL.csproj" />
+    <ProjectReference Include="..\GameCube.GFZ\GameCube.GFZ.csproj" />
   </ItemGroup>
 
 </Project>

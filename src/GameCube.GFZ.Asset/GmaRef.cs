@@ -1,8 +1,9 @@
-﻿using Manifold;
+﻿using GameCube.GFZ.GMA;
+using Manifold;
 using Manifold.IO;
 using System.Text;
 
-namespace GameCube.GFZ.GMA;
+namespace GameCube.GFZ.Asset;
 
 /// <summary>
 ///     An assetized version of <see cref="Gma"/> with loose text references

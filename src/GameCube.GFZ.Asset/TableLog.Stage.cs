@@ -1,11 +1,12 @@
-﻿namespace GameCube.GFZ.Stage;
-
+﻿using GameCube.Common;
+using GameCube.GFZ.Stage;
 using Manifold;
-using GameCube.Common;
 using Manifold.IO;
 using System.Collections.Generic;
 using System.IO;
 using static Manifold.IO.TableLogger;
+
+namespace GameCube.GFZ.Asset;
 
 /// <summary>
 ///     Library of log functions for <see cref="Scene"/> (stage) files.

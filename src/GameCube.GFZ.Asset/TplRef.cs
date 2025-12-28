@@ -1,8 +1,9 @@
-﻿using Manifold;
+﻿using GameCube.GFZ.TPL;
+using Manifold;
 using Manifold.IO;
 using System.Text;
 
-namespace GameCube.GFZ.TPL;
+namespace GameCube.GFZ.Asset;
 
 /// <summary>
 ///     An assetized version of <see cref="Tpl"/> with loose text references
