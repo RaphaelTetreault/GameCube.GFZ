@@ -5,7 +5,7 @@ namespace GameCube.GFZ.FMI;
 
 /// <summary>
 ///     Represents a position for a vehicle-related object, such as pilot position
-///     and animatable object like steering wheel or rudder/wing.
+///     and animation objects like steering wheel or rudder/wing.
 /// </summary>
 public class FmiPosition :
     IBinarySerializable,

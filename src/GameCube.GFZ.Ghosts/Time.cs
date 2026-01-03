@@ -19,14 +19,14 @@ public struct Time :
         reader.Read(ref milliseconds);
     }
 
-    public void Serialize(EndianBinaryWriter writer)
+    public readonly void Serialize(EndianBinaryWriter writer)
     {
         writer.Write(minutes);
         writer.Write(seconds);
         writer.Write(milliseconds);
     }
 
-    public override string ToString()
+    public override readonly string ToString()
     {
         return $"{minutes:0}\'{seconds:00}\"{milliseconds:000}";
     }

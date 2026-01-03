@@ -83,9 +83,8 @@ public class GxTextureAsset :
         for (int i = 0; i < textures.Length; i++)
         {
             textures[i] = Texture.ReadDirectColorTexture(reader, format, width, height);
-            // Dive by two
-            width >>= 1;
-            height >>= 1;
+            width /= 2;
+            height /= 2;
         }
 
         return textures;
