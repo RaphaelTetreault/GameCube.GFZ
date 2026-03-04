@@ -24,38 +24,38 @@ public class SceneFile : BinaryFileWrapper<Scene>
     public override string FileName { get; set; } = string.Empty;
 
     /// <summary>
-    /// The course's author.
+    ///     The course's author.
     /// </summary>
     public string Author { get; set; } = string.Empty;
 
     /// <summary>
-    /// The course's name.
+    ///     The course's name.
     /// </summary>
     public string CourseName { get; set; } = string.Empty;
 
     /// <summary>
-    /// How large the file is in bytes.
+    ///     How large the file is in bytes.
     /// </summary>
     public int FileSize { get; private set; }
 
     public string FileFormatDescription => Value.IsFormatGX ? "GX" : "AX";
 
     /// <summary>
-    /// The course index as indicated by the file name COLI_COURSE## where ## is the index.
+    ///     The course index as indicated by the file name COLI_COURSE## where ## is the index.
     /// </summary>
     public int CourseIndex { get; set; }
 
     public string CourseDescription => ((CourseIndexAX)CourseIndex).GetDescription();
 
     /// <summary>
-    /// The venue for this course.
+    ///     The venue for this course.
     /// </summary>
     public Venue Venue { get; set; }
 
     public string VenueDescription => CourseUtility.GetVenueID(CourseIndex).GetDescription();
 
     /// <summary>
-    /// Gets the venue's name
+    ///     Gets the venue's name
     /// </summary>
     public string VenueName => EnumExtensions.GetDescription(Venue);
 
