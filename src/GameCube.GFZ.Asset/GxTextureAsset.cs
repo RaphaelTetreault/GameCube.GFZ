@@ -36,9 +36,7 @@ public class GxTextureAsset :
     // Methods
     public void Deserialize(EndianBinaryReader reader)
     {
-        uint magicConst = 0;
-        reader.Read(ref magicConst);
-        Assert.IsTrue(magicConst == magic);
+        reader.AssertRead(magic);
         reader.Read(ref width);
         reader.Read(ref height);
         reader.Read(ref format);
