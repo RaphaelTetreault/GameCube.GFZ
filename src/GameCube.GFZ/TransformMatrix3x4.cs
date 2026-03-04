@@ -39,7 +39,7 @@ public class TransformMatrix3x4 :
 
         this.RecordStartAddress(reader);
         {
-            // Read rows
+            // Read rows. Using ReadFloat because values are unassigned, error CS0165.
             // Row 1
             M11 = reader.ReadFloat();
             M12 = reader.ReadFloat();

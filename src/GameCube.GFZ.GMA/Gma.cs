@@ -109,7 +109,7 @@ public class Gma :
             };
         }
 
-        // This will be grabage/blank
+        // This will be garbage/blank
         writer.Write(modelsCount);
         writer.Write(modelBasePtrOffset);
 
