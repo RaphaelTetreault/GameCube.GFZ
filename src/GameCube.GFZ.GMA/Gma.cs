@@ -13,7 +13,7 @@ public class Gma :
     IHasReference
 {
     // FIELDS
-    private int modelsCount;
+    private int modelCount;
     private Offset modelBasePtrOffset;
     private ModelEntry[] modelEntries = [];
     // Pseudo-fields.
@@ -22,7 +22,7 @@ public class Gma :
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public int ModelsCount { get => modelsCount; set => modelsCount = value; }
+    public int ModelCount { get => modelCount; set => modelCount = value; }
     public Offset ModelBasePtr { get => modelBasePtrOffset; set => modelBasePtrOffset = value; }
     public ModelEntry[] ModelEntries { get => modelEntries; set => modelEntries = value; }
     public Model[] Models { get => models; set => models = value; }
@@ -31,15 +31,15 @@ public class Gma :
     // METHODS
     public void Deserialize(EndianBinaryReader reader)
     {
-        reader.Read(ref modelsCount);
+        reader.Read(ref modelCount);
         reader.Read(ref modelBasePtrOffset);
-        reader.Read(ref modelEntries, modelsCount);
+        reader.Read(ref modelEntries, modelCount);
 
         Offset nameBasePtrOffset = reader.GetPositionAsPointer().address;
         var modelList = new List<Model>();
 
         // Add offsets necessary for pointers to be correct
-        for (int i = 0; i < modelsCount; i++)
+        for (int i = 0; i < modelCount; i++)
         {
             var modelEntry = modelEntries[i];
             modelEntry.GcmfBasePtrOffset = modelBasePtrOffset;
@@ -52,7 +52,7 @@ public class Gma :
             {
                 GcmfPtr = modelEntry.GcmfPtr,
                 NamePtr = modelEntry.NamePtr,
-                DebugIndex = $"[{i}/{ModelsCount}]",
+                DebugIndex = $"[{i}/{ModelCount}]",
             };
             model.Deserialize(reader);
             modelList.Add(model);
@@ -73,7 +73,7 @@ public class Gma :
 
             modelNames.Add(model.Name);
             modelGCMFs.Add(model.Gcmf);
-            model.DebugIndex = $"[{index++}/{ModelsCount}]";
+            model.DebugIndex = $"[{index++}/{ModelCount}]";
         }
 
         // Write GCMFs to a memory stream, collect their pointer
@@ -110,7 +110,7 @@ public class Gma :
         }
 
         // This will be garbage/blank
-        writer.Write(modelsCount);
+        writer.Write(modelCount);
         writer.Write(modelBasePtrOffset);
 
         // Write entries (offsets)
@@ -123,14 +123,14 @@ public class Gma :
 
         // Update some metadata
         modelBasePtrOffset = writer.GetPositionAsPointer().address;
-        modelsCount = modelEntries.Length;
+        modelCount = modelEntries.Length;
 
         // Write model data
         gcmfWriter.BaseStream.CopyTo(writer.BaseStream);
 
         // Re-write values
         writer.JumpToZero();
-        writer.Write(modelsCount);
+        writer.Write(modelCount);
         writer.Write(modelBasePtrOffset);
     }
 
