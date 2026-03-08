@@ -76,7 +76,7 @@ public class Gma :
             model.DebugIndex = $"[{index++}/{ModelCount}]";
         }
 
-        // Write GCMFs to a memory stream, collect their pointer
+        // Write GCMFs to a memory stream, collect their pointers
         var gcmfOffsets = new Offset[modelGCMFs.Count];
         var gcmfWriter = new EndianBinaryWriter(new MemoryStream(), writer.Endianness);
         for (int i = 0; i < modelGCMFs.Count; i++)
@@ -87,7 +87,7 @@ public class Gma :
         }
         gcmfWriter.SeekBegin();
 
-        // Write names to memory stream, collet their pointers
+        // Write names to memory stream, collect their pointers
         var nameOffsets = new Offset[modelGCMFs.Count];
         var nameWriter = new EndianBinaryWriter(new MemoryStream(), writer.Endianness);
         for (int i = 0; i < modelGCMFs.Count; i++)
