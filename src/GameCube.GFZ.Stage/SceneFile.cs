@@ -1,4 +1,5 @@
-﻿using Manifold;
+﻿using GameCube.GFZ.GameData;
+using Manifold;
 using Manifold.IO;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -50,9 +51,9 @@ public class SceneFile : BinaryFileWrapper<Scene>
     /// <summary>
     ///     The venue for this course.
     /// </summary>
-    public Venue Venue { get; set; }
+    public VenueID Venue { get; set; }
 
-    public string VenueDescription => CourseUtility.GetVenueID(CourseIndex).GetDescription();
+    public string VenueDescription => CourseUtility.GetDefaultVenueID(CourseIndex).GetDescription();
 
     /// <summary>
     ///     Gets the venue's name
@@ -77,8 +78,8 @@ public class SceneFile : BinaryFileWrapper<Scene>
         }
 
         // TODO: use file hash + DB instead of hardcoded guesses.
-        Venue = CourseUtility.GetVenue(CourseIndex);
-        CourseName = CourseUtility.GetCourseName(CourseIndex);
+        Venue = CourseUtility.GetDefaultVenueID(CourseIndex);
+        CourseName = CourseUtility.GetDefaultCourseNameAX(CourseIndex);
         //Author = "Amusement Vision";
     }
 

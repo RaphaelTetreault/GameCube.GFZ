@@ -65,11 +65,11 @@ public enum VenueID : byte
     MuteCityCom,
 
     [Description("Mute City (Story)")]
-    MuteCityStory,
+    MuteCityComStory,
 
     [Description("Phantom Road")]
     PhantomRoad,
 
-    [Description("WIN")]
-    Win,
+    [Description("Mute City (Grand Prix Podium)")]
+    MuteCityGrandPrixPodium,
 }

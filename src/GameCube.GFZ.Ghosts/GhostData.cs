@@ -1,5 +1,5 @@
 using GameCube.GFZ.CarData;
-using GameCube.GFZ.Stage;
+using GameCube.GFZ.GameData;
 using Manifold.IO;
 
 namespace GameCube.GFZ.Ghosts;
