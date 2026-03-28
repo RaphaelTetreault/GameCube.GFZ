@@ -101,7 +101,7 @@ public static class CourseUtility
     public static CourseIndexGX GetCourseNameGX(int index)
     {
         var courseID = (CourseIndexGX)index;
-        var notDefined = !System.Enum.IsDefined(typeof(CourseIndexGX), courseID);
+        var notDefined = !Enum.IsDefined(courseID);
         if (notDefined)
         {
             courseID = CourseIndexGX.None;
@@ -112,7 +112,7 @@ public static class CourseUtility
     public static CourseIndexAX GetCourseNameAX(int index)
     {
         var courseID = (CourseIndexAX)index;
-        var notDefined = !System.Enum.IsDefined(typeof(CourseIndexAX), courseID);
+        var notDefined = !Enum.IsDefined(courseID);
         if (notDefined)
         {
             courseID = CourseIndexAX.None;
@@ -160,13 +160,13 @@ public static class CourseUtility
 
 
 
-    private static Exception GetGameCodeNotAxOrGxException(GameCode gameCode)
+    private static ArgumentException GetGameCodeNotAxOrGxException(GameCode gameCode)
     {
         string msg = $"Invalid {nameof(GameCode)} {gameCode}. No flags for AX or GX defined.";
-        return new ArgumentException();
+        return new ArgumentException(msg);
     }
 
-    private static Exception GetVenueIDInvalidException(VenueID venueID)
+    private static ArgumentException GetVenueIDInvalidException(VenueID venueID)
     {
         string msg = $"Invalid {nameof(VenueID)} value {venueID} ({(int)venueID}).";
         return new ArgumentException(msg);
