@@ -1,4 +1,5 @@
 ﻿using GameCube.AmusementVision;
+using System;
 
 namespace GameCube.GFZ.GameData;
 
@@ -7,7 +8,7 @@ namespace GameCube.GFZ.GameData;
 /// </summary>
 public static class CourseUtility
 {
-    public static string GetVenueBackgroundName(VenueID venueID) => venueID switch
+    public static string GetVenueBackgroundName(VenueID venueID, GameCode gameCode) => venueID switch
     {
         VenueID.Aeropolis       => "tow",   // Tower = Aeropolis
         VenueID.BigBlue         => "big",   
@@ -22,14 +23,14 @@ public static class CourseUtility
         VenueID.MuteCity        => "mut",   
         VenueID.MuteCityCom     => "com",   // Com for Combo? Mute City + Casino Palace.
         VenueID.MuteCityComStory => "com_s",
-        VenueID.MuteCityGrandPrixPodium => "win", // TODO: investigate "win" and "win_gx"
+        VenueID.MuteCityGrandPrixPodium => IsGX(gameCode) ? "win_gx" : IsAX(gameCode) ? "win" : throw GetGameCodeNotAxOrGxException(gameCode),
         VenueID.OuterSpace      => "met",   // Meteor = Outer Space
         VenueID.PhantomRoad     => "rai",   // Rainbow Road = Phantom Road
         VenueID.PortTown        => "por",
         VenueID.PortTownStory   => "por_s",
         VenueID.SandOcean       => "san",
         VenueID.SandOceanStory  => "san_s",
-        _ => throw new System.ArgumentException($"Invalid {nameof(VenueID)} value {venueID} ({(int)venueID})."),
+        _ => throw GetVenueIDInvalidException(venueID),
     };
 
     /// <summary>
@@ -136,10 +137,12 @@ public static class CourseUtility
 
     public static string GetDefaultCourseName(int index, GameCode gameCode)
     {
-        string name = IsAX(gameCode)
-            ? GetDefaultCourseNameAX(index)
-            : GetDefaultCourseNameGX(index);
-        return name;
+        if (IsGX(gameCode))
+            return GetDefaultCourseNameGX(index);
+        else if (IsAX(gameCode))
+            return GetDefaultCourseNameAX(index);
+
+        throw GetGameCodeNotAxOrGxException(gameCode);
     }
 
     public static string GetDefaultVenueName(int index)
@@ -150,9 +153,23 @@ public static class CourseUtility
     }
 
     // TODO: consider moving this into a utlity class for GameCode, GameCodeFields, AvGame, etc.
-    private static bool IsAX(GameCode gameCode) => gameCode == GameCode.GFZJ8P;
-    private static bool IsGX(GameCode gameCode) => !IsAX(gameCode);
+#pragma warning disable CA2248 // Provide correct 'enum' argument to 'Enum.HasFlag'
+    private static bool IsAX(GameCode gameCode) => gameCode.HasFlag(GameCodeFields.AX);
+    private static bool IsGX(GameCode gameCode) => gameCode.HasFlag(GameCodeFields.GX);
+#pragma warning restore CA2248 // Provide correct 'enum' argument to 'Enum.HasFlag'
 
 
+
+    private static Exception GetGameCodeNotAxOrGxException(GameCode gameCode)
+    {
+        string msg = $"Invalid {nameof(GameCode)} {gameCode}. No flags for AX or GX defined.";
+        return new ArgumentException();
+    }
+
+    private static Exception GetVenueIDInvalidException(VenueID venueID)
+    {
+        string msg = $"Invalid {nameof(VenueID)} value {venueID} ({(int)venueID}).";
+        return new ArgumentException(msg);
+    }
 
 }
