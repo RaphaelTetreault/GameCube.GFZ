@@ -1,13 +1,23 @@
 ﻿using GameCube.AmusementVision;
 using System;
+using System.Collections.Frozen;
+using System.Collections.Generic;
 
 namespace GameCube.GFZ.GameData;
 
 /// <summary>
 ///     
 /// </summary>
-public static class CourseUtility
+public static class CourseDatabase
 {
+
+
+
+
+
+
+
+
     public static string GetVenueBackgroundName(VenueID venueID, GameCode gameCode) => venueID switch
     {
         VenueID.Aeropolis       => "tow",   // Tower = Aeropolis

@@ -53,7 +53,7 @@ public class SceneFile : BinaryFileWrapper<Scene>
     /// </summary>
     public VenueID Venue { get; set; }
 
-    public string VenueDescription => CourseUtility.GetDefaultVenueID(CourseIndex).GetDescription();
+    public string VenueDescription => CourseDatabase.GetDefaultVenueID(CourseIndex).GetDescription();
 
     /// <summary>
     ///     Gets the venue's name
@@ -78,8 +78,8 @@ public class SceneFile : BinaryFileWrapper<Scene>
         }
 
         // TODO: use file hash + DB instead of hardcoded guesses.
-        Venue = CourseUtility.GetDefaultVenueID(CourseIndex);
-        CourseName = CourseUtility.GetDefaultCourseNameAX(CourseIndex);
+        Venue = CourseDatabase.GetDefaultVenueID(CourseIndex);
+        CourseName = CourseDatabase.GetDefaultCourseNameAX(CourseIndex);
         //Author = "Amusement Vision";
     }
 
