@@ -5,10 +5,10 @@ namespace GameCube.GFZ.LineREL;
 /// <summary>
 ///     AX
 /// </summary>
-public class LineRelInfoGfzj8p : LineRelInfo
+public class LineRelInfoGgge6e : LineRelInfo
 {
     // TODO: const for file hash
-    public override GameCode GameCode => GameCode.GFZJ8P;
+    public override GameCode GameCode => GameCode.GGGE6E;
     public override string SourceFile => "../sys/main.dol"; //...?
     public override string WorkingFile => "../sys/main.dol";
     public override string FileHashMD5 => throw new System.NotImplementedException();

@@ -11,31 +11,41 @@ namespace GameCube.GFZ.GameData
         {
             public const string Aeropolis = "Aeropolis";
             public const string BigBlue = "Big Blue";
-            public const string BigBlueStory = BigBlue + Story;
             public const string CasinoPalace = "Casino Palace";
             public const string CosmoTerminal = "Cosmo Terminal";
             public const string Elevator = "Elevator";
             public const string Fire = "Fire";
-            public const string FireStory = Fire + Story; // Fire
             public const string FireField = "Fire Field";
-            public const string FireFieldStory = FireField + Story; // Fire Field
             public const string GreenPlant = "Green Plant";
             public const string Lightning = "Lightning";
-            public const string LightningStory = Lightning + Story; // Lightning
             public const string MuteCity = "Mute City";
             public const string MuteCityCom = "Mute City";
-            public const string MuteCityComStory = MuteCityCom + Story; // Mute City
             public const string MuteCityGrandPrixPodium = Null;
             public const string Null = "Null";
             public const string OuterSpace = "Outer Space";
             public const string PhantomRoad = "Phantom Road";
             public const string PortTown = "Port Town";
-            public const string PortTownStory = PortTown + Story; // Port Town
             public const string RainbowRoad = "Rainbow Road";
             public const string SandOcean = "Sand Ocean";
-            public const string SandOceanStory = SandOcean + Story; // Red Canyon
-            public const string Story = " (Story)";
             public const string VegasPalace = "Vegas Palace";
+            // Story
+            public const string Story = " (Story)";
+            public const string BigBlueStory = BigBlue + Story;
+            public const string FireStory = Fire + Story; // Fire
+            public const string FireFieldStory = FireField + Story; // Fire Field
+            public const string MuteCityComStory = MuteCityCom + Story; // Mute City
+            public const string PortTownStory = PortTown + Story; // Port Town
+            public const string SandOceanStory = SandOcean + Story; // Red Canyon
+            // Considerations for above story venue names
+            public const string Story1 = MuteCityCom;
+            public const string Story2 = "Red Canyon";
+            //public const string Story3 = CasinoPalace;
+            public const string Story4 = BigBlue;
+            //public const string Story5 = Lightning;
+            public const string Story6 = PortTown;
+            //public const string Story7 = MuteCity;
+            public const string Story8 = "Underworld";
+            //public const string Story9 = PhantomRoad;
         }
 
         public static readonly Venue Aeropolis = new()
@@ -45,8 +55,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.Aeropolis),
                 new (GameCode.GFZJ01, Names.Aeropolis),
-                new (GameCode.GFZJ8P, Names.Aeropolis),
                 new (GameCode.GFZP01, Names.Aeropolis),
+                new (GameCode.GGGE6E, Names.Aeropolis),
             ]),
         };
 
@@ -57,8 +67,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.BigBlue),
                 new (GameCode.GFZJ01, Names.BigBlue),
-                new (GameCode.GFZJ8P, Names.BigBlue),
                 new (GameCode.GFZP01, Names.BigBlue),
+                new (GameCode.GGGE6E, Names.BigBlue),
             ]),
         };
 
@@ -70,8 +80,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.BigBlueStory),
                 new (GameCode.GFZJ01, Names.BigBlueStory),
-                new (GameCode.GFZJ8P, Names.BigBlueStory),
                 new (GameCode.GFZP01, Names.BigBlueStory),
+                new (GameCode.GGGE6E, Names.BigBlueStory),
             ]),
         };
 
@@ -82,8 +92,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.CasinoPalace),
                 new (GameCode.GFZJ01, Names.VegasPalace),
-                new (GameCode.GFZJ8P, Names.VegasPalace),
                 new (GameCode.GFZP01, Names.CasinoPalace),
+                new (GameCode.GGGE6E, Names.VegasPalace),
             ]),
         };
 
@@ -94,8 +104,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.CosmoTerminal),
                 new (GameCode.GFZJ01, Names.CosmoTerminal),
-                new (GameCode.GFZJ8P, Names.Elevator),
                 new (GameCode.GFZP01, Names.CosmoTerminal),
+                new (GameCode.GGGE6E, Names.Elevator),
             ]),
         };
 
@@ -106,8 +116,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.FireField),
                 new (GameCode.GFZJ01, Names.FireField),
-                new (GameCode.GFZJ8P, Names.Fire),
                 new (GameCode.GFZP01, Names.FireField),
+                new (GameCode.GGGE6E, Names.Fire),
             ]),
         };
 
@@ -118,8 +128,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.FireFieldStory),
                 new (GameCode.GFZJ01, Names.FireFieldStory),
-                new (GameCode.GFZJ8P, Names.FireStory),
                 new (GameCode.GFZP01, Names.FireFieldStory),
+                new (GameCode.GGGE6E, Names.FireStory),
             ]),
         };
 
@@ -130,8 +140,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.GreenPlant),
                 new (GameCode.GFZJ01, Names.GreenPlant),
-                new (GameCode.GFZJ8P, Names.GreenPlant),
                 new (GameCode.GFZP01, Names.GreenPlant),
+                new (GameCode.GGGE6E, Names.GreenPlant),
             ]),
         };
 
@@ -142,20 +152,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.Lightning),
                 new (GameCode.GFZJ01, Names.Lightning),
-                new (GameCode.GFZJ8P, Names.Lightning),
                 new (GameCode.GFZP01, Names.Lightning),
-            ]),
-        };
-
-        public static readonly Venue LightningStory = new()
-        {
-            ID = VenueID.LightningStory,
-            Name = FrozenDictionary.Create<GameCode, string>(
-            [
-                new (GameCode.GFZE01, Names.LightningStory),
-                new (GameCode.GFZJ01, Names.LightningStory),
-                new (GameCode.GFZJ8P, Names.LightningStory),
-                new (GameCode.GFZP01, Names.LightningStory),
+                new (GameCode.GGGE6E, Names.Lightning),
             ]),
         };
 
@@ -166,8 +164,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.MuteCity),
                 new (GameCode.GFZJ01, Names.MuteCity),
-                new (GameCode.GFZJ8P, Names.MuteCity),
                 new (GameCode.GFZP01, Names.MuteCity),
+                new (GameCode.GGGE6E, Names.MuteCity),
             ]),
         };
 
@@ -178,8 +176,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.MuteCityCom),
                 new (GameCode.GFZJ01, Names.MuteCityCom),
-                new (GameCode.GFZJ8P, Names.MuteCityCom),
                 new (GameCode.GFZP01, Names.MuteCityCom),
+                new (GameCode.GGGE6E, Names.MuteCityCom),
             ]),
         };
 
@@ -190,8 +188,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.MuteCityComStory),
                 new (GameCode.GFZJ01, Names.MuteCityComStory),
-                new (GameCode.GFZJ8P, Names.MuteCityComStory),
                 new (GameCode.GFZP01, Names.MuteCityComStory),
+                new (GameCode.GGGE6E, Names.MuteCityComStory),
             ]),
         };
 
@@ -202,8 +200,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.MuteCityGrandPrixPodium),
                 new (GameCode.GFZJ01, Names.MuteCityGrandPrixPodium),
-                new (GameCode.GFZJ8P, Names.MuteCityGrandPrixPodium),
                 new (GameCode.GFZP01, Names.MuteCityGrandPrixPodium),
+                new (GameCode.GGGE6E, Names.MuteCityGrandPrixPodium),
             ]),
         };
 
@@ -214,8 +212,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.Null),
                 new (GameCode.GFZJ01, Names.Null),
-                new (GameCode.GFZJ8P, Names.Null),
                 new (GameCode.GFZP01, Names.Null),
+                new (GameCode.GGGE6E, Names.Null),
             ]),
         };
 
@@ -226,8 +224,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.OuterSpace),
                 new (GameCode.GFZJ01, Names.OuterSpace),
-                new (GameCode.GFZJ8P, Names.OuterSpace),
                 new (GameCode.GFZP01, Names.OuterSpace),
+                new (GameCode.GGGE6E, Names.OuterSpace),
             ]),
         };
 
@@ -238,8 +236,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.PhantomRoad),
                 new (GameCode.GFZJ01, Names.PhantomRoad),
-                new (GameCode.GFZJ8P, Names.RainbowRoad),
                 new (GameCode.GFZP01, Names.PhantomRoad),
+                new (GameCode.GGGE6E, Names.RainbowRoad),
             ]),
         };
 
@@ -250,8 +248,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.PortTown),
                 new (GameCode.GFZJ01, Names.PortTown),
-                new (GameCode.GFZJ8P, Names.PortTown),
                 new (GameCode.GFZP01, Names.PortTown),
+                new (GameCode.GGGE6E, Names.PortTown),
             ]),
         };
 
@@ -262,8 +260,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.PortTownStory),
                 new (GameCode.GFZJ01, Names.PortTownStory),
-                new (GameCode.GFZJ8P, Names.PortTownStory),
                 new (GameCode.GFZP01, Names.PortTownStory),
+                new (GameCode.GGGE6E, Names.PortTownStory),
             ]),
         };
 
@@ -274,8 +272,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.SandOcean),
                 new (GameCode.GFZJ01, Names.SandOcean),
-                new (GameCode.GFZJ8P, Names.SandOcean),
                 new (GameCode.GFZP01, Names.SandOcean),
+                new (GameCode.GGGE6E, Names.SandOcean),
             ]),
         };
 
@@ -286,8 +284,8 @@ namespace GameCube.GFZ.GameData
             [
                 new (GameCode.GFZE01, Names.SandOceanStory),
                 new (GameCode.GFZJ01, Names.SandOceanStory),
-                new (GameCode.GFZJ8P, Names.SandOceanStory),
                 new (GameCode.GFZP01, Names.SandOceanStory),
+                new (GameCode.GGGE6E, Names.SandOceanStory),
             ]),
         };
 
