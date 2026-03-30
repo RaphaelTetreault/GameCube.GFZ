@@ -1,4 +1,5 @@
-﻿using System.Collections.Frozen;
+﻿using System;
+using System.Collections.Frozen;
 
 namespace GameCube.GFZ.GameData
 {
@@ -33,6 +34,7 @@ namespace GameCube.GFZ.GameData
             public const string BigBlueStory = BigBlue + Story;
             public const string FireStory = Fire + Story; // Fire
             public const string FireFieldStory = FireField + Story; // Fire Field
+            public const string LightningStory = Lightning + Story;
             public const string MuteCityComStory = MuteCityCom + Story; // Mute City
             public const string PortTownStory = PortTown + Story; // Port Town
             public const string SandOceanStory = SandOcean + Story; // Red Canyon
@@ -154,6 +156,18 @@ namespace GameCube.GFZ.GameData
                 new (GameCode.GFZJ01, Names.Lightning),
                 new (GameCode.GFZP01, Names.Lightning),
                 new (GameCode.GGGE6E, Names.Lightning),
+            ]),
+        };
+
+        public static readonly Venue LightningStory = new()
+        {
+            ID = VenueID.LightningStory,
+            Name = FrozenDictionary.Create<GameCode, string>(
+            [
+                new (GameCode.GFZE01, Names.LightningStory),
+                new (GameCode.GFZJ01, Names.LightningStory),
+                new (GameCode.GFZP01, Names.LightningStory),
+                new (GameCode.GGGE6E, Names.LightningStory),
             ]),
         };
 
@@ -288,6 +302,65 @@ namespace GameCube.GFZ.GameData
                 new (GameCode.GGGE6E, Names.SandOceanStory),
             ]),
         };
+
+
+        public static readonly Venue[] DefaultVenues =
+        [
+            // 0
+            Null,
+            MuteCity,
+            PortTown,
+            PortTownStory,
+            BigBlue,
+            // 5
+            BigBlueStory,
+            Lightning,
+            LightningStory,
+            SandOcean,
+            SandOceanStory,
+            // 10
+            GreenPlant,
+            FireField,
+            FireFieldStory,
+            CasinoPalace,
+            OuterSpace,
+            // 15
+            Aeropolis,
+            CosmoTerminal,
+            MuteCityCom,
+            MuteCityComStory,
+            PhantomRoad,
+            // 20
+            MuteCityGrandPrixPodium,
+        ];
+
+        public static void UnitTest()
+        {
+            foreach (var gameCode in Enum.GetValues<GameCode>())
+            {
+                if (gameCode == GameCode.GFZJ8P)
+                    continue;
+
+                Console.WriteLine(gameCode);
+                for (int i = 0; i < GameDataConsts.MaxVenueIndex; i++)
+                {
+                    Venue v = DefaultVenues[i];
+                    if (v != Null)
+                    {
+                        if (i != (int)v.ID)
+                            throw new Exception("Wrong index match!");
+                    }
+
+                    // Catch few cases where only AX defines track, so GameCode is not present for course name
+                    if (!v.Name.ContainsKey(gameCode))
+                        v = Null;
+                    // Print
+                    Console.WriteLine($"{gameCode} {i,3} - Stage: {v.ID,3}, {v.Name[gameCode]}");
+                }
+                Console.WriteLine();
+            }
+        }
+
 
     }
 }

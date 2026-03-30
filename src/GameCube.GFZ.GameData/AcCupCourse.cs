@@ -10,21 +10,21 @@ namespace GameCube.GFZ.GameData;
 /// </remarks>
 public enum AcCupCourse : byte
 {
-    [Description("Mute City - Sonic Oval")]
+    [Description("Mute City [Sonic Oval]")]
     MCSO,
 
-    [Description("Aeropolis - Screw Drive")]
+    [Description("Aeropolis [Screw Drive]")]
     ASD,
 
-    [Description("Outer Space - Meteor Stream")]
+    [Description("Outer Space [Meteor Stream]")]
     OSMS,
 
-    [Description("Port Town - Cylinder Wave")]
+    [Description("Port Town [Cylinder Wave]")]
     PTCW,
 
-    [Description("Lightning - Thunder Road")]
+    [Description("Lightning [Thunder Road]")]
     LTR,
 
-    [Description("Green Plant - Spiral")]
+    [Description("Green Plant [Spiral")]
     GPS,
 }

@@ -13,11 +13,6 @@ public static class CourseDatabase
 
 
 
-
-
-
-
-
     public static string GetVenueBackgroundName(VenueID venueID, GameCode gameCode) => venueID switch
     {
         VenueID.Aeropolis       => "tow",   // Tower = Aeropolis
@@ -108,57 +103,23 @@ public static class CourseDatabase
         };
     }
 
-    public static CourseIndexGX GetCourseNameGX(int index)
+    public static string GetDefaultCourseName(GameCode gameCode, int courseIndex)
     {
-        var courseID = (CourseIndexGX)index;
-        var notDefined = !Enum.IsDefined(courseID);
-        if (notDefined)
-        {
-            courseID = CourseIndexGX.None;
-        }
-        return courseID;
-    }
-
-    public static CourseIndexAX GetCourseNameAX(int index)
-    {
-        var courseID = (CourseIndexAX)index;
-        var notDefined = !Enum.IsDefined(courseID);
-        if (notDefined)
-        {
-            courseID = CourseIndexAX.None;
-        }
-        return courseID;
-    }
-
-
-    public static string GetDefaultCourseNameAX(int index)
-    {
-        CourseIndexAX value = GetCourseNameAX(index);
-        string name = Manifold.EnumExtensions.GetDescription(value);
+        Course course = Course.DefaultCourses[courseIndex];
+        string name = course.Name[gameCode];
         return name;
     }
-
-    public static string GetDefaultCourseNameGX(int index)
+    public static string GetDefaultVenueName(GameCode gameCode, int courseIndex)
     {
-        CourseIndexGX value = GetCourseNameGX(index);
-        string name = Manifold.EnumExtensions.GetDescription(value);
+        Course course = Course.DefaultCourses[courseIndex];
+        Venue venue = course.Venue;
+        string name = venue.Name[gameCode];
         return name;
     }
-
-    public static string GetDefaultCourseName(int index, GameCode gameCode)
+    public static string GetDefaultVenueName(GameCode gameCode, VenueID venueID)
     {
-        if (IsGX(gameCode))
-            return GetDefaultCourseNameGX(index);
-        else if (IsAX(gameCode))
-            return GetDefaultCourseNameAX(index);
-
-        throw GetGameCodeNotAxOrGxException(gameCode);
-    }
-
-    public static string GetDefaultVenueName(int index)
-    {
-        VenueID venueID = GetDefaultVenueID(index);
-        string name = Manifold.EnumExtensions.GetDescription(venueID);
+        Venue venue = Venue.DefaultVenues[(int)venueID];
+        string name = venue.Name[gameCode];
         return name;
     }
 

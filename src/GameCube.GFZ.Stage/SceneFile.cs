@@ -46,14 +46,14 @@ public class SceneFile : BinaryFileWrapper<Scene>
     /// </summary>
     public int CourseIndex { get; set; }
 
-    public string CourseDescription => ((CourseIndexAX)CourseIndex).GetDescription();
+    public string CourseDescription => Course.DefaultCourses[CourseIndex].DisplayText(GameCode.GFZE01);
 
     /// <summary>
     ///     The venue for this course.
     /// </summary>
     public VenueID Venue { get; set; }
 
-    public string VenueDescription => CourseDatabase.GetDefaultVenueID(CourseIndex).GetDescription();
+    public string VenueDescription => Course.DefaultCourses[CourseIndex].Venue.Name[GameCode.GFZE01];
 
     /// <summary>
     ///     Gets the venue's name
@@ -79,7 +79,7 @@ public class SceneFile : BinaryFileWrapper<Scene>
 
         // TODO: use file hash + DB instead of hardcoded guesses.
         Venue = CourseDatabase.GetDefaultVenueID(CourseIndex);
-        CourseName = CourseDatabase.GetDefaultCourseNameAX(CourseIndex);
+        CourseName = CourseDatabase.GetDefaultCourseName(GameCode.GFZE01, CourseIndex);
         //Author = "Amusement Vision";
     }
 

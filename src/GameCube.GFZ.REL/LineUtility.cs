@@ -278,7 +278,7 @@ public class LineUtility
         writer.Write(difficulty);
     }
 
-    public static void PatchCupSlot(EndianBinaryWriter writer, LineRelInfo lookup, Cup cup, int courseIndex)
+    public static void PatchCupSlot(EndianBinaryWriter writer, LineRelInfo lookup, CupIndex cup, int courseIndex)
     {
         ValidateStageIndex(courseIndex, 110, -1);
 
@@ -296,7 +296,7 @@ public class LineUtility
         writer.Write(courseIndex);
     }
 
-    public static void PatchCupSlots(EndianBinaryWriter writer, LineRelInfo lookup, Cup cup, short[] courses)
+    public static void PatchCupSlots(EndianBinaryWriter writer, LineRelInfo lookup, CupIndex cup, short[] courses)
     {
         if (courses.Length < 1 || courses.Length > 6)
         {

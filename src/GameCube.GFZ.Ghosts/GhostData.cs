@@ -28,8 +28,6 @@ public class GhostData :
     public GhostFrame[] frames = [];
 
     public string TimeDisplay => time.ToString();
-    public CourseIndexAX CourseIndexAX => (CourseIndexAX)courseID;
-    public CourseIndexGX CourseIndexGX => (CourseIndexGX)courseID;
 
     public void Deserialize(EndianBinaryReader reader)
     {

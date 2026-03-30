@@ -8,7 +8,7 @@ namespace GameCube.GFZ.GameData;
 /// <remarks>
 ///     Description attribute contains display name of each cup.
 /// </remarks>
-public enum Cup : byte
+public enum CupIndex : byte
 {
     [Description("All")]
     All,

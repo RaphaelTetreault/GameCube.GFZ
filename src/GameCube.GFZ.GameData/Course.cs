@@ -10,6 +10,14 @@ namespace GameCube.GFZ.GameData
         public required FrozenDictionary<GameCode, string> Name { get; init; }
 
 
+        public readonly string DisplayText(GameCode gameCode)
+        {
+            string venue = Venue.Name[gameCode];
+            string course = this.Name[gameCode];
+            return $"{venue} [{course}]";
+        }
+
+
         public static class NamesEN
         {
             // Ruby Cup
