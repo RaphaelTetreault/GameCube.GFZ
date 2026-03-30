@@ -24,7 +24,7 @@ public static class CourseDatabase
         VenueID.FireFieldStory  => "fir_s", 
         VenueID.GreenPlant      => "for",   // Forest = Green Plant
         VenueID.Lightning       => "lig",   
-        VenueID.LightningStory  => throw new ArgumentException($"No known file match for {venueID}"), 
+        VenueID.LightningStory  => throw new ArgumentException($"No known file match for {(int)venueID} {venueID}"), 
         VenueID.MuteCity        => "mut",   
         VenueID.MuteCityCom     => "com",   // Com for Combo? Mute City + Casino Palace.
         VenueID.MuteCityComStory => "com_s",
@@ -73,7 +73,7 @@ public static class CourseDatabase
             21 => VenueID.Aeropolis,    // Aeropolis [Dragon Slope]
             22 => VenueID.CosmoTerminal,
             23 => VenueID.Lightning,
-            24 => VenueID.CosmoTerminal, // Cosmo Terminal [Trident]
+            24 => VenueID.CosmoTerminal,// Cosmo Terminal [Trident]
             25 => VenueID.SandOcean,    // Sand Ocean [Lateral Shift]
             26 => VenueID.SandOcean,    // Sand Ocean [Surface Slide]
             27 => VenueID.BigBlue,      // Big Blue [Ordeal]
@@ -99,7 +99,7 @@ public static class CourseDatabase
             49 => VenueID.MuteCityGrandPrixPodium, // Grand Prix Podium
             50 => VenueID.MuteCityGrandPrixPodium, // Victory Lap
 
-            _ => VenueID.None, // For all other indices, there is no venue
+            _ => VenueID.None, // All other indices are unset
         };
     }
 
