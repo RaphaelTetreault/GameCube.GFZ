@@ -24,7 +24,7 @@ public static class CourseDatabase
         VenueID.FireFieldStory  => "fir_s", 
         VenueID.GreenPlant      => "for",   // Forest = Green Plant
         VenueID.Lightning       => "lig",   
-        VenueID.LightningStory  => "lig_s", 
+        VenueID.LightningStory  => throw new ArgumentException($"No known file match for {venueID}"), 
         VenueID.MuteCity        => "mut",   
         VenueID.MuteCityCom     => "com",   // Com for Combo? Mute City + Casino Palace.
         VenueID.MuteCityComStory => "com_s",
@@ -49,7 +49,7 @@ public static class CourseDatabase
     {
         return index switch
         {
-            00 => VenueID.SandOcean,    // Unused Twist Road leftovers
+            00 => VenueID.SandOcean,    // AX test for Sand Ocean [Screw Drive]
             01 => VenueID.MuteCity,     // Mute City [Twist Road]
             02 => VenueID.MuteCity,     
             03 => VenueID.MuteCity,     // Mute City [Serial Gaps]
@@ -86,15 +86,15 @@ public static class CourseDatabase
             34 => VenueID.Lightning,    // Lightning [Thunder Road]
             35 => VenueID.GreenPlant,   // Green Plant [Sprial]
             36 => VenueID.MuteCityCom,  // Mute City [Sonic Oval]
-            37 => VenueID.MuteCityComStory, // Story 1: Captain Falcon Trains
-            38 => VenueID.SandOceanStory,   // Story 2: Goroh: The Vengeful Samurai
-            39 => VenueID.CasinoPalace,     // Story 3: High Stakes in Mute City
-            40 => VenueID.BigBlueStory,     // Story 4: Challenge of the Bloody Chain
-            41 => VenueID.Lightning,        // Story 5: Save Jody Summer!
-            42 => VenueID.PortTownStory,    // Story 6: Black Shadow's Trap
-            43 => VenueID.MuteCity,         // Story 7: The F-Zero Grand Prix
-            44 => VenueID.FireFieldStory,   // Story 8: Secrets of the Champion Belt
-            45 => VenueID.PhantomRoad,      // Story 9: Finale: Enter The Creators
+            37 => VenueID.MuteCityComStory, // Chapter 1  Captain Falcon Trains
+            38 => VenueID.SandOceanStory,   // Chapter 2  Goroh: The Vengeful Samurai
+            39 => VenueID.CasinoPalace,     // Chapter 3  High Stakes in Mute City
+            40 => VenueID.BigBlueStory,     // Chapter 4  Challenge of the Bloody Chain
+            41 => VenueID.Lightning,        // Chapter 5  Save Jody Summer!
+            42 => VenueID.PortTownStory,    // Chapter 6  Black Shadow's Trap
+            43 => VenueID.MuteCity,         // Chapter 7  The F-Zero Grand Prix
+            44 => VenueID.FireFieldStory,   // Chapter 8  Secrets of the Champion Belt
+            45 => VenueID.PhantomRoad,      // Chapter 9  Finale: Enter The Creators
 
             49 => VenueID.MuteCityGrandPrixPodium, // Grand Prix Podium
             50 => VenueID.MuteCityGrandPrixPodium, // Victory Lap

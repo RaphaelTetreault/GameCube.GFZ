@@ -306,7 +306,6 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue[] DefaultVenues =
         [
-            // 0
             Null,
             MuteCity,
             PortTown,
