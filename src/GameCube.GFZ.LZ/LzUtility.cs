@@ -14,16 +14,16 @@ public static class LzUtility
     /// Compresses file at <paramref name="filePath"/> using Amusement Vision LZ compression.
     /// </summary>
     /// <param name="filePath">The file to compress.</param>
-    /// <param name="game">Which LZ format to use for this game.</param>
+    /// <param name="lzHeaderType">Which LZ format to use for this game.</param>
     /// <returns>
     /// A memory stream with the compressed file contents.
     /// </returns>
-    public static MemoryStream CompressAvLz(string filePath, AvGame game)
+    public static MemoryStream CompressAvLz(string filePath, LzHeaderType lzHeaderType)
     {
         var compressedFile = new MemoryStream();
         using (var inputFile = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-            Lz.Pack(inputFile, compressedFile, game);
+            Lz.Pack(inputFile, compressedFile, lzHeaderType);
             compressedFile.Flush();
         }
 
@@ -35,12 +35,12 @@ public static class LzUtility
     /// and saves it to disk.
     /// </summary>
     /// <param name="filePath">The file to compress.</param>
-    /// <param name="game">Which LZ format to use for this game.</param>
+    /// <param name="lzHeaderType">Which LZ format to use for this game.</param>
     /// <param name="overwriteFiles">Whether the opration can overwrite existing files on disk.</param>
     /// <returns>
     /// Returns a bool indicating the IO operation was successful.
     /// </returns>
-    public static bool CompressAvLzToDisk(string filePath, AvGame game, bool overwriteFiles)
+    public static bool CompressAvLzToDisk(string filePath, LzHeaderType lzHeaderType, bool overwriteFiles)
     {
         var outputPath = $"{filePath}.lz";
 
@@ -50,7 +50,7 @@ public static class LzUtility
             return false;
         }
 
-        var compressedFile = CompressAvLz(filePath, game);
+        var compressedFile = CompressAvLz(filePath, lzHeaderType);
 
         // Save stream from RAM to disk
         // File.Create will clear any existing file data
@@ -69,18 +69,18 @@ public static class LzUtility
     /// and saves it to disk.
     /// </summary>
     /// <param name="filePaths">The files to compress.</param>
-    /// <param name="game">Which LZ format to use for this game.</param>
+    /// <param name="lsHeaderType">Which LZ format to use for this game.</param>
     /// <param name="overwriteFiles">Whether the opration can overwrite existing files on disk.</param>
     /// <returns>
     /// Returns an iterator for each file specified in <paramref name="filePaths"/>. For each file, the
     /// iterator returns a FileStatus with success and filePath data.
     /// </returns>
-    public static IEnumerable<FileStatus> CompressAvLzToDisk(string[] filePaths, AvGame game, bool overwriteFiles)
+    public static IEnumerable<FileStatus> CompressAvLzToDisk(string[] filePaths, LzHeaderType lsHeaderType, bool overwriteFiles)
     {
         for (int i = 0; i < filePaths.Length; i++)
         {
             var filePath = filePaths[i];
-            bool success = CompressAvLzToDisk(filePath, game, overwriteFiles);
+            bool success = CompressAvLzToDisk(filePath, lsHeaderType, overwriteFiles);
             yield return new FileStatus(success, filePath);
         }
     }
@@ -90,7 +90,7 @@ public static class LzUtility
     /// and saves each file it to disk.
     /// </summary>
     /// <param name="rootPath">The folder to compress files in.</param>
-    /// <param name="game">Which LZ format to use for this game.</param>
+    /// <param name="lzHeaderType">Which LZ format to use for this game.</param>
     /// <param name="overwriteFiles">Whether the opration can overwrite existing files on disk.</param>
     /// <param name="searchOption">The search option used to find files in the specified folder.</param>
     /// <param name="searchPattern">The search pattern used to find files in the specified folder.</param>
@@ -98,10 +98,10 @@ public static class LzUtility
     /// Returns an iterator for each file found using the search parameters. For each file, the iterator
     /// returns a FileStatus with success and filePath data.
     /// </returns>
-    public static IEnumerable<FileStatus> CompressAvLzDirectoryToDisk(string rootPath, AvGame game, bool overwriteFiles, SearchOption searchOption, string searchPattern)
+    public static IEnumerable<FileStatus> CompressAvLzDirectoryToDisk(string rootPath, LzHeaderType lzHeaderType, bool overwriteFiles, SearchOption searchOption, string searchPattern)
     {
         var filePaths = Directory.GetFiles(rootPath, searchPattern, searchOption);
-        return CompressAvLzToDisk(filePaths, game, overwriteFiles);
+        return CompressAvLzToDisk(filePaths, lzHeaderType, overwriteFiles);
     }
 
     /// <summary>
