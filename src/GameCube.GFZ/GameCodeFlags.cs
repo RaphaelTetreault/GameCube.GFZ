@@ -1,10 +1,10 @@
 ﻿namespace GameCube.GFZ;
 
 /// <summary>
-///     Enum representing all bit fields for <see cref="GameCode"/>.
+///     Enum representing all bit flags for <see cref="GameCode"/>.
 /// </summary>
 [System.Flags]
-public enum GameCodeFields
+public enum GameCodeFlags
 {
     // Games
     GX = 1 << 0,

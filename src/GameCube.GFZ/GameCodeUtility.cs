@@ -2,47 +2,47 @@
 
 public class GameCodeUtility
 {
-    public static GameCode SetRegion(GameCode gameCode, GameCodeFields newRegion)
+    public static GameCode SetRegion(GameCode gameCode, GameCodeFlags newRegion)
     {
         // Validate incoming region
-        if ((newRegion & GameCodeFields.MaskRegion) == 0)
+        if ((newRegion & GameCodeFlags.MaskRegion) == 0)
         {
-            string msg = $"{nameof(GameCodeFields)} {newRegion} is not a region!";
+            string msg = $"{nameof(GameCodeFlags)} {newRegion} is not a region!";
             throw new System.ArgumentException(msg);
         }
 
         // Strip old region and apply new region
-        GameCodeFields value = (GameCodeFields)gameCode;
-        value &= ~GameCodeFields.MaskRegion;
+        GameCodeFlags value = (GameCodeFlags)gameCode;
+        value &= ~GameCodeFlags.MaskRegion;
         value |= newRegion;
         return (GameCode)value;
     }
 
-    public static GameCode SetGame(GameCode gameCode, GameCodeFields newGame)
+    public static GameCode SetGame(GameCode gameCode, GameCodeFlags newGame)
     {
         // Validate incoming game
-        if ((newGame & GameCodeFields.MaskRegion) == 0)
+        if ((newGame & GameCodeFlags.MaskRegion) == 0)
         {
-            string msg = $"{nameof(GameCodeFields)} {newGame} is not a game!";
+            string msg = $"{nameof(GameCodeFlags)} {newGame} is not a game!";
             throw new System.ArgumentException(msg);
         }
 
         // Strip old region and apply new region
-        GameCodeFields value = (GameCodeFields)gameCode;
-        value &= ~GameCodeFields.MaskGame;
+        GameCodeFlags value = (GameCodeFlags)gameCode;
+        value &= ~GameCodeFlags.MaskGame;
         value |= newGame;
         return (GameCode)value;
     }
 
-    public static GameCodeFields GetRegion(GameCode gameCode)
+    public static GameCodeFlags GetRegion(GameCode gameCode)
     {
-        GameCodeFields fields = (GameCodeFields)gameCode & GameCodeFields.MaskRegion;
+        GameCodeFlags fields = (GameCodeFlags)gameCode & GameCodeFlags.MaskRegion;
         return fields;
     }
 
-    public static GameCodeFields GetGame(GameCode gameCode)
+    public static GameCodeFlags GetGame(GameCode gameCode)
     {
-        GameCodeFields fields = (GameCodeFields)gameCode & GameCodeFields.MaskGame;
+        GameCodeFlags fields = (GameCodeFlags)gameCode & GameCodeFlags.MaskGame;
         return fields;
     }
 }

@@ -125,8 +125,8 @@ public static class CourseDatabase
 
     // TODO: consider moving this into a utlity class for GameCode, GameCodeFields, AvGame, etc.
 #pragma warning disable CA2248 // Provide correct 'enum' argument to 'Enum.HasFlag'
-    private static bool IsAX(GameCode gameCode) => gameCode.HasFlag(GameCodeFields.AX);
-    private static bool IsGX(GameCode gameCode) => gameCode.HasFlag(GameCodeFields.GX);
+    private static bool IsAX(GameCode gameCode) => gameCode.HasFlag(GameCodeFlags.AX);
+    private static bool IsGX(GameCode gameCode) => gameCode.HasFlag(GameCodeFlags.GX);
 #pragma warning restore CA2248 // Provide correct 'enum' argument to 'Enum.HasFlag'
 
 

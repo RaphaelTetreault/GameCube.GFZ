@@ -10,21 +10,21 @@ public enum GameCode
     ///     E: <u>E</u>nglish / North America.
     ///     01: Nintendo publisher code.
     /// </summary>
-    GFZE01 = GameCodeFields.GX + GameCodeFields.NorthAmerica,
+    GFZE01 = GameCodeFlags.GX + GameCodeFlags.NorthAmerica,
 
     /// <summary>
     ///     GFZ: <u>G</u>ameCube <u>F</u>-<u>Z</u>ero.
     ///     J: <u>J</u>apanese/ Japan.
     ///     01: Nintendo publisher code.
     /// </summary>
-    GFZJ01 = GameCodeFields.GX + GameCodeFields.Japan,
+    GFZJ01 = GameCodeFlags.GX + GameCodeFlags.Japan,
 
     /// <summary>
     ///     GFZ: <u>G</u>ameCube <u>F</u>-<u>Z</u>ero.
     ///     P: <u>P</u>AL / Europe.
     ///     01: Nintendo publisher code.
     /// </summary>
-    GFZP01 = GameCodeFields.GX + GameCodeFields.Europe,
+    GFZP01 = GameCodeFlags.GX + GameCodeFlags.Europe,
 
     /// <summary>
     ///     GFZ: <u>G</u>ameCube <u>F</u>-<u>Z</u>ero.
@@ -36,7 +36,7 @@ public enum GameCode
     ///     Game code GGGE6E. This game, despite the E region, does also
     ///     contain Japanese text.
     /// </remarks>
-    GFZJ8P = GameCodeFields.AX + GameCodeFields.Japan,
+    GFZJ8P = GameCodeFlags.AX + GameCodeFlags.Japan,
 
     /// <summary>
     ///     F-Zero AX ID according to GDROM associated boot.bin.
@@ -44,5 +44,5 @@ public enum GameCode
     /// <remarks>
     ///     The official ID recognized by Dolphin and crediar.
     /// </remarks>
-    GGGE6E = GameCodeFields.AX + GameCodeFields.NorthAmerica,
+    GGGE6E = GameCodeFlags.AX + GameCodeFlags.NorthAmerica,
 }
