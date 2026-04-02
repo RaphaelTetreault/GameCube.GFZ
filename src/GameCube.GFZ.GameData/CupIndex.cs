@@ -1,45 +1,20 @@
-﻿using System.ComponentModel;
-
-namespace GameCube.GFZ.GameData;
+﻿namespace GameCube.GFZ.GameData;
 
 /// <summary>
-///     Enum of all cups.
+///     Enum of all cups in order present in the game.
 /// </summary>
-/// <remarks>
-///     Description attribute contains display name of each cup.
-/// </remarks>
 public enum CupIndex : byte
 {
-    [Description("All")]
     All,
-
-    [Description("Ruby Cup")]
     Ruby,
-
-    [Description("Sapphire Cup")]
     Sapphire,
-
-    [Description("Emerald Cup")]
     Emerald,
-
-    [Description("Diamond Cup")]
     Diamond,
-
-    [Description("AX Cup")]
     AX,
-
-    [Description("AC Cup")]
-    AC,
-
-    [Description("WHF Cup")]
-    WHF,
-
-    [Description("E3-0")]
-    E30,
-
-    [Description("E3-1")]
-    E31,
-
-    [Description("E3 VS")]
-    E3VS,
+    AC,  // Styled: Ac Cup, Ac カップ
+    WHF, // Styled: Whf Cup, WHF カップ
+    Undef,// Styled: 
+    E30, // Styled: 
+    E31, // Styled: 
+    E3VS,// Styled: 
 }

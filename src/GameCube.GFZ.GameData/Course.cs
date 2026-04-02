@@ -5,7 +5,7 @@ namespace GameCube.GFZ.GameData
 {
     public readonly record struct Course
     {
-        public required byte CourseIndex { get; init; }
+        public required ushort CourseIndex { get; init; }
         public required Venue Venue { get; init; }
         public required FrozenDictionary<GameCode, string> Name { get; init; }
 
@@ -614,6 +614,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story9),
             ]),
         };
@@ -624,6 +627,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.LoopCross),
             ]),
         };
@@ -634,6 +640,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.MeteorStream),
             ]),
         };
@@ -644,6 +653,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.CylinderWave),
             ]),
         };
@@ -654,6 +666,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.LongPipe),
             ]),
         };
@@ -664,6 +679,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story2),
             ]),
         };
@@ -675,6 +693,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story3),
             ]),
         };
@@ -686,6 +707,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story4),
             ]),
         };
@@ -697,6 +721,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story5),
             ]),
         };
@@ -708,6 +735,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story6),
             ]),
         };
@@ -719,6 +749,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story7),
             ]),
         };
@@ -730,6 +763,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story8),
             ]),
         };
@@ -740,6 +776,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Story9),
             ]),
         };
@@ -750,6 +789,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.TwistRoad),
             ]),
         };
@@ -760,6 +802,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.TwistRoad),
             ]),
         };
@@ -770,6 +815,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Multiplex),
             ]),
         };
@@ -780,6 +828,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Intersection),
             ]),
         };
@@ -790,6 +841,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.Undulation),
             ]),
         };
@@ -800,6 +854,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.DriftHighway),
             ]),
         };
@@ -810,6 +867,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.AeroDive),
             ]),
         };
@@ -820,13 +880,16 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.LateralShift),
             ]),
         };
 
         public static readonly Course Null = new()
         {
-            CourseIndex = 255,
+            CourseIndex = ushort.MaxValue,
             Venue = Venue.Null,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
@@ -839,41 +902,41 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Course[] DefaultCourses =
         [
-            // 0
             SandOcean_ScrewDrive,
+            // 0
             MuteCity_TwistRoad,
-            Null,
+            Null with { CourseIndex = 2 },
             MuteCity_SerialGaps,
-            Null,
+            Null with { CourseIndex = 4 },
             Aeropolis_Multiplex,
-            Null,
+            Null with { CourseIndex = 6 },
             PortTown_AeroDive,
             Lightning_LoopCross,
             Lightning_HalfPipe,
-            // 10
             GreenPlant_Intersection,
+            // 10
             GreenPlant_MobiusRing,
-            Null,
+            Null with { CourseIndex = 12 },
             PortTown_LongPipe,
             BigBlue_DriftHighway,
             FireField_CylinderKnot,
             CasinoPalace_SplitOval,
             FireField_Undulation,
-            Null,
-            Null,
+            Null with { CourseIndex = 18 },
+            Null with { CourseIndex = 19 },
+            Null with { CourseIndex = 20 },
             // 20
-            Null,
             Aeropolis_DragonSlope,
-            Null,
-            Null,
+            Null with { CourseIndex = 22 },
+            Null with { CourseIndex = 23 },
             CosmoTerminal_Trident,
             SandOcean_LateralShift,
             SandOcean_SurfaceSlide,
             BigBlue_Ordeal,
             PhantomRoad_SlimLineSlits,
             CasinoPalace_DoubleBranches,
+            Null with { CourseIndex = 30 },
             // 30
-            Null,
             Aeropolis_ScrewDrive,
             OuterSpace_MeteorStream,
             PortTown_CylinderWave,
@@ -883,63 +946,63 @@ namespace GameCube.GFZ.GameData
             Story1,
             Story2,
             Story3,
-            // 40
             Story4,
+            // 40
             Story5,
             Story6,
             Story7,
             Story8,
             Story9,
-            Null,
-            Null,
-            Null,
+            Null with { CourseIndex = 47 },
+            Null with { CourseIndex = 48 },
+            Null with { CourseIndex = 49 },
             GrandPrixPodium,
-            // 50
             VictoryLap,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
+            // 50
+            Null with { CourseIndex = 51 },
+            Null with { CourseIndex = 52 },
+            Null with { CourseIndex = 53 },
+            Null with { CourseIndex = 54 },
+            Null with { CourseIndex = 55 },
+            Null with { CourseIndex = 56 },
+            Null with { CourseIndex = 57 },
+            Null with { CourseIndex = 58 },
+            Null with { CourseIndex = 59 },
+            Null with { CourseIndex = 60 },
             // 60
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
+            Null with { CourseIndex = 61 },
+            Null with { CourseIndex = 62 },
+            Null with { CourseIndex = 63 },
+            Null with { CourseIndex = 64 },
+            Null with { CourseIndex = 65 },
+            Null with { CourseIndex = 66 },
+            Null with { CourseIndex = 67 },
+            Null with { CourseIndex = 68 },
+            Null with { CourseIndex = 69 },
+            Null with { CourseIndex = 70 },
             // 70
-            Null,
-            Null,
+            Null with { CourseIndex = 71 },
             Test_SurfaceSlide,
-            Null,
-            Null,
-            Null,
-            Null,
+            Null with { CourseIndex = 73 },
+            Null with { CourseIndex = 74 },
+            Null with { CourseIndex = 75 },
+            Null with { CourseIndex = 76 },
             Test_LoopCross,
-            Null,
-            Null,
+            Null with { CourseIndex = 78 },
+            Null with { CourseIndex = 79 },
+            Null with { CourseIndex = 80 },
             // 80
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
-            Null,
+            Null with { CourseIndex = 81 }, // Implied to be Test_SonicOval
+            Null with { CourseIndex = 82 },
+            Null with { CourseIndex = 83 },
+            Null with { CourseIndex = 84 },
+            Null with { CourseIndex = 85 }, // Implied to be Test_ScrewDrive
             Test_MeteorStream,
             Test_CylinderWave,
-            Null,
-            Null,
-            // 90
+            Null with { CourseIndex = 88 }, // Implied to be Test_ThunderRoad
+            Null with { CourseIndex = 89 }, // Implied to be Test_Spiral
             Test_LongPipe,
+            // 90
             Test_Story2,
             Test_Story3,
             Test_Story4,
@@ -948,20 +1011,20 @@ namespace GameCube.GFZ.GameData
             Test_Story7,
             Test_Story8,
             Test_Story9,
-            Null,
+            Null with { CourseIndex = 99 },
+            Null with { CourseIndex = 100 },
             // 100
-            Null,
             Test_TwistRoadOld,
             Test_TwistRoad,
             Test_Multiplex,
             Test_Intersection,
             Test_Undulation,
-            Null,
+            Null with { CourseIndex = 106 },
             Test_DriftHighway,
             Test_AeroDive,
-            Null,
-            // 110
+            Null with { CourseIndex = 109 },
             Test_LateralShift,
+            // 110
         ];
 
         public static void UnitTest()
