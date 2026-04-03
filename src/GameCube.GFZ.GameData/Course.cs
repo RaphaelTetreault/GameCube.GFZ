@@ -123,6 +123,9 @@ namespace GameCube.GFZ.GameData
             Venue = Venue.SandOcean,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
+                new (GameCode.GFZE01, NamesEN.Null),
+                new (GameCode.GFZJ01, NamesJP.Null),
+                new (GameCode.GFZP01, NamesEN.Null),
                 new (GameCode.GGGE6E, NamesEN.ScrewDrive),
             ]),
         };
