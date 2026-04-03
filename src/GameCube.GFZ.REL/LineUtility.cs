@@ -251,7 +251,7 @@ public class LineUtility
         PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmfl);
     }
 
-    public static void PatchVenueIndex(EndianBinaryWriter writer, LineRelInfo lookup, int index, VenueID venue)
+    public static void PatchVenueIndex(EndianBinaryWriter writer, LineRelInfo lookup, int index, VenueIndex venue)
     {
         ValidateStageIndex(index, 110);
 

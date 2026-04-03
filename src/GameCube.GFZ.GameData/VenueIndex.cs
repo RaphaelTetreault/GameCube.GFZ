@@ -6,7 +6,7 @@
 /// <remarks>
 ///     Description attribute contains display name of each venue.
 /// </remarks>
-public enum VenueID : byte
+public enum VenueIndex : byte
 {
     None,
     MuteCity,

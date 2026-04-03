@@ -67,34 +67,34 @@ namespace GameCube.GFZ.Stage
 
 
         // STATIC METHODS
-        public static Fog GetFogDefault(VenueID venue)
+        public static Fog GetFogDefault(VenueIndex venue)
         {
             return venue switch
             {
-                VenueID.BigBlue => BigBlue,
-                VenueID.CasinoPalace => CasinoPalace,
-                VenueID.MuteCityCom => MuteCityCom,
-                VenueID.CosmoTerminal => CosmoTerminal,
-                VenueID.FireField => FireField,
-                VenueID.GreenPlant => GreenPlant,
-                VenueID.Lightning => Lightning,
-                VenueID.PortTown => PortTown,
-                VenueID.OuterSpace => OuterSpace,
-                VenueID.MuteCity => MuteCity,
-                VenueID.PhantomRoad => PhantomRoad,
-                VenueID.SandOcean => SandOcean,
-                VenueID.Aeropolis => Aeropolis,
-                VenueID.MuteCityGrandPrixPodium => MuteCityGrandPrixPodium,
+                VenueIndex.BigBlue => BigBlue,
+                VenueIndex.CasinoPalace => CasinoPalace,
+                VenueIndex.MuteCityCom => MuteCityCom,
+                VenueIndex.CosmoTerminal => CosmoTerminal,
+                VenueIndex.FireField => FireField,
+                VenueIndex.GreenPlant => GreenPlant,
+                VenueIndex.Lightning => Lightning,
+                VenueIndex.PortTown => PortTown,
+                VenueIndex.OuterSpace => OuterSpace,
+                VenueIndex.MuteCity => MuteCity,
+                VenueIndex.PhantomRoad => PhantomRoad,
+                VenueIndex.SandOcean => SandOcean,
+                VenueIndex.Aeropolis => Aeropolis,
+                VenueIndex.MuteCityGrandPrixPodium => MuteCityGrandPrixPodium,
 
                 // Story
-                VenueID.BigBlueStory => BigBlueStory,
-                VenueID.MuteCityComStory => MuteCityComStory,
-                VenueID.FireFieldStory => FireFieldStory,
-                VenueID.PortTownStory => PortTownStory,
-                VenueID.SandOceanStory => SandOceanStory,
+                VenueIndex.BigBlueStory => BigBlueStory,
+                VenueIndex.MuteCityComStory => MuteCityComStory,
+                VenueIndex.FireFieldStory => FireFieldStory,
+                VenueIndex.PortTownStory => PortTownStory,
+                VenueIndex.SandOceanStory => SandOceanStory,
 
                 // Default for none
-                VenueID.None => new Fog(),
+                VenueIndex.None => new Fog(),
 
                 _ => throw new NotImplementedException(),
             };
