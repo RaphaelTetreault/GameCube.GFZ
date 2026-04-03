@@ -6,8 +6,8 @@ namespace GameCube.GFZ.GameData
     public readonly record struct Course
     {
         public required ushort CourseIndex { get; init; }
-        public required Venue Venue { get; init; }
         public required FrozenDictionary<GameCode, string> Name { get; init; }
+        public required Venue Venue { get; init; }
 
 
         public readonly string DisplayText(GameCode gameCode)

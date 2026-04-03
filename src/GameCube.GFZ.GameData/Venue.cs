@@ -5,7 +5,7 @@ namespace GameCube.GFZ.GameData
 {
     public readonly record struct Venue
     {
-        public required VenueID ID { get; init; }
+        public required VenueID VenueID { get; init; }
         public required FrozenDictionary<GameCode, string> Name { get; init; }
 
         public static class Names
@@ -52,7 +52,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue Aeropolis = new()
         {
-            ID = VenueID.Aeropolis,
+            VenueID = VenueID.Aeropolis,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.Aeropolis),
@@ -64,7 +64,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue BigBlue = new()
         {
-            ID = VenueID.BigBlue,
+            VenueID = VenueID.BigBlue,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.BigBlue),
@@ -77,7 +77,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue BigBlueStory = new()
         {
-            ID = VenueID.BigBlueStory,
+            VenueID = VenueID.BigBlueStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.BigBlueStory),
@@ -89,7 +89,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue CasinoPalace = new()
         {
-            ID = VenueID.CasinoPalace,
+            VenueID = VenueID.CasinoPalace,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.CasinoPalace),
@@ -101,7 +101,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue CosmoTerminal = new()
         {
-            ID = VenueID.CosmoTerminal,
+            VenueID = VenueID.CosmoTerminal,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.CosmoTerminal),
@@ -113,7 +113,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue FireField = new()
         {
-            ID = VenueID.FireField,
+            VenueID = VenueID.FireField,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.FireField),
@@ -125,7 +125,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue FireFieldStory = new()
         {
-            ID = VenueID.FireFieldStory,
+            VenueID = VenueID.FireFieldStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.FireFieldStory),
@@ -137,7 +137,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue GreenPlant = new()
         {
-            ID = VenueID.GreenPlant,
+            VenueID = VenueID.GreenPlant,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.GreenPlant),
@@ -149,7 +149,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue Lightning = new()
         {
-            ID = VenueID.Lightning,
+            VenueID = VenueID.Lightning,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.Lightning),
@@ -161,7 +161,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue LightningStory = new()
         {
-            ID = VenueID.LightningStory,
+            VenueID = VenueID.LightningStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.LightningStory),
@@ -173,7 +173,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue MuteCity = new()
         {
-            ID = VenueID.MuteCity,
+            VenueID = VenueID.MuteCity,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.MuteCity),
@@ -185,7 +185,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue MuteCityCom = new()
         {
-            ID = VenueID.MuteCityCom,
+            VenueID = VenueID.MuteCityCom,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.MuteCityCom),
@@ -197,7 +197,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue MuteCityComStory = new()
         {
-            ID = VenueID.MuteCityComStory,
+            VenueID = VenueID.MuteCityComStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.MuteCityComStory),
@@ -209,7 +209,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue MuteCityGrandPrixPodium = new()
         {
-            ID = VenueID.MuteCityGrandPrixPodium,
+            VenueID = VenueID.MuteCityGrandPrixPodium,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.MuteCityGrandPrixPodium),
@@ -221,7 +221,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue Null = new()
         {
-            ID = VenueID.None,
+            VenueID = VenueID.None,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.Null),
@@ -233,7 +233,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue OuterSpace = new()
         {
-            ID = VenueID.OuterSpace,
+            VenueID = VenueID.OuterSpace,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.OuterSpace),
@@ -245,7 +245,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue PhantomRoad = new()
         {
-            ID = VenueID.PhantomRoad,
+            VenueID = VenueID.PhantomRoad,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.PhantomRoad),
@@ -257,7 +257,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue PortTown = new()
         {
-            ID = VenueID.PortTown,
+            VenueID = VenueID.PortTown,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.PortTown),
@@ -269,7 +269,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue PortTownStory = new()
         {
-            ID = VenueID.PortTownStory,
+            VenueID = VenueID.PortTownStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.PortTownStory),
@@ -281,7 +281,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue SandOcean = new()
         {
-            ID = VenueID.SandOcean,
+            VenueID = VenueID.SandOcean,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.SandOcean),
@@ -293,7 +293,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Venue SandOceanStory = new()
         {
-            ID = VenueID.SandOceanStory,
+            VenueID = VenueID.SandOceanStory,
             Name = FrozenDictionary.Create<GameCode, string>(
             [
                 new (GameCode.GFZE01, Names.SandOceanStory),
@@ -346,7 +346,7 @@ namespace GameCube.GFZ.GameData
                     Venue v = DefaultVenues[i];
                     if (v != Null)
                     {
-                        if (i != (int)v.ID)
+                        if (i != (int)v.VenueID)
                             throw new Exception("Wrong index match!");
                     }
 
@@ -354,7 +354,7 @@ namespace GameCube.GFZ.GameData
                     if (!v.Name.ContainsKey(gameCode))
                         v = Null;
                     // Print
-                    Console.WriteLine($"{gameCode} {i,3} - Stage: {v.ID,3}, {v.Name[gameCode]}");
+                    Console.WriteLine($"{gameCode} {i,3} - Stage: {v.VenueID,3}, {v.Name[gameCode]}");
                 }
                 Console.WriteLine();
             }
