@@ -26,9 +26,9 @@ namespace GameCube.GFZ.GameData
             courses.CopyTo(Courses, 0);
         }
 
-        public static Cup AllCup_RealValues = new()
+        public static readonly Cup AllCup_ActualValues = new()
         {
-            CupIndex = CupIndex.All,
+            CupIndex = CupIndex.AllCup,
             Courses =
             [
                 Course.Null,
@@ -40,15 +40,15 @@ namespace GameCube.GFZ.GameData
             ]
         };
 
-        public static Cup AllCup_FunctionalValues = new()
+        public static readonly Cup AllCup_FunctionalValues = new()
         {
-            CupIndex = CupIndex.All,
+            CupIndex = CupIndex.AllCup,
             Courses = Course.DefaultCourses,
         };
 
         public static readonly Cup RubyCup = new()
         {
-            CupIndex = CupIndex.Ruby,
+            CupIndex = CupIndex.RubyCup,
             Courses = [
                 Course.MuteCity_TwistRoad,
                 Course.CasinoPalace_SplitOval,
@@ -61,7 +61,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Cup SapphireCup = new()
         {
-            CupIndex = CupIndex.Sapphire,
+            CupIndex = CupIndex.SapphireCup,
             Courses = [
                 Course.BigBlue_DriftHighway,
                 Course.PortTown_AeroDive,
@@ -74,7 +74,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Cup EmeraldCup = new()
         {
-            CupIndex = CupIndex.Emerald,
+            CupIndex = CupIndex.EmeraldCup,
             Courses = [
                 Course.FireField_CylinderKnot,
                 Course.GreenPlant_Intersection,
@@ -87,7 +87,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Cup DiamondCup = new()
         {
-            CupIndex = CupIndex.Diamond,
+            CupIndex = CupIndex.DiamondCup,
             Courses = [
                 Course.CosmoTerminal_Trident,
                 Course.SandOcean_LateralShift,
@@ -100,7 +100,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Cup AXCup = new()
         {
-            CupIndex = CupIndex.AX,
+            CupIndex = CupIndex.AXCup,
             Courses = [
                 Course.Aeropolis_ScrewDrive,
                 Course.OuterSpace_MeteorStream,
@@ -113,7 +113,7 @@ namespace GameCube.GFZ.GameData
 
         public static readonly Cup ACCup = new()
         {
-            CupIndex = CupIndex.AC,
+            CupIndex = CupIndex.ACCup,
             Courses = [
                 Course.MuteCity_SonicOval,
                 Course.Aeropolis_ScrewDrive,
@@ -124,9 +124,9 @@ namespace GameCube.GFZ.GameData
             ]
         };
 
-        public static readonly Cup WhfCup_PartA = new()
+        public static readonly Cup AC = new()
         {
-            CupIndex = CupIndex.WHF,
+            CupIndex = CupIndex.AC,
             Courses = [
                 Course.Null with { CourseIndex = 82 },
                 Course.Null with { CourseIndex = 56 },
@@ -137,7 +137,7 @@ namespace GameCube.GFZ.GameData
             ]
         };
 
-        public static readonly Cup WhfCup_PartB = new()
+        public static readonly Cup WHF = new()
         {
             CupIndex = CupIndex.WHF,
             Courses = [
@@ -150,9 +150,9 @@ namespace GameCube.GFZ.GameData
             ]
         };
 
-        public static readonly Cup E30Cup = new()
+        public static readonly Cup E3SingleRaceGP = new()
         {
-            CupIndex = CupIndex.E30,
+            CupIndex = CupIndex.E3_SingleRaceGP,
             Courses = [
                 Course.MuteCity_TwistRoad,
                 Course.PortTown_LongPipe,
@@ -163,22 +163,9 @@ namespace GameCube.GFZ.GameData
             ]
         };
 
-        public static readonly Cup E31Cup = new()
+        public static readonly Cup E3Versus = new()
         {
-            CupIndex = CupIndex.E31,
-            Courses = [
-                Course.Null,
-                Course.Null,
-                Course.Null,
-                Course.Null,
-                Course.Null,
-                Course.Null,
-            ]
-        };
-
-        public static readonly Cup E3VSCup = new()
-        {
-            CupIndex = CupIndex.E3VS,
+            CupIndex = CupIndex.E3_Versus,
             Courses = [
                 Course.CasinoPalace_SplitOval,
                 Course.Null,
@@ -210,11 +197,10 @@ namespace GameCube.GFZ.GameData
             DiamondCup,
             AXCup,
             ACCup,
-            WhfCup_PartA, // TODO: WHF, figure out name for part B
-            WhfCup_PartB, // TODO: see above
-            E30Cup,
-            E31Cup,
-            E3VSCup,
+            AC,
+            WHF,
+            E3SingleRaceGP,
+            E3Versus,
         ];
     }
 }
