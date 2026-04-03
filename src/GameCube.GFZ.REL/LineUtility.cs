@@ -210,8 +210,8 @@ public class LineUtility
             throw new IndexOutOfRangeException("Index must be between 0 and 55");
         }
 
-        if (bgmIndex >= (byte)Bgm.invalid_id_start &&
-            bgmIndex <= (byte)Bgm.invalid_id_end)
+        if (bgmIndex >= (byte)BgmIndex.invalid_id_start &&
+            bgmIndex <= (byte)BgmIndex.invalid_id_end)
         {
             string msg = "BGM index must be between 0 and 96, or be exactly 255";
             throw new ArgumentException(msg);
@@ -225,8 +225,8 @@ public class LineUtility
     {
         ValidateStageIndex(stageIndex, 45);
 
-        if (bgmfl.songIndex >= (byte)Bgm.invalid_id_start &&
-            bgmfl.songIndex <= (byte)Bgm.invalid_id_end)
+        if (bgmfl.songIndex >= (byte)BgmIndex.invalid_id_start &&
+            bgmfl.songIndex <= (byte)BgmIndex.invalid_id_end)
         {
             string msg = "BGM index must be between 0 and 96, or be exactly 255";
             throw new ArgumentException(msg);

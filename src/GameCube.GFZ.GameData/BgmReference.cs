@@ -42,7 +42,7 @@ public static class BgmReference
     /// <returns>
     ///     The relevant 16-bit offset to the correct loop point data.
     /// </returns>
-    public static ushort GetBgmLoopPointOffset(Bgm bgmFinalLapIndex)
+    public static ushort GetBgmLoopPointOffset(BgmIndex bgmFinalLapIndex)
     {
         ushort value = GetBgmLoopPointOffset((byte)bgmFinalLapIndex);
         return value;
