@@ -278,9 +278,9 @@ public enum BgmIndex : byte
     winingrun = 53,
 
     /// <summary>
-    ///     Unused
+    ///     Unused. "yobi"?
     /// </summary>
-    unused = 54,
+    metadata_unused = 54,
 
     /// <summary>
     ///     Options
@@ -498,15 +498,20 @@ public enum BgmIndex : byte
     /// <summary>
     ///     METADATA. Invalid index start.
     /// </summary>
-    invalid_id_start = 97,
+    metadata_invalid_id_start = 97,
 
     /// <summary>
     ///     METADATA. Invalid index end.
     /// </summary>
-    invalid_id_end = 254,
+    metadata_invalid_id_end = 254,
 
     /// <summary>
     ///     Random selection ID.
     /// </summary>
-    random = 255,
+    metadata_random = 255,
+
+    /// <summary>
+    ///     Random selection ID.
+    /// </summary>
+    metadata_no_final_lap_bgm = 0xFF,
 }

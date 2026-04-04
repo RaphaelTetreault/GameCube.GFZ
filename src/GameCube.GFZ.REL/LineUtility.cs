@@ -205,34 +205,18 @@ public class LineUtility
 
     public static void PatchCourseBgm(EndianBinaryWriter writer, LineRelInfo lookup, int stageIndex, byte bgmIndex)
     {
-        if (stageIndex > 55)
-        {
-            throw new IndexOutOfRangeException("Index must be between 0 and 55");
-        }
-
-        if (bgmIndex >= (byte)BgmIndex.invalid_id_start &&
-            bgmIndex <= (byte)BgmIndex.invalid_id_end)
-        {
-            string msg = "BGM index must be between 0 and 96, or be exactly 255";
-            throw new ArgumentException(msg);
-        }
-
+        ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmIndex);
+        MusicDB.ThrowIfBgmIndexInvalid(bgmIndex);
+        // Patch BGM Final Lap music, stride of 1
         writer.JumpToAddress(lookup.CourseBgmIndex.Address + stageIndex);
         writer.Write(bgmIndex);
     }
 
     public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, BgmFinalLap bgmfl)
     {
-        ValidateStageIndex(stageIndex, 45);
-
-        if (bgmfl.songIndex >= (byte)BgmIndex.invalid_id_start &&
-            bgmfl.songIndex <= (byte)BgmIndex.invalid_id_end)
-        {
-            string msg = "BGM index must be between 0 and 96, or be exactly 255";
-            throw new ArgumentException(msg);
-        }
-
-        // Patch song
+        ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmflIndex);
+        MusicDB.ThrowIfBgmIndexInvalid(bgmfl.songIndex);
+        // Patch BGM Final Lap music, stride of 4
         writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + stageIndex * 4);
         writer.Write(bgmfl);
     }

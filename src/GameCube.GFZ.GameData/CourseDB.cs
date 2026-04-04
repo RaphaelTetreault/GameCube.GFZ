@@ -3,7 +3,6 @@ using System.Collections.Frozen;
 
 namespace GameCube.GFZ.GameData;
 
-
 /// <summary>
 ///     DataBase of default game <see cref="Course"/>s.
 /// </summary>
