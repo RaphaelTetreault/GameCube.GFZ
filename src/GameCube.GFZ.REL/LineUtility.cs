@@ -303,7 +303,7 @@ public class LineUtility
         writer.Write(courses);
     }
 
-    public static void PatchAxTimer(EndianBinaryWriter writer, LineRelInfo lookup, AcCupCourse courseId, byte seconds)
+    public static void PatchAxTimer(EndianBinaryWriter writer, LineRelInfo lookup, AcCupCourseIndex courseId, byte seconds)
     {
         if ((byte)courseId > 6)
         {

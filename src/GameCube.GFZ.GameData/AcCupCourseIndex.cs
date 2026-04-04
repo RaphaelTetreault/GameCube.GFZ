@@ -5,7 +5,7 @@ namespace GameCube.GFZ.GameData;
 /// <summary>
 ///     Arcade Cup (AX Cup) stages.
 /// </summary>
-public enum AcCupCourse : byte
+public enum AcCupCourseIndex : byte
 {
     MuteCity_SonicOval,
     Aeropolis_ScrewDrive,
