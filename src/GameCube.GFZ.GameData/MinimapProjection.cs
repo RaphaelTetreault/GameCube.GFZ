@@ -6,7 +6,7 @@ namespace GameCube.GFZ.GameData;
 /// <summary>
 ///     Represents the projection of the vehicles onto the minimap.
 /// </summary>
-public sealed class MinimapProjection :
+public struct MinimapProjection :
     IBinarySerializable
 {
     public const int Size = 7 * 4;

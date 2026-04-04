@@ -40,7 +40,7 @@ public struct VehicleRating :
             throw new ArgumentException(msg);
         }
 
-        VehicleRating value = new VehicleRating
+        VehicleRating value = new()
         {
             body = FromChar(rating[0]),
             boost = FromChar(rating[1]),
