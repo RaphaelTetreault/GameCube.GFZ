@@ -3,9 +3,6 @@
 /// <summary>
 ///     Venue index (internal venue index).
 /// </summary>
-/// <remarks>
-///     Description attribute contains display name of each venue.
-/// </remarks>
 public enum VenueIndex : byte
 {
     None,

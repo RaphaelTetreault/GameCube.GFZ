@@ -2,7 +2,7 @@
 
 namespace GameCube.GFZ.GameData;
 
-public readonly record struct Music()
+public readonly record struct BgmMusic()
 {
     public required BgmIndex BgmIndex { get; init; }
     public BgmIndex BgmFinalLapIndex { get; init; } = BgmIndex.metadata_no_final_lap_bgm;
@@ -10,6 +10,14 @@ public readonly record struct Music()
     public required string OfficialName { get; init; }
     public required BgmGroup Group { get; init; }
 
+    public BgmFinalLap GetAsBgmFinalLap()
+    {
+        return new BgmFinalLap()
+        {
+            songIndex = (byte)BgmFinalLapIndex,
+            loopPointDataOffset = BgmFinalLapLoopOffset,
+        };
+    }
     public string FileName => BgmIndex.ToString();
     public string Directory => Group switch
     {

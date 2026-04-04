@@ -333,6 +333,37 @@ public static class VenueDB
         MuteCityGrandPrixPodium,
     ];
 
+    /// <summary>
+    ///     Maps <see cref="VenueIndex"/> to <see cref="BgmMusic"/>.
+    /// </summary>
+    /// <remarks>
+    ///     Returned array of <see cref="BgmMusic"/> can be empty or contain an alternative song (Mute City, Big Blue).
+    /// </remarks>
+    public static readonly FrozenDictionary<VenueIndex, BgmMusic[]> VenueBgmMusic = FrozenDictionary.Create<VenueIndex, BgmMusic[]>(
+    [
+        new (VenueIndex.None, []),
+        new (VenueIndex.MuteCity, [BgmMusicDB.MuteCity, BgmMusicDB.MuteCitySecret]),
+        new (VenueIndex.PortTown, [BgmMusicDB.PortTown]),
+        new (VenueIndex.PortTownStory, [BgmMusicDB.Story6]),
+        new (VenueIndex.BigBlue, [BgmMusicDB.BigBlue, BgmMusicDB.BigBlueSecret]),
+        new (VenueIndex.BigBlueStory, [BgmMusicDB.NightOfBigBlue]),
+        new (VenueIndex.Lightning, [BgmMusicDB.Lightning]),
+        new (VenueIndex.LightningStory, []),
+        new (VenueIndex.SandOcean, [BgmMusicDB.SandOcean]),
+        new (VenueIndex.SandOceanStory, [BgmMusicDB.RedCanyon]),
+        new (VenueIndex.GreenPlant, [BgmMusicDB.GreenPlant]),
+        new (VenueIndex.FireField, [BgmMusicDB.FireField]),
+        new (VenueIndex.FireFieldStory, [BgmMusicDB.Story8]),
+        new (VenueIndex.CasinoPalace, [BgmMusicDB.CasinoPalace]),
+        new (VenueIndex.OuterSpace, [BgmMusicDB.OuterSpace]),
+        new (VenueIndex.Aeropolis, [BgmMusicDB.Aeropolis]),
+        new (VenueIndex.CosmoTerminal, [BgmMusicDB.CosmoTerminal]),
+        new (VenueIndex.MuteCityCom, [BgmMusicDB.MuteCity, BgmMusicDB.MuteCitySecret]),
+        new (VenueIndex.MuteCityComStory, [BgmMusicDB.MuteCity]),
+        new (VenueIndex.PhantomRoad, [BgmMusicDB.PhantomRoad]),
+        new (VenueIndex.MuteCityGrandPrixPodium, [BgmMusicDB.WinningRunGX]),
+    ]);
+
     public static void UnitTest()
     {
         foreach (var gameCode in Enum.GetValues<GameCode>())

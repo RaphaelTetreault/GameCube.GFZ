@@ -206,7 +206,7 @@ public class LineUtility
     public static void PatchCourseBgm(EndianBinaryWriter writer, LineRelInfo lookup, int stageIndex, byte bgmIndex)
     {
         ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmIndex);
-        MusicDB.ThrowIfBgmIndexInvalid(bgmIndex);
+        BgmMusicDB.ThrowIfBgmIndexInvalid(bgmIndex);
         // Patch BGM Final Lap music, stride of 1
         writer.JumpToAddress(lookup.CourseBgmIndex.Address + stageIndex);
         writer.Write(bgmIndex);
@@ -215,24 +215,10 @@ public class LineUtility
     public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, BgmFinalLap bgmfl)
     {
         ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmflIndex);
-        MusicDB.ThrowIfBgmIndexInvalid(bgmfl.songIndex);
+        BgmMusicDB.ThrowIfBgmIndexInvalid(bgmfl.songIndex);
         // Patch BGM Final Lap music, stride of 4
         writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + stageIndex * 4);
         writer.Write(bgmfl);
-    }
-    public static void PatchCourseBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex)
-    {
-        ushort offset = BgmReference.GetBgmLoopPointOffset(bgmIndex);
-        PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmIndex, offset);
-    }
-    public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, LineRelInfo lookup, byte stageIndex, byte bgmIndex, ushort offset)
-    {
-        BgmFinalLap bgmfl = new BgmFinalLap()
-        {
-            songIndex = bgmIndex,
-            loopPointDataOffset = offset,
-        };
-        PatchStageBgmFinalLap(writer, lookup, stageIndex, bgmfl);
     }
 
     public static void PatchVenueIndex(EndianBinaryWriter writer, LineRelInfo lookup, int index, VenueIndex venue)
