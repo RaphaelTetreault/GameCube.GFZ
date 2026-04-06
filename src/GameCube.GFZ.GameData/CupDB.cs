@@ -88,7 +88,7 @@ public static class CupDB
             CourseDB.FireField_CylinderKnot,
             CourseDB.GreenPlant_Intersection,
             CourseDB.CasinoPalace_DoubleBranches,
-            CourseDB.Lightning_LoopCross,
+            CourseDB.Lightning_HalfPipe,
             CourseDB.BigBlue_Ordeal,
             CourseDB.Null,
         ],

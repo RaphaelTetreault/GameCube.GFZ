@@ -131,6 +131,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.TwistRoad),
             new (GameCode.GGGE6E, NamesEN.TwistRoad),
         ]),
+        StarDifficultyRating = 1,
     };
 
     public static readonly Course MuteCity_SerialGaps = new()
@@ -144,6 +145,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.SerialGaps),
             new (GameCode.GGGE6E, NamesEN.SerialGaps),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course Aeropolis_Multiplex = new()
@@ -157,6 +159,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Multiplex),
             new (GameCode.GGGE6E, NamesEN.Multiplex),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course PortTown_AeroDive = new()
@@ -170,6 +173,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.AeroDive),
             new (GameCode.GGGE6E, NamesEN.AeroDive),
         ]),
+        StarDifficultyRating = 2,
     };
 
     public static readonly Course Lightning_LoopCross = new()
@@ -183,6 +187,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.LoopCross),
             new (GameCode.GGGE6E, NamesEN.LoopCross),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course Lightning_HalfPipe = new()
@@ -196,6 +201,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.HalfPipe),
             new (GameCode.GGGE6E, NamesEN.HalfPipe),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course GreenPlant_Intersection = new()
@@ -209,6 +215,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Intersection),
             new (GameCode.GGGE6E, NamesEN.Intersection),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course GreenPlant_MobiusRing = new()
@@ -222,6 +229,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.MobiusRing),
             new (GameCode.GGGE6E, NamesEN.MobiusRing),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course PortTown_LongPipe = new()
@@ -235,6 +243,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.LongPipe),
             new (GameCode.GGGE6E, NamesEN.LongPipe),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course BigBlue_DriftHighway = new()
@@ -248,6 +257,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.DriftHighway),
             new (GameCode.GGGE6E, NamesEN.DriftHighway),
         ]),
+        StarDifficultyRating = 2,
     };
 
     public static readonly Course FireField_CylinderKnot = new()
@@ -261,6 +271,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.CylinderKnot),
             new (GameCode.GGGE6E, NamesEN.CylinderKnot),
         ]),
+        StarDifficultyRating = 2,
     };
 
     public static readonly Course CasinoPalace_SplitOval = new()
@@ -274,6 +285,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.SplitOval),
             new (GameCode.GGGE6E, NamesEN.SplitOval),
         ]),
+        StarDifficultyRating = 1,
     };
 
     public static readonly Course FireField_Undulation = new()
@@ -287,6 +299,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Undulation),
             new (GameCode.GGGE6E, NamesEN.Undulation),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course Aeropolis_DragonSlope = new()
@@ -300,6 +313,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.DragonSlope),
             new (GameCode.GGGE6E, NamesEN.DragonSlope),
         ]),
+        StarDifficultyRating = 5,
     };
 
     public static readonly Course CosmoTerminal_Trident = new()
@@ -313,6 +327,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Trident),
             new (GameCode.GGGE6E, NamesEN.Trident),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course SandOcean_LateralShift = new()
@@ -326,6 +341,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.LateralShift),
             new (GameCode.GGGE6E, NamesEN.LateralShift),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course SandOcean_SurfaceSlide = new()
@@ -339,6 +355,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.SurfaceSlide),
             new (GameCode.GGGE6E, NamesEN.SurfaceSlide),
         ]),
+        StarDifficultyRating = 2,
     };
 
     public static readonly Course BigBlue_Ordeal = new()
@@ -352,6 +369,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Ordeal),
             new (GameCode.GGGE6E, NamesEN.Ordeal),
         ]),
+        StarDifficultyRating = 5,
     };
 
     public static readonly Course PhantomRoad_SlimLineSlits = new()
@@ -365,6 +383,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.SlimLineSlits),
             new (GameCode.GGGE6E, NamesEN.SlimLineSlits),
         ]),
+        StarDifficultyRating = 6,
     };
 
     public static readonly Course CasinoPalace_DoubleBranches = new()
@@ -378,6 +397,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.DoubleBranches),
             new (GameCode.GGGE6E, NamesEN.DoubleBranches),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course Aeropolis_ScrewDrive = new()
@@ -391,6 +411,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.ScrewDrive),
             new (GameCode.GGGE6E, NamesEN.ScrewDrive),
         ]),
+        StarDifficultyRating = 2,
     };
 
     public static readonly Course OuterSpace_MeteorStream = new()
@@ -404,6 +425,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.MeteorStream),
             new (GameCode.GGGE6E, NamesEN.MeteorStream),
         ]),
+        StarDifficultyRating = 3,
     };
 
     public static readonly Course PortTown_CylinderWave = new()
@@ -417,6 +439,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.CylinderWave),
             new (GameCode.GGGE6E, NamesEN.CylinderWave),
         ]),
+        StarDifficultyRating = 4,
     };
 
     public static readonly Course Lightning_ThunderRoad = new()
@@ -430,6 +453,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.ThunderRoad),
             new (GameCode.GGGE6E, NamesEN.ThunderRoad),
         ]),
+        StarDifficultyRating = 5,
     };
 
     public static readonly Course GreenPlant_Spiral = new()
@@ -443,6 +467,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Spiral),
             new (GameCode.GGGE6E, NamesEN.Spiral),
         ]),
+        StarDifficultyRating = 6,
     };
 
     public static readonly Course MuteCity_SonicOval = new()
@@ -456,6 +481,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.SonicOval),
             new (GameCode.GGGE6E, NamesEN.SonicOval),
         ]),
+        StarDifficultyRating = 1,
     };
 
     public static readonly Course Story1 = new()
