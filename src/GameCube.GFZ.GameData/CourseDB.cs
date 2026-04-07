@@ -495,6 +495,7 @@ public static class CourseDB
             new (GameCode.GFZP01, NamesEN.Story1),
             new (GameCode.GGGE6E, NamesEN.Story1),
         ]),
+        StarDifficultyRating = 1, // Yes, GX does encode a difficulty for only Story 1
     };
 
     public static readonly Course Story2 = new()

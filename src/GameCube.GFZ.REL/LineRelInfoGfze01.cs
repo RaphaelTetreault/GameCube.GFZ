@@ -33,8 +33,8 @@ public class LineRelInfoGfze01 : LineRelInfo
     public override Pointer MachineLetterRatingsPtr => 0x1AECB8;
     public override Pointer VehicleMaxSpeedCap9990KmhPtr => 0x160230;
 
-    public override DataBlock CourseVenueIndex => new(0x1986D4, 111);
-    public override DataBlock CourseDifficulty => new(0x168958, 111);
+    public override DataBlock CourseVenueIndex => new(0x1986D4, 111); // 0x6f
+    public override DataBlock CourseDifficulty => new(0x168958, 111); // 0x6F
     public override DataBlock CourseBgmIndex => new(0x163A8C, 56);
     public override DataBlock CourseBgmFinalLapIndex => new(0x163AC4, 184);
     public override DataBlock CupCourseLut => new(0x167940, 0x84);
