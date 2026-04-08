@@ -1,6 +1,6 @@
 ﻿using Manifold.IO;
 
-namespace GameCube.GFZ.LineREL;
+namespace GameCube.GFZ.REL;
 
 /// <summary>
 ///     Represents an area in memory.

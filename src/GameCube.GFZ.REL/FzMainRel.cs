@@ -1,83 +1,86 @@
 using Manifold.IO;
 
-namespace GameCube.GFZ.LineREL;
+namespace GameCube.GFZ.REL;
 
 /// <summary>
 ///     Base class which inheritors define specific addresses and values for each version of the file.
 /// </summary>
-public abstract class LineRelInfo
+public readonly record struct FzMainRel
 {
-    /// <summary>
-    ///     File endianness.
-    /// </summary>
-    public virtual Endianness Endianness => Endianness.BigEndian;
+    public FzMainRel()
+    {
+    }
 
     /// <summary>
     ///     The game code associated with this file.
     /// </summary>
-    public abstract GameCode GameCode { get; }
+    public GameCode GameCode { get; init; }
+
+    /// <summary>
+    ///     File endianness.
+    /// </summary>
+    public static Endianness Endianness => FzMainCrypter.Endianness;
 
     /// <summary>
     ///     
     /// </summary>
-    public abstract string SourceFile { get; }
+    public string SourceFile { get; init; } = string.Empty;
 
     /// <summary>
     ///     
     /// </summary>
-    public abstract string WorkingFile { get; }
+    public string WorkingFile { get; init; } = string.Empty;
 
     /// <summary>
     ///     TODO: File hash of the archive or decompressed file?
     ///     Probably the former.
     /// </summary>
-    public abstract string FileHashMD5 { get; }
+    public string FileHashMD5 { get; init; } = string.Empty;
 
     /// <summary>
     ///     Base address of all strings in table. Other offsets defined
     ///     are relative to this address.
     /// </summary>
-    public abstract Pointer StringTableBaseAddress { get; }
+    public Pointer StringTableBaseAddress { get; init; }
 
-    // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     /// <summary>
     ///     Address for venue names offsets relative to <see cref="StringTableBaseAddress"/>.
     ///     Logically combines both <see cref="VenueNamesEnglishOffsets"/> and
     ///     <see cref="VenueNamesJapaneseOffsets"/> as one contiguous array.
     /// </summary>
-    public abstract ArrayPointer32 VenueNameOffsets { get; }
+    public ArrayPointer32 VenueNameOffsets { get; init; }
 
     /// <summary>
     ///     Address for english venue names offsets relative to <see cref="StringTableBaseAddress"/>.
     /// </summary>
-    public abstract ArrayPointer32 VenueNamesEnglishOffsets { get; }
+    public ArrayPointer32 VenueNamesEnglishOffsets { get; init; }
 
     /// <summary>
     ///     Address for english venue names offsets relative to <see cref="StringTableBaseAddress"/>.
     /// </summary>
-    public abstract ArrayPointer32 VenueNamesJapaneseOffsets { get; }
+    public ArrayPointer32 VenueNamesJapaneseOffsets { get; init; }
     
     /// <summary>
     ///     Address and byte-length for english venue names.
     /// </summary>
-    public abstract DataBlock VenueNamesEnglish { get; }
+    public DataBlock VenueNamesEnglish { get; init; }
 
     /// <summary>
     ///     Address and byte-length for japanese venue names.
     /// </summary>
-    public abstract DataBlock VenueNamesJapanese { get; }
+    public DataBlock VenueNamesJapanese { get; init; }
 
 
     /// <summary>
     ///     How many langagues are defined in the translation tables.
     /// </summary>
-    public abstract int CourseNameLanguages { get; } // done
+    public int CourseNameLanguages { get; init; } // done
 
     /// <summary>
     ///     Address for course name offsets relative to <see cref="StringTableBaseAddress"/>.
     /// </summary>
-    public abstract ArrayPointer32 CourseNameOffsets { get; }
+    public ArrayPointer32 CourseNameOffsets { get; init; }
 
     /// <summary>
     ///     Data for course names.
@@ -85,7 +88,7 @@ public abstract class LineRelInfo
     /// <remarks>
     ///     Japanese game uses English names.
     /// </remarks>
-    public abstract DataBlock CourseNamesEnglish { get; }
+    public DataBlock CourseNamesEnglish { get; init; }
 
     /// <summary>
     ///     Data for course name localizations (non-English european languages).
@@ -94,67 +97,67 @@ public abstract class LineRelInfo
     ///     AX, E, J order: GER, FRE, SPA, ITA, JPN (interleaved).
     ///     P order: JPN (only).
     /// </remarks>
-    public abstract DataBlock CourseNamesLocalizations { get; }
+    public DataBlock CourseNamesLocalizations { get; init; }
 
     /// <summary>
     ///     Where non-custom "cardata" states are stored used explicitedly
     ///     for the display values on the machine select screen.
     /// </summary>
-    public abstract Pointer CarDataMachinesPtr { get; }
+    public Pointer CarDataMachinesPtr { get; init; }
 
     /// <summary>
     ///     The letter ratings for machines. Eg: EAD, ACB, etc.
     /// </summary>
-    public abstract Pointer MachineLetterRatingsPtr { get; }
+    public Pointer MachineLetterRatingsPtr { get; init; }
 
     /// <summary>
     ///     Address of the max speed float constant. When vehicles stay above this
     ///     value for more than 1 frame, speed is set to 0. Value is stored as a double.
     /// </summary>
-    public abstract Pointer VehicleMaxSpeedCap9990KmhPtr { get; }
+    public Pointer VehicleMaxSpeedCap9990KmhPtr { get; init; }
 
     /// <summary>
     ///     Index which correlates stage index to venue.
     /// </summary>
-    public abstract DataBlock CourseVenueIndex { get; }         // done
+    public DataBlock CourseVenueIndex { get; init; }         // done
 
     /// <summary>
     ///     Dificulty rating byte for each stage index.
     /// </summary>
-    public abstract DataBlock CourseDifficulty { get; }         // done
+    public DataBlock CourseDifficulty { get; init; }         // done
 
     /// <summary>
     ///     Index which correlates stage index to BGM.
     /// </summary>
-    public abstract DataBlock CourseBgmIndex { get; }           // done
+    public DataBlock CourseBgmIndex { get; init; }           // done
 
     /// <summary>
     ///     Index which correlates stage index to final lap BGM.
     /// </summary>
-    public abstract DataBlock CourseBgmFinalLapIndex { get; }   // done
+    public DataBlock CourseBgmFinalLapIndex { get; init; }   // done
 
     /// <summary>
     ///     Look-Up-Table which maps the 6 cup entries to stages indexes
     ///     for the purpose of loading the COLI_COURSE## file.
     /// </summary>
-    public abstract DataBlock CupCourseLut { get; }             // TODO: index in cup
+    public DataBlock CupCourseLut { get; init; }             // TODO: index in cup
 
     /// <summary>
     ///     Look-Up-Table which maps the 6 cup entries to stages indexes
     ///     for the purpose of loading in the GMA and TPL assets.
     /// </summary>
-    public abstract DataBlock CupCourseLutAssets { get; }       // TODO: gma/tpl loading index
+    public DataBlock CupCourseLutAssets { get; init; }       // TODO: gma/tpl loading index
 
     /// <summary>
     ///     Look-Up-Table which maps the 6 cup entries to stages indexes.
     ///     Purpose unknown.
     /// </summary>
-    public abstract DataBlock CupCourseLutUnk { get; }          // TODO: unknown, but related
+    public DataBlock CupCourseLutUnk { get; init; }          // TODO: unknown, but related
 
     /// <summary>
     ///     Stage minimap projections.
     /// </summary>
-    public abstract DataBlock CourseMinimapParameterStructs { get; }
+    public DataBlock CourseMinimapParameterStructs { get; init; }
 
     /// <summary>
     ///     List of banned/censored words.
@@ -162,56 +165,23 @@ public abstract class LineRelInfo
     /// <remarks>
     ///     Use to invalidate values during name entry.
     /// </remarks>
-    public abstract DataBlock ForbiddenWords { get; }
+    public DataBlock ForbiddenWords { get; init; }
 
     /// <summary>
     ///     List of banned/censored words.
     /// </summary>
-    public abstract DataBlock AxModeCourseTimers { get; }
+    public DataBlock AxModeCourseTimers { get; init; }
 
     /// <summary>
     ///     Positions for pilot seating in their vehicle.
     /// </summary>
-    public abstract DataBlock PilotPositions { get; }
+    public DataBlock PilotPositions { get; init; }
 
     /// <summary>
     ///     Map which translates pilot index into machine index.
     /// </summary>
-    public abstract DataBlock PilotToMachineLut { get; }
+    public DataBlock PilotToMachineLut { get; init; }
 
 
-    /// <summary>
-    ///     Encryption/Decryption salt.
-    /// </summary>
-    public abstract short Salt { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption key 0.
-    /// </summary>
-    public abstract int Key0 { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption key 1.
-    /// </summary>
-    public abstract int Key1 { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption key 2.
-    /// </summary>
-    public abstract int Key2 { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption block key 0.
-    /// </summary>
-    public abstract int BlockKey0 { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption block key 1.
-    /// </summary>
-    public abstract short BlockKey1 { get; }
-
-    /// <summary>
-    ///     Encryption/Decryption block key 2.
-    /// </summary>
-    public abstract short BlockKey2 { get; }
+    public FzMainCrypter Crypter { get; init; }
 }

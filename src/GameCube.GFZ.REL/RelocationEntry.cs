@@ -1,12 +1,13 @@
 ﻿using Manifold.IO;
 
-namespace GameCube.GFZ.LineREL;
+namespace GameCube.GFZ.REL;
 
 /// <summary>
 ///     REL relocation entry.
 /// </summary>
 /// <remarks>
 ///     Based off of: https://wiki.tockdom.com/wiki/REL_(File_Format)#Relocation_Data
+///     TODO Move to <see cref="GameCube.Common"/>.    
 /// </remarks>
 public struct RelocationEntry :
     IBinarySerializable
@@ -45,13 +46,13 @@ public struct RelocationEntry :
         reader.Read(ref addEnd);
     }
 
-    public Pointer ResolveAddress(int baseAddress)
+    public readonly Pointer ResolveAddress(int baseAddress)
     {
         Pointer pointer = baseAddress + addEnd;
         return pointer;
     }
 
-    public void Serialize(EndianBinaryWriter writer)
+    public readonly void Serialize(EndianBinaryWriter writer)
     {
         writer.Write(offset);
         writer.Write(type);

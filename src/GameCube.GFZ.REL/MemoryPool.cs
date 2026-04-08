@@ -1,10 +1,10 @@
 ﻿using Manifold.IO;
 using System.Collections.Generic;
 
-namespace GameCube.GFZ.LineREL;
+namespace GameCube.GFZ.REL;
 
 /// <summary>
-///     A poopl of <see cref="MemoryArea"/>s.
+///     A pool of <see cref="MemoryArea"/>s.
 /// </summary>
 public class MemoryPool
 {
