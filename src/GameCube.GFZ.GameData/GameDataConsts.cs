@@ -11,4 +11,6 @@ public static class GameDataConsts
     public const int MaxDifficultyStars = 24;
     public const int MaxBgmIndex = 55;   // bgm
     public const int MaxBgmflIndex = 45; // bgm final lap
+    public const int MaxCupIndex = 10;
+    public const int MaxCupCourseIndex = 6;
 }

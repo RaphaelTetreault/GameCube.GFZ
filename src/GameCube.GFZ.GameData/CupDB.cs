@@ -1,4 +1,5 @@
-﻿using System.Collections.Frozen;
+﻿using System;
+using System.Collections.Frozen;
 
 namespace GameCube.GFZ.GameData;
 
@@ -198,8 +199,8 @@ public static class CupDB
         Courses = [
             CourseDB.Null with { CourseIndex = 81 },
             CourseDB.Null with { CourseIndex = 85 },
-            CourseDB.Null with { CourseIndex = 86 },
-            CourseDB.Null with { CourseIndex = 87 },
+            CourseDB.Test_MeteorStream, //     86
+            CourseDB.Test_CylinderWave, //     87
             CourseDB.Null with { CourseIndex = 88 },
             CourseDB.Null with { CourseIndex = 89 },
         ],
@@ -228,6 +229,7 @@ public static class CupDB
         Name = FrozenDictionary.Create<Language, string>(
         [
             new (Language.English,  "E3-0"),
+            // Maybe other Latin languages also use above?
             new (Language.Japanese, "E3 1コースレース用"),
         ]),
     };
@@ -246,6 +248,7 @@ public static class CupDB
         Name = FrozenDictionary.Create<Language, string>(
         [
             new (Language.English,  "E3-1"),
+            // Maybe other Latin languages also use above?
             new (Language.Japanese, "E3 VS用"),
         ]),
     };
@@ -264,7 +267,7 @@ public static class CupDB
     ];
     public static readonly Cup[] DefaultCups =
     [
-        AllCup_FunctionalValues,
+        AllCup_ActualValues,
         RubyCup,
         SapphireCup,
         EmeraldCup,
@@ -276,4 +279,49 @@ public static class CupDB
         E3SingleRaceGP,
         E3Versus,
     ];
+
+    public static void UnitTest()
+    {
+        FrozenDictionary<GameCode, Language[]> gameCodeToLang = FrozenDictionary.Create<GameCode, Language[]>
+            ([
+                new (GameCode.GFZE01, [Language.English]),
+                new (GameCode.GFZJ01, [Language.Japanese]),
+                new (GameCode.GFZP01, [Language.English, Language.Deutsch, Language.Français, Language.Español, Language.Italiano]),
+                new (GameCode.GFZJ8P, []),
+                new (GameCode.GGGE6E, [Language.English]),
+            ]);
+
+        foreach (GameCode gameCode in Enum.GetValues<GameCode>())
+        {
+            Console.WriteLine(gameCode);
+            foreach (Language language in gameCodeToLang[gameCode])
+            {
+                Console.WriteLine(language);
+                // Each cup index
+                for (int cupIndex = 0; cupIndex <= GameDataConsts.MaxCupIndex; cupIndex++)
+                {
+                    Cup cup = DefaultCups[cupIndex];
+                    if (cupIndex != (int)cup.CupIndex)
+                    {
+                        string msg = $"Wrong index match! Index:{cupIndex}, CupIndex:{cup.CupIndex}";
+                        throw new Exception(msg);
+                    }
+
+                    // Each course
+                    for (int courseIndex = 0; courseIndex < GameDataConsts.MaxCupCourseIndex; courseIndex++)
+                    {
+                        Course course = cup.Courses[courseIndex];
+                        if (!cup.Name.ContainsKey(language))
+                            continue;
+
+                        Console.Write($"Cup:{cupIndex,2} {cup.Name[language],12}");
+                        Console.Write($" - Stage: {course.CourseIndex,5}, {course.Venue.Name[gameCode]} [{course.Name[gameCode]}]");
+                        Console.WriteLine();
+                    }
+                }
+            }
+            Console.WriteLine();
+        }
+    }
+
 }

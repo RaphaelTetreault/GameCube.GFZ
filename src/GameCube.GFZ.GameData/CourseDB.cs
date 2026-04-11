@@ -973,9 +973,9 @@ public static class CourseDB
         Story7,
         Story8,
         Story9,
+        Null with { CourseIndex = 46 },
         Null with { CourseIndex = 47 },
         Null with { CourseIndex = 48 },
-        Null with { CourseIndex = 49 },
         GrandPrixPodium,
         VictoryLap,
         // 50
@@ -1060,8 +1060,10 @@ public static class CourseDB
                 Course c = DefaultCourses[i];
                 if (c != Null)
                 {
-                    if (i != c.CourseIndex)
-                        throw new System.Exception("Wrong index match!");
+                    if (i != c.CourseIndex) {
+                        string msg = $"Wrong index match! Index:{i}, CourseIndex:{c.CourseIndex}";
+                        throw new System.Exception(msg);
+                    }
                 }
 
                 // Catch few cases where only AX defines track, so GameCode is not present for course name
