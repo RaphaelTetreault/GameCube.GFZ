@@ -93,3 +93,11 @@ public enum PilotName
     [Description("Pheonix")]
     Pheonix,
 }
+
+public static class PilotNameExtensions
+{
+    extension(PilotName pilotName)
+    {
+        public byte Byte => (byte)pilotName;
+    }
+}

@@ -27,3 +27,11 @@ public enum VenueIndex : byte
     PhantomRoad,
     MuteCityGrandPrixPodium,
 }
+
+public static class VenueIndexExtensions
+{
+    extension(VenueIndex venueIndex)
+    {
+        public byte Byte => (byte)venueIndex;        
+    }
+}
