@@ -991,22 +991,22 @@ public static class CourseDB
         Null with { CourseIndex = 60 },
         // 60
         Null with { CourseIndex = 61 },
-        Null with { CourseIndex = 62 },
+        Null with { CourseIndex = 62 }, // AX test ghost for Half-Pipe
         Null with { CourseIndex = 63 },
-        Null with { CourseIndex = 64 },
+        Null with { CourseIndex = 64 }, // AX test ghost for Mobius Ring
         Null with { CourseIndex = 65 },
-        Null with { CourseIndex = 66 },
+        Null with { CourseIndex = 66 }, // AX test ghost for Loop Cross
         Null with { CourseIndex = 67 },
         Null with { CourseIndex = 68 },
         Null with { CourseIndex = 69 },
         Null with { CourseIndex = 70 },
         // 70
         Null with { CourseIndex = 71 },
-        Test_SurfaceSlide,
+        Test_SurfaceSlide,              // Also has AX test ghost for Surface Slide
         Null with { CourseIndex = 73 },
         Null with { CourseIndex = 74 },
         Null with { CourseIndex = 75 },
-        Null with { CourseIndex = 76 },
+        Null with { CourseIndex = 76 }, // AX test ghost for Loop Cross
         Test_LoopCross,
         Null with { CourseIndex = 78 },
         Null with { CourseIndex = 79 },
@@ -1015,7 +1015,7 @@ public static class CourseDB
         Null with { CourseIndex = 81 }, // Implied to be Test_SonicOval
         Null with { CourseIndex = 82 },
         Null with { CourseIndex = 83 },
-        Null with { CourseIndex = 84 },
+        Null with { CourseIndex = 84 }, // AX test ghost for Sonic Oval
         Null with { CourseIndex = 85 }, // Implied to be Test_ScrewDrive
         Test_MeteorStream,
         Test_CylinderWave,
