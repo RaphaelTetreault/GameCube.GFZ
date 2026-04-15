@@ -320,7 +320,7 @@ namespace GameCube.GFZ.Stage
                 [
                     new KeyableAttribute()
                     {
-                        EaseMode = InterpolationMode.unknown1,
+                        EaseMode = InterpolationMode.Cubic,
                         Time = 0f,
                         Value = value,
                         TangentIn = 0f,

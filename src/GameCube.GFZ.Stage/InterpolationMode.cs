@@ -12,22 +12,28 @@ namespace GameCube.GFZ.Stage;
 public enum InterpolationMode : int
 {
     /// <summary>
-    /// No interpolation between keys. Values are kept until next key is hit. Maya "step" tangent.
+    ///     No interpolation between keys. Values are kept until next key is hit. Maya "step" tangent.
     /// </summary>
     Constant = 0,
 
     /// <summary>
-    /// Linear interpolation between keys.
+    ///     Linear interpolation between keys.
     /// </summary>
-    Linear,
+    Linear = 1,
 
     /// <summary>
-    /// 
+    ///     Cubic interpolation between keys.
     /// </summary>
-    unknown1, // could be auto or auto clamped? SMB2 community calls it "ease"
+    Cubic = 2,
 
     /// <summary>
-    /// 
+    ///     Cubic interpolation between keys.
     /// </summary>
-    unknown2, // could be auto or auto clamped?
+    /// <remarks>
+    ///     Alternate value for <see cref="Cubic"/>.<br/>
+    ///     The game interprets anything that isn't <see cref="Constant"/> 
+    ///     or <see cref="Linear"/> as <see cref="Cubic"/> interpolation.
+    ///     Some game data has keys of value 3 instead of 2. ¯\_(ツ)_/¯
+    /// </remarks>
+    CubicAlt = 3,
 }
