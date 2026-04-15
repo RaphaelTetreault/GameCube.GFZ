@@ -3,7 +3,7 @@ using Manifold.IO;
 namespace GameCube.GFZ.REL;
 
 /// <summary>
-///     Base class which inheritors define specific addresses and values for each version of the file.
+///     Defines a number of useful locations and areas for patching fz*.main.rel
 /// </summary>
 public readonly record struct FzMainRel
 {

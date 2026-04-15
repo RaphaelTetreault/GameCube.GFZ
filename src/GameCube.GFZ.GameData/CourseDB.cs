@@ -1055,7 +1055,7 @@ public static class CourseDB
                 continue;
 
             Console.WriteLine(gameCode);
-            for (int i = 0; i < GameDataConsts.MaxStageIndex; i++)
+            for (int i = 0; i < GameDataConsts.MaxCourseIndex; i++)
             {
                 Course c = DefaultCourses[i];
                 if (c != Null)

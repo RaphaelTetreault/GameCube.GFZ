@@ -5,7 +5,7 @@
 /// </summary>
 public static class GameDataConsts
 {
-    public const int MaxStageIndex = 110;
+    public const int MaxCourseIndex = 110;
     public const int MaxVenueIndex = 20;
     public const int MaxMinimapIndex = 45;
     public const int MaxDifficultyStars = 24;

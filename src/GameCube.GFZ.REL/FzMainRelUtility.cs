@@ -35,21 +35,21 @@ public class FzMainRelUtility
         writer.Write(minimapProjection);
     }
 
-    public static void PatchCourseBgm(EndianBinaryWriter writer, FzMainRel lookup, int stageIndex, byte bgmIndex)
+    public static void PatchCourseBgm(EndianBinaryWriter writer, FzMainRel lookup, int courseIndex, byte bgmIndex)
     {
-        ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmIndex);
+        ValidateStageIndex(courseIndex, GameDataConsts.MaxBgmIndex);
         BgmMusicDB.ThrowIfBgmIndexInvalid(bgmIndex);
         // Patch BGM Final Lap music, stride of 1
-        writer.JumpToAddress(lookup.CourseBgmIndex.Address + stageIndex);
+        writer.JumpToAddress(lookup.CourseBgmIndex.Address + courseIndex);
         writer.Write(bgmIndex);
     }
 
-    public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, FzMainRel lookup, byte stageIndex, BgmFinalLap bgmfl)
+    public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, FzMainRel lookup, int courseIndex, BgmFinalLap bgmfl)
     {
-        ValidateStageIndex(stageIndex, GameDataConsts.MaxBgmflIndex);
+        ValidateStageIndex(courseIndex, GameDataConsts.MaxBgmflIndex);
         BgmMusicDB.ThrowIfBgmIndexInvalid(bgmfl.songIndex);
         // Patch BGM Final Lap music, stride of 4
-        writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + stageIndex * 4);
+        writer.JumpToAddress(lookup.CourseBgmFinalLapIndex.Address + courseIndex * 4);
         writer.Write(bgmfl);
     }
 
