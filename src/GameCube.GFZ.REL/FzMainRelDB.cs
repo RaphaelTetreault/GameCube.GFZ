@@ -38,38 +38,40 @@ public static class FzMainRelDB
         GameCode = GameCode.GFZE01,
         SourceFile = "enemy_line/line__.bin",
         WorkingFile = "enemy_line/line__.rel",
-        FileHashMD5 = "a1790e38cbe17510017689088eab5758",
-        StringTableBaseAddress = 0x16D600,
+        FileHashMD5 = "f8947b6cec19af95f96fb9d11670ebdd",
+        StringTableBaseAddress = 0x16A180,
         Crypter = FzMainCrypterDB.Japanese,
 
         // VENUE NAMES
-        VenueNameOffsets = new(0x1F71DC, 42),
-        VenueNamesEnglishOffsets = new(0x1F71DC, 22), // Strings at: 197F80
-        VenueNamesJapaneseOffsets = new(0x1F728C, 20), // Strings at: 19807C
-        VenueNamesEnglish = new(0x197F80, 0xA4),
-        VenueNamesJapanese = new(0x19807C, 0xD8),
+        VenueNameOffsets = new(0x1F1C2C, 42), // ENG followed by JPN
+        VenueNamesEnglishOffsets = new(0x1F1C2C, 22),
+        VenueNamesJapaneseOffsets = new(0x1F1CDC, 20),
+        VenueNamesEnglish = new(0x194A60, 0xA4),
+        VenueNamesJapanese = new(0x194B5C, 0xD8),
 
-        CourseNameLanguages = 6, // ENG, GER, FRE, SPA, ITA, JPN
-        CourseNameOffsets = new(0x201F38, 666),
-        CourseNamesEnglish = new(0x19875C, 0x15C),
-        CourseNamesLocalizations = new(0x198A7C, 0x8D8),
+        // COURSE NAMES
+        CourseNameLanguages = 6,
+        CourseNameOffsets = new(0x1F286C, 666), // 111 * 6
+        CourseNamesEnglish = new(0x19523C, 0x15C), // English strings
+        CourseNamesLocalizations = new(0x19555C, 0x8D8), // Other localization strings
 
-        CarDataMachinesPtr = 0x195660,
-        MachineLetterRatingsPtr = 0x1AECB8,
-        VehicleMaxSpeedCap9990KmhPtr = 0x160230,
+        // CARDATA
+        CarDataMachinesPtr = 0x192140,
+        MachineLetterRatingsPtr = 0x1AA3F8,
+        VehicleMaxSpeedCap9990KmhPtr = 0x15d040,
 
-        CourseVenueIndex = new(0x1986D4, 111), // 0x6f
-        CourseDifficulty = new(0x168958, 111), // 0x6F
-        CourseBgmIndex = new(0x163A8C, 56),
-        CourseBgmFinalLapIndex = new(0x163AC4, 184),
-        CupCourseLut = new(0x167940, 0x84),
-        CupCourseLutAssets = new(0x1679C4, 0x84),
-        CupCourseLutUnk = new(0x167A48, 0x84),
-        CourseMinimapParameterStructs = new(0x18B5B0, 0x508),
-        ForbiddenWords = new(0x1B0630, 0x3E0),
-        AxModeCourseTimers = new(0x1ADBC0, 6),
-        PilotPositions = new(0x1A19C4, 0x210),
-        PilotToMachineLut = new(0x167890, 0xA4),
+        CourseVenueIndex = new(0x1951B4, 111),
+        CourseDifficulty = new(0x165460, 111),
+        CourseBgmIndex = new(0x1607B4, 56),
+        CourseBgmFinalLapIndex = new(0x1607EC, 184),
+        CupCourseLut = new(0x164548, 0x84),
+        CupCourseLutAssets = new(0x1645CC, 0x84),
+        CupCourseLutUnk = new(0x164650, 0x84),
+        CourseMinimapParameterStructs = new(0x188098, 0x508),
+        ForbiddenWords = new(0x1ABA60, 0x3E0),
+        AxModeCourseTimers = new(0x1A9390, 6),
+        PilotPositions = new(0x19E49C, 0x210),
+        PilotToMachineLut = new(0x164498, 0xA4),
     };
 
     /// <summary>
@@ -84,7 +86,6 @@ public static class FzMainRelDB
         StringTableBaseAddress = 0x16D600,
         Crypter = FzMainCrypterDB.Latin,
 
-        // VENUE NAMES
         VenueNameOffsets = new(0x1F71DC, 42),
         VenueNamesEnglishOffsets = new(0x1F71DC, 22), // Strings at: 197F80
         VenueNamesJapaneseOffsets = new(0x1F728C, 20), // Strings at: 19807C
@@ -92,7 +93,7 @@ public static class FzMainRelDB
         VenueNamesJapanese = new(0x19807C, 0xD8),
 
         CourseNameLanguages = 6, // ENG, GER, FRE, SPA, ITA, JPN
-        CourseNameOffsets = new(0x201F38, 666),
+        CourseNameOffsets = new(0x1F7E1C, 666),
         CourseNamesEnglish = new(0x19875C, 0x15C),
         CourseNamesLocalizations = new(0x198A7C, 0x8D8),
 
@@ -100,8 +101,8 @@ public static class FzMainRelDB
         MachineLetterRatingsPtr = 0x1AECB8,
         VehicleMaxSpeedCap9990KmhPtr = 0x160230,
 
-        CourseVenueIndex = new(0x1986D4, 111), // 0x6f
-        CourseDifficulty = new(0x168958, 111), // 0x6F
+        CourseVenueIndex = new(0x1986D4, 111),
+        CourseDifficulty = new(0x168958, 111),
         CourseBgmIndex = new(0x163A8C, 56),
         CourseBgmFinalLapIndex = new(0x163AC4, 184),
         CupCourseLut = new(0x167940, 0x84),
