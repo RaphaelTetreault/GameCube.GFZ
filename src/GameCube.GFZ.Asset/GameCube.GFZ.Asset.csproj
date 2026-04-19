@@ -14,7 +14,6 @@
     <ProjectReference Include="..\GameCube.GFZ.GCI\GameCube.GFZ.GCI.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.Ghosts\GameCube.GFZ.Ghosts.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.GMA\GameCube.GFZ.GMA.csproj" />
-    <ProjectReference Include="..\GameCube.GFZ.LZ\GameCube.GFZ.LZ.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.REL\GameCube.GFZ.REL.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.Replay\GameCube.GFZ.Replay.csproj" />
     <ProjectReference Include="..\GameCube.GFZ.Stage\GameCube.GFZ.Stage.csproj" />
