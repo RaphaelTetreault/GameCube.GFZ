@@ -49,7 +49,7 @@ public class Tpl :
             Assert.IsFalse(textureSequenceDescription.IsGarbageEntry, msg1);
 
             // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
-            var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
+            var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
             var msg2 = "Encoding is not direct. GFZ does not use (handle?) indirect modes.";
             Assert.IsTrue(encoding.IsDirect, msg2);
 
@@ -114,7 +114,7 @@ public class Tpl :
     /// <returns></returns>
     public static TextureSequence ReadDirectTextureSequence(EndianBinaryReader reader, TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         var textureSequence = new TextureSequence(textureSequenceDescription);
@@ -286,7 +286,7 @@ public class Tpl :
         // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
         // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
         // quadrant size (4, 4) instead.
-        int nBlocks4x4 = Encoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight, 4, 4);
+        int nBlocks4x4 = TextureEncoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight, 4, 4);
         // The number of blocks we get out is now 4 times the size since we specify a block
         // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
         // terms with other blocks, we divide by 4.
@@ -305,7 +305,7 @@ public class Tpl :
     ///     The number of blocks encoded by GFZ for a texture of <paramref name="pixelWidth"/> by
     ///     <paramref name="pixelHeight"/> size using its own <paramref name="encoding"/> format.
     /// </returns>
-    public static int GetGfzBlocksEncodedCount(int pixelWidth, int pixelHeight, Encoding encoding)
+    public static int GetGfzBlocksEncodedCount(int pixelWidth, int pixelHeight, TextureEncoding encoding)
     {
         bool isCmprTexture = encoding.Format == TextureFormat.CMPR;
 
@@ -327,7 +327,7 @@ public class Tpl :
     /// </returns>
     public static int GetTotalBlocksEncodedCount(TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = Encoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         int numTextures = textureSequenceDescription.NumberOfTextures;
