@@ -10,7 +10,8 @@ namespace GameCube.GFZ.REL;
 ///     TODO Move to <see cref="GameCube.Common"/>.    
 /// </remarks>
 public struct RelocationEntry :
-    IBinarySerializable
+    IBinarySerializable,
+    IBinaryAddressable
 {
     public const int Size = 8;
 
@@ -37,13 +38,17 @@ public struct RelocationEntry :
     /// </summary>
     public Offset addEnd;
 
+    public AddressRange AddressRange { get; set; }
+
 
     public void Deserialize(EndianBinaryReader reader)
     {
+        AddressRange.RecordStartAddress(reader);
         reader.Read(ref offset);
         reader.Read(ref type);
         reader.Read(ref section);
         reader.Read(ref addEnd);
+        AddressRange.RecordEndAddress(reader);
     }
 
     public readonly Pointer ResolveAddress(int baseAddress)
@@ -54,10 +59,12 @@ public struct RelocationEntry :
 
     public readonly void Serialize(EndianBinaryWriter writer)
     {
+        AddressRange.RecordStartAddress(writer);
         writer.Write(offset);
         writer.Write(type);
         writer.Write(section);
         writer.Write(addEnd);
+        AddressRange.RecordEndAddress(writer);
     }
 }
 
