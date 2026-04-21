@@ -2,8 +2,6 @@
 using GameCube.GFZ.Stage;
 using Manifold;
 using Manifold.IO;
-using System.Collections.Generic;
-using System.IO;
 using static Manifold.IO.TableLogger;
 
 namespace GameCube.GFZ.Asset;
