@@ -8,7 +8,7 @@ namespace GameCube.GFZ.TPL;
 /// </summary>
 public class TextureSequence
 {
-    public TextureSquenceElement[] Elements { get; internal set; } = [];
+    public TextureSequenceElement[] Elements { get; internal set; } = [];
     public TextureSequenceDescription Description { get; internal set; }
     public AddressRange AddressRange { get; internal set; }
     public int Length => Elements is null ? 0 : Elements.Length;
@@ -23,9 +23,9 @@ public class TextureSequence
 
         // Initialize texture sequence
         int numberOfTextures = textureSequenceDescription.NumberOfTextures;
-        Elements = new TextureSquenceElement[numberOfTextures];
+        Elements = new TextureSequenceElement[numberOfTextures];
         for (int i = 0; i < Elements.Length; i++)
-            Elements[i] = new TextureSquenceElement();
+            Elements[i] = new TextureSequenceElement();
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class TextureSequence
     /// </summary>
     /// <param name="elements"></param>
     /// <param name="textureFormat"></param>
-    public TextureSequence(TextureSquenceElement[] elements, TextureFormat textureFormat)
+    public TextureSequence(TextureSequenceElement[] elements, TextureFormat textureFormat)
     {
         // Assign elements
         Elements = elements;

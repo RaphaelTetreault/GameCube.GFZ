@@ -6,7 +6,7 @@ namespace GameCube.GFZ.TPL;
 /// <summary>
 ///     Describes a texture/mipmap in <see cref="TextureSequence"/>.
 /// </summary>
-public class TextureSquenceElement
+public class TextureSequenceElement
 {
     private static readonly Texture defaultTexture = new();
 
