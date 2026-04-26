@@ -41,19 +41,23 @@ public class Emblem :
     // Methods
     public void Deserialize(EndianBinaryReader reader)
     {
-        AddressRange.RecordStartAddress(reader);
+        this.RecordStartAddress(reader);
         Texture = Texture.ReadDirectColorTexture(reader, Format, Width, Height);
-        AddressRange.RecordEndAddress(reader);
+        this.RecordEndAddress(reader);
 
         ThrowErrorIfInvalid();
+        Assert.IsTrue(AddressRange.Size == Size);
     }
     public void Serialize(EndianBinaryWriter writer)
     {
         ThrowErrorIfInvalid();
+
         var blocks = Texture.CreateDirectColorBlocksFromTexture(Texture, DirectEncoding);
-        AddressRange.RecordStartAddress(writer);
+        this.RecordStartAddress(writer);
         DirectEncoding.WriteBlocks(writer, blocks);
-        AddressRange.RecordEndAddress(writer);
+        this.RecordEndAddress(writer);
+
+        Assert.IsTrue(AddressRange.Size == Size);
     }
 
     private void ThrowErrorIfInvalid()

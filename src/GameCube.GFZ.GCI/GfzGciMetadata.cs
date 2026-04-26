@@ -19,6 +19,7 @@ public class GfzGciMetadata :
     public const ushort TempCRC = 0xDEAD;
     public const string TempComment = "TEMP";
     public const byte TextPadByte = 0x00;
+    public const int Size = 0x2060; // size of this struct in bytes
 
     // FIELDS
     private ushort crc;                    // 0x00
@@ -46,7 +47,8 @@ public class GfzGciMetadata :
         banner = new Banner() { Format = GciTextureFormat.DirectColor, };
         icons = new Icons() { Format = GciTextureFormat.DirectColor, };
 
-        AddressRange.RecordStartAddress(reader);
+        this.RecordStartAddress(reader);
+        //
         reader.Read(ref crc);
         reader.Read(ref id);
         reader.Read(ref comment1, Encoding);
@@ -55,7 +57,8 @@ public class GfzGciMetadata :
         reader.JumpToAddress(AddressRange.startAddress + 0x60);
         banner.ReadBanner(reader);
         icons.ReadIcons(reader, IconsCount);
-        AddressRange.RecordEndAddress(reader);
+        //
+        this.RecordEndAddress(reader);
 
         // TODO: assertions
         //Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
@@ -69,7 +72,8 @@ public class GfzGciMetadata :
         int bytesPadComment2 = Comment2MaxLength - comment2.Length;
         Assert.IsTrue(icons.CountIcons() == 1, "Not exactly 1 icon!");
 
-        AddressRange.RecordStartAddress(writer);
+        this.RecordStartAddress(writer);
+        //
         writer.Write(TempCRC);
         writer.Write(id);
         writer.Write(comment1, Encoding, false);
@@ -78,10 +82,11 @@ public class GfzGciMetadata :
         writer.WritePadding(TextPadByte, bytesPadComment2);
         banner.WriteBanner(writer);
         icons.WriteIcons(writer);
-        AddressRange.RecordEndAddress(writer);
+        //
+        this.RecordEndAddress(writer);
 
         // TODO assert size
-        //Assert.IsTrue(AddressRange.Size == 0x00);
+        Assert.IsTrue(AddressRange.Size == Size);
     }
 
     /// <summary>

@@ -67,7 +67,7 @@ public class EmblemGCI :
 
         // Validation
         Assert.IsTrue(fstEntry.AddressRange.Size == GciFstEntry.Size);
-        Assert.IsTrue(metadata.AddressRange.Size == 0x00);
+        Assert.IsTrue(metadata.AddressRange.Size == GfzGciMetadata.Size);
         Assert.IsTrue(emblem.AddressRange.Size == Emblem.Size);
         Assert.IsTrue(paddingRange.Size == paddingLength);
         // Validate block size
