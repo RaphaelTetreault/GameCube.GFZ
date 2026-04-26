@@ -1,4 +1,5 @@
 ﻿using GameCube.DiskImage;
+using GameCube.GCI;
 using System;
 
 namespace GameCube.GFZ.GCI;
