@@ -1,4 +1,5 @@
-﻿using GameCube.GX.Texture;
+﻿using GameCube.GCI;
+using GameCube.GX.Texture;
 using Manifold.IO;
 using System;
 using System.IO;

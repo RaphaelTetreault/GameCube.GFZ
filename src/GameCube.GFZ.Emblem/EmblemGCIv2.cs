@@ -147,14 +147,14 @@ public class EmblemGCIv2 :
     public void ValidateAssumptions()
     {
         // FST assumptions
-        Assert.IsTrue(fstEntry.BannerIconFlags == GciFstEntryDB.Emblem.BannerIconFlags);
-        Assert.IsTrue(fstEntry.ModificationTime != GciFstEntryDB.Emblem.ModificationTime);
-        Assert.IsTrue(fstEntry.ImageDataOffset != GciFstEntryDB.Emblem.ImageDataOffset);
-        Assert.IsTrue(fstEntry.GciImageFormat == GciFstEntryDB.Emblem.GciImageFormat);
-        Assert.IsTrue(fstEntry.GciAnimationSpeed == GciFstEntryDB.Emblem.GciAnimationSpeed);
-        Assert.IsTrue(fstEntry.GciPermissionFlags == GciFstEntryDB.Emblem.GciPermissionFlags);
-        Assert.IsTrue(fstEntry.BlockCount != GciFstEntryDB.Emblem.BlockCount);
-        Assert.IsTrue(fstEntry.CommentOffset != GciFstEntryDB.Emblem.CommentOffset);
+        Assert.IsTrue(fstEntry.BannerIconFlags == GfzGciFstEntryDB.Emblem.BannerIconFlags);
+        Assert.IsTrue(fstEntry.ModificationTime != GfzGciFstEntryDB.Emblem.ModificationTime);
+        Assert.IsTrue(fstEntry.ImageDataOffset != GfzGciFstEntryDB.Emblem.ImageDataOffset);
+        Assert.IsTrue(fstEntry.GciImageFormat == GfzGciFstEntryDB.Emblem.GciImageFormat);
+        Assert.IsTrue(fstEntry.GciAnimationSpeed == GfzGciFstEntryDB.Emblem.GciAnimationSpeed);
+        Assert.IsTrue(fstEntry.GciPermissionFlags == GfzGciFstEntryDB.Emblem.GciPermissionFlags);
+        Assert.IsTrue(fstEntry.BlockCount != GfzGciFstEntryDB.Emblem.BlockCount);
+        Assert.IsTrue(fstEntry.CommentOffset != GfzGciFstEntryDB.Emblem.CommentOffset);
 
         // Metadata assumptions
         Assert.IsTrue(metadata.Banner.Format == GciTextureFormat.DirectColor);
