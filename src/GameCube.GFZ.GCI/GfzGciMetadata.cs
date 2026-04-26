@@ -9,6 +9,7 @@ using GameCube.Common;
 namespace GameCube.GFZ.GCI;
 
 public class GfzGciMetadata :
+    IBinaryAddressable,
     IBinarySerializable
 {
     // CONSTANTS
@@ -29,6 +30,7 @@ public class GfzGciMetadata :
 
     // PROPERTIES
     public Encoding Encoding { get; set; } = TextEncoding.ShiftJIS;
+    public AddressRange AddressRange { get; set; }
 
     // PROPERTIES (FORWARD)
     public ushort CRC { get => crc; set => crc = value; }
@@ -44,16 +46,18 @@ public class GfzGciMetadata :
         banner = new Banner() { Format = GciTextureFormat.DirectColor, };
         icons = new Icons() { Format = GciTextureFormat.DirectColor, };
 
-        Pointer baseAddress = reader.GetPositionAsPointer();
+        AddressRange.RecordStartAddress(reader);
         reader.Read(ref crc);
         reader.Read(ref id);
         reader.Read(ref comment1, Encoding);
-        reader.JumpToAddress(baseAddress + 0x24);
+        reader.JumpToAddress(AddressRange.startAddress + 0x24);
         reader.Read(ref comment2, Encoding);
-        reader.JumpToAddress(baseAddress + 0x60);
+        reader.JumpToAddress(AddressRange.startAddress + 0x60);
         banner.ReadBanner(reader);
         icons.ReadIcons(reader, IconsCount);
+        AddressRange.RecordEndAddress(reader);
 
+        // TODO: assertions
         //Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
         //Assert.IsTrue(Icons.Length == IconsCount);
         //Assert.IsTrue(Header.GetAnimationFrameCount() == Icons.Length);
@@ -64,9 +68,8 @@ public class GfzGciMetadata :
         int bytesPadComment1 = Comment1MaxLength - comment1.Length;
         int bytesPadComment2 = Comment2MaxLength - comment2.Length;
         Assert.IsTrue(icons.CountIcons() == 1, "Not exactly 1 icon!");
-        AddressRange addressRange = new();
 
-        addressRange.RecordStartAddress(writer);
+        AddressRange.RecordStartAddress(writer);
         writer.Write(TempCRC);
         writer.Write(id);
         writer.Write(comment1, Encoding, false);
@@ -75,8 +78,10 @@ public class GfzGciMetadata :
         writer.WritePadding(TextPadByte, bytesPadComment2);
         banner.WriteBanner(writer);
         icons.WriteIcons(writer);
-        addressRange.RecordEndAddress(writer);
-        // assert end pos / size
+        AddressRange.RecordEndAddress(writer);
+
+        // TODO assert size
+        //Assert.IsTrue(AddressRange.Size == 0x00);
     }
 
     /// <summary>

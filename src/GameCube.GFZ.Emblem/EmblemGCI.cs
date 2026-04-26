@@ -3,6 +3,7 @@ using GameCube.GFZ.GCI;
 using GameCube.GX.Texture;
 using Manifold.IO;
 using System;
+using System.IO;
 
 namespace GameCube.GFZ.Emblem;
 
@@ -24,7 +25,7 @@ public class EmblemGCI :
 
     // FIELDS
     private GciFstEntry fstEntry;
-    private GfzGciMetadata metadata = new() { ID = 0x0401 };
+    private GfzGciMetadata metadata = new();
     private Emblem emblem = new();
     private byte[] padding = [];
 
@@ -48,38 +49,26 @@ public class EmblemGCI :
     public void Deserialize(EndianBinaryReader reader)
     {
         // Record which binary data is where
-        AddressRange fstEntryRange = new();
-        AddressRange metadataRange = new();
-        AddressRange emblemRange = new();
         AddressRange paddingRange = new();
         AddressRange blocksRange = new();
 
-        // HEADER
-        fstEntryRange.RecordStartAddress(reader);
         reader.Read(ref fstEntry);
-        fstEntryRange.RecordEndAddress(reader);
         // BLOCKS START
         blocksRange.RecordStartAddress(reader);
-        // METADATA
-        metadataRange.RecordStartAddress(reader);
         reader.Read(ref metadata);
-        metadataRange.RecordEndAddress(reader);
-        // EMBLEM
-        emblemRange.RecordStartAddress(reader);
         reader.Read(ref emblem);
-        emblemRange.RecordEndAddress(reader);
         // PADDING
         int paddingLength = GciFstEntry.ComputeGciPaddingLength(reader.GetPositionAsPointer());
         paddingRange.RecordStartAddress(reader);
         reader.Read(ref padding, paddingLength);
         paddingRange.RecordEndAddress(reader);
-        // BLOCKS END
         blocksRange.RecordEndAddress(reader);
+        // BLOCKS END
 
         // Validation
-        Assert.IsTrue(fstEntryRange.Size == GciFstEntry.Size);
-        //Assert.IsTrue(metadataRange.Size == ???);
-        Assert.IsTrue(emblemRange.Size == Emblem.Size);
+        Assert.IsTrue(fstEntry.AddressRange.Size == GciFstEntry.Size);
+        Assert.IsTrue(metadata.AddressRange.Size == 0x00);
+        Assert.IsTrue(emblem.AddressRange.Size == Emblem.Size);
         Assert.IsTrue(paddingRange.Size == paddingLength);
         // Validate block size
         Assert.IsTrue(blocksRange.Size == GciFstEntry.BlockSize * fstEntry.BlockCount);
@@ -98,45 +87,33 @@ public class EmblemGCI :
         DoAutomations(DateTime.Now);
 
         // Record which binary data is where
-        AddressRange fstEntryRange = new();
-        AddressRange metadataRange = new();
-        AddressRange emblemRange = new();
         AddressRange paddingRange = new();
         AddressRange blocksRange = new();
 
-        // HEADER
-        fstEntryRange.RecordStartAddress(writer);
         writer.Write(fstEntry);
-        fstEntryRange.RecordEndAddress(writer);
         // BLOCKS START
         blocksRange.RecordStartAddress(writer);
-        // METADATA
-        metadataRange.RecordStartAddress(writer);
         writer.Write(metadata);
-        metadataRange.RecordEndAddress(writer);
-        // EMBLEM
-        emblemRange.RecordStartAddress(writer);
         writer.Write(emblem);
-        emblemRange.RecordEndAddress(writer);
         // PADDING
         int paddingLength = GciFstEntry.ComputeGciPaddingLength(writer.GetPositionAsPointer());
         paddingRange.RecordStartAddress(writer);
         writer.WritePadding(PaddingByte, paddingLength);
         paddingRange.RecordEndAddress(writer);
-        // BLOCKS END
         blocksRange.RecordEndAddress(writer);
+        // BLOCKS END
 
         // FST UPDATE: block count and comment offset
         Assert.IsTrue(blocksRange.Size % GciFstEntry.BlockSize == 0, "Not exact block size.");
         fstEntry.BlockCount = (ushort)(blocksRange.Size / GciFstEntry.BlockSize);
         fstEntry.ImageDataOffset = ImageDataOffset;
         fstEntry.CommentOffset = CommentOffset;
-        writer.JumpToAddress(fstEntryRange.startAddress, true);
+        writer.JumpToAddress(fstEntry.AddressRange.startAddress, true);
         writer.Write(fstEntry);
         // CRC
         AddressRange crcRange = blocksRange with { startAddress = blocksRange.startAddress + 2 };
         metadata.CRC = GfzGciMetadata.ComputeCRC(writer.BaseStream, crcRange);
-        writer.JumpToAddress(metadataRange.startAddress);
+        writer.JumpToAddress(metadata.AddressRange.startAddress);
         writer.Write(metadata.CRC);
         // Reset address
         writer.JumpToAddress(blocksRange.endAddress);
@@ -160,6 +137,20 @@ public class EmblemGCI :
         Assert.IsTrue(metadata.Banner.Format == GciTextureFormat.DirectColor);
         Assert.IsTrue(metadata.Icons.Format == GciTextureFormat.DirectColor);
         Assert.IsTrue(metadata.Icons.CountIcons() == GfzGciMetadata.IconsCount);
+
+        //TODO 2026/04/26:
+        //  Key insight, internal file name is what hangs up game...
+        //  Must be .dat extension in file. Causes file loading hang otherwise.
+        //  Must have fze020 for whatever reason. Causes pointer issues.
+        //  To that point. file is fze_02000_02000 (no _ in actual). 02000 repeats twice.
+
+        //string fileName = Path.GetFileNameWithoutExtension(fstEntry.InternalFileName);
+        string extension = Path.GetExtension(fstEntry.InternalFileName);
+        if (extension != ".dat")
+        {
+            string msg = $"{nameof(EmblemGCI)} internal file name must end in \".dat!\"";
+            throw new ArgumentException(msg);
+        }
     }
 
     private void DoAutomations(DateTime time)

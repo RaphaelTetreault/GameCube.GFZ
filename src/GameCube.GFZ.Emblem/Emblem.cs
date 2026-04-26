@@ -11,6 +11,7 @@ namespace GameCube.GFZ.Emblem;
 ///     An emblem is really just a specific spec for a GameCube GC texture.
 /// </remarks>
 public class Emblem :
+    IBinaryAddressable,
     IBinarySerializable
 {
     // Consts
@@ -22,6 +23,8 @@ public class Emblem :
 
     // Properties
     public Texture Texture { get; set; } = new Texture();
+    public AddressRange AddressRange { get; set; }
+
 
     // Constructors
     public Emblem()
@@ -38,14 +41,19 @@ public class Emblem :
     // Methods
     public void Deserialize(EndianBinaryReader reader)
     {
+        AddressRange.RecordStartAddress(reader);
         Texture = Texture.ReadDirectColorTexture(reader, Format, Width, Height);
+        AddressRange.RecordEndAddress(reader);
+
         ThrowErrorIfInvalid();
     }
     public void Serialize(EndianBinaryWriter writer)
     {
         ThrowErrorIfInvalid();
         var blocks = Texture.CreateDirectColorBlocksFromTexture(Texture, DirectEncoding);
+        AddressRange.RecordStartAddress(writer);
         DirectEncoding.WriteBlocks(writer, blocks);
+        AddressRange.RecordEndAddress(writer);
     }
 
     private void ThrowErrorIfInvalid()
