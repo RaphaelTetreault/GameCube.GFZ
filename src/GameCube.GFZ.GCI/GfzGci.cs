@@ -65,7 +65,7 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
         [
             ReadDirectColorIcon(reader),
         ];
-        Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
+        Assert.IsTrue(Header.ImageFormat == GciImageFormat.DirectColor);
         Assert.IsTrue(Icons.Length == IconsCount);
         Assert.IsTrue(Header.GetAnimationFrameCount() == Icons.Length);
     }
@@ -84,7 +84,7 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
         writer.WritePadding(0x00, CommentLength - comment.Length);
         foreach (var icon in Icons)
             Assert.IsTrue(TextureEncoding.IsDirectEncoding(icon.Format));
-        Header.ImageFormat = ImageFormat.DirectColor;
+        Header.ImageFormat = GciImageFormat.DirectColor;
         //Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
         Assert.IsTrue(Icons.Length == IconsCount);
         WriteDirectColorBanner(writer);
