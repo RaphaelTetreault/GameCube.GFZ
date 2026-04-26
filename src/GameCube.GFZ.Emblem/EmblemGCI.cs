@@ -48,37 +48,36 @@ public class EmblemGCI :
 
     public void Deserialize(EndianBinaryReader reader)
     {
-        // Record which binary data is where
-        AddressRange paddingRange = new();
-        AddressRange blocksRange = new();
-
+        // Write data
         reader.Read(ref fstEntry);
-        // BLOCKS START
-        blocksRange.RecordStartAddress(reader);
         reader.Read(ref metadata);
         reader.Read(ref emblem);
-        // PADDING
+
+        // Write padding
+        AddressRange paddingRange = new();
         int paddingLength = GciFstEntry.ComputeGciPaddingLength(reader.GetPositionAsPointer());
         paddingRange.RecordStartAddress(reader);
         reader.Read(ref padding, paddingLength);
         paddingRange.RecordEndAddress(reader);
-        blocksRange.RecordEndAddress(reader);
-        // BLOCKS END
 
-        // Validation
+        // Validate sizes
         Assert.IsTrue(fstEntry.AddressRange.Size == GciFstEntry.Size);
         Assert.IsTrue(metadata.AddressRange.Size == GfzGciMetadata.Size);
         Assert.IsTrue(emblem.AddressRange.Size == Emblem.Size);
         Assert.IsTrue(paddingRange.Size == paddingLength);
-        // Validate block size
+        // Validate GC block size
+        AddressRange blocksRange = new()
+        {
+            startAddress = metadata.AddressRange.startAddress,
+            endAddress = paddingRange.endAddress,
+        };
         Assert.IsTrue(blocksRange.Size == GciFstEntry.BlockSize * fstEntry.BlockCount);
         Assert.IsTrue(blocksRange.Size % GciFstEntry.BlockSize == 0, "Not exact block size.");
-
         // Assert CRC
-        AddressRange crcRange = blocksRange with { startAddress = blocksRange.startAddress + 2 };
+        AddressRange crcRange = blocksRange with { startAddress = blocksRange.startAddress + 0x02 };
         ushort crc = GfzGciMetadata.ComputeCRC(reader.BaseStream, crcRange);
         Assert.IsTrue(crc == metadata.CRC, $"Loaded CRC was {metadata.CRC} but expected {crc}.");
-
+        // Validate all the things I assume about EmblemGCI
         ValidateAssumptions();
     }
 
@@ -86,24 +85,24 @@ public class EmblemGCI :
     {
         DoAutomations(DateTime.Now);
 
-        // Record which binary data is where
-        AddressRange paddingRange = new();
-        AddressRange blocksRange = new();
-
+        // Write data
         writer.Write(fstEntry);
-        // BLOCKS START
-        blocksRange.RecordStartAddress(writer);
         writer.Write(metadata);
         writer.Write(emblem);
-        // PADDING
+
+        // Write padding
+        AddressRange paddingRange = new();
         int paddingLength = GciFstEntry.ComputeGciPaddingLength(writer.GetPositionAsPointer());
         paddingRange.RecordStartAddress(writer);
         writer.WritePadding(PaddingByte, paddingLength);
         paddingRange.RecordEndAddress(writer);
-        blocksRange.RecordEndAddress(writer);
-        // BLOCKS END
 
         // FST UPDATE: block count and comment offset
+        AddressRange blocksRange = new()
+        {
+            startAddress = metadata.AddressRange.startAddress,
+            endAddress = paddingRange.endAddress,
+        };
         Assert.IsTrue(blocksRange.Size % GciFstEntry.BlockSize == 0, "Not exact block size.");
         fstEntry.BlockCount = (ushort)(blocksRange.Size / GciFstEntry.BlockSize);
         fstEntry.ImageDataOffset = ImageDataOffset;
@@ -111,13 +110,13 @@ public class EmblemGCI :
         writer.JumpToAddress(fstEntry.AddressRange.startAddress, true);
         writer.Write(fstEntry);
         // CRC
-        AddressRange crcRange = blocksRange with { startAddress = blocksRange.startAddress + 2 };
+        AddressRange crcRange = blocksRange with { startAddress = blocksRange.startAddress + 0x02 };
         metadata.CRC = GfzGciMetadata.ComputeCRC(writer.BaseStream, crcRange);
         writer.JumpToAddress(metadata.AddressRange.startAddress);
         writer.Write(metadata.CRC);
         // Reset address
         writer.JumpToAddress(blocksRange.endAddress);
-
+        // Validate all the things I assume about EmblemGCI
         ValidateAssumptions();
     }
 
