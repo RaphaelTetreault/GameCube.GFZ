@@ -9,7 +9,7 @@ namespace GameCube.GFZ.Emblem;
 /// <summary>
 ///     
 /// </summary>
-public class EmblemGCIv2 :
+public class EmblemGCI :
     IBinarySerializable,
     IBinaryFileType
 {
