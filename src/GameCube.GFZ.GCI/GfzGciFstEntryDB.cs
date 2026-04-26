@@ -1,7 +1,7 @@
 ﻿using GameCube.DiskImage;
 using System;
 
-namespace GameCube.GCI;
+namespace GameCube.GFZ.GCI;
 
 /// <summary>
 ///         
