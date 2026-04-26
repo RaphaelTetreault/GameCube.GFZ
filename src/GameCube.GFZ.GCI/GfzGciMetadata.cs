@@ -10,6 +10,7 @@ namespace GameCube.GFZ.GCI;
 public class GfzGciMetadata :
     IBinarySerializable
 {
+    // CONSTANTS
     public const int Comment1MaxLength = 32;
     public const int Comment2MaxLength = 60;
     public const int IconsCount = 1;
@@ -17,6 +18,7 @@ public class GfzGciMetadata :
     public const string TempComment = "TEMP";
     public const byte TextPadByte = 0x00;
 
+    // FIELDS
     private ushort crc;                    // 0x00
     private ushort id;                     // 0x02
     private string comment1 = TempComment; // 0x04, size 0x20, 32 bytes - game title
@@ -24,8 +26,16 @@ public class GfzGciMetadata :
     private Banner banner = new();         // 0x60 GCI banner
     private Icons icons = new();           // ---- GCI icon(s)
 
+    // PROPERTIES
     public Encoding Encoding { get; set; } = TextEncoding.ShiftJIS;
 
+    // PROPERTIES (FORWARD)
+    public ushort CRC { get => crc; set => crc = value; }
+    public ushort ID { get => id; set => id = value; }
+    public string Comment1 { get => comment1; set => comment1 = SanitizeString(value, Comment1MaxLength); }
+    public string Comment2 { get => comment2; set => comment2 = SanitizeString(value, Comment2MaxLength); }
+    public Banner Banner { get => banner; set => banner = value; }
+    public Icons Icons { get => icons; set => icons = value; }
 
     public void Deserialize(EndianBinaryReader reader)
     {
@@ -77,8 +87,8 @@ public class GfzGciMetadata :
     public static ushort ComputeCRC(Stream stream, AddressRange addressRange)
     {
         bool isValidRange =
-            0 < addressRange.startAddress && addressRange.startAddress < stream.Length &&
-            0 < addressRange.endAddress   && addressRange.endAddress   < stream.Length;
+            0 <= addressRange.startAddress && addressRange.startAddress <= stream.Length &&
+            0 <= addressRange.endAddress && addressRange.endAddress <= stream.Length;
         if (!isValidRange)
         {
             string msg = $"Address range {addressRange.startAddress:x8} to " +
