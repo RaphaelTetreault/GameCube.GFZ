@@ -3,6 +3,7 @@
 
 using GameCube.DiskImage;
 using GameCube.GFZ.GCI;
+using Manifold.IO;
 
 namespace GameCube.GFZ.Emblem;
 
@@ -12,9 +13,8 @@ namespace GameCube.GFZ.Emblem;
 public class EmblemGCI : GfzGci<EmblemFile>
 {
     public const ushort UID = 0x0401; // NOT A UNIQUE ID
-
-    public readonly ushort[] UIDs = [UID];
-    public override ushort[] UniqueIDs => UIDs;
+    public override ushort UniqueID => UID;
+    public override ushort[] UniqueIDs => [UID];
 
     public Emblem Emblem
     {
@@ -25,4 +25,14 @@ public class EmblemGCI : GfzGci<EmblemFile>
     public EmblemGCI() : base() { }
     public EmblemGCI(Region region) : base(region) { }
 
+    public override void Serialize(EndianBinaryWriter writer)
+    {
+        base.Serialize(writer);
+        // Correct checksum
+        writer.Flush();
+        ushort checksum = ComputeCRC(writer.BaseStream);
+        writer.JumpToAddress(0x40);
+        writer.Write(checksum);
+        writer.Flush();
+    }
 }

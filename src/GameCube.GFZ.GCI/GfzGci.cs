@@ -1,7 +1,9 @@
 ﻿using GameCube.DiskImage;
 using GameCube.GCI;
+using GameCube.GX.Texture;
 using Manifold.IO;
 using System;
+using System.IO;
 
 namespace GameCube.GFZ.GCI;
 
@@ -22,13 +24,13 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
     // FIELDS
     private string gameTitle = string.Empty;
     private string comment = string.Empty;
-    private ushort unknown;
+    private ushort checksum;
     private ushort uniqueID;
 
     // PROPERTIES
     public override ushort UniqueID => uniqueID;
     public override string Comment { get => comment; set => comment = value; }
-    public override ushort Unknown => unknown;
+    public override ushort Checksum => checksum;
     public string GameTitle { get => gameTitle; set => gameTitle = value; }
 
     public GfzGci() : this((Region)0)
@@ -41,9 +43,9 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
         gameID[0] = 'G';
         gameID[1] = 'F';
         gameID[2] = 'Z';
-        gameID[3] = GameID.GetRegionChar(region);
-        gameID[4] = '0';
-        gameID[5] = '1';
+        gameID[3] = 'E'; // bad bad bad
+        gameID[4] = '8';
+        gameID[5] = 'P';
         Header.GameID = gameID;
     }
 
@@ -52,7 +54,7 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
     {
         var textEncoding = Header.GetTextEncoding();
 
-        reader.Read(ref unknown);
+        reader.Read(ref checksum);
         reader.Read(ref uniqueID);
         Assert.IsTrue(reader.GetPositionAsPointer() == Header.CommentPtr);
         reader.Read(ref gameTitle, textEncoding, GameTitleLength);
@@ -71,24 +73,36 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
     public override void SerializeCommentAndImages(EndianBinaryWriter writer)
     {
         var textEncoding = Header.GetTextEncoding();
+        GameTitle = "F-ZERO GX";
+        Comment = Header.GetDefaultComment();
 
-        writer.Write(unknown);
-        writer.Write(uniqueID);
+        writer.Write((ushort)0xDEAD);
+        writer.Write(UniqueID);
         writer.Write(gameTitle, textEncoding, false);
         writer.WritePadding(0x00, GameTitleLength - gameTitle.Length);
         writer.Write(comment, textEncoding, false);
         writer.WritePadding(0x00, CommentLength - comment.Length);
-        Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
+        foreach (var icon in Icons)
+            Assert.IsTrue(TextureEncoding.IsDirectEncoding(icon.Format));
+        Header.ImageFormat = ImageFormat.DirectColor;
+        //Assert.IsTrue(Header.ImageFormat == ImageFormat.DirectColor);
         Assert.IsTrue(Icons.Length == IconsCount);
         WriteDirectColorBanner(writer);
         WriteDirectColorIcons(writer);
     }
 
-    public static string FormatGciFileName(GfzGciFileType fileType, GciHeader gciHeader, string fileNameWithoutExtension, out string fileName)
+    public static string FormatGciFileName(GfzGciFileType fileType, Region region, string fileNameWithoutExtension, out string fileName)
     {
-        char regionChar = gciHeader.GameID.RegionCode;
-        string prefix = $"8P-GFZ{regionChar}-";
-        fileName = GfzGciDesignator(fileType);
+        char regionChar = region switch
+        {
+            Region.Japan => 'J',
+            Region.NorthAmerica => 'E',
+            Region.Europe => 'P',
+            _ => throw new ArgumentException(),
+        };
+        string code = GfzGciDesignator(fileType);
+        string prefix = $"8P-GFZ{regionChar}-{code}-";
+        fileName = string.Empty;
 
         switch (fileType)
         {
@@ -145,5 +159,44 @@ public abstract class GfzGci<TBinarySerializable> : GciWithUniqueID<TBinarySeria
             GfzGciFileType.Replay => 22,
             _ => -1,
         };
+    }
+
+    /// <summary>
+    ///     Compute file CRC
+    /// </summary>
+    /// <returns>
+    ///     
+    /// </returns>
+    public ushort ComputeCRC(Stream stream)
+    {
+        BinaryReader reader = new BinaryReader(stream);
+        int checksum = 0xFFFF;
+        int generatorPolynomial = 0x8408;
+
+        //for all data after checksum
+        reader.BaseStream.Position = 0x42;
+        for (int i = 0x42; i < stream.Length; i++)
+        {
+            byte value = reader.ReadByte();
+            checksum = checksum ^ value;
+
+            //For each bit in byte
+            for (int j = 8; j > 0; j--)
+            {
+                if ((checksum & 1) == 1)
+                {
+                    checksum = (checksum >>> 1) ^ generatorPolynomial;
+
+                }
+                else
+                {
+                    checksum = (checksum >>> 1);
+                }
+            }
+        }
+
+        //Final operation: flip all bits
+        checksum ^= 0xFFFF;
+        return (ushort)checksum;
     }
 }

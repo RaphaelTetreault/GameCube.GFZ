@@ -18,7 +18,7 @@ public class ReplayGCI : GciWithUniqueID<Replay>
     public override ushort[] UniqueIDs => UIDs;
     public Replay Replay { get => FileData; set => FileData = value; }
 
-    public override ushort Unknown => throw new NotImplementedException();
+    public override ushort Checksum => throw new NotImplementedException();
 
     public override string Comment { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
