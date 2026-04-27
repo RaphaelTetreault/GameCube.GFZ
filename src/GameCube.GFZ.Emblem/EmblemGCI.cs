@@ -147,7 +147,7 @@ public class EmblemGCI :
         string extension = Path.GetExtension(fstEntry.InternalFileName);
         if (extension != ".dat")
         {
-            string msg = $"{nameof(EmblemGCI)} internal file name must end in \".dat!\"";
+            string msg = $"{nameof(EmblemGCI)} internal file name must end in \".dat\"!";
             throw new ArgumentException(msg);
         }
     }
