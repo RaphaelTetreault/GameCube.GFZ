@@ -25,6 +25,7 @@ public static class GfzGciFstEntryDB
         CommentOffset = 0xFDDDDDDD,
     };
 
+    // All codes are *8P instead of *01
     public static readonly GciFstEntry EmblemJP = Emblem with { GameID = "GFZJ8P" };
     public static readonly GciFstEntry EmblemNA = Emblem with { GameID = "GFZE8P" };
     public static readonly GciFstEntry EmblemEU = Emblem with { GameID = "GFZP8P" };

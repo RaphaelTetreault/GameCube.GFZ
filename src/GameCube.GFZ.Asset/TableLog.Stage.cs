@@ -820,7 +820,6 @@ public static class StageTableLogger
 
     #endregion
 
-
     public static void AnalyzeHeaders(SceneFile[] sceneFiles, string fileName)
     {
         using var writer = new StreamWriter(File.Create(fileName));
