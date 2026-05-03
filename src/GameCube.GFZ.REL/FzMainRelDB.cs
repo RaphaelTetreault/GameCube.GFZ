@@ -51,6 +51,7 @@ public static class FzMainRelDB
 
         // COURSE NAMES
         CourseNameLanguages = 6,
+        CourseNameLocalizationsStartIndex = 1,
         CourseNameOffsets = new(0x1F286C, 666), // 111 * 6
         CourseNamesEnglish = new(0x19523C, 0x15C), // English strings
         CourseNamesLocalizations = new(0x19555C, 0x8D8), // Other localization strings
@@ -93,6 +94,7 @@ public static class FzMainRelDB
         VenueNamesJapanese = new(0x19807C, 0xD8),
 
         CourseNameLanguages = 6, // ENG, GER, FRE, SPA, ITA, JPN
+        CourseNameLocalizationsStartIndex = 1,
         CourseNameOffsets = new(0x1F7E1C, 666),
         CourseNamesEnglish = new(0x19875C, 0x15C),
         CourseNamesLocalizations = new(0x198A7C, 0x8D8),
@@ -134,9 +136,12 @@ public static class FzMainRelDB
         VenueNamesJapanese = new(0x199A3C, 0xD8),
 
         CourseNameLanguages = 6,
-        CourseNameOffsets = new(0x201F34, 666), // 111 * 6
+        CourseNameLocalizationsStartIndex = 111,
+        //CourseNameOffsets = new(0x201F34, 666), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
+        //CourseNameOffsets = new(0x201F34 + 0x08 * 111, 666), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
+        CourseNameOffsets = new(0x201F34, 777), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
         CourseNamesEnglish = new(0x19A11C, 0x15C),
-        CourseNamesLocalizations = new(0x19A430, 0x1E4), // Japanese only (no GER, FRE, SPA, ITA)
+        CourseNamesLocalizations = new(0x19A434, 0x1E8), // Japanese only (no GER, FRE, SPA, ITA)
 
         CarDataMachinesPtr = 0x195648,
         MachineLetterRatingsPtr = 0x1B8E20,

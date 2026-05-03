@@ -78,6 +78,11 @@ public readonly record struct FzMainRel
     public int CourseNameLanguages { get; init; } // done
 
     /// <summary>
+    ///     
+    /// </summary>
+    public int CourseNameLocalizationsStartIndex { get; init; }
+
+    /// <summary>
     ///     Address for course name offsets relative to <see cref="StringTableBaseAddress"/>.
     /// </summary>
     public ArrayPointer32 CourseNameOffsets { get; init; }
