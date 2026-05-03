@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -20,7 +20,7 @@ public static class CupDB
             CourseDB.Null,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "ALL Cup"),
             new (Language.Deutsch,  "ALL Cup GER"),
@@ -49,7 +49,7 @@ public static class CupDB
             CourseDB.Aeropolis_Multiplex,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Ruby Cup"),
             new (Language.Deutsch,  "Rubin-Cup"),
@@ -71,7 +71,7 @@ public static class CupDB
             CourseDB.MuteCity_SerialGaps,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Sapphire Cup"),
             new (Language.Deutsch,  "Saphir-Cup"),
@@ -93,7 +93,7 @@ public static class CupDB
             CourseDB.BigBlue_Ordeal,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Emerald Cup"),
             new (Language.Deutsch,  "Smaragd-Cup"),
@@ -115,7 +115,7 @@ public static class CupDB
             CourseDB.PhantomRoad_SlimLineSlits,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Diamond Cup"),
             new (Language.Deutsch,  "Diamant-Cup"),
@@ -137,7 +137,7 @@ public static class CupDB
             CourseDB.GreenPlant_Spiral,
             CourseDB.MuteCity_SonicOval,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "AX Cup"),
             new (Language.Deutsch,  "AX-Cup"),
@@ -159,7 +159,7 @@ public static class CupDB
             CourseDB.Lightning_ThunderRoad,
             CourseDB.GreenPlant_Spiral,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Ac Cup"),
             new (Language.Deutsch,  "Ac Cup GER"),
@@ -182,7 +182,7 @@ public static class CupDB
             CourseDB.Null with { CourseIndex = 59 },
             CourseDB.Null with { CourseIndex = 60 },
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Ac"),
             new (Language.Deutsch,  "Ac GER"),
@@ -204,7 +204,7 @@ public static class CupDB
             CourseDB.Null with { CourseIndex = 88 },
             CourseDB.Null with { CourseIndex = 89 },
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "Whf Cup"),
             new (Language.Deutsch,  "Whf Cup GER"),
@@ -226,7 +226,7 @@ public static class CupDB
             CourseDB.Null,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "E3-0"),
             // Maybe other Latin languages also use above?
@@ -245,7 +245,7 @@ public static class CupDB
             CourseDB.Null,
             CourseDB.Null,
         ],
-        Name = FrozenDictionary.Create<Language, string>(
+        Name = ImmutableDictionary.CreateRange<Language, string>(
         [
             new (Language.English,  "E3-1"),
             // Maybe other Latin languages also use above?
@@ -282,7 +282,7 @@ public static class CupDB
 
     public static void UnitTest()
     {
-        FrozenDictionary<GameCode, Language[]> gameCodeToLang = FrozenDictionary.Create<GameCode, Language[]>
+        ImmutableDictionary<GameCode, Language[]> gameCodeToLang = ImmutableDictionary.CreateRange<GameCode, Language[]>
             ([
                 new (GameCode.GFZE01, [Language.English]),
                 new (GameCode.GFZJ01, [Language.Japanese]),

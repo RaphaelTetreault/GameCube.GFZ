@@ -1,6 +1,4 @@
-﻿using System.Collections.Frozen;
-
-namespace GameCube.GFZ.GameData;
+﻿namespace GameCube.GFZ.GameData;
 
 /// <summary>
 ///     DataBase of default game <see cref="BgmMusic"/>s.
@@ -652,7 +650,7 @@ public static class BgmMusicDB
         InterviewIn,        // 18
         InterviewOut,       // 19
         Lightning,          // 20, 21
-        OuterSpace,       // 22, 23
+        OuterSpace,         // 22, 23
         MissionClear,       // 24
         MuteCity,           // 25, 26
         BigBlue,            // 27, 28

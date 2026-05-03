@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -111,7 +111,7 @@ public static class CourseDB
     {
         CourseIndex = 0,
         Venue = VenueDB.SandOcean,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -124,7 +124,7 @@ public static class CourseDB
     {
         CourseIndex = 1,
         Venue = VenueDB.MuteCity,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.TwistRoad),
             new (GameCode.GFZJ01, NamesJP.TwistRoad),
@@ -138,7 +138,7 @@ public static class CourseDB
     {
         CourseIndex = 3,
         Venue = VenueDB.MuteCity,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.SerialGaps),
             new (GameCode.GFZJ01, NamesJP.SerialGaps),
@@ -152,7 +152,7 @@ public static class CourseDB
     {
         CourseIndex = 5,
         Venue = VenueDB.Aeropolis,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Multiplex),
             new (GameCode.GFZJ01, NamesJP.Multiplex),
@@ -166,7 +166,7 @@ public static class CourseDB
     {
         CourseIndex = 7,
         Venue = VenueDB.PortTown,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.AeroDive),
             new (GameCode.GFZJ01, NamesJP.AeroDive),
@@ -180,7 +180,7 @@ public static class CourseDB
     {
         CourseIndex = 8,
         Venue = VenueDB.Lightning,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.LoopCross),
             new (GameCode.GFZJ01, NamesJP.LoopCross),
@@ -194,7 +194,7 @@ public static class CourseDB
     {
         CourseIndex = 9,
         Venue = VenueDB.Lightning,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.HalfPipe),
             new (GameCode.GFZJ01, NamesJP.HalfPipe),
@@ -208,7 +208,7 @@ public static class CourseDB
     {
         CourseIndex = 10,
         Venue = VenueDB.GreenPlant,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Intersection),
             new (GameCode.GFZJ01, NamesJP.Intersection),
@@ -222,7 +222,7 @@ public static class CourseDB
     {
         CourseIndex = 11,
         Venue = VenueDB.GreenPlant,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.MobiusRing),
             new (GameCode.GFZJ01, NamesJP.MobiusRing),
@@ -236,7 +236,7 @@ public static class CourseDB
     {
         CourseIndex = 13,
         Venue = VenueDB.PortTown,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.LongPipe),
             new (GameCode.GFZJ01, NamesJP.LongPipe),
@@ -250,7 +250,7 @@ public static class CourseDB
     {
         CourseIndex = 14,
         Venue = VenueDB.BigBlue,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.DriftHighway),
             new (GameCode.GFZJ01, NamesJP.DriftHighway),
@@ -264,7 +264,7 @@ public static class CourseDB
     {
         CourseIndex = 15,
         Venue = VenueDB.FireField,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.CylinderKnot),
             new (GameCode.GFZJ01, NamesJP.CylinderKnot),
@@ -278,7 +278,7 @@ public static class CourseDB
     {
         CourseIndex = 16,
         Venue = VenueDB.CasinoPalace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.SplitOval),
             new (GameCode.GFZJ01, NamesJP.SplitOval),
@@ -292,7 +292,7 @@ public static class CourseDB
     {
         CourseIndex = 17,
         Venue = VenueDB.FireField,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Undulation),
             new (GameCode.GFZJ01, NamesJP.Undulation),
@@ -306,7 +306,7 @@ public static class CourseDB
     {
         CourseIndex = 21,
         Venue = VenueDB.Aeropolis,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.DragonSlope),
             new (GameCode.GFZJ01, NamesJP.DragonSlope),
@@ -320,7 +320,7 @@ public static class CourseDB
     {
         CourseIndex = 24,
         Venue = VenueDB.CosmoTerminal,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Trident),
             new (GameCode.GFZJ01, NamesJP.Trident),
@@ -334,7 +334,7 @@ public static class CourseDB
     {
         CourseIndex = 25,
         Venue = VenueDB.SandOcean,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.LateralShift),
             new (GameCode.GFZJ01, NamesJP.LateralShift),
@@ -348,7 +348,7 @@ public static class CourseDB
     {
         CourseIndex = 26,
         Venue = VenueDB.SandOcean,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.SurfaceSlide),
             new (GameCode.GFZJ01, NamesJP.SurfaceSlide),
@@ -362,7 +362,7 @@ public static class CourseDB
     {
         CourseIndex = 27,
         Venue = VenueDB.BigBlue,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Ordeal),
             new (GameCode.GFZJ01, NamesJP.Ordeal),
@@ -376,7 +376,7 @@ public static class CourseDB
     {
         CourseIndex = 28,
         Venue = VenueDB.PhantomRoad,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.SlimLineSlits),
             new (GameCode.GFZJ01, NamesJP.SlimLineSlits),
@@ -390,7 +390,7 @@ public static class CourseDB
     {
         CourseIndex = 29,
         Venue = VenueDB.CasinoPalace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.DoubleBranches),
             new (GameCode.GFZJ01, NamesJP.DoubleBranches),
@@ -404,7 +404,7 @@ public static class CourseDB
     {
         CourseIndex = 31,
         Venue = VenueDB.Aeropolis,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.ScrewDrive),
             new (GameCode.GFZJ01, NamesJP.ScrewDrive),
@@ -418,7 +418,7 @@ public static class CourseDB
     {
         CourseIndex = 32,
         Venue = VenueDB.OuterSpace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.MeteorStream),
             new (GameCode.GFZJ01, NamesJP.MeteorStream),
@@ -432,7 +432,7 @@ public static class CourseDB
     {
         CourseIndex = 33,
         Venue = VenueDB.PortTown,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.CylinderWave),
             new (GameCode.GFZJ01, NamesJP.CylinderWave),
@@ -446,7 +446,7 @@ public static class CourseDB
     {
         CourseIndex = 34,
         Venue = VenueDB.Lightning,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.ThunderRoad),
             new (GameCode.GFZJ01, NamesJP.ThunderRoad),
@@ -460,7 +460,7 @@ public static class CourseDB
     {
         CourseIndex = 35,
         Venue = VenueDB.GreenPlant,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Spiral),
             new (GameCode.GFZJ01, NamesJP.Spiral),
@@ -474,7 +474,7 @@ public static class CourseDB
     {
         CourseIndex = 36,
         Venue = VenueDB.MuteCityCom,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.SonicOval),
             new (GameCode.GFZJ01, NamesJP.SonicOval),
@@ -488,7 +488,7 @@ public static class CourseDB
     {
         CourseIndex = 37,
         Venue = VenueDB.MuteCityComStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story1),
             new (GameCode.GFZJ01, NamesJP.Story1),
@@ -502,7 +502,7 @@ public static class CourseDB
     {
         CourseIndex = 38,
         Venue = VenueDB.SandOceanStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story2),
             new (GameCode.GFZJ01, NamesJP.Story2),
@@ -515,7 +515,7 @@ public static class CourseDB
     {
         CourseIndex = 39,
         Venue = VenueDB.CasinoPalace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story3),
             new (GameCode.GFZJ01, NamesJP.Story3),
@@ -528,7 +528,7 @@ public static class CourseDB
     {
         CourseIndex = 40,
         Venue = VenueDB.BigBlueStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story4),
             new (GameCode.GFZJ01, NamesJP.Story4),
@@ -541,7 +541,7 @@ public static class CourseDB
     {
         CourseIndex = 41,
         Venue = VenueDB.Lightning,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story5),
             new (GameCode.GFZJ01, NamesJP.Story5),
@@ -554,7 +554,7 @@ public static class CourseDB
     {
         CourseIndex = 42,
         Venue = VenueDB.PortTownStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story6),
             new (GameCode.GFZJ01, NamesJP.Story6),
@@ -567,7 +567,7 @@ public static class CourseDB
     {
         CourseIndex = 43,
         Venue = VenueDB.MuteCity,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story7),
             new (GameCode.GFZJ01, NamesJP.Story7),
@@ -580,7 +580,7 @@ public static class CourseDB
     {
         CourseIndex = 44,
         Venue = VenueDB.FireFieldStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story8),
             new (GameCode.GFZJ01, NamesJP.Story8),
@@ -593,7 +593,7 @@ public static class CourseDB
     {
         CourseIndex = 45,
         Venue = VenueDB.PhantomRoad,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Story9),
             new (GameCode.GFZJ01, NamesJP.Story9),
@@ -606,7 +606,7 @@ public static class CourseDB
     {
         CourseIndex = 49,
         Venue = VenueDB.MuteCityGrandPrixPodium,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -619,7 +619,7 @@ public static class CourseDB
     {
         CourseIndex = 50,
         Venue = VenueDB.MuteCityGrandPrixPodium,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -632,7 +632,7 @@ public static class CourseDB
     {
         CourseIndex = 72,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -645,7 +645,7 @@ public static class CourseDB
     {
         CourseIndex = 77,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -658,7 +658,7 @@ public static class CourseDB
     {
         CourseIndex = 86,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -671,7 +671,7 @@ public static class CourseDB
     {
         CourseIndex = 87,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -684,7 +684,7 @@ public static class CourseDB
     {
         CourseIndex = 90,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -697,7 +697,7 @@ public static class CourseDB
     {
         CourseIndex = 91,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -711,7 +711,7 @@ public static class CourseDB
     {
         CourseIndex = 92,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -725,7 +725,7 @@ public static class CourseDB
     {
         CourseIndex = 93,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -739,7 +739,7 @@ public static class CourseDB
     {
         CourseIndex = 94,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -753,7 +753,7 @@ public static class CourseDB
     {
         CourseIndex = 95,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -767,7 +767,7 @@ public static class CourseDB
     {
         CourseIndex = 96,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -781,7 +781,7 @@ public static class CourseDB
     {
         CourseIndex = 97,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -794,7 +794,7 @@ public static class CourseDB
     {
         CourseIndex = 98,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -807,7 +807,7 @@ public static class CourseDB
     {
         CourseIndex = 101,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -820,7 +820,7 @@ public static class CourseDB
     {
         CourseIndex = 102,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -833,7 +833,7 @@ public static class CourseDB
     {
         CourseIndex = 103,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -846,7 +846,7 @@ public static class CourseDB
     {
         CourseIndex = 104,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -859,7 +859,7 @@ public static class CourseDB
     {
         CourseIndex = 105,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -872,7 +872,7 @@ public static class CourseDB
     {
         CourseIndex = 107,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -885,7 +885,7 @@ public static class CourseDB
     {
         CourseIndex = 108,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -898,7 +898,7 @@ public static class CourseDB
     {
         CourseIndex = 110,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),
@@ -911,7 +911,7 @@ public static class CourseDB
     {
         CourseIndex = ushort.MaxValue,
         Venue = VenueDB.Null,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, NamesEN.Null),
             new (GameCode.GFZJ01, NamesJP.Null),

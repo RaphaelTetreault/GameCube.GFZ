@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+﻿using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -7,6 +7,6 @@ namespace GameCube.GFZ.GameData;
 /// </summary>
 public readonly record struct Venue
 {
-    public required FrozenDictionary<GameCode, string> Name { get; init; }
+    public required ImmutableDictionary<GameCode, string> Name { get; init; }
     public required VenueIndex VenueIndex { get; init; }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -53,7 +53,7 @@ public static class VenueDB
     public static readonly Venue Aeropolis = new()
     {
         VenueIndex = VenueIndex.Aeropolis,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.Aeropolis),
             new (GameCode.GFZJ01, Names.Aeropolis),
@@ -65,7 +65,7 @@ public static class VenueDB
     public static readonly Venue BigBlue = new()
     {
         VenueIndex = VenueIndex.BigBlue,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.BigBlue),
             new (GameCode.GFZJ01, Names.BigBlue),
@@ -78,7 +78,7 @@ public static class VenueDB
     public static readonly Venue BigBlueStory = new()
     {
         VenueIndex = VenueIndex.BigBlueStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.BigBlueStory),
             new (GameCode.GFZJ01, Names.BigBlueStory),
@@ -90,7 +90,7 @@ public static class VenueDB
     public static readonly Venue CasinoPalace = new()
     {
         VenueIndex = VenueIndex.CasinoPalace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.CasinoPalace),
             new (GameCode.GFZJ01, Names.VegasPalace),
@@ -102,7 +102,7 @@ public static class VenueDB
     public static readonly Venue CosmoTerminal = new()
     {
         VenueIndex = VenueIndex.CosmoTerminal,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.CosmoTerminal),
             new (GameCode.GFZJ01, Names.CosmoTerminal),
@@ -114,7 +114,7 @@ public static class VenueDB
     public static readonly Venue FireField = new()
     {
         VenueIndex = VenueIndex.FireField,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.FireField),
             new (GameCode.GFZJ01, Names.FireField),
@@ -126,7 +126,7 @@ public static class VenueDB
     public static readonly Venue FireFieldStory = new()
     {
         VenueIndex = VenueIndex.FireFieldStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.FireFieldStory),
             new (GameCode.GFZJ01, Names.FireFieldStory),
@@ -138,7 +138,7 @@ public static class VenueDB
     public static readonly Venue GreenPlant = new()
     {
         VenueIndex = VenueIndex.GreenPlant,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.GreenPlant),
             new (GameCode.GFZJ01, Names.GreenPlant),
@@ -150,7 +150,7 @@ public static class VenueDB
     public static readonly Venue Lightning = new()
     {
         VenueIndex = VenueIndex.Lightning,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.Lightning),
             new (GameCode.GFZJ01, Names.Lightning),
@@ -162,7 +162,7 @@ public static class VenueDB
     public static readonly Venue LightningStory = new()
     {
         VenueIndex = VenueIndex.LightningStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.LightningStory),
             new (GameCode.GFZJ01, Names.LightningStory),
@@ -174,7 +174,7 @@ public static class VenueDB
     public static readonly Venue MuteCity = new()
     {
         VenueIndex = VenueIndex.MuteCity,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.MuteCity),
             new (GameCode.GFZJ01, Names.MuteCity),
@@ -186,7 +186,7 @@ public static class VenueDB
     public static readonly Venue MuteCityCom = new()
     {
         VenueIndex = VenueIndex.MuteCityCom,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.MuteCityCom),
             new (GameCode.GFZJ01, Names.MuteCityCom),
@@ -198,7 +198,7 @@ public static class VenueDB
     public static readonly Venue MuteCityComStory = new()
     {
         VenueIndex = VenueIndex.MuteCityComStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.MuteCityComStory),
             new (GameCode.GFZJ01, Names.MuteCityComStory),
@@ -210,7 +210,7 @@ public static class VenueDB
     public static readonly Venue MuteCityGrandPrixPodium = new()
     {
         VenueIndex = VenueIndex.MuteCityGrandPrixPodium,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.MuteCityGrandPrixPodium),
             new (GameCode.GFZJ01, Names.MuteCityGrandPrixPodium),
@@ -222,7 +222,7 @@ public static class VenueDB
     public static readonly Venue Null = new()
     {
         VenueIndex = VenueIndex.None,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.Null),
             new (GameCode.GFZJ01, Names.Null),
@@ -234,7 +234,7 @@ public static class VenueDB
     public static readonly Venue OuterSpace = new()
     {
         VenueIndex = VenueIndex.OuterSpace,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.OuterSpace),
             new (GameCode.GFZJ01, Names.OuterSpace),
@@ -246,7 +246,7 @@ public static class VenueDB
     public static readonly Venue PhantomRoad = new()
     {
         VenueIndex = VenueIndex.PhantomRoad,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.PhantomRoad),
             new (GameCode.GFZJ01, Names.PhantomRoad),
@@ -258,7 +258,7 @@ public static class VenueDB
     public static readonly Venue PortTown = new()
     {
         VenueIndex = VenueIndex.PortTown,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.PortTown),
             new (GameCode.GFZJ01, Names.PortTown),
@@ -270,7 +270,7 @@ public static class VenueDB
     public static readonly Venue PortTownStory = new()
     {
         VenueIndex = VenueIndex.PortTownStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.PortTownStory),
             new (GameCode.GFZJ01, Names.PortTownStory),
@@ -282,7 +282,7 @@ public static class VenueDB
     public static readonly Venue SandOcean = new()
     {
         VenueIndex = VenueIndex.SandOcean,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.SandOcean),
             new (GameCode.GFZJ01, Names.SandOcean),
@@ -294,7 +294,7 @@ public static class VenueDB
     public static readonly Venue SandOceanStory = new()
     {
         VenueIndex = VenueIndex.SandOceanStory,
-        Name = FrozenDictionary.Create<GameCode, string>(
+        Name = ImmutableDictionary.CreateRange<GameCode, string>(
         [
             new (GameCode.GFZE01, Names.SandOceanStory),
             new (GameCode.GFZJ01, Names.SandOceanStory),
@@ -339,7 +339,7 @@ public static class VenueDB
     /// <remarks>
     ///     Returned array of <see cref="BgmMusic"/> can be empty or contain an alternative song (Mute City, Big Blue).
     /// </remarks>
-    public static readonly FrozenDictionary<VenueIndex, BgmMusic[]> VenueBgmMusic = FrozenDictionary.Create<VenueIndex, BgmMusic[]>(
+    public static readonly ImmutableDictionary<VenueIndex, BgmMusic[]> VenueBgmMusic = ImmutableDictionary.CreateRange<VenueIndex, BgmMusic[]>(
     [
         new (VenueIndex.None, []),
         new (VenueIndex.MuteCity, [BgmMusicDB.MuteCity, BgmMusicDB.MuteCitySecret]),

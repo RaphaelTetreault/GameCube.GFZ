@@ -1,4 +1,4 @@
-﻿using System.Collections.Frozen;
+﻿using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -14,7 +14,7 @@ public readonly record struct Course
     }
 
     public required ushort CourseIndex { get; init; } = UnassignedCourseIndex;
-    public required FrozenDictionary<GameCode, string> Name { get; init; }
+    public required ImmutableDictionary<GameCode, string> Name { get; init; }
     public byte StarDifficultyRating { get; init; }
     public required Venue Venue { get; init; }
 

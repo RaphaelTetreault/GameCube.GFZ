@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Frozen;
+using System.Collections.Immutable;
 
 namespace GameCube.GFZ.GameData;
 
@@ -12,7 +12,7 @@ public readonly record struct Cup
 
     public required CupIndex CupIndex { get; init; }
     public required Course[] Courses { get; init; }
-    public required FrozenDictionary<Language, string> Name { get; init; }
+    public required ImmutableDictionary<Language, string> Name { get; init; }
 
     public Cup()
     {
