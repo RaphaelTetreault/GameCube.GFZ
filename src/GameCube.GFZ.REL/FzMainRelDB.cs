@@ -1,4 +1,5 @@
-﻿using Manifold.IO;
+﻿using GameCube.GFZ.GameData;
+using Manifold.IO;
 
 namespace GameCube.GFZ.REL;
 
@@ -50,9 +51,9 @@ public static class FzMainRelDB
         VenueNamesJapanese = new(0x194B5C, 0xD8),
 
         // COURSE NAMES
-        CourseNameLanguages = 6,
+        CourseNameLanguages = GameDataConsts.LanguageCount,
         CourseNameLocalizationsStartIndex = 1,
-        CourseNameOffsets = new(0x1F286C, 666), // 111 * 6
+        CourseNameOffsets = new(0x1F286C, GameDataConsts.CourseCount * GameDataConsts.LanguageCount), // 111 * 6
         CourseNamesEnglish = new(0x19523C, 0x15C), // English strings
         CourseNamesLocalizations = new(0x19555C, 0x8D8), // Other localization strings
 
@@ -61,10 +62,10 @@ public static class FzMainRelDB
         MachineLetterRatingsPtr = 0x1AA3F8,
         VehicleMaxSpeedCap9990KmhPtr = 0x15d040,
 
-        CourseVenueIndex = new(0x1951B4, 111),
-        CourseDifficulty = new(0x165460, 111),
+        CourseVenueIndex = new(0x1951B4, GameDataConsts.CourseCount),
+        CourseDifficulty = new(0x165460, GameDataConsts.CourseCount),
         CourseBgmIndex = new(0x1607B4, 56),
-        CourseBgmFinalLapIndex = new(0x1607EC, 184),
+        CourseBgmFinalLapIndex = new(0x1607EC, 184), // 46 * 4 (courses 0-45, struct size 4 bytes)
         CupCourseLut = new(0x164548, 0x84),
         CupCourseLutAssets = new(0x1645CC, 0x84),
         CupCourseLutUnk = new(0x164650, 0x84),
@@ -93,9 +94,9 @@ public static class FzMainRelDB
         VenueNamesEnglish = new(0x197F80, 0xA4),
         VenueNamesJapanese = new(0x19807C, 0xD8),
 
-        CourseNameLanguages = 6, // ENG, GER, FRE, SPA, ITA, JPN
+        CourseNameLanguages = GameDataConsts.LanguageCount, // ENG, GER, FRE, SPA, ITA, JPN
         CourseNameLocalizationsStartIndex = 1,
-        CourseNameOffsets = new(0x1F7E1C, 666),
+        CourseNameOffsets = new(0x1F7E1C, GameDataConsts.CourseCount * GameDataConsts.LanguageCount),
         CourseNamesEnglish = new(0x19875C, 0x15C),
         CourseNamesLocalizations = new(0x198A7C, 0x8D8),
 
@@ -103,10 +104,10 @@ public static class FzMainRelDB
         MachineLetterRatingsPtr = 0x1AECB8,
         VehicleMaxSpeedCap9990KmhPtr = 0x160230,
 
-        CourseVenueIndex = new(0x1986D4, 111),
-        CourseDifficulty = new(0x168958, 111),
+        CourseVenueIndex = new(0x1986D4, GameDataConsts.CourseCount),
+        CourseDifficulty = new(0x168958, GameDataConsts.CourseCount),
         CourseBgmIndex = new(0x163A8C, 56),
-        CourseBgmFinalLapIndex = new(0x163AC4, 184),
+        CourseBgmFinalLapIndex = new(0x163AC4, 184), // 46 * 4 (courses 0-45, struct size 4 bytes)
         CupCourseLut = new(0x167940, 0x84),
         CupCourseLutAssets = new(0x1679C4, 0x84),
         CupCourseLutUnk = new(0x167A48, 0x84),
@@ -135,11 +136,9 @@ public static class FzMainRelDB
         VenueNamesEnglish = new(0x199940, 0xA0),
         VenueNamesJapanese = new(0x199A3C, 0xD8),
 
-        CourseNameLanguages = 6,
-        CourseNameLocalizationsStartIndex = 111,
-        //CourseNameOffsets = new(0x201F34, 666), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
-        //CourseNameOffsets = new(0x201F34 + 0x08 * 111, 666), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
-        CourseNameOffsets = new(0x201F34, 777), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
+        CourseNameLanguages = GameDataConsts.LanguageCount,
+        CourseNameLocalizationsStartIndex = GameDataConsts.CourseCount, // Begin after linear English entry. See below.
+        CourseNameOffsets = new(0x201F34, GameDataConsts.CourseCount * 7), // 111 English in linear order, then 111 * 6 cycling ENG, GER, FRE, SPA, ITA, JPN
         CourseNamesEnglish = new(0x19A11C, 0x15C),
         CourseNamesLocalizations = new(0x19A434, 0x1E8), // Japanese only (no GER, FRE, SPA, ITA)
 
@@ -147,10 +146,10 @@ public static class FzMainRelDB
         MachineLetterRatingsPtr = 0x1B8E20,
         VehicleMaxSpeedCap9990KmhPtr = 0x160e10,
 
-        CourseVenueIndex = new(0x19A094, 111),
-        CourseDifficulty = new(0x1698EC, 111),
+        CourseVenueIndex = new(0x19A094, GameDataConsts.CourseCount),
+        CourseDifficulty = new(0x1698EC, GameDataConsts.CourseCount),
         CourseBgmIndex = new(0x16495C, 56),
-        CourseBgmFinalLapIndex = new(0x164994, 184),
+        CourseBgmFinalLapIndex = new(0x164994, 184), // 46 * 4 (courses 0-45, struct size 4 bytes)
         CupCourseLut = new(0x1688B0, 0x84),
         CupCourseLutAssets = new(0x168934, 0x84),
         CupCourseLutUnk = new(0x1689B8, 0x84),
@@ -191,7 +190,7 @@ public static class FzMainRelDB
         CourseVenueIndex = new(0x21B3EC, 111),
         CourseDifficulty = DataBlock.Null, // Nothing comfirmed yet
         CourseBgmIndex = new(0x20E3F0, 56),
-        CourseBgmFinalLapIndex = new(0x20E484, 184),
+        CourseBgmFinalLapIndex = new(0x20E484, 184), // 46 * 4 (courses 0-45, struct size 4 bytes)
         CupCourseLut = new(0x20FB64, 0x84),
         CupCourseLutAssets = new(0x20FBE8, 0x84),
         CupCourseLutUnk = new(0x20FC6C, 0x84),
