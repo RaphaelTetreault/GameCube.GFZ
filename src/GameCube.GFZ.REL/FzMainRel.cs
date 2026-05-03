@@ -7,6 +7,8 @@ namespace GameCube.GFZ.REL;
 /// </summary>
 public readonly record struct FzMainRel
 {
+    public readonly record struct Md5HashRange(AddressRange Range, string Md5Hash);
+
     public FzMainRel()
     {
     }
@@ -32,10 +34,14 @@ public readonly record struct FzMainRel
     public string WorkingFile { get; init; } = string.Empty;
 
     /// <summary>
-    ///     TODO: File hash of the archive or decompressed file?
-    ///     Probably the former.
+    ///     File hash and range of (GX) ./enemy_line/line__.bin
     /// </summary>
-    public string FileHashMD5 { get; init; } = string.Empty;
+    public Md5HashRange MD5LineBin { get; init; }
+
+    /// <summary>
+    ///     File hash and range of (GX) fz.main.rel, fze.main.rel, fzp.main.rel, and (AX) main.dol
+    /// </summary>
+    public Md5HashRange MD5MainRel { get; init; }
 
     /// <summary>
     ///     Base address of all strings in table. Other offsets defined
