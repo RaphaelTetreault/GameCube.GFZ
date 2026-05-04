@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GameCube.GFZ.CarData;
+namespace GameCube.GFZ.GameData;
 
 /// <summary>
 ///     Mmachine index (internal machine index, not display number).
@@ -8,7 +8,7 @@ namespace GameCube.GFZ.CarData;
 /// <remarks>
 ///     Description attribute contains display name of each machine.
 /// </remarks>
-public enum MachineID : byte
+public enum MachineIndex : byte
 {
     [Description("Red Gazelle")]
     RedGazelle,

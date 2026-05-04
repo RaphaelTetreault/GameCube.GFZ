@@ -1,6 +1,6 @@
 ﻿// https://github.com/JoselleAstrid/fzerogx-docs/blob/master/file_formats/gci_replay.md#racer-array
 
-using GameCube.GFZ.CarData;
+using GameCube.GFZ.GameData;
 using Manifold.IO;
 using System;
 
@@ -13,7 +13,7 @@ public class RaceParticipant :
     IBitSerializable
 {
     private bool isHuman; // 1, 1
-    private MachineID machineID; // 6, 7
+    private MachineIndex machineID; // 6, 7
     private byte gridIndex; // 5, 12
     private byte graphConsoleSetting; // 7, 19
     private byte colorPalette; // 2, 21
@@ -24,7 +24,7 @@ public class RaceParticipant :
     public void Deserialize(BitStreamReader reader)
     {
         isHuman = reader.ReadBool();
-        machineID = (MachineID)reader.ReadByte(6);
+        machineID = (MachineIndex)reader.ReadByte(6);
         gridIndex = reader.ReadByte(5);
         graphConsoleSetting = reader.ReadByte(7);
         colorPalette = reader.ReadByte(2);

@@ -44,7 +44,7 @@ public class FzMainRelUtility
         writer.Write(bgmIndex);
     }
 
-    public static void PatchStageBgmFinalLap(EndianBinaryWriter writer, FzMainRel lookup, int courseIndex, BgmFinalLap bgmfl)
+    public static void PatchCourseBgmFinalLap(EndianBinaryWriter writer, FzMainRel lookup, int courseIndex, BgmFinalLap bgmfl)
     {
         ValidateStageIndex(courseIndex, GameDataConsts.MaxBgmflIndex);
         BgmMusicDB.ThrowIfBgmIndexInvalid(bgmfl.songIndex);
@@ -146,9 +146,9 @@ public class FzMainRelUtility
         writer.Write(seconds);
     }
 
-    public static void PatchPilotPosition(EndianBinaryWriter writer, FzMainRel lookup, PilotID id, Vector3 position)
+    public static void PatchPilotPosition(EndianBinaryWriter writer, FzMainRel lookup, PilotIndex id, Vector3 position)
     {
-        if (id > PilotID.Gen)
+        if (id > PilotIndex.Gen)
         {
             throw new ArgumentException("Invalid Pilot ID");
         }
@@ -157,24 +157,25 @@ public class FzMainRelUtility
         writer.Write(position);
     }
 
-    public static void PatchPilotToMachine(EndianBinaryWriter writer, FzMainRel lookup, MachineID machine, PilotID pilot)
+    public static void PatchPilotToMachine(EndianBinaryWriter writer, FzMainRel lookup, MachineIndex machine, PilotIndex pilot)
     {
-        if (pilot > PilotID.Gen)
+        if (pilot > PilotIndex.Gen)
         {
             throw new ArgumentException("Invalid Pilot ID");
         }
 
-        if (machine > MachineID.RainbowPhoenix)
+        if (machine > MachineIndex.RainbowPhoenix)
         {
             throw new ArgumentException("Invalid Machine ID");
         }
 
-        if (pilot > PilotID.Pheonix)
+        if (pilot > PilotIndex.Pheonix)
         {
             throw new ArgumentException($"ID: {pilot} will only work with Free Run Races! Different Race Settings will freeze the game!");
         }
 
-        PatchPilotPosition(writer, lookup, pilot, PilotPosition.Default[(int)machine].Position);
+        throw new NotImplementedException();
+        //PatchPilotPosition(writer, lookup, pilot, PilotPosition.Default[(int)machine].Position);
 
         writer.JumpToAddress(lookup.PilotToMachineLut.Address + (int)machine * 4);
         writer.Write((int)pilot);

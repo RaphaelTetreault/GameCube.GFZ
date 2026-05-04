@@ -14,7 +14,7 @@ public class GhostData :
 
     // FIELDS
     // TODO: make private, add accessors
-    public MachineID machineID; // 0x00
+    public MachineIndex machineID; // 0x00
     public byte courseID; // 0x01
     public byte zero0x02; // Addr:0x02 always zero
     public bool unkBoolean; // 0x03, bool - usually True
