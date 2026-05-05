@@ -167,7 +167,7 @@ public static class CupDB
             new (Language.Español,  "Ac Cup SPA"),
             new (Language.Italiano, "Ac Cup ITA"),
             new (Language.Japanese, "アーケードカップ80"), // Yeah, didn't think about WTF is going on here. See below.
-            new (Language.Japanese, "アーケードカップ50"), // ...
+            //new (Language.Japanese, "アーケードカップ50"), // ...
         ]),
     };
 
