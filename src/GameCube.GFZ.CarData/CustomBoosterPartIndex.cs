@@ -3,7 +3,7 @@
 /// <summary>
 /// 
 /// </summary>
-public enum CustomBoosterPartName
+public enum CustomBoosterPartIndex
 {
     Euros_01,
     Triangle_GT,

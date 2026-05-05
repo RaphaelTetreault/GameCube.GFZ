@@ -26,11 +26,11 @@ public class CustomMachine :
     private byte[] unknown3 = []; // 16
     private byte[][] emblemData = new byte[4][]; // 4*8288, is actually a byte-aligned structure
     private PilotIndex pilotID; // 4
-    private CustomBodyPartName bodyID; // 4
+    private CustomBodyPartIndex bodyID; // 4
     private GXColor bodyColor; // 4
-    private CustomCockpitPartName cockpitID; // 4
+    private CustomCockpitPartIndex cockpitID; // 4
     private GXColor cockpitColor; // 4
-    private CustomBoosterPartName boosterID; // 4
+    private CustomBoosterPartIndex boosterID; // 4
     private GXColor boosterColor; // 4
     private uint unknown4; // 4
 #pragma warning restore IDE0052 // Remove unread private members
@@ -49,11 +49,11 @@ public class CustomMachine :
         for (int i = 0; i < emblemCount; i++)
             emblemData[i] = reader.ReadBytes(8288*8); // bytes
         pilotID = (PilotIndex)reader.ReadUInt(4 * 8);
-        bodyID = (CustomBodyPartName)reader.ReadUInt(4 * 8);
+        bodyID = (CustomBodyPartIndex)reader.ReadUInt(4 * 8);
         bodyColor = new GXColor(reader.ReadUInt(4 * 8));
-        cockpitID = (CustomCockpitPartName)reader.ReadUInt(4 * 8);
+        cockpitID = (CustomCockpitPartIndex)reader.ReadUInt(4 * 8);
         cockpitColor = new GXColor(reader.ReadUInt(4 * 8));
-        boosterID = (CustomBoosterPartName)reader.ReadUInt(4 * 8);
+        boosterID = (CustomBoosterPartIndex)reader.ReadUInt(4 * 8);
         boosterColor = new GXColor(reader.ReadUInt(4 * 8));
         unknown4 = reader.ReadUInt(4 * 8);
     }

@@ -1,9 +1,9 @@
 ﻿namespace GameCube.GFZ.CarData;
 
 /// <summary>
-/// 
+///     Custom machine cockpit part index.
 /// </summary>
-public enum CustomCockpitPartName
+public enum CustomCockpitPartIndex
 {
     WonderWorm,
     RushCyclone,

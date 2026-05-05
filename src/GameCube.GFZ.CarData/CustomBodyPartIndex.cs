@@ -3,7 +3,7 @@
 /// <summary>
 /// 
 /// </summary>
-public enum CustomBodyPartName
+public enum CustomBodyPartIndex
 {
     BraveEagle,
     GalaxyFalcon,

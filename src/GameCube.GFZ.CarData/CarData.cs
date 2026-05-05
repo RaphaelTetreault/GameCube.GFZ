@@ -270,11 +270,11 @@ public class CarData :
             Machines[i].RuntimeName = machineNames[i];
 
         for (int i = 0; i < BodyParts.Length; i++)
-            BodyParts[i].RuntimeName = ((CustomBodyPartName)i).ToString();
+            BodyParts[i].RuntimeName = ((CustomBodyPartIndex)i).ToString();
         for (int i = 0; i < CockpitParts.Length; i++)
-            CockpitParts[i].RuntimeName = ((CustomCockpitPartName)i).ToString();
+            CockpitParts[i].RuntimeName = ((CustomCockpitPartIndex)i).ToString();
         for (int i = 0; i < BoosterParts.Length; i++)
-            BoosterParts[i].RuntimeName = ((CustomBoosterPartName)i).ToString();
+            BoosterParts[i].RuntimeName = ((CustomBoosterPartIndex)i).ToString();
     }
 
     public void Serialize(EndianBinaryWriter writer)
@@ -321,9 +321,9 @@ public class CarData :
     {
         string[] headers = Machines[0].GetHeaders();
         string[] machineNames = MachineNamesTable.Reverse().ToArray().AsStringArray();
-        string[] bodyNames = Enum.GetNames<CustomBodyPartName>();
-        string[] cockpitNames = Enum.GetNames<CustomCockpitPartName>();
-        string[] boosterNames = Enum.GetNames<CustomBoosterPartName>();
+        string[] bodyNames = Enum.GetNames<CustomBodyPartIndex>();
+        string[] cockpitNames = Enum.GetNames<CustomCockpitPartIndex>();
+        string[] boosterNames = Enum.GetNames<CustomBoosterPartIndex>();
 
         Table[] tables = new Table[4]
         {
