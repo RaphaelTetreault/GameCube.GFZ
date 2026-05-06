@@ -12,7 +12,7 @@ using Manifold.IO;
 namespace GameCube.GFZ.Stage;
 
 /// <summary>
-///     Texture metadata. In some instasnces defines how a texture scrolls.
+///     Texture metadata. In some instances defines how a texture scrolls.
 /// </summary>
 public sealed class TextureScroll :
     IBinaryAddressable,

@@ -37,7 +37,7 @@ public enum ObjectRenderFlags0x04 : uint
     unk_28 = 1 << 28,
     unk_29 = 1 << 29,
     unk_30 = 1 << 30,
-    unk_31 = unchecked((uint)(1 << 31)),
+    unk_31 = 1u << 31,
 
     _NULL = 0xFFFFFFFF,
 }

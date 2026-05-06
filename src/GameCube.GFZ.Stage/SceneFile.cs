@@ -81,6 +81,7 @@ public class SceneFile : BinaryFileWrapper<Scene>
         Venue = VenueDB.GetDefaultVenueID(CourseIndex);
         CourseName = CourseDB.GetDefaultCourseName(GameCode.GFZE01, CourseIndex);
         //Author = "Amusement Vision";
+        reader.Close();
     }
 
 

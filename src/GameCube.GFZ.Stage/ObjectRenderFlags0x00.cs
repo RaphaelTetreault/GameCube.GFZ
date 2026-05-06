@@ -37,5 +37,5 @@ public enum ObjectRenderFlags0x00 : uint
     unk_28 = 1 << 28,
     unk_29 = 1 << 29,
     unk_DisableObject1 = 1 << 30,
-    unk_DisableObject2 = unchecked((uint)(1 << 31)),
+    unk_DisableObject2 = 1u << 31,
 }
