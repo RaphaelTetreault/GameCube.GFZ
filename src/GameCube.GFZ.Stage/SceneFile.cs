@@ -39,7 +39,26 @@ public class SceneFile : BinaryFileWrapper<Scene>
     /// <summary>
     ///     The course index as indicated by the file name COLI_COURSE## where ## is the index.
     /// </summary>
-    public int CourseIndex { get; set; }
+    /// <remarks>
+    ///     Hacky implementation to force-load index due to Log function not calling
+    ///     string-constructor directly.
+    /// </remarks>
+    public int CourseIndex
+    {
+        get
+        {
+            bool isNotSet = field == -1;
+            bool hasFileName = !string.IsNullOrWhiteSpace(FileName);
+            if (isNotSet && hasFileName)
+            {
+                // Store the stage index, can solve venue and course name from this using hashes
+                var matchDigits = Regex.Match(FileName, ConstRegex.MatchIntegers);
+                field = int.Parse(matchDigits.Value);
+            }
+            return field;
+        }
+        set;
+    } = -1;
 
     public Course CourseInfo => CourseDB.DefaultCourses[CourseIndex];
     public string CourseName => CourseInfo.Name[GameCode.GGGE6E];

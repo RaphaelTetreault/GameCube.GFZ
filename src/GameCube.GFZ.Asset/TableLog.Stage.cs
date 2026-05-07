@@ -546,7 +546,7 @@ public static class StageTableLogger
                 foreach (var field in dynamicSceneObject.Value.TextureScroll.Fields.Iterate())
                 {
                     if (field.Value is null)
-                        return;
+                        continue;
 
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(dynamicSceneObject.Index);
