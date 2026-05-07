@@ -5,8 +5,8 @@ using System.Numerics;
 namespace GameCube.GFZ.Stage;
 
 /// <summary>
-///     A trigger volume that has many different use cases depending on
-///     which course it appears. Consult enum comments for more details.
+///     A trigger volume that has many different use cases depending on which course it appears. 
+///     Consult <see cref="CourseMetadataType"/> comments for more details.
 /// </summary>
 public sealed class MiscellaneousTrigger :
     IBinaryAddressable,
@@ -14,7 +14,7 @@ public sealed class MiscellaneousTrigger :
     ITextPrintable
 {
     // FIELDS
-    private TransformTRXS transform;
+    private TransformTRXS transform = new();
     private CourseMetadataType metadataType;
 
 
@@ -43,9 +43,6 @@ public sealed class MiscellaneousTrigger :
         }
         this.RecordEndAddress(reader);
     }
-
-
-
     public void Serialize(EndianBinaryWriter writer)
     {
         this.RecordStartAddress(writer);

@@ -34,9 +34,9 @@ public sealed class TrackSegment :
     private uint zero_0x48; // zero confirmed
     private int branchIndex; // 0, 1, 2, 3
     // REFERENCE FIELDS
-    private AnimationCurveTRS animationCurveTRS = new AnimationCurveTRS();
-    private TrackCorner trackCorner;
-    private TrackSegment[] children = new TrackSegment[0];
+    private AnimationCurveTRS animationCurveTRS = new();
+    private TrackCorner? trackCorner;
+    private TrackSegment[]? children;
 
 
     // PROPERTIES
@@ -44,7 +44,7 @@ public sealed class TrackSegment :
     public int Depth { get; set; }
     public string OrderIndentifier { get; set; } = string.Empty;
     public bool IsRoot { get; set; }
-    public TrackSegment Parent { get; set; }
+    public TrackSegment? Parent { get; set; }
     public TrackSegmentType SegmentType { get => segmentType; set => segmentType = value; }
     public TrackEmbeddedPropertyType EmbeddedPropertyType { get => embeddedPropertyType; set => embeddedPropertyType = value; }
     public TrackPerimeterFlags PerimeterFlags { get => perimeterFlags; set => perimeterFlags = value; }
@@ -61,8 +61,8 @@ public sealed class TrackSegment :
     public float RailHeightLeft { get => railHeightLeft; set => railHeightLeft = value; }
     public int BranchIndex { get => branchIndex; set => branchIndex = value; }
     public AnimationCurveTRS AnimationCurveTRS { get => animationCurveTRS; set => animationCurveTRS = value; }
-    public TrackCorner TrackCorner { get => trackCorner; set => trackCorner = value; }
-    public TrackSegment[] Children { get => children; set => children = value; }
+    public TrackCorner? TrackCorner { get => trackCorner; set => trackCorner = value; }
+    public TrackSegment[]? Children { get => children; set => children = value; }
 
 
     public void SetRails(float leftHeight, float rightHeight)

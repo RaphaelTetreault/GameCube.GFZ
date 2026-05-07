@@ -1,3 +1,6 @@
+// TODO: THIS SHOULD REALLY BE A STRUCT...?
+// CONSIDER REF STRUCTS?
+
 using Manifold;
 using Manifold.IO;
 using System.Numerics;

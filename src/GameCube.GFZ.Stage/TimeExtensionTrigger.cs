@@ -19,7 +19,7 @@ public sealed class TimeExtensionTrigger :
     ITextPrintable
 {
     // FIELDS
-    private TransformTRXS transform;
+    private TransformTRXS transform = new();
     private TimeExtensionOption option;
 
 

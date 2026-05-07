@@ -1,10 +1,12 @@
-﻿using Manifold;
+﻿// TODO: STRUCT
+
+using Manifold;
 using Manifold.IO;
 
 namespace GameCube.GFZ.Stage;
 
 /// <summary>
-///     A single data field for <cref>TextureScroll</cref>.
+///     A single data field for <see cref="TextureScroll"/>.
 /// </summary>
 public sealed class TextureScrollField :
     IBinaryAddressable,

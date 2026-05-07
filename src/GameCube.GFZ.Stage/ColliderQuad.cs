@@ -29,7 +29,7 @@ public sealed class ColliderQuad :
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     /// <remarks>
-    /// The dot product of dot(normal, vertex0/1/2/4). All result in the same scalar.
+    ///     The dot product of dot(normal, vertex0/1/2/4). All result in the same scalar.
     /// </remarks>
     public float PlaneDistance { get => planeDistance; set => planeDistance = value; }
     public Vector3 Normal { get => normal; set => normal = value; }
@@ -45,7 +45,7 @@ public sealed class ColliderQuad :
     // METHODS
 
     /// <summary>
-    /// Computes and stores the dotProduct of this quadrangle.
+    ///     Computes and stores the dotProduct of this quadrangle.
     /// </summary>
     public void UpdatePlaneDistance()
     {
@@ -92,11 +92,11 @@ public sealed class ColliderQuad :
 
     public Vector3[] GetVertices()
     {
-        return new Vector3[] { Vertex0, Vertex1, Vertex2, Vertex3 };
+        return [Vertex0, Vertex1, Vertex2, Vertex3];
     }
     public Vector3[] GetEdgeNormals()
     {
-        return new Vector3[] { EdgeNormal0, EdgeNormal1, EdgeNormal2, EdgeNormal3 };
+        return [EdgeNormal0, EdgeNormal1, EdgeNormal2, EdgeNormal3];
     }
 
     public Vector3 Center()

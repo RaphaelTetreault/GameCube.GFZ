@@ -6,13 +6,13 @@ namespace GameCube.GFZ.Stage;
 public enum TimeExtensionOption
 {
     /// <summary>
-    /// Flag used for Lightning [Thunder Road] and Green Plant [Spiral] checkpoints.
+    ///     Flag used for Lightning [Thunder Road] and Green Plant [Spiral] checkpoints.
     /// </summary>
     Default = 0x00000000,
 
     /// <summary>
-    /// Flag used for Port Town [Cylinder Wave] checkpoint.
-    /// THOUGHT: Might be indication of circular trigger?
+    ///     Flag used for Port Town [Cylinder Wave] checkpoint.
+    ///     THOUGHT: Might be indication of circular trigger?
     /// </summary>
     PTCW = 0x00000001,
 }

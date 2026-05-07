@@ -1,3 +1,5 @@
+// TODO: AS REF FLOAT?
+
 namespace GameCube.GFZ.Stage;
 
 /// <summary>

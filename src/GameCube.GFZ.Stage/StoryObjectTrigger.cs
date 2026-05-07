@@ -44,7 +44,7 @@ public sealed class StoryObjectTrigger :
     private Vector3 rotation; // trigger rotation
     private Vector3 position; // trigger position
     // FIELDS (deserialized from pointers)
-    private StoryObjectPath storyObjectPath;
+    private StoryObjectPath? storyObjectPath;
 
 
     // PROPERTIES
@@ -72,7 +72,7 @@ public sealed class StoryObjectTrigger :
     public Vector3 Scale { get => scale; set => scale = value; }
     public Vector3 Rotation { get => rotation; set => rotation = value; }
     public Vector3 Position { get => position; set => position = value; }
-    public StoryObjectPath StoryObjectPath { get => storyObjectPath; set => storyObjectPath = value; }
+    public StoryObjectPath? StoryObjectPath { get => storyObjectPath; set => storyObjectPath = value; }
 
 
     // METHODS

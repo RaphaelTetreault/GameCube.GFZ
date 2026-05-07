@@ -7,13 +7,13 @@ namespace GameCube.GFZ.Stage;
 public enum TrackPipeCylinderFlags : byte
 {
     /// <summary>
-    /// Is the driveable surface on the outside (cylinder) or inside (pipe)?
-    /// If set is cylinder, if not set is pipe.
+    ///     Is the driveable surface on the outside (cylinder) or inside (pipe)?
+    ///     If set is cylinder, if not set is pipe.
     /// </summary>
     IsCylinderNotPipe = 1 << 0,
     
     /// <summary>
-    /// Is the cylinder or pipe open (transitioning from another segment type).
+    ///     Is the cylinder or pipe open (transitioning from another segment type).
     /// </summary>
     IsOpenPipeOrCylinder = 1 << 1,
 }

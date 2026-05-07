@@ -13,7 +13,7 @@ namespace GameCube.GFZ.Stage
         ITextPrintable
     {
         // FIELDS
-        private TransformTRXS transform;
+        private TransformTRXS transform = new();
         private TriggerableAnimation animation;
         private TriggerableVisualEffect visualEffect;
 

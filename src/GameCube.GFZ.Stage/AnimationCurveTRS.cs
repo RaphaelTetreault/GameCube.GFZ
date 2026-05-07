@@ -20,12 +20,13 @@ public sealed class AnimationCurveTRS :
 
 
     // FIELDS
-    private ArrayPointer2D animationCurvesPtr2D = new ArrayPointer2D(kCurveCount);
+    private ArrayPointer2D animationCurvesPtr2D = new(kCurveCount);
     // REFERENCE FIELDS
-    private AnimationCurve[] animationCurves = new AnimationCurve[kCurveCount]
-    {
-        new(), new(), new(), new(), new(), new(), new(), new(), new(),
-    };
+    private AnimationCurve[] animationCurves = [
+        new(), new(), new(), // Scale
+        new(), new(), new(), // Rotation
+        new(), new(), new(), // Position
+    ];
 
 
     // INDEXERS
@@ -154,7 +155,7 @@ public sealed class AnimationCurveTRS :
 
     public override string ToString() => PrintSingleLine();
 
-    private void WriteKeyables(System.Text.StringBuilder builder, AnimationCurve curve, string heading, int indentLevel = 0, string indent = "\t")
+    private static void WriteKeyables(System.Text.StringBuilder builder, AnimationCurve curve, string heading, int indentLevel = 0, string indent = "\t")
     {
         builder.AppendLineIndented(indent, indentLevel, $"{heading}[{curve.Length}]");
         int index = 0;

@@ -18,12 +18,12 @@ public sealed class StoryObjectPath :
     // FIELDS
     private ArrayPointer animationCurvePtr;
     // FIELDS (deserialized from pointer)
-    private AnimationCurve animationCurve;
+    private AnimationCurve? animationCurve;
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public AnimationCurve AnimationCurve { get => animationCurve; set => animationCurve = value; }
+    public AnimationCurve? AnimationCurve { get => animationCurve; set => animationCurve = value; }
     public ArrayPointer AnimationCurvePtr { get => animationCurvePtr; set => animationCurvePtr = value; }
 
 

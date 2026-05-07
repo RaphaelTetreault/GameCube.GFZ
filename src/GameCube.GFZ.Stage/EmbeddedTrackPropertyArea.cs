@@ -1,3 +1,5 @@
+// TODO: CONSIDER AS STRUCT
+
 using Manifold;
 using Manifold.IO;
 

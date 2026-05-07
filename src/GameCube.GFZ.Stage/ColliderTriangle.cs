@@ -54,11 +54,11 @@ public sealed class ColliderTriangle :
 
     public Vector3[] GetVertices()
     {
-        return new Vector3[] { Vertex0, Vertex1, Vertex2 };
+        return [Vertex0, Vertex1, Vertex2];
     }
     public Vector3[] GetEdgeNormals()
     {
-        return new Vector3[] { EdgeNormal0, EdgeNormal1, EdgeNormal2};
+        return [EdgeNormal0, EdgeNormal1, EdgeNormal2];
     }
 
     public Vector3 Center()

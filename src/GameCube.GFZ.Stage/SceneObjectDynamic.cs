@@ -23,11 +23,11 @@ public sealed class SceneObjectDynamic :
     private Pointer skeletalAnimatorPtr;
     private Pointer transformMatrix3x4Ptr;
     // FIELDS (deserialized from pointers)
-    private SceneObject sceneObject;
-    private AnimationClip animationClip;
-    private TextureScroll textureScroll;
-    private SkeletalAnimator skeletalAnimator;
-    private TransformMatrix3x4 transformMatrix3x4;
+    private SceneObject sceneObject; // make some guarantees?
+    private AnimationClip? animationClip;
+    private TextureScroll? textureScroll;
+    private SkeletalAnimator? skeletalAnimator;
+    private TransformMatrix3x4? transformMatrix3x4;
 
 
     // PROPERTIES
@@ -43,10 +43,10 @@ public sealed class SceneObjectDynamic :
     public Pointer SkeletalAnimatorPtr { get => skeletalAnimatorPtr; set => skeletalAnimatorPtr = value; }
     public Pointer TransformMatrix3x4Ptr { get => transformMatrix3x4Ptr; set => transformMatrix3x4Ptr = value; }
     public SceneObject SceneObject { get => sceneObject; set => sceneObject = value; }
-    public AnimationClip AnimationClip { get => animationClip; set => animationClip = value; }
-    public TextureScroll TextureScroll { get => textureScroll; set => textureScroll = value; }
-    public SkeletalAnimator SkeletalAnimator { get => skeletalAnimator; set => skeletalAnimator = value; }
-    public TransformMatrix3x4 TransformMatrix3x4 { get => transformMatrix3x4; set => transformMatrix3x4 = value; }
+    public AnimationClip? AnimationClip { get => animationClip; set => animationClip = value; }
+    public TextureScroll? TextureScroll { get => textureScroll; set => textureScroll = value; }
+    public SkeletalAnimator? SkeletalAnimator { get => skeletalAnimator; set => skeletalAnimator = value; }
+    public TransformMatrix3x4? TransformMatrix3x4 { get => transformMatrix3x4; set => transformMatrix3x4 = value; }
 
 
     // METHODS

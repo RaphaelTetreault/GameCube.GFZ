@@ -9,53 +9,53 @@ namespace GameCube.GFZ.Stage;
 public enum StaticColliderMeshProperty
 {
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a driveable surface.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a driveable surface.
     /// </summary>
     driveable,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a (recovery) pit.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a (recovery) pit.
     /// </summary>
     recover,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a wall / undriveable surface.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a wall / undriveable surface.
     /// </summary>
     wall,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a dash plate.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a dash plate.
     /// </summary>
     dash,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a jump plate.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a jump plate.
     /// </summary>
     jump,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is an ice surface.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is an ice surface.
     /// </summary>
     ice,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a dirt surface.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a dirt surface.
     /// </summary>
     dirt,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a damage area.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is a damage area.
     ///     This could be a lava surface, a lazer beam (LHP), etc.
     /// </summary>
     damage,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is an out-of-bounds plane.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is an out-of-bounds plane.
     /// </summary>
     outOfBounds,
 
     /// <summary>
-    ///     Indicate the <cref>StaticColliderMeshGrid</cref> mesh is an ground plane.
+    ///     Indicate the <see cref="StaticColliderMeshGrid"/> mesh is an ground plane.
     ///     This is used for Sand Ocean's sand colliders.
     /// </summary>
     /// <remarks>

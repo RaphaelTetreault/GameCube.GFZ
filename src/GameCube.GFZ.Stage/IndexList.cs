@@ -17,7 +17,7 @@ public sealed class IndexList :
     public const ushort kUshortArrayTerminator = 0xFFFF;
 
     // FIELDS
-    private ushort[] indexes = new ushort[0];
+    private ushort[] indexes = [];
 
 
     // INDEXERS

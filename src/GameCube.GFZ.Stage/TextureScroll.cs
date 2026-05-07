@@ -26,14 +26,14 @@ public sealed class TextureScroll :
 
 
     // FIELDS
-    private Pointer[] fieldPtrs;
+    private Pointer[] fieldPtrs = new Pointer[kCount];
     // REFERENCE FIELDS
-    private TextureScrollField[] fields = new TextureScrollField[0]; // could you not init to size 12?
+    private TextureScrollField[]? fields; // could you not init to size 12?
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public TextureScrollField[] Fields { get => fields; set => fields = value; }
+    public TextureScrollField[]? Fields { get => fields; set => fields = value; }
     public Pointer[] FieldPtrs { get => fieldPtrs; set => fieldPtrs = value; }
 
 

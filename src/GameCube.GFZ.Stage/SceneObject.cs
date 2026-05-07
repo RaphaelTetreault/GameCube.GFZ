@@ -34,8 +34,8 @@ public sealed class SceneObject :
     private ArrayPointer lodsPtr;
     private Pointer colliderGeometryPtr;
     // FIELDS (deserialized from pointers)
-    private SceneObjectLOD[] lods;
-    private ColliderMesh colliderMesh;
+    private SceneObjectLOD[]? lods;
+    private ColliderMesh? colliderMesh;
 
 
     // PROPERTIES

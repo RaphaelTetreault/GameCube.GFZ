@@ -30,7 +30,7 @@ public sealed class AnimationClip :
     private float unk_0x04;
     private byte[] zeroes_0x08 = new byte[kZeroes0x08];
     private EnumFlags32 unk_layer_0x18;
-    private AnimationClipCurve[] curves = []; // field, NOT reference field
+    private AnimationClipCurve[] curves = new AnimationClipCurve[kAnimationCurvesCount]; // field, NOT reference field
 
 
     // PROPERTIES

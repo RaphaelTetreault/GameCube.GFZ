@@ -17,7 +17,7 @@ public sealed class CullOverrideTrigger :
     ITextPrintable
 {
     // FIELDS
-    private TransformTRXS transform;
+    private TransformTRXS transform = new();
     private EnumFlags32 unk_0x20;
 
 

@@ -28,15 +28,15 @@ public sealed class ColliderMesh :
     private BoundingSphere boundingSphere;
     private ArrayPointer2D collisionArrayPtr2D = new(kTotalIndices);
     // REFERENCE FIELDS
-    private ColliderTriangle[] tris = [];
-    private ColliderQuad[] quads = [];
+    private ColliderTriangle[]? tris = null;
+    private ColliderQuad[]? quads = null;
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     public ArrayPointer2D CollisionArrayPtr2D { get => collisionArrayPtr2D; set => collisionArrayPtr2D = value; }
-    public ColliderTriangle[] Tris { get => tris; set => tris = value; }
+    public ColliderTriangle[]? Tris { get => tris; set => tris = value; }
     public ArrayPointer TrisPtr { get => collisionArrayPtr2D[kTriIndex]; set => collisionArrayPtr2D[kTriIndex] = value; }
-    public ColliderQuad[] Quads { get => quads; set => quads = value; }
+    public ColliderQuad[]? Quads { get => quads; set => quads = value; }
     public ArrayPointer QuadsPtr { get => collisionArrayPtr2D[kQuadIndex]; set => collisionArrayPtr2D[kQuadIndex] = value; }
     public ColliderMeshType ColliderType { get => colliderType; set => colliderType = value; }
     public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }

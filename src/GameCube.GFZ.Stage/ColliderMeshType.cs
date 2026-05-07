@@ -37,5 +37,5 @@ public enum ColliderMeshType : uint
     _29 = 1 << 28,
     _30 = 1 << 29,
     _31 = 1 << 30,
-    _32 = unchecked((uint)1 << 31),
+    _32 = 1u << 31,
 }

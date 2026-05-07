@@ -1,3 +1,6 @@
+// TODO: CHECK WHICH PTRS ARE NEVER NULL
+
+
 //////////////////////////
 // Analysis: 2022-01-14 //
 //////////////////////////

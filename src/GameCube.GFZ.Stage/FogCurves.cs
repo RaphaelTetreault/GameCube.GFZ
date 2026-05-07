@@ -38,15 +38,16 @@ public sealed class FogCurves :
     public const int kCurveCount = 6;
 
     // FIELDS
-    public ArrayPointer[] animationCurvesPtrs;
+    public ArrayPointer[] animationCurvesPtrs = new ArrayPointer[kCurveCount];
     // REFERENCE FIELDS
-    public AnimationCurve[] animationCurves = new AnimationCurve[kCurveCount];
+    public AnimationCurve[]? animationCurves;
 
 
     // CONSTRUCTORS
     public FogCurves()
     {
         // Initialize values so no null errors
+        animationCurves = new AnimationCurve[kCurveCount];
         for (int i = 0; i < animationCurves.Length; i++)
             animationCurves[i] = new AnimationCurve(0);
     }

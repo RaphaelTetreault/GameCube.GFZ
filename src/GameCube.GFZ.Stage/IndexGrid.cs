@@ -1,3 +1,5 @@
+// TODO: RATHER THAN POLYMOPHISM, JUST DO CONSTRUCTOR PARAMS? CONFIG?
+
 using Manifold;
 using Manifold.IO;
 
@@ -16,7 +18,7 @@ public abstract class IndexGrid :
     // FIELDS
     private Pointer[] indexListPtrs;
     // REFERENCE FIELDS
-    private IndexList[] indexLists;
+    private IndexList[]? indexLists;
 
 
     public IndexGrid()
@@ -34,8 +36,8 @@ public abstract class IndexGrid :
 
 
     // INDEXERS
-    public IndexList this[int index] { get => indexLists[index]; set => indexLists[index] = value; }
-    public IndexList this[int x, int z] { get => indexLists[z * SubdivisionsX + x]; set => indexLists[z * SubdivisionsX + x] = value; }
+    public IndexList? this[int index] { get => indexLists[index]; set => indexLists[index] = value; }
+    public IndexList? this[int x, int z] { get => indexLists[z * SubdivisionsX + x]; set => indexLists[z * SubdivisionsX + x] = value; }
 
     // ABSTRACT PROPERTIES
     public abstract int SubdivisionsX { get; }
@@ -84,7 +86,7 @@ public abstract class IndexGrid :
         HasIndexes = HasAnyIndexes(indexLists);
     }
 
-    private ushort GetLargestIndex(IndexList[] indexLists)
+    private static ushort GetLargestIndex(IndexList[] indexLists)
     {
         // Find the largest known index to use as tri/quad array size
         // The game probably just reads indices dynamically using address + index * tri/quad size

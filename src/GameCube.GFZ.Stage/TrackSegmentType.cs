@@ -6,7 +6,7 @@ namespace GameCube.GFZ.Stage;
 public enum TrackSegmentType : byte
 {
     /// <summary>
-    ///     When set to nothing, TrackProperty has a value.
+    ///     When set to nothing, <see cref="TrackEmbeddedPropertyType"/> has a value.
     /// </summary>
     IsEmbed = 0, // 0x00
 
@@ -16,7 +16,7 @@ public enum TrackSegmentType : byte
     IsPipeOrCylinder = 1 << 0, // 0x01
 
     /// <summary>
-    ///     Flag when this is the final node EXCLUDING children for TrackProperties
+    ///     Flag when this is the final node EXCLUDING children for <see cref="TrackEmbeddedPropertyType"/>
     ///     If children is ice, dirt, etc, then will have this flag ON
     ///     If children is pipe type, then flag will be [1 << 3] and have no [1 << 1]
     /// </summary>

@@ -47,7 +47,7 @@ public sealed class Scene :
     private ArrayPointer staticSceneObjectsPtr;
     private int zero0x74; // Ptr? Array Ptr length?
     private int zero0x78; // Ptr? Array Ptr address?
-    private CircuitType circuitType = CircuitType.ClosedCircuit;
+    private CircuitType circuitType = CircuitType.Circuit;
     private Pointer fogCurvesPtr;
     private Pointer fogPtr;
     private int zero0x88; // Ptr? Array Ptr length?

@@ -19,12 +19,12 @@ public sealed class AnimationClipCurve :
     private uint unk_0x0C;
     private ArrayPointer animationCurvePtr;
     // REFERENCE FIELDS
-    private AnimationCurve animationCurve;
+    private AnimationCurve? animationCurve;
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public AnimationCurve AnimationCurve { get => animationCurve; set => animationCurve = value; }
+    public AnimationCurve? AnimationCurve { get => animationCurve; set => animationCurve = value; }
     public ArrayPointer AnimationCurvePtr { get => animationCurvePtr; set => animationCurvePtr = value; }
     public uint Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
     public uint Unk_0x04 { get => unk_0x04; set => unk_0x04 = value; }

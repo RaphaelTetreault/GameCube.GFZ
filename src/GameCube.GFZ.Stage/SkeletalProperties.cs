@@ -1,4 +1,6 @@
-﻿using Manifold;
+﻿// TODO: STRUCT?
+
+using Manifold;
 using Manifold.IO;
 
 namespace GameCube.GFZ.Stage;

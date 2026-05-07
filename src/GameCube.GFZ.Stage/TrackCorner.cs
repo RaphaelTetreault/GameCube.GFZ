@@ -13,7 +13,7 @@ public sealed class TrackCorner :
     ITextPrintable
 {
     // FIELDS
-    private TransformMatrix3x4 transform; // never null
+    private TransformMatrix3x4 transform = new(); // never null
     private float width;
     private byte const_0x34; // Const: 0x02
     private byte zero_0x35; // Const: 0x00

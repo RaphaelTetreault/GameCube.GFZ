@@ -18,13 +18,13 @@ public sealed class SkeletalAnimator :
     private uint one_0x08; // Always 1. Bool?
     private Pointer propertiesPtr;
     // REFERENCE FIELDS
-    private SkeletalProperties properties;
+    private SkeletalProperties? properties;
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     public Pointer PropertiesPtr { get => propertiesPtr; set => propertiesPtr = value; }
-    public SkeletalProperties Properties { get => properties; set => properties = value; }
+    public SkeletalProperties? Properties { get => properties; set => properties = value; }
 
 
     // METHODS

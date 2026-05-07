@@ -18,14 +18,14 @@ public sealed class UnknownCollider :
 {
     // FIELDS
     private Pointer sceneObjectPtr;
-    private TransformTRXS transform;
+    private TransformTRXS transform = new();
     // REFERENCE FIELDS
-    private SceneObject sceneObject;
+    private SceneObject? sceneObject;
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public SceneObject SceneObject { get => sceneObject; set => sceneObject = value; }
+    public SceneObject? SceneObject { get => sceneObject; set => sceneObject = value; }
     public Pointer SceneObjectPtr { get => sceneObjectPtr; set => sceneObjectPtr = value; }
     public TransformTRXS Transform { get => transform; set => transform = value; }
 
