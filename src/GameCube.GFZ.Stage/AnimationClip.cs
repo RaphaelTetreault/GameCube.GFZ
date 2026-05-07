@@ -19,7 +19,8 @@ public sealed class AnimationClip :
 {
     // CONSTANTS
     /// <summary>
-    ///     Number of animation curves. Order: scale.xyz, rotation.xyz, position.xyz, unknown, texture alpha
+    ///     Number of animation curves.
+    ///     Order: scale.xyz, rotation.xyz, position.xyz, unknown, texture alpha
     /// </summary>
     public const int kAnimationCurvesCount = 11;
     private const int kZeroes0x08 = 0x10;
