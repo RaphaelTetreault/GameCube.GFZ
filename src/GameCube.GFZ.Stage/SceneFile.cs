@@ -30,11 +30,6 @@ public class SceneFile : BinaryFileWrapper<Scene>
     public string Author { get; set; } = string.Empty;
 
     /// <summary>
-    ///     The course's name.
-    /// </summary>
-    public string CourseName { get; set; } = string.Empty;
-
-    /// <summary>
     ///     How large the file is in bytes.
     /// </summary>
     public int FileSize { get; private set; }
@@ -46,19 +41,13 @@ public class SceneFile : BinaryFileWrapper<Scene>
     /// </summary>
     public int CourseIndex { get; set; }
 
-    public string CourseDescription => CourseDB.DefaultCourses[CourseIndex].DisplayText(GameCode.GFZE01);
+    public Course CourseInfo => CourseDB.DefaultCourses[CourseIndex];
+    public string CourseName => CourseInfo.Name[GameCode.GGGE6E];
 
-    /// <summary>
-    ///     The venue for this course.
-    /// </summary>
-    public VenueIndex Venue { get; set; }
+    public Venue VenueInfo => CourseDB.DefaultCourses[CourseIndex].Venue;
+    public string VenueName => VenueInfo.Name[GameCode.GGGE6E];
 
-    public string VenueDescription => CourseDB.DefaultCourses[CourseIndex].Venue.Name[GameCode.GFZE01];
 
-    /// <summary>
-    ///     Gets the venue's name
-    /// </summary>
-    public string VenueName => EnumExtensions.GetDescription(Venue);
 
 
     // CONSTRUCTORS
@@ -78,8 +67,9 @@ public class SceneFile : BinaryFileWrapper<Scene>
         }
 
         // TODO: use file hash + DB instead of hardcoded guesses.
-        Venue = VenueDB.GetDefaultVenueID(CourseIndex);
-        CourseName = CourseDB.GetDefaultCourseName(GameCode.GFZE01, CourseIndex);
+        //Venue = VenueDB.GetDefaultVenueID(CourseIndex);
+        //CourseName = CourseDB.GetDefaultCourseName(GameCode.GFZE01, CourseIndex);
+        
         //Author = "Amusement Vision";
         reader.Close();
     }

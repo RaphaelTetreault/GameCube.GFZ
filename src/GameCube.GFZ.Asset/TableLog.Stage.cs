@@ -73,17 +73,6 @@ public static class StageTableLogger
         LogVisualEffectTrigger
     ];
 
-    public static Course GetCourseViaSceneFile(SceneFile sceneFile)
-    {
-        // Super hacky, get 2-3 digits at end of file after "COLI_COURSE"
-        string end = sceneFile.FileName[^3..];
-        if (end[0] == 'E')
-            end = end[^2..];
-        int courseIndex = int.Parse(end);
-        Course course = CourseDB.DefaultCourses[courseIndex];
-        return course;
-    }
-
     #region Track Data / Transforms
 
     public static void AnalyzeTrackKeyablesAll(SceneFile[] sceneFiles, string filename)
@@ -374,8 +363,6 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Course course = GetCourseViaSceneFile(sceneFile);
-
             for (int gameObjectIndex = 0; gameObjectIndex < sceneFile.Value.dynamicSceneObjects.Length; gameObjectIndex++)
             {
                 var gameObject = sceneFile.Value.dynamicSceneObjects[gameObjectIndex];
@@ -396,7 +383,7 @@ public static class StageTableLogger
                     {
                         var keyable = animationClipCurve.AnimationCurve.KeyableAttributes[keyIndex];
                         writer.WriteNextCol(sceneFile.FileName);
-                        writer.WriteNextCol(course.Name[GameCode.GGGE6E]);
+                        writer.WriteNextCol(sceneFile.CourseName);
                         writer.WriteNextCol(gameObjectIndex);
                         writer.WriteNextCol(gameObject.Name);
                         writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
@@ -910,8 +897,8 @@ public static class StageTableLogger
             Scene scene = sceneFile;
             writer.WriteNextCol(sceneFile.FileName);
             writer.WriteNextCol(sceneFile.CourseIndex);
-            writer.WriteNextCol(sceneFile.VenueDescription);
-            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.VenueName);
+            writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
 
             writer.WriteNextCol(scene.UnkRange0x00.near);
@@ -1007,8 +994,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(arcadeCheckpooint.Transform.Position);
@@ -1049,8 +1036,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(cmt.Position);
@@ -1095,8 +1082,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 //writer.WriteNextCol(item.zero_0x00);
@@ -1147,8 +1134,8 @@ public static class StageTableLogger
 
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
 
                 writer.WriteNextCol(item.AddressRange.PrintStartAddress());
@@ -1193,8 +1180,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(vfx.Transform.Position);
@@ -1251,8 +1238,8 @@ public static class StageTableLogger
                 {
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(sceneFile.CourseIndex);
-                    writer.WriteNextCol(sceneFile.VenueDescription);
-                    writer.WriteNextCol(sceneFile.CourseDescription);
+                    writer.WriteNextCol(sceneFile.VenueName);
+                    writer.WriteNextCol(sceneFile.CourseName);
                     writer.WriteNextCol(sceneFile.FileFormatDescription);
                     //
                     writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
@@ -1300,8 +1287,8 @@ public static class StageTableLogger
             Scene scene = sceneFile;
             writer.WriteNextCol(sceneFile.FileName);
             writer.WriteNextCol(sceneFile.CourseIndex);
-            writer.WriteNextCol(sceneFile.VenueDescription);
-            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.VenueName);
+            writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
             //
             writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
@@ -1572,8 +1559,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(sceneObjectLOD.Name);
@@ -1629,8 +1616,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(sceneObject.PrimaryLOD.Name);
@@ -1682,8 +1669,8 @@ public static class StageTableLogger
                 {
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(sceneFile.CourseIndex);
-                    writer.WriteNextCol(sceneFile.VenueDescription);
-                    writer.WriteNextCol(sceneFile.CourseDescription);
+                    writer.WriteNextCol(sceneFile.VenueName);
+                    writer.WriteNextCol(sceneFile.CourseName);
                     writer.WriteNextCol(sceneFile.FileFormatDescription);
                     //
                     writer.WriteNextCol(template.Name);
@@ -1729,8 +1716,8 @@ public static class StageTableLogger
             //
             writer.WriteNextCol(sceneFile.FileName);
             writer.WriteNextCol(sceneFile.CourseIndex);
-            writer.WriteNextCol(sceneFile.VenueDescription);
-            writer.WriteNextCol(sceneFile.CourseDescription);
+            writer.WriteNextCol(sceneFile.VenueName);
+            writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
             //
             writer.WriteNextCol(scene.UnkRange0x00.near);
@@ -1770,8 +1757,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(surfaceAttributeArea.LengthFrom);
@@ -1815,8 +1802,8 @@ public static class StageTableLogger
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueDescription);
-                writer.WriteNextCol(sceneFile.CourseDescription);
+                writer.WriteNextCol(sceneFile.VenueName);
+                writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
                 //
                 writer.WriteNextCol(unkSols.SceneObjectPtr);
