@@ -27,7 +27,7 @@ public sealed class SceneObjectDynamic :
     private AnimationClip? animationClip;
     private TextureScroll? textureScroll;
     private SkeletalAnimator? skeletalAnimator;
-    private TransformMatrix3x4? transformMatrix3x4;
+    private TransformMatrix3x4 transformMatrix3x4; // some guarantees?
 
 
     // PROPERTIES

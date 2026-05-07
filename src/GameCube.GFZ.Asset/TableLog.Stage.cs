@@ -278,7 +278,7 @@ public static class StageTableLogger
         WriteTrackSegment(writer, sceneFile, depth, index, total, trackSegment);
 
         // Write children
-        if (trackSegment.Children == null)
+        if (trackSegment.Children is null)
             return;
 
         foreach (var child in trackSegment.Children)
@@ -363,42 +363,36 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            for (int gameObjectIndex = 0; gameObjectIndex < sceneFile.Value.dynamicSceneObjects.Length; gameObjectIndex++)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                var gameObject = sceneFile.Value.dynamicSceneObjects[gameObjectIndex];
-
-                if (gameObject.AnimationClip == null)
+                if (dynamicSceneObject.Value.AnimationClip is null)
                     continue;
-                if (gameObject.AnimationClip.Curves == null)
+                if (dynamicSceneObject.Value.AnimationClip.Curves is null)
                     continue;
 
-                for (int animIndex = 0; animIndex < gameObject.AnimationClip.Curves.Length; animIndex++)
+                foreach (var animationClipCurve in dynamicSceneObject.Value.AnimationClip.Curves.Iterate())
                 {
-                    var animationClipCurve = gameObject.AnimationClip.Curves[animIndex];
-                    if (animationClipCurve.AnimationCurve == null)
+                    if (animationClipCurve.Value.AnimationCurve is null)
                         continue;
 
-                    int keysCount = animationClipCurve.AnimationCurve.KeyableAttributes.Length;
-                    for (int keyIndex = 0; keyIndex < keysCount; keyIndex++)
+                    foreach (var keyable in animationClipCurve.Value.AnimationCurve.KeyableAttributes.Iterate(out int keysCount))
                     {
-                        var keyable = animationClipCurve.AnimationCurve.KeyableAttributes[keyIndex];
                         writer.WriteNextCol(sceneFile.FileName);
                         writer.WriteNextCol(sceneFile.CourseName);
-                        writer.WriteNextCol(gameObjectIndex);
-                        writer.WriteNextCol(gameObject.Name);
-                        writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(animIndex);
-                        writer.WriteNextCol($"[{keyIndex + 1}/{keysCount}]");
-                        writer.WriteNextCol(keyable.EaseMode);
-                        writer.WriteNextCol(keyable.Time);
-                        writer.WriteNextCol(keyable.Value);
-                        writer.WriteNextCol(keyable.TangentIn);
-                        writer.WriteNextCol(keyable.TangentOut);
+                        writer.WriteNextCol(dynamicSceneObject.Index);
+                        writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                        writer.WriteNextCol(animationClipCurve.Value.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(keyable.Value.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(animationClipCurve.Index);
+                        writer.WriteNextCol($"[{keyable.Index + 1}/{keysCount}]");
+                        writer.WriteNextCol(keyable.Value.EaseMode);
+                        writer.WriteNextCol(keyable.Value.Time);
+                        writer.WriteNextCol(keyable.Value.Value);
+                        writer.WriteNextCol(keyable.Value.TangentIn);
+                        writer.WriteNextCol(keyable.Value.TangentOut);
                         writer.WriteNextRow();
                     }
                 }
-                gameObjectIndex++;
             }
         }
         writer.Flush();
@@ -431,47 +425,42 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            int objIndex = 0;
-            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                if (dynamicSceneObject.AnimationClip == null)
+                if (dynamicSceneObject.Value.AnimationClip is null)
                     continue;
-                //if (gameObject.animation.curve == null)
+                //if (dynamicSceneObject.Value.AnimationClip.Curves is null)
                 //    continue;
 
-                int animIndex = 0;
-                foreach (var animationClipCurve in dynamicSceneObject.AnimationClip.Curves)
+                foreach (var animationClipCurve in dynamicSceneObject.Value.AnimationClip.Curves.Iterate())
                 {
-                    // Failing for some reason on indexes 6+ :/
-                    if (animationClipCurve.AnimationCurve == null)
+                    if (animationClipCurve.Value.AnimationCurve is null)
                         continue;
 
-                    foreach (var keyable in animationClipCurve.AnimationCurve.KeyableAttributes)
+                    foreach (var keyable in animationClipCurve.Value.AnimationCurve.KeyableAttributes.Iterate())
                     {
                         /// HACK, write each anim index as separate file
-                        if (animIndex != index)
-                            continue;
+                        //if (animIndex != index)
+                        //    continue;
 
                         writer.WriteNextCol(sceneFile.FileName);
-                        writer.WriteNextCol(objIndex);
-                        writer.WriteNextCol(dynamicSceneObject.Name);
-                        writer.WriteNextCol(animationClipCurve.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(keyable.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(animationClipCurve.Unk_0x00);
-                        writer.WriteNextCol(animationClipCurve.Unk_0x04);
-                        writer.WriteNextCol(animationClipCurve.Unk_0x08);
-                        writer.WriteNextCol(animationClipCurve.Unk_0x0C);
-                        writer.WriteNextCol(animIndex);
-                        writer.WriteNextCol(keyable.EaseMode);
-                        writer.WriteNextCol(keyable.Time);
-                        writer.WriteNextCol(keyable.Value);
-                        writer.WriteNextCol(keyable.TangentIn);
-                        writer.WriteNextCol(keyable.TangentOut);
+                        writer.WriteNextCol(dynamicSceneObject.Index);
+                        writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                        writer.WriteNextCol(animationClipCurve.Value.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(animationClipCurve.Value.AddressRange.PrintStartAddress());
+                        writer.WriteNextCol(animationClipCurve.Value.Unk_0x00);
+                        writer.WriteNextCol(animationClipCurve.Value.Unk_0x04);
+                        writer.WriteNextCol(animationClipCurve.Value.Unk_0x08);
+                        writer.WriteNextCol(animationClipCurve.Value.Unk_0x0C);
+                        writer.WriteNextCol(keyable.Index);
+                        writer.WriteNextCol(keyable.Value.EaseMode);
+                        writer.WriteNextCol(keyable.Value.Time);
+                        writer.WriteNextCol(keyable.Value.Value);
+                        writer.WriteNextCol(keyable.Value.TangentIn);
+                        writer.WriteNextCol(keyable.Value.TangentOut);
                         writer.WriteNextRow();
                     }
-                    animIndex++;
                 }
-                objIndex++;
             }
         }
         writer.Flush();
@@ -507,29 +496,26 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            int sceneObjectIndex = 0;
-            foreach (var sceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(sceneObjectIndex);
-                writer.WriteNextCol(sceneObject.Name);
-                writer.WriteNextCol(sceneObject.AddressRange.PrintStartAddress());
-                writer.WriteNextCol(sceneObject.ObjectRenderFlags0x00);
-                writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x00:x8}");
-                writer.WriteNextCol(sceneObject.ObjectRenderFlags0x04);
-                writer.WriteNextCol($"0x{(uint)sceneObject.ObjectRenderFlags0x04:x8}");
-                writer.WriteNextCol(sceneObject.SceneObjectPtr.PrintAddress);
-                writer.WriteNextCol(sceneObject.TransformTRXS.Position);
-                writer.WriteNextCol(sceneObject.TransformTRXS.RotationEuler);
-                writer.WriteNextCol(sceneObject.TransformTRXS.Scale);
+                writer.WriteNextCol(dynamicSceneObject.Index);
+                writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                writer.WriteNextCol(dynamicSceneObject.Value.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(dynamicSceneObject.Value.ObjectRenderFlags0x00);
+                writer.WriteNextCol($"0x{(uint)dynamicSceneObject.Value.ObjectRenderFlags0x00:x8}");
+                writer.WriteNextCol(dynamicSceneObject.Value.ObjectRenderFlags0x04);
+                writer.WriteNextCol($"0x{(uint)dynamicSceneObject.Value.ObjectRenderFlags0x04:x8}");
+                writer.WriteNextCol(dynamicSceneObject.Value.SceneObjectPtr.PrintAddress);
+                writer.WriteNextCol(dynamicSceneObject.Value.TransformTRXS.Position);
+                writer.WriteNextCol(dynamicSceneObject.Value.TransformTRXS.RotationEuler);
+                writer.WriteNextCol(dynamicSceneObject.Value.TransformTRXS.Scale);
                 //writer.WriteNextCol(sceneObject.zero_0x2C);
-                writer.WriteNextCol(sceneObject.AnimationClipPtr.PrintAddress);
-                writer.WriteNextCol(sceneObject.TextureScrollPtr.PrintAddress);
-                writer.WriteNextCol(sceneObject.SkeletalAnimatorPtr.PrintAddress);
-                writer.WriteNextCol(sceneObject.TransformMatrix3x4Ptr.PrintAddress);
+                writer.WriteNextCol(dynamicSceneObject.Value.AnimationClipPtr.PrintAddress);
+                writer.WriteNextCol(dynamicSceneObject.Value.TextureScrollPtr.PrintAddress);
+                writer.WriteNextCol(dynamicSceneObject.Value.SkeletalAnimatorPtr.PrintAddress);
+                writer.WriteNextCol(dynamicSceneObject.Value.TransformMatrix3x4Ptr.PrintAddress);
                 writer.WriteNextRow();
-
-                sceneObjectIndex++;
             }
         }
         writer.Flush();
@@ -550,28 +536,26 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            int gameObjectIndex = 0;
-            foreach (var sceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                if (sceneObject.TextureScroll == null)
+                if (dynamicSceneObject.Value.TextureScroll is null)
+                    continue;
+                if (dynamicSceneObject.Value.TextureScroll.Fields is null)
                     continue;
 
-                int fieldArrayIndex = 0;
-                foreach (var field in sceneObject.TextureScroll.Fields)
+                foreach (var field in dynamicSceneObject.Value.TextureScroll.Fields.Iterate())
                 {
-                    if (field == null)
+                    if (field.Value is null)
                         return;
 
                     writer.WriteNextCol(sceneFile.FileName);
-                    writer.WriteNextCol(gameObjectIndex);
-                    writer.WriteNextCol(sceneObject.Name);
-                    writer.WriteNextCol(fieldArrayIndex);
-                    writer.WriteNextCol(field.u);
-                    writer.WriteNextCol(field.v);
+                    writer.WriteNextCol(dynamicSceneObject.Index);
+                    writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                    writer.WriteNextCol(field.Index);
+                    writer.WriteNextCol(field.Value.u);
+                    writer.WriteNextCol(field.Value.v);
                     writer.WriteNextRow();
-                    fieldArrayIndex++;
                 }
-                gameObjectIndex++;
             }
         }
         writer.Flush();
@@ -604,35 +588,31 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            int gameObjectIndex = 0;
-            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                if (dynamicSceneObject.SkeletalAnimator == null)
+                if (dynamicSceneObject.Value.SkeletalAnimator is null)
                     continue;
-                if (dynamicSceneObject.SkeletalAnimator.PropertiesPtr.IsNull)
+                if (dynamicSceneObject.Value.SkeletalAnimator.Properties is null)
                     continue;
 
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(gameObjectIndex);
-                writer.WriteNextCol(dynamicSceneObject.Name);
+                writer.WriteNextCol(dynamicSceneObject.Index);
+                writer.WriteNextCol(dynamicSceneObject.Value.Name);
 
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x00);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.zero_0x04);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.one_0x08);
-                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.PropertiesPtr);
-
-                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x00);
-                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
-                writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x04);
-                writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
-                writer.WriteFlags(dynamicSceneObject.SkeletalAnimator.Properties.Unk_0x08);
+                writer.WriteNextCol(dynamicSceneObject.Value.SkeletalAnimator.PropertiesPtr);
+                writer.WriteNextCol(dynamicSceneObject.Value.SkeletalAnimator.Properties.Unk_0x00);
+                writer.WriteNextCol(dynamicSceneObject.Value.SkeletalAnimator.Properties.Unk_0x04);
+                writer.WriteFlags(dynamicSceneObject.Value.SkeletalAnimator.Properties.Unk_0x04);
+                writer.WriteNextCol(dynamicSceneObject.Value.SkeletalAnimator.Properties.Unk_0x08);
+                writer.WriteFlags(dynamicSceneObject.Value.SkeletalAnimator.Properties.Unk_0x08);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x0C);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x10);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x14);
                 //writer.WriteNextCol(dynamicSceneObject.SkeletalAnimator.Properties.zero_0x18);
                 writer.WriteNextRow();
-
-                gameObjectIndex++;
             }
         }
         writer.Flush();
@@ -642,14 +622,13 @@ public static class StageTableLogger
     {
         using var writer = new StreamWriter(File.Create(fileName));
 
-        // Write header
         writer.WriteNextCol("File");
         writer.WriteNextCol("Game Object #");
         writer.WriteNextCol("Game Object");
-
+        // Where
         writer.WriteNextCol("Tri Index");
         writer.WriteNextCol("Addr");
-
+        // Tri Data
         writer.WriteNextColNicify(nameof(ColliderTriangle.PlaneDistance));
         writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".X");
         writer.WriteNextColNicify(nameof(ColliderTriangle.Normal) + ".Y");
@@ -672,55 +651,50 @@ public static class StageTableLogger
         writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".X");
         writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Y");
         writer.WriteNextColNicify(nameof(ColliderTriangle.EdgeNormal2) + ".Z");
-
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            int gameObjectIndex = 0;
-            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
-                    dynamicSceneObject.SceneObject.ColliderMesh.Tris is null ||
-                    dynamicSceneObject.SceneObject.ColliderMesh.Tris.Length == 0)
+                if (dynamicSceneObject.Value.SceneObject.ColliderMesh is null ||
+                    dynamicSceneObject.Value.SceneObject.ColliderMesh.Tris is null ||
+                    dynamicSceneObject.Value.SceneObject.ColliderMesh.Tris.Length == 0)
                     continue;
 
-                int triIndex = 0;
-                foreach (var tri in dynamicSceneObject.SceneObject.ColliderMesh.Tris)
+                foreach (var tri in dynamicSceneObject.Value.SceneObject.ColliderMesh.Tris.Iterate())
                 {
                     writer.WriteNextCol(sceneFile.FileName);
-                    writer.WriteNextCol(gameObjectIndex);
-                    writer.WriteNextCol(dynamicSceneObject.Name);
-
-                    writer.WriteNextCol(triIndex++);
-                    writer.WriteStartAddress(tri);
-
-                    writer.WriteNextCol(tri.PlaneDistance);
-                    writer.WriteNextCol(tri.Normal.X);
-                    writer.WriteNextCol(tri.Normal.Y);
-                    writer.WriteNextCol(tri.Normal.Z);
-                    writer.WriteNextCol(tri.Vertex0.X);
-                    writer.WriteNextCol(tri.Vertex0.Y);
-                    writer.WriteNextCol(tri.Vertex0.Z);
-                    writer.WriteNextCol(tri.Vertex1.X);
-                    writer.WriteNextCol(tri.Vertex1.Y);
-                    writer.WriteNextCol(tri.Vertex1.Z);
-                    writer.WriteNextCol(tri.Vertex2.X);
-                    writer.WriteNextCol(tri.Vertex2.Y);
-                    writer.WriteNextCol(tri.Vertex2.Z);
-                    writer.WriteNextCol(tri.EdgeNormal0.X);
-                    writer.WriteNextCol(tri.EdgeNormal0.Y);
-                    writer.WriteNextCol(tri.EdgeNormal0.Z);
-                    writer.WriteNextCol(tri.EdgeNormal1.X);
-                    writer.WriteNextCol(tri.EdgeNormal1.Y);
-                    writer.WriteNextCol(tri.EdgeNormal1.Z);
-                    writer.WriteNextCol(tri.EdgeNormal2.X);
-                    writer.WriteNextCol(tri.EdgeNormal2.Y);
-                    writer.WriteNextCol(tri.EdgeNormal2.Z);
-
+                    writer.WriteNextCol(dynamicSceneObject.Index);
+                    writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                    // 
+                    writer.WriteNextCol(tri.Index);
+                    writer.WriteStartAddress(tri.Value);
+                    // 
+                    writer.WriteNextCol(tri.Value.PlaneDistance);
+                    writer.WriteNextCol(tri.Value.Normal.X);
+                    writer.WriteNextCol(tri.Value.Normal.Y);
+                    writer.WriteNextCol(tri.Value.Normal.Z);
+                    writer.WriteNextCol(tri.Value.Vertex0.X);
+                    writer.WriteNextCol(tri.Value.Vertex0.Y);
+                    writer.WriteNextCol(tri.Value.Vertex0.Z);
+                    writer.WriteNextCol(tri.Value.Vertex1.X);
+                    writer.WriteNextCol(tri.Value.Vertex1.Y);
+                    writer.WriteNextCol(tri.Value.Vertex1.Z);
+                    writer.WriteNextCol(tri.Value.Vertex2.X);
+                    writer.WriteNextCol(tri.Value.Vertex2.Y);
+                    writer.WriteNextCol(tri.Value.Vertex2.Z);
+                    writer.WriteNextCol(tri.Value.EdgeNormal0.X);
+                    writer.WriteNextCol(tri.Value.EdgeNormal0.Y);
+                    writer.WriteNextCol(tri.Value.EdgeNormal0.Z);
+                    writer.WriteNextCol(tri.Value.EdgeNormal1.X);
+                    writer.WriteNextCol(tri.Value.EdgeNormal1.Y);
+                    writer.WriteNextCol(tri.Value.EdgeNormal1.Z);
+                    writer.WriteNextCol(tri.Value.EdgeNormal2.X);
+                    writer.WriteNextCol(tri.Value.EdgeNormal2.Y);
+                    writer.WriteNextCol(tri.Value.EdgeNormal2.Z);
                     writer.WriteNextRow();
                 }
-                gameObjectIndex++;
             }
         }
         writer.Flush();
@@ -734,10 +708,10 @@ public static class StageTableLogger
         writer.WriteNextCol("File");
         writer.WriteNextCol("Game Object #");
         writer.WriteNextCol("Game Object");
-
+        //
         writer.WriteNextCol("Quad Index");
         writer.WriteNextCol("Addr");
-
+        //
         writer.WriteNextColNicify(nameof(ColliderQuad.PlaneDistance));
         writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".X");
         writer.WriteNextColNicify(nameof(ColliderQuad.Normal) + ".Y");
@@ -771,56 +745,52 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            int gameObjectIndex = 0;
-            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects)
+            foreach (var dynamicSceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                if (dynamicSceneObject.SceneObject.ColliderMesh is null ||
-                    dynamicSceneObject.SceneObject.ColliderMesh.Quads is null ||
-                    dynamicSceneObject.SceneObject.ColliderMesh.Quads.Length == 0)
+                if (dynamicSceneObject.Value.SceneObject.ColliderMesh is null ||
+                    dynamicSceneObject.Value.SceneObject.ColliderMesh.Quads is null ||
+                    dynamicSceneObject.Value.SceneObject.ColliderMesh.Quads.Length == 0)
                     continue;
 
-                int quadIndex = 0;
-                foreach (var quad in dynamicSceneObject.SceneObject.ColliderMesh.Quads)
-                {
+                foreach (var quad in dynamicSceneObject.Value.SceneObject.ColliderMesh.Quads.Iterate())
+                { 
                     writer.WriteNextCol(sceneFile.FileName);
-                    writer.WriteNextCol(gameObjectIndex);
-                    writer.WriteNextCol(dynamicSceneObject.Name);
-
-                    writer.WriteNextCol(quadIndex++);
-                    writer.WriteStartAddress(quad);
-
-                    writer.WriteNextCol(quad.PlaneDistance);
-                    writer.WriteNextCol(quad.Normal.X);
-                    writer.WriteNextCol(quad.Normal.Y);
-                    writer.WriteNextCol(quad.Normal.Z);
-                    writer.WriteNextCol(quad.Vertex0.X);
-                    writer.WriteNextCol(quad.Vertex0.Y);
-                    writer.WriteNextCol(quad.Vertex0.Z);
-                    writer.WriteNextCol(quad.Vertex1.X);
-                    writer.WriteNextCol(quad.Vertex1.Y);
-                    writer.WriteNextCol(quad.Vertex1.Z);
-                    writer.WriteNextCol(quad.Vertex2.X);
-                    writer.WriteNextCol(quad.Vertex2.Y);
-                    writer.WriteNextCol(quad.Vertex2.Z);
-                    writer.WriteNextCol(quad.Vertex3.X);
-                    writer.WriteNextCol(quad.Vertex3.Y);
-                    writer.WriteNextCol(quad.Vertex3.Z);
-                    writer.WriteNextCol(quad.EdgeNormal0.X);
-                    writer.WriteNextCol(quad.EdgeNormal0.Y);
-                    writer.WriteNextCol(quad.EdgeNormal0.Z);
-                    writer.WriteNextCol(quad.EdgeNormal1.X);
-                    writer.WriteNextCol(quad.EdgeNormal1.Y);
-                    writer.WriteNextCol(quad.EdgeNormal1.Z);
-                    writer.WriteNextCol(quad.EdgeNormal2.X);
-                    writer.WriteNextCol(quad.EdgeNormal2.Y);
-                    writer.WriteNextCol(quad.EdgeNormal2.Z);
-                    writer.WriteNextCol(quad.EdgeNormal3.X);
-                    writer.WriteNextCol(quad.EdgeNormal3.Y);
-                    writer.WriteNextCol(quad.EdgeNormal3.Z);
-
+                    writer.WriteNextCol(dynamicSceneObject.Index);
+                    writer.WriteNextCol(dynamicSceneObject.Value.Name);
+                    // 
+                    writer.WriteNextCol(quad.Index);
+                    writer.WriteStartAddress(quad.Value);
+                    // 
+                    writer.WriteNextCol(quad.Value.PlaneDistance);
+                    writer.WriteNextCol(quad.Value.Normal.X);
+                    writer.WriteNextCol(quad.Value.Normal.Y);
+                    writer.WriteNextCol(quad.Value.Normal.Z);
+                    writer.WriteNextCol(quad.Value.Vertex0.X);
+                    writer.WriteNextCol(quad.Value.Vertex0.Y);
+                    writer.WriteNextCol(quad.Value.Vertex0.Z);
+                    writer.WriteNextCol(quad.Value.Vertex1.X);
+                    writer.WriteNextCol(quad.Value.Vertex1.Y);
+                    writer.WriteNextCol(quad.Value.Vertex1.Z);
+                    writer.WriteNextCol(quad.Value.Vertex2.X);
+                    writer.WriteNextCol(quad.Value.Vertex2.Y);
+                    writer.WriteNextCol(quad.Value.Vertex2.Z);
+                    writer.WriteNextCol(quad.Value.Vertex3.X);
+                    writer.WriteNextCol(quad.Value.Vertex3.Y);
+                    writer.WriteNextCol(quad.Value.Vertex3.Z);
+                    writer.WriteNextCol(quad.Value.EdgeNormal0.X);
+                    writer.WriteNextCol(quad.Value.EdgeNormal0.Y);
+                    writer.WriteNextCol(quad.Value.EdgeNormal0.Z);
+                    writer.WriteNextCol(quad.Value.EdgeNormal1.X);
+                    writer.WriteNextCol(quad.Value.EdgeNormal1.Y);
+                    writer.WriteNextCol(quad.Value.EdgeNormal1.Z);
+                    writer.WriteNextCol(quad.Value.EdgeNormal2.X);
+                    writer.WriteNextCol(quad.Value.EdgeNormal2.Y);
+                    writer.WriteNextCol(quad.Value.EdgeNormal2.Z);
+                    writer.WriteNextCol(quad.Value.EdgeNormal3.X);
+                    writer.WriteNextCol(quad.Value.EdgeNormal3.Y);
+                    writer.WriteNextCol(quad.Value.EdgeNormal3.Z);
                     writer.WriteNextRow();
                 }
-                gameObjectIndex++;
             }
         }
         writer.Flush();
@@ -900,7 +870,7 @@ public static class StageTableLogger
             writer.WriteNextCol(sceneFile.VenueName);
             writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
-
+            //
             writer.WriteNextCol(scene.UnkRange0x00.near);
             writer.WriteNextCol(scene.UnkRange0x00.far);
             writer.WriteNextCol(scene.TrackNodesPtr.length);
@@ -977,33 +947,27 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Position));
         writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.RotationEuler));
         writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.Scale));
         writer.WriteNextCol(nameof(TimeExtensionTrigger.Transform.UnknownOption));
         writer.WriteNextCol(nameof(TimeExtensionTrigger.Option));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-
-            foreach (var arcadeCheckpooint in scene.timeExtensionTriggers)
+            foreach (var arcadeCheckpoint in sceneFile.Value.timeExtensionTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
-                writer.WriteNextCol(arcadeCheckpooint.Transform.Position);
-                writer.WriteNextCol(arcadeCheckpooint.Transform.RotationEuler);
-                writer.WriteNextCol(arcadeCheckpooint.Transform.Scale);
-                writer.WriteNextCol(arcadeCheckpooint.Transform.UnknownOption);
-                writer.WriteNextCol(arcadeCheckpooint.Option);
-                //
+                writer.WriteNextCol(arcadeCheckpoint.Transform.Position);
+                writer.WriteNextCol(arcadeCheckpoint.Transform.RotationEuler);
+                writer.WriteNextCol(arcadeCheckpoint.Transform.Scale);
+                writer.WriteNextCol(arcadeCheckpoint.Transform.UnknownOption);
+                writer.WriteNextCol(arcadeCheckpoint.Option);
                 writer.WriteNextRow();
             }
             writer.Flush();
@@ -1020,32 +984,27 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol(nameof(MiscellaneousTrigger.Position));
         writer.WriteNextCol(nameof(MiscellaneousTrigger.RotationEuler));
         writer.WriteNextCol(nameof(MiscellaneousTrigger.Scale) + " / PositionTo");
         writer.WriteNextCol(nameof(MiscellaneousTrigger.Transform.UnknownOption));
         writer.WriteNextCol(nameof(MiscellaneousTrigger.MetadataType));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var cmt in scene.miscellaneousTriggers)
+            foreach (var miscellaneousTrigger in sceneFile.Value.miscellaneousTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
-                writer.WriteNextCol(cmt.Position);
-                writer.WriteNextCol(cmt.RotationEuler);
-                writer.WriteNextCol(cmt.Scale);
-                writer.WriteNextCol(cmt.Transform.UnknownOption);
-                writer.WriteNextCol(cmt.MetadataType);
-                //
+                writer.WriteNextCol(miscellaneousTrigger.Position);
+                writer.WriteNextCol(miscellaneousTrigger.RotationEuler);
+                writer.WriteNextCol(miscellaneousTrigger.Scale);
+                writer.WriteNextCol(miscellaneousTrigger.Transform.UnknownOption);
+                writer.WriteNextCol(miscellaneousTrigger.MetadataType);
                 writer.WriteNextRow();
             }
             writer.Flush();
@@ -1062,7 +1021,6 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         //writer.WriteNextCol(nameof(StoryObjectTrigger.zero_0x00));
         writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroupOrderIndex));
         writer.WriteNextCol(nameof(StoryObjectTrigger.BoulderGroup));
@@ -1072,30 +1030,26 @@ public static class StageTableLogger
         writer.WriteNextCol(nameof(StoryObjectTrigger.Scale));
         writer.WriteNextCol(nameof(StoryObjectTrigger.Rotation));
         writer.WriteNextCol(nameof(StoryObjectTrigger.Position));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var item in scene.storyObjectTriggers)
+            foreach (var storyObjectTrigger in sceneFile.Value.storyObjectTriggers.Iterate())
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
                 //writer.WriteNextCol(item.zero_0x00);
-                writer.WriteNextCol(item.BoulderGroupOrderIndex);
-                writer.WriteNextCol(item.BoulderGroup);
-                writer.WriteNextCol(item.Difficulty);
-                writer.WriteNextCol(item.Story2BoulderScale);
-                writer.WriteNextCol(item.Story2BoulderPathPtr);
-                writer.WriteNextCol(item.Scale);
-                writer.WriteNextCol(item.Rotation);
-                writer.WriteNextCol(item.Position);
-                //
+                writer.WriteNextCol(storyObjectTrigger.Value.BoulderGroupOrderIndex);
+                writer.WriteNextCol(storyObjectTrigger.Value.BoulderGroup);
+                writer.WriteNextCol(storyObjectTrigger.Value.Difficulty);
+                writer.WriteNextCol(storyObjectTrigger.Value.Story2BoulderScale);
+                writer.WriteNextCol(storyObjectTrigger.Value.Story2BoulderPathPtr);
+                writer.WriteNextCol(storyObjectTrigger.Value.Scale);
+                writer.WriteNextCol(storyObjectTrigger.Value.Rotation);
+                writer.WriteNextCol(storyObjectTrigger.Value.Position);
                 writer.WriteNextRow();
             }
             writer.Flush();
@@ -1112,41 +1066,29 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
-        writer.WriteNextCol("Start");
-        writer.WriteNextCol("End");
-        //
+        writer.WriteNextCol("Addr Start");
+        writer.WriteNextCol("Addr End");
         writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
         writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
-        //
         writer.WriteNextCol("Order");
         writer.WriteNextCol("Index");
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            int count = 0;
-            int total = scene.cullOverrideTriggers.Length;
-            foreach (var item in scene.cullOverrideTriggers)
+            foreach (var cullOverrideTrigger in sceneFile.Value.cullOverrideTriggers.Iterate(out int total))
             {
-                count++;
-
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-
-                writer.WriteNextCol(item.AddressRange.PrintStartAddress());
-                writer.WriteNextCol(item.AddressRange.PrintEndAddress());
-
-                writer.WriteNextCol(item.Unk_0x20);
-                writer.WriteNextCol($"0x{(int)item.Unk_0x20:X8}");
-
-                writer.WriteNextCol(count);
-                writer.WriteNextCol($"[{count}/{total}]");
-
+                writer.WriteNextCol(cullOverrideTrigger.Value.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(cullOverrideTrigger.Value.AddressRange.PrintEndAddress());
+                writer.WriteNextCol(cullOverrideTrigger.Value.Unk_0x20);
+                writer.WriteNextCol($"0x{(int)cullOverrideTrigger.Value.Unk_0x20:X8}");
+                writer.WriteNextCol(cullOverrideTrigger.Index);
+                writer.WriteNextCol($"[{cullOverrideTrigger.Index + 1}/{total}]");
                 writer.WriteNextRow();
             }
         }
@@ -1163,34 +1105,29 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Position));
         writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.RotationEuler));
         writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.Scale));
         writer.WriteNextCol(nameof(VisualEffectTrigger.Transform.UnknownOption));
         writer.WriteNextCol(nameof(VisualEffectTrigger.Animation));
         writer.WriteNextCol(nameof(VisualEffectTrigger.VisualEffect));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var vfx in scene.visualEffectTriggers)
+            foreach (var visualEffectTrigger in sceneFile.Value.visualEffectTriggers)
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
-                writer.WriteNextCol(vfx.Transform.Position);
-                writer.WriteNextCol(vfx.Transform.RotationEuler);
-                writer.WriteNextCol(vfx.Transform.Scale);
-                writer.WriteNextCol(vfx.Transform.UnknownOption);
-                writer.WriteNextCol(vfx.Animation);
-                writer.WriteNextCol(vfx.VisualEffect);
-                //
+                writer.WriteNextCol(visualEffectTrigger.Transform.Position);
+                writer.WriteNextCol(visualEffectTrigger.Transform.RotationEuler);
+                writer.WriteNextCol(visualEffectTrigger.Transform.Scale);
+                writer.WriteNextCol(visualEffectTrigger.Transform.UnknownOption);
+                writer.WriteNextCol(visualEffectTrigger.Animation);
+                writer.WriteNextCol(visualEffectTrigger.VisualEffect);
                 writer.WriteNextRow();
             }
             writer.Flush();
@@ -1211,46 +1148,38 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol("Addr");
         writer.WriteNextCol("Index");
-        //
         writer.WriteNextCol(nameof(KeyableAttribute.EaseMode));
         writer.WriteNextCol(nameof(KeyableAttribute.Time));
         writer.WriteNextCol(nameof(KeyableAttribute.Value));
         writer.WriteNextCol(nameof(KeyableAttribute.TangentIn));
         writer.WriteNextCol(nameof(KeyableAttribute.TangentOut));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            if (scene.fogCurves == null)
+            if (sceneFile.Value.fogCurves is null)
+                continue;
+            if (sceneFile.Value.fogCurves.animationCurves is null)
                 continue;
 
-            var totalD1 = scene.fogCurves.animationCurves.Length;
-            var countD1 = 0;
-            foreach (var animationCurve in scene.fogCurves.animationCurves)
+            foreach (var fogAnimationCurve in sceneFile.Value.fogCurves.animationCurves.Iterate(out int count))
             {
-                countD1++;
-                foreach (var keyableAttribute in animationCurve.KeyableAttributes)
+                foreach (var keyableAttribute in fogAnimationCurve.Value.KeyableAttributes)
                 {
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(sceneFile.CourseIndex);
                     writer.WriteNextCol(sceneFile.VenueName);
                     writer.WriteNextCol(sceneFile.CourseName);
                     writer.WriteNextCol(sceneFile.FileFormatDescription);
-                    //
                     writer.WriteNextCol(keyableAttribute.AddressRange.PrintStartAddress());
-                    writer.WriteNextCol($"[{countD1}/{totalD1}]");
-                    //
+                    writer.WriteNextCol($"[{fogAnimationCurve.Index}/{count}]");
                     writer.WriteNextCol(keyableAttribute.EaseMode);
                     writer.WriteNextCol(keyableAttribute.Time);
                     writer.WriteNextCol(keyableAttribute.Value);
                     writer.WriteNextCol(keyableAttribute.TangentIn);
                     writer.WriteNextCol(keyableAttribute.TangentOut);
-                    //
                     writer.WriteNextRow();
                 }
             }
@@ -1268,7 +1197,6 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol("Addr");
         writer.WriteNextCol(nameof(Fog.Interpolation));
         writer.WriteNextCol(nameof(Fog.FogRange) + "." + nameof(ViewRange.near));
@@ -1290,14 +1218,13 @@ public static class StageTableLogger
             writer.WriteNextCol(sceneFile.VenueName);
             writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
-            //
-            writer.WriteNextCol(scene.fog.AddressRange.PrintStartAddress());
-            writer.WriteNextCol(scene.fog.Interpolation);
-            writer.WriteNextCol(scene.fog.FogRange.near);
-            writer.WriteNextCol(scene.fog.FogRange.far);
-            writer.WriteNextCol(scene.fog.ColorRGB.X);
-            writer.WriteNextCol(scene.fog.ColorRGB.Y);
-            writer.WriteNextCol(scene.fog.ColorRGB.Z);
+            writer.WriteNextCol(sceneFile.Value.fog.AddressRange.PrintStartAddress());
+            writer.WriteNextCol(sceneFile.Value.fog.Interpolation);
+            writer.WriteNextCol(sceneFile.Value.fog.FogRange.near);
+            writer.WriteNextCol(sceneFile.Value.fog.FogRange.far);
+            writer.WriteNextCol(sceneFile.Value.fog.ColorRGB.X);
+            writer.WriteNextCol(sceneFile.Value.fog.ColorRGB.Y);
+            writer.WriteNextCol(sceneFile.Value.fog.ColorRGB.Z);
             //writer.WriteNextCol(scene.fog.zero0x18.X);
             //writer.WriteNextCol(scene.fog.zero0x18.Y);
             //writer.WriteNextCol(scene.fog.zero0x18.Z);
@@ -1333,42 +1260,39 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            int sceneObjectIndex = 0;
-            foreach (var sceneObject in scene.dynamicSceneObjects)
+            foreach (var sceneObject in sceneFile.Value.dynamicSceneObjects.Iterate())
             {
-                // Skip objects that don;'t have both matrix and decomposed rotation
+                // Skip objects that don't have both matrix and decomposed rotation
                 // These are not helpful for comparision
-                if (!sceneObject.TransformMatrix3x4Ptr.IsNotNull)
+                if (sceneObject.Value.TransformMatrix3x4 is null)
                     continue;
 
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(sceneObjectIndex);
-                writer.WriteNextCol(sceneObject.Name);
+                writer.WriteNextCol(sceneObject.Index);
+                writer.WriteNextCol(sceneObject.Value.Name);
 
                 // Rotation values from clean, uncompressed matrix
-                var matrix = sceneObject.TransformMatrix3x4.RotationEuler;
+                var matrix = sceneObject.Value.TransformMatrix3x4.RotationEuler;
                 writer.WriteNextCol(matrix.X);
                 writer.WriteNextCol(matrix.Y);
                 writer.WriteNextCol(matrix.Z);
 
                 // Rotation values as reconstructed
-                var euler = sceneObject.TransformTRXS.CompressedRotation.Eulers;
+                var euler = sceneObject.Value.TransformTRXS.CompressedRotation.Eulers;
                 writer.WriteNextCol(euler.X);
                 writer.WriteNextCol(euler.Y);
                 writer.WriteNextCol(euler.Z);
 
                 // Decomposed rotation values, raw, requires processing to be used
-                var decomposed = sceneObject.TransformTRXS.CompressedRotation;
+                var decomposed = sceneObject.Value.TransformTRXS.CompressedRotation;
                 writer.WriteNextCol(decomposed.X);
                 writer.WriteNextCol(decomposed.Y);
                 writer.WriteNextCol(decomposed.Z);
                 // The other parameters that go with the structure
-                writer.WriteNextCol(sceneObject.TransformTRXS.UnknownOption);
-                writer.WriteNextCol(sceneObject.TransformTRXS.ObjectActiveOverride);
+                writer.WriteNextCol(sceneObject.Value.TransformTRXS.UnknownOption);
+                writer.WriteNextCol(sceneObject.Value.TransformTRXS.ObjectActiveOverride);
 
                 writer.WriteNextRow();
-                sceneObjectIndex++;
             }
         }
         writer.Flush();
@@ -1408,46 +1332,38 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            int nodeLength = scene.trackNodes.Length;
-            int nodeIndex = 0;
-            foreach (var trackNode in scene.trackNodes)
+            foreach (var trackNode in sceneFile.Value.trackNodes.Iterate(out int trackNodesLength))
             {
-                int pointLength = trackNode.Checkpoints.Length;
-                int pointIndex = 0;
-                foreach (var trackPoint in trackNode.Checkpoints)
+                foreach (var checkpoint in trackNode.Value.Checkpoints.Iterate(out int checkpointsLength))
                 {
-                    writer.WriteNextCol($"COLI_COURSE{sceneFile.CourseIndex:d2}");
-                    writer.WriteNextCol($"[{nodeIndex}/{nodeLength}]");
-                    writer.WriteNextCol($"[{pointIndex}/{pointLength}]");
 
-                    writer.WriteNextCol(trackPoint.CurveTimeStart);
-                    writer.WriteNextCol(trackPoint.CurveTimeEnd);
-                    writer.WriteNextCol(trackPoint.PlaneStart.distance);
-                    writer.WriteNextCol(trackPoint.PlaneStart.normal.X);
-                    writer.WriteNextCol(trackPoint.PlaneStart.normal.Y);
-                    writer.WriteNextCol(trackPoint.PlaneStart.normal.Z);
-                    writer.WriteNextCol(trackPoint.PlaneStart.origin.X);
-                    writer.WriteNextCol(trackPoint.PlaneStart.origin.Y);
-                    writer.WriteNextCol(trackPoint.PlaneStart.origin.Z);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.distance);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.X);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.Y);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.normal.Z);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.X);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.Y);
-                    writer.WriteNextCol(trackPoint.PlaneEnd.origin.Z);
-                    writer.WriteNextCol(trackPoint.StartDistance);
-                    writer.WriteNextCol(trackPoint.EndDistance);
-                    writer.WriteNextCol(trackPoint.TrackWidth);
-                    writer.WriteNextCol(trackPoint.ConnectToTrackIn);
-                    writer.WriteNextCol(trackPoint.ConnectToTrackOut);
+                    writer.WriteNextCol($"COLI_COURSE{sceneFile.CourseIndex:d2}");
+                    writer.WriteNextCol($"[{trackNode.Index}/{trackNodesLength}]");
+                    writer.WriteNextCol($"[{checkpoint.Index}/{checkpointsLength}]");
+                    writer.WriteNextCol(checkpoint.Value.CurveTimeStart);
+                    writer.WriteNextCol(checkpoint.Value.CurveTimeEnd);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.distance);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.normal.X);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.normal.Y);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.normal.Z);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.origin.X);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.origin.Y);
+                    writer.WriteNextCol(checkpoint.Value.PlaneStart.origin.Z);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.distance);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.normal.X);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.normal.Y);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.normal.Z);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.origin.X);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.origin.Y);
+                    writer.WriteNextCol(checkpoint.Value.PlaneEnd.origin.Z);
+                    writer.WriteNextCol(checkpoint.Value.StartDistance);
+                    writer.WriteNextCol(checkpoint.Value.EndDistance);
+                    writer.WriteNextCol(checkpoint.Value.TrackWidth);
+                    writer.WriteNextCol(checkpoint.Value.ConnectToTrackIn);
+                    writer.WriteNextCol(checkpoint.Value.ConnectToTrackOut);
                     //writer.WriteNextCol(trackPoint.zero_0x4E);
                     writer.WriteNextRow();
-
-                    pointIndex++;
                 }
-                nodeIndex++;
             }
         }
         writer.Flush();
@@ -1477,17 +1393,15 @@ public static class StageTableLogger
         writer.WriteNextColNicify(nameof(StaticColliderMeshManager.Unk_float));
         writer.WriteNextCol();
         writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
-        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
-        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".X");
+        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".Y");
+        writer.WriteNextColNicify(nameof(BoundingSphere.origin) + ".Z");
         writer.WriteNextColNicify(nameof(BoundingSphere.radius));
         writer.WriteNextRow();
 
         int index = 0;
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            var staticColliderMeshes = scene.staticColliderMeshManager;
-
+            var staticColliderMeshes = sceneFile.Value.staticColliderMeshManager;
             writer.WriteNextCol($"COLI_COURSE{sceneFile.CourseIndex:d2}");
             writer.WriteNextCol(staticColliderMeshes.AddressRange.PrintStartAddress());
             writer.WriteNextCol(index++);
@@ -1525,8 +1439,8 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
-        writer.WriteNextCol("name");
+        writer.WriteNextCol("Index");
+        writer.WriteNextCol("Name");
         writer.WriteNextCol("Object Type");
         writer.WriteNextCol("Addr");
         //writer.WriteNextCol(nameof(SceneObjectLOD.zero_0x00));
@@ -1538,39 +1452,25 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            // Get all the scene object references
-            var sceneObjectLODs = new List<SceneObjectLOD>();
-            foreach (var templateSceneObject in scene.sceneObjects)
+            foreach (var sceneObject in sceneFile.Value.sceneObjects)
             {
-                var sceneObjects = templateSceneObject.LODs;
-                foreach (var sceneObject in sceneObjects)
-                    sceneObjectLODs.Add(sceneObject);
-            }
-            //foreach (var staticSceneObject in scene.staticSceneObjects)
-            //{
-            //    var sceneObjects = staticSceneObject.templateSceneObject.sceneObjects;
-            //    foreach (var sceneObject in sceneObjects)
-            //        objectsList.Add((sceneObject, "Instance"));
-            //}
-
-            // iterate
-            foreach (var sceneObjectLOD in sceneObjectLODs)
-            {
-                writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteNextCol(sceneFile.CourseIndex);
-                writer.WriteNextCol(sceneFile.VenueName);
-                writer.WriteNextCol(sceneFile.CourseName);
-                writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
-                writer.WriteNextCol(sceneObjectLOD.Name);
-                writer.WriteNextCol(sceneObjectLOD.AddressRange.PrintStartAddress());
-                //writer.WriteNextCol(sceneObjectReference.zero_0x00);
-                writer.WriteNextCol(sceneObjectLOD.LodNamePtr);
-                //writer.WriteNextCol(sceneObjectReference.zero_0x08);
-                writer.WriteNextCol(sceneObjectLOD.LodDistance);
-                //
-                writer.WriteNextRow();
+                foreach (var sceneObjectLOD in sceneObject.LODs.Iterate())
+                {
+                    writer.WriteNextCol(sceneFile.FileName);
+                    writer.WriteNextCol(sceneFile.CourseIndex);
+                    writer.WriteNextCol(sceneFile.VenueName);
+                    writer.WriteNextCol(sceneFile.CourseName);
+                    writer.WriteNextCol(sceneFile.FileFormatDescription);
+                    writer.WriteNextCol(sceneObjectLOD.Index);
+                    writer.WriteNextCol(sceneObjectLOD.Value.Name);
+                    writer.WriteNextCol(sceneObjectLOD.Value.AddressRange.PrintStartAddress());
+                    //writer.WriteNextCol(sceneObjectReference.zero_0x00);
+                    writer.WriteNextCol(sceneObjectLOD.Value.LodNamePtr);
+                    //writer.WriteNextCol(sceneObjectReference.zero_0x08);
+                    writer.WriteNextCol(sceneObjectLOD.Value.LodDistance);
+                    //
+                    writer.WriteNextRow();
+                }
             }
         }
         writer.Flush();
@@ -1587,7 +1487,7 @@ public static class StageTableLogger
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
         //
-        writer.WriteNextCol("name");
+        writer.WriteNextCol("Name");
         writer.WriteNextCol("Object Type");
         writer.WriteNextCol("Addr");
         writer.WriteNextCol(nameof(SceneObject.LodRenderFlags));
@@ -1598,14 +1498,13 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
             // Get all the scene object references
             var sceneObjectsList = new List<(SceneObject sceneObject, string soCategory)>();
-            foreach (var sceneInstance in scene.sceneObjects)
+            foreach (var sceneInstance in sceneFile.Value.sceneObjects)
             {
                 sceneObjectsList.Add((sceneInstance, "Instance"));
             }
-            foreach (var sceneOriginObject in scene.staticSceneObjects)
+            foreach (var sceneOriginObject in sceneFile.Value.staticSceneObjects)
             {
                 var sceneInstance = sceneOriginObject.SceneObject;
                 sceneObjectsList.Add((sceneInstance, "Origin"));
@@ -1660,12 +1559,9 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var template in scene.sceneObjects)
+            foreach (var template in sceneFile.Value.sceneObjects)
             {
-                var index = 0;
-                var length = template.LODs.Length;
-                foreach (var sceneObject in template.LODs)
+                foreach (var sceneObject in template.LODs.Iterate(out int length))
                 {
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(sceneFile.CourseIndex);
@@ -1678,12 +1574,12 @@ public static class StageTableLogger
                     writer.WriteNextCol(template.LodsPtr.length);
                     writer.WriteNextCol(template.LodsPtr.PrintAddress);
                     writer.WriteNextCol(template.ColliderMeshPtr);
-                    writer.WriteNextCol($"[{++index}/{length}]");
+                    writer.WriteNextCol($"[{sceneObject.Index+1}/{length}]");
                     //writer.WriteNextCol(sceneObject.zero_0x00);
-                    writer.WriteNextCol(sceneObject.LodNamePtr);
+                    writer.WriteNextCol(sceneObject.Value.LodNamePtr);
                     //writer.WriteNextCol(sceneObject.zero_0x08);
-                    writer.WriteNextCol(sceneObject.LodDistance);
-                    writer.WriteNextCol(sceneObject.Name);
+                    writer.WriteNextCol(sceneObject.Value.LodDistance);
+                    writer.WriteNextCol(sceneObject.Value.Name);
                     writer.WriteNextRow();
                 }
             }
@@ -1702,28 +1598,23 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.near));
         writer.WriteNextCol(nameof(ViewRange) + "." + nameof(ViewRange.far));
         writer.WriteNextCol(nameof(Scene.trackMinHeight));
         writer.WriteNextCol(nameof(Scene.trackLength));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            //
             writer.WriteNextCol(sceneFile.FileName);
             writer.WriteNextCol(sceneFile.CourseIndex);
             writer.WriteNextCol(sceneFile.VenueName);
             writer.WriteNextCol(sceneFile.CourseName);
             writer.WriteNextCol(sceneFile.FileFormatDescription);
-            //
-            writer.WriteNextCol(scene.UnkRange0x00.near);
-            writer.WriteNextCol(scene.UnkRange0x00.far);
-            writer.WriteNextCol(scene.trackMinHeight.Value);
-            writer.WriteNextCol(scene.trackLength.Value);
+            writer.WriteNextCol(sceneFile.Value.UnkRange0x00.near);
+            writer.WriteNextCol(sceneFile.Value.UnkRange0x00.far);
+            writer.WriteNextCol(sceneFile.Value.trackMinHeight.Value);
+            writer.WriteNextCol(sceneFile.Value.trackLength.Value);
             writer.WriteNextRow();
         }
         writer.Flush();
@@ -1739,7 +1630,7 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
+        writer.WriteNextCol("Index");
         writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthFrom));
         writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.LengthTo));
         writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.WidthLeft));
@@ -1747,28 +1638,25 @@ public static class StageTableLogger
         writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.PropertyType));
         writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.TrackBranchID));
         //writer.WriteNextCol(nameof(EmbeddedTrackPropertyArea.zero_0x12));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var surfaceAttributeArea in scene.embeddedPropertyAreas)
+            foreach (var embeddedPropertyArea in sceneFile.Value.embeddedPropertyAreas.Iterate(out int length))
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
-                writer.WriteNextCol(surfaceAttributeArea.LengthFrom);
-                writer.WriteNextCol(surfaceAttributeArea.LengthTo);
-                writer.WriteNextCol(surfaceAttributeArea.WidthLeft);
-                writer.WriteNextCol(surfaceAttributeArea.WidthRight);
-                writer.WriteNextCol(surfaceAttributeArea.PropertyType);
-                writer.WriteNextCol(surfaceAttributeArea.TrackBranchID);
+                writer.WriteNextCol($"[{embeddedPropertyArea.Index+1}/{length}]");
+                writer.WriteNextCol(embeddedPropertyArea.Value.LengthFrom);
+                writer.WriteNextCol(embeddedPropertyArea.Value.LengthTo);
+                writer.WriteNextCol(embeddedPropertyArea.Value.WidthLeft);
+                writer.WriteNextCol(embeddedPropertyArea.Value.WidthRight);
+                writer.WriteNextCol(embeddedPropertyArea.Value.PropertyType);
+                writer.WriteNextCol(embeddedPropertyArea.Value.TrackBranchID);
                 //writer.WriteNextCol(surfaceAttributeArea.zero_0x12);
-                //
                 writer.WriteNextRow();
             }
         }
@@ -1786,32 +1674,27 @@ public static class StageTableLogger
         writer.WriteNextCol("Venue");
         writer.WriteNextCol("Course");
         writer.WriteNextCol("AX/GX");
-        //
         writer.WriteNextCol(nameof(UnknownCollider.SceneObjectPtr));
         writer.WriteNextCol(nameof(UnknownCollider.Transform.Position));
         writer.WriteNextCol(nameof(UnknownCollider.Transform.RotationEuler));
         writer.WriteNextCol(nameof(UnknownCollider.Transform.Scale));
         writer.WriteNextCol(nameof(UnknownCollider.Transform.UnknownOption));
-        //
         writer.WriteNextRow();
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            foreach (var unkSols in scene.unknownColliders)
+            foreach (var unkSols in sceneFile.Value.unknownColliders)
             {
                 writer.WriteNextCol(sceneFile.FileName);
                 writer.WriteNextCol(sceneFile.CourseIndex);
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                //
                 writer.WriteNextCol(unkSols.SceneObjectPtr);
                 writer.WriteNextCol(unkSols.Transform.Position);
                 writer.WriteNextCol(unkSols.Transform.RotationEuler);
                 writer.WriteNextCol(unkSols.Transform.Scale);
                 writer.WriteNextCol(unkSols.Transform.UnknownOption);
-                //
                 writer.WriteNextRow();
             }
             writer.Flush();
@@ -1854,35 +1737,33 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            int triIndex = 0;
-            foreach (var tri in scene.staticColliderMeshManager.ColliderTris)
+            foreach (var tri in sceneFile.Value.staticColliderMeshManager.ColliderTris.Iterate())
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteStartAddress(tri);
-                writer.WriteNextCol(triIndex++);
-                writer.WriteNextCol(tri.PlaneDistance);
-                writer.WriteNextCol(tri.Normal.X);
-                writer.WriteNextCol(tri.Normal.Y);
-                writer.WriteNextCol(tri.Normal.Z);
-                writer.WriteNextCol(tri.Vertex0.X);
-                writer.WriteNextCol(tri.Vertex0.Y);
-                writer.WriteNextCol(tri.Vertex0.Z);
-                writer.WriteNextCol(tri.Vertex1.X);
-                writer.WriteNextCol(tri.Vertex1.Y);
-                writer.WriteNextCol(tri.Vertex1.Z);
-                writer.WriteNextCol(tri.Vertex2.X);
-                writer.WriteNextCol(tri.Vertex2.Y);
-                writer.WriteNextCol(tri.Vertex2.Z);
-                writer.WriteNextCol(tri.EdgeNormal0.X);
-                writer.WriteNextCol(tri.EdgeNormal0.Y);
-                writer.WriteNextCol(tri.EdgeNormal0.Z);
-                writer.WriteNextCol(tri.EdgeNormal1.X);
-                writer.WriteNextCol(tri.EdgeNormal1.Y);
-                writer.WriteNextCol(tri.EdgeNormal1.Z);
-                writer.WriteNextCol(tri.EdgeNormal2.X);
-                writer.WriteNextCol(tri.EdgeNormal2.Y);
-                writer.WriteNextCol(tri.EdgeNormal2.Z);
+                writer.WriteStartAddress(tri.Value);
+                writer.WriteNextCol(tri.Index);
+                writer.WriteNextCol(tri.Value.PlaneDistance);
+                writer.WriteNextCol(tri.Value.Normal.X);
+                writer.WriteNextCol(tri.Value.Normal.Y);
+                writer.WriteNextCol(tri.Value.Normal.Z);
+                writer.WriteNextCol(tri.Value.Vertex0.X);
+                writer.WriteNextCol(tri.Value.Vertex0.Y);
+                writer.WriteNextCol(tri.Value.Vertex0.Z);
+                writer.WriteNextCol(tri.Value.Vertex1.X);
+                writer.WriteNextCol(tri.Value.Vertex1.Y);
+                writer.WriteNextCol(tri.Value.Vertex1.Z);
+                writer.WriteNextCol(tri.Value.Vertex2.X);
+                writer.WriteNextCol(tri.Value.Vertex2.Y);
+                writer.WriteNextCol(tri.Value.Vertex2.Z);
+                writer.WriteNextCol(tri.Value.EdgeNormal0.X);
+                writer.WriteNextCol(tri.Value.EdgeNormal0.Y);
+                writer.WriteNextCol(tri.Value.EdgeNormal0.Z);
+                writer.WriteNextCol(tri.Value.EdgeNormal1.X);
+                writer.WriteNextCol(tri.Value.EdgeNormal1.Y);
+                writer.WriteNextCol(tri.Value.EdgeNormal1.Z);
+                writer.WriteNextCol(tri.Value.EdgeNormal2.X);
+                writer.WriteNextCol(tri.Value.EdgeNormal2.Y);
+                writer.WriteNextCol(tri.Value.EdgeNormal2.Z);
                 writer.WriteNextRow();
             }
         }
@@ -1929,41 +1810,39 @@ public static class StageTableLogger
 
         foreach (var sceneFile in sceneFiles)
         {
-            Scene scene = sceneFile;
-            int quadIndex = 0;
-            foreach (var quad in scene.staticColliderMeshManager.ColliderQuads)
+            foreach (var quad in sceneFile.Value.staticColliderMeshManager.ColliderQuads.Iterate())
             {
                 writer.WriteNextCol(sceneFile.FileName);
-                writer.WriteStartAddress(quad);
-                writer.WriteNextCol(quadIndex++);
-                writer.WriteNextCol(quad.PlaneDistance);
-                writer.WriteNextCol(quad.Normal.X);
-                writer.WriteNextCol(quad.Normal.Y);
-                writer.WriteNextCol(quad.Normal.Z);
-                writer.WriteNextCol(quad.Vertex0.X);
-                writer.WriteNextCol(quad.Vertex0.Y);
-                writer.WriteNextCol(quad.Vertex0.Z);
-                writer.WriteNextCol(quad.Vertex1.X);
-                writer.WriteNextCol(quad.Vertex1.Y);
-                writer.WriteNextCol(quad.Vertex1.Z);
-                writer.WriteNextCol(quad.Vertex2.X);
-                writer.WriteNextCol(quad.Vertex2.Y);
-                writer.WriteNextCol(quad.Vertex2.Z);
-                writer.WriteNextCol(quad.Vertex3.X);
-                writer.WriteNextCol(quad.Vertex3.Y);
-                writer.WriteNextCol(quad.Vertex3.Z);
-                writer.WriteNextCol(quad.EdgeNormal0.X);
-                writer.WriteNextCol(quad.EdgeNormal0.Y);
-                writer.WriteNextCol(quad.EdgeNormal0.Z);
-                writer.WriteNextCol(quad.EdgeNormal1.X);
-                writer.WriteNextCol(quad.EdgeNormal1.Y);
-                writer.WriteNextCol(quad.EdgeNormal1.Z);
-                writer.WriteNextCol(quad.EdgeNormal2.X);
-                writer.WriteNextCol(quad.EdgeNormal2.Y);
-                writer.WriteNextCol(quad.EdgeNormal2.Z);
-                writer.WriteNextCol(quad.EdgeNormal3.X);
-                writer.WriteNextCol(quad.EdgeNormal3.Y);
-                writer.WriteNextCol(quad.EdgeNormal3.Z);
+                writer.WriteStartAddress(quad.Value);
+                writer.WriteNextCol(quad.Index);
+                writer.WriteNextCol(quad.Value.PlaneDistance);
+                writer.WriteNextCol(quad.Value.Normal.X);
+                writer.WriteNextCol(quad.Value.Normal.Y);
+                writer.WriteNextCol(quad.Value.Normal.Z);
+                writer.WriteNextCol(quad.Value.Vertex0.X);
+                writer.WriteNextCol(quad.Value.Vertex0.Y);
+                writer.WriteNextCol(quad.Value.Vertex0.Z);
+                writer.WriteNextCol(quad.Value.Vertex1.X);
+                writer.WriteNextCol(quad.Value.Vertex1.Y);
+                writer.WriteNextCol(quad.Value.Vertex1.Z);
+                writer.WriteNextCol(quad.Value.Vertex2.X);
+                writer.WriteNextCol(quad.Value.Vertex2.Y);
+                writer.WriteNextCol(quad.Value.Vertex2.Z);
+                writer.WriteNextCol(quad.Value.Vertex3.X);
+                writer.WriteNextCol(quad.Value.Vertex3.Y);
+                writer.WriteNextCol(quad.Value.Vertex3.Z);
+                writer.WriteNextCol(quad.Value.EdgeNormal0.X);
+                writer.WriteNextCol(quad.Value.EdgeNormal0.Y);
+                writer.WriteNextCol(quad.Value.EdgeNormal0.Z);
+                writer.WriteNextCol(quad.Value.EdgeNormal1.X);
+                writer.WriteNextCol(quad.Value.EdgeNormal1.Y);
+                writer.WriteNextCol(quad.Value.EdgeNormal1.Z);
+                writer.WriteNextCol(quad.Value.EdgeNormal2.X);
+                writer.WriteNextCol(quad.Value.EdgeNormal2.Y);
+                writer.WriteNextCol(quad.Value.EdgeNormal2.Z);
+                writer.WriteNextCol(quad.Value.EdgeNormal3.X);
+                writer.WriteNextCol(quad.Value.EdgeNormal3.Y);
+                writer.WriteNextCol(quad.Value.EdgeNormal3.Z);
                 writer.WriteNextRow();
             }
         }

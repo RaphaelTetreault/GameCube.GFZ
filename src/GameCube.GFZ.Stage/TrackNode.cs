@@ -22,15 +22,15 @@ public sealed class TrackNode :
     private ArrayPointer checkpointsPtr;
     private Pointer segmentPtr;
     // FIELDS (deserialized from pointers)
-    private Checkpoint[]? checkpoints;
-    private TrackSegment? segment;
+    private Checkpoint[] checkpoints; // CONFIRM: NEVER NULL
+    private TrackSegment segment;     // CONFIRM: NEVER NULL
 
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public Checkpoint[]? Checkpoints { get => checkpoints; set => checkpoints = value; }
+    public Checkpoint[] Checkpoints { get => checkpoints; set => checkpoints = value; }
     public ArrayPointer CheckpointsPtr { get => checkpointsPtr; set => checkpointsPtr = value; }
-    public TrackSegment? RootSegment { get => segment; set => segment = value; }
+    public TrackSegment RootSegment { get => segment; set => segment = value; }
     public Pointer SegmentPtr { get => segmentPtr; set => segmentPtr = value; }
 
 
