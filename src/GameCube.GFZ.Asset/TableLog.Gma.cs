@@ -1,6 +1,6 @@
 ﻿using GameCube.GFZ.GMA;
+using Manifold;
 using Manifold.IO;
-using System.IO;
 using static Manifold.IO.TableLogger;
 
 namespace GameCube.GFZ.Asset;
@@ -20,186 +20,173 @@ public class GmaTableLogger
 
     public static void AnalyzeGcmf(GmaFile[] gmas, string outputFileName)
     {
-        using (var writer = new StreamWriter(File.Create(outputFileName)))
-        {
-            // Write header
-            writer.WriteNextCol("FileName");
-            writer.WriteNextCol("Address");
-            writer.WriteNextCol(nameof(Model.Name));
-            writer.WriteNextCol("Model Index");
-            writer.WriteNextCol("Debug Index");
-            writer.WriteNextCol(nameof(Gcmf.Attributes));
-            writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Origin");
-            writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Radius");
-            writer.WriteNextCol(nameof(Gcmf.TextureConfigsCount));
-            writer.WriteNextCol(nameof(Gcmf.OpaqueMaterialCount));
-            writer.WriteNextCol(nameof(Gcmf.TranslucidMaterialCount));
-            writer.WriteNextCol(nameof(Gcmf.BoneCount));
-            writer.WriteNextCol(nameof(Gcmf.SubmeshOffsetPtr));
-            writer.WriteNextCol(nameof(Gcmf.SkinnedVertexDescriptor));
-            writer.WriteNextCol(nameof(Gcmf.Submeshes));
-            writer.WriteNextCol(nameof(Gcmf.SkinnedVerticesA));
-            writer.WriteNextCol(nameof(Gcmf.SkinnedVerticesB));
-            writer.WriteNextCol(nameof(Gcmf.SkinBoneBindings));
-            writer.WriteNextCol(nameof(Gcmf.UnkBoneIndices));
-            writer.WriteNextRow();
+        using var writer = new StreamWriter(File.Create(outputFileName));
+        // Write header
+        writer.WriteNextCol("FileName");
+        writer.WriteNextCol("Address");
+        writer.WriteNextCol(nameof(Model.Name));
+        writer.WriteNextCol("Model Index");
+        writer.WriteNextCol("Debug Index");
+        writer.WriteNextCol(nameof(Gcmf.Attributes));
+        writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Origin");
+        writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Radius");
+        writer.WriteNextCol(nameof(Gcmf.TextureConfigsCount));
+        writer.WriteNextCol(nameof(Gcmf.OpaqueMaterialCount));
+        writer.WriteNextCol(nameof(Gcmf.TranslucidMaterialCount));
+        writer.WriteNextCol(nameof(Gcmf.BoneCount));
+        writer.WriteNextCol(nameof(Gcmf.SubmeshOffsetPtr));
+        writer.WriteNextCol(nameof(Gcmf.SkinnedVertexDescriptor));
+        writer.WriteNextCol(nameof(Gcmf.Submeshes));
+        writer.WriteNextCol(nameof(Gcmf.SkinnedVerticesA));
+        writer.WriteNextCol(nameof(Gcmf.SkinnedVerticesB));
+        writer.WriteNextCol(nameof(Gcmf.SkinBoneBindings));
+        writer.WriteNextCol(nameof(Gcmf.UnkBoneIndices));
+        writer.WriteNextRow();
 
-            foreach (var gma in gmas)
+        foreach (var gma in gmas)
+        {
+            foreach (var model in gma.Value.Models.Iterate())
             {
-                int modelIndex = 0;
-                foreach (var model in gma.Value.Models)
-                {
-                    var gcmf = model.Gcmf;
-                    writer.WriteNextCol(gma.FileName);
-                    writer.WriteNextCol(gcmf.AddressRange.PrintStartAddress());
-                    writer.WriteNextCol(model.Name);
-                    writer.WriteNextCol(modelIndex++);
-                    writer.WriteNextCol(model.DebugIndex);
-                    writer.WriteNextCol(gcmf.Attributes);
-                    writer.WriteNextCol(gcmf.BoundingSphere.origin);
-                    writer.WriteNextCol(gcmf.BoundingSphere.radius);
-                    writer.WriteNextCol(gcmf.TextureConfigsCount);
-                    writer.WriteNextCol(gcmf.OpaqueMaterialCount);
-                    writer.WriteNextCol(gcmf.TranslucidMaterialCount);
-                    writer.WriteNextCol(gcmf.BoneCount);
-                    writer.WriteNextCol(gcmf.SubmeshOffsetPtr);
-                    writer.WriteNextCol(gcmf.SkinnedVertexDescriptor is not null);
-                    writer.WriteNextCol(gcmf.Submeshes.Length);
-                    writer.WriteNextCol(gcmf.SkinnedVerticesA.Length);
-                    writer.WriteNextCol(gcmf.SkinnedVerticesB.Length);
-                    writer.WriteNextCol(gcmf.SkinBoneBindings.Length);
-                    writer.WriteNextCol(gcmf.UnkBoneIndices.Length);
-                    writer.WriteNextRow();
-                }
+                var gcmf = model.Value.Gcmf;
+                writer.WriteNextCol(gma.FileName);
+                writer.WriteNextCol(gcmf.AddressRange.PrintStartAddress());
+                writer.WriteNextCol(model.Value.Name);
+                writer.WriteNextCol(model.Index);
+                writer.WriteNextCol(model.Value.DebugIndex);
+                writer.WriteNextCol(gcmf.Attributes);
+                writer.WriteNextCol(gcmf.BoundingSphere.origin);
+                writer.WriteNextCol(gcmf.BoundingSphere.radius);
+                writer.WriteNextCol(gcmf.TextureConfigsCount);
+                writer.WriteNextCol(gcmf.OpaqueMaterialCount);
+                writer.WriteNextCol(gcmf.TranslucidMaterialCount);
+                writer.WriteNextCol(gcmf.BoneCount);
+                writer.WriteNextCol(gcmf.SubmeshOffsetPtr);
+                writer.WriteNextCol(gcmf.SkinnedVertexDescriptor is not null);
+                writer.WriteNextCol(gcmf.Submeshes.Length);
+                writer.WriteNextCol(gcmf.SkinnedVerticesA.Length);
+                writer.WriteNextCol(gcmf.SkinnedVerticesB.Length);
+                writer.WriteNextCol(gcmf.SkinBoneBindings.Length);
+                writer.WriteNextCol(gcmf.UnkBoneIndices.Length);
+                writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeTextureConfigs(GmaFile[] gmas, string outputFileName)
     {
-        using (var writer = new StreamWriter(File.Create(outputFileName)))
-        {
-            // Write header
-            writer.WriteNextCol("FileName");
-            writer.WriteNextCol("Address");
-            writer.WriteNextCol(nameof(Model.Name));
-            writer.WriteNextCol("Model Index");
-            writer.WriteNextCol("Debug Index");
-            writer.WriteNextCol("Tex Index");
-            writer.WriteNextCol(nameof(TevLayer.Unk0x00));
-            writer.WriteNextCol(nameof(TevLayer.MipmapSetting));
-            writer.WriteNextCol(nameof(TevLayer.WrapMode));
-            writer.WriteNextCol(nameof(TevLayer.TplTextureIndex));
-            writer.WriteNextCol(nameof(TevLayer.LodBias));
-            writer.WriteNextCol(nameof(TevLayer.AnisotropicFilter));
-            writer.WriteNextCol(nameof(TevLayer.Unk0x0C));
-            writer.WriteNextCol(nameof(TevLayer.IsSwappableTexture));
-            writer.WriteNextCol(nameof(TevLayer.TevLayerIndex));
-            writer.WriteNextCol(nameof(TevLayer.Unk0x12));
-            writer.WriteNextRow();
+        using var writer = new StreamWriter(File.Create(outputFileName));
+        // Write header
+        writer.WriteNextCol("FileName");
+        writer.WriteNextCol("Address");
+        writer.WriteNextCol(nameof(Model.Name));
+        writer.WriteNextCol("Model Index");
+        writer.WriteNextCol("Debug Index");
+        writer.WriteNextCol("Tex Index");
+        writer.WriteNextCol(nameof(TevLayer.Unk0x00));
+        writer.WriteNextCol(nameof(TevLayer.MipmapSetting));
+        writer.WriteNextCol(nameof(TevLayer.WrapMode));
+        writer.WriteNextCol(nameof(TevLayer.TplTextureIndex));
+        writer.WriteNextCol(nameof(TevLayer.LodBias));
+        writer.WriteNextCol(nameof(TevLayer.AnisotropicFilter));
+        writer.WriteNextCol(nameof(TevLayer.Unk0x0C));
+        writer.WriteNextCol(nameof(TevLayer.IsSwappableTexture));
+        writer.WriteNextCol(nameof(TevLayer.TevLayerIndex));
+        writer.WriteNextCol(nameof(TevLayer.Unk0x12));
+        writer.WriteNextRow();
 
-            foreach (var gma in gmas)
+        foreach (var gma in gmas)
+        {
+            foreach (var model in gma.Value.Models.Iterate())
             {
-                int modelIndex = 0;
-                foreach (var model in gma.Value.Models)
+                foreach (var tevLayer in model.Value.Gcmf.TevLayers.Iterate())
                 {
-                    int textureConfigIndex = 0;
-                    foreach (var textureConfif in model.Gcmf.TevLayers)
-                    {
-                        writer.WriteNextCol(gma.FileName);
-                        writer.WriteNextCol(textureConfif.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(model.Name);
-                        writer.WriteNextCol(modelIndex);
-                        writer.WriteNextCol(model.DebugIndex);
-                        writer.WriteNextCol(textureConfigIndex++);
-                        writer.WriteNextCol(textureConfif.Unk0x00);
-                        writer.WriteNextCol(textureConfif.MipmapSetting);
-                        writer.WriteNextCol(textureConfif.WrapMode);
-                        writer.WriteNextCol(textureConfif.TplTextureIndex);
-                        writer.WriteNextCol(textureConfif.LodBias);
-                        writer.WriteNextCol(textureConfif.AnisotropicFilter);
-                        writer.WriteNextCol(textureConfif.Unk0x0C);
-                        writer.WriteNextCol(textureConfif.IsSwappableTexture);
-                        writer.WriteNextCol(textureConfif.TevLayerIndex);
-                        writer.WriteNextCol(textureConfif.Unk0x12);
-                        writer.WriteNextRow();
-                    }
-                    modelIndex++;
+                    writer.WriteNextCol(gma.FileName);
+                    writer.WriteNextCol(tevLayer.Value.AddressRange.PrintStartAddress());
+                    writer.WriteNextCol(model.Value.Name);
+                    writer.WriteNextCol(model.Index);
+                    writer.WriteNextCol(model.Value.DebugIndex);
+                    writer.WriteNextCol(tevLayer.Index);
+                    writer.WriteNextCol(tevLayer.Value.Unk0x00);
+                    writer.WriteNextCol(tevLayer.Value.MipmapSetting);
+                    writer.WriteNextCol(tevLayer.Value.WrapMode);
+                    writer.WriteNextCol(tevLayer.Value.TplTextureIndex);
+                    writer.WriteNextCol(tevLayer.Value.LodBias);
+                    writer.WriteNextCol(tevLayer.Value.AnisotropicFilter);
+                    writer.WriteNextCol(tevLayer.Value.Unk0x0C);
+                    writer.WriteNextCol(tevLayer.Value.IsSwappableTexture);
+                    writer.WriteNextCol(tevLayer.Value.TevLayerIndex);
+                    writer.WriteNextCol(tevLayer.Value.Unk0x12);
+                    writer.WriteNextRow();
                 }
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeMaterials(GmaFile[] gmas, string outputFileName)
     {
-        using (var writer = new StreamWriter(File.Create(outputFileName)))
-        {
-            // Write header
-            writer.WriteNextCol("FileName");
-            writer.WriteNextCol("Address");
-            writer.WriteNextCol(nameof(Model.Name));
-            writer.WriteNextCol("Model Index");
-            writer.WriteNextCol("Debug Index");
-            writer.WriteNextCol("Material Index");
-            writer.WriteNextCol(nameof(Submesh.RenderFlags));
-            writer.WriteNextCol(nameof(Material.MaterialColor));
-            writer.WriteNextCol(nameof(Material.AmbientColor));
-            writer.WriteNextCol(nameof(Material.SpecularColor));
-            writer.WriteNextCol(nameof(Material.Unk0x10));
-            writer.WriteNextCol(nameof(Material.Alpha));
-            writer.WriteNextCol(nameof(Material.TevLayerCount));
-            writer.WriteNextCol(nameof(Material.MaterialDestination));
-            writer.WriteNextCol(nameof(Material.UnkAlpha0x14));
-            writer.WriteNextCol(nameof(Material.Unk0x15));
-            writer.WriteNextCol(nameof(Material.TevLayerIndex0));
-            writer.WriteNextCol(nameof(Material.TevLayerIndex1));
-            writer.WriteNextCol(nameof(Material.TevLayerIndex2));
-            writer.WriteNextCol(nameof(Submesh.VertexAttributes));
-            writer.WriteNextCol(nameof(UnkAlphaOptions.Origin));
-            writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
-            writer.WriteNextCol(nameof(UnkAlphaOptions.BlendFactors));
-            writer.WriteNextRow();
+        using var writer = new StreamWriter(File.Create(outputFileName));
+        // Write header
+        writer.WriteNextCol("FileName");
+        writer.WriteNextCol("Address");
+        writer.WriteNextCol(nameof(Model.Name));
+        writer.WriteNextCol("Model Index");
+        writer.WriteNextCol("Debug Index");
+        writer.WriteNextCol("Material Index");
+        writer.WriteNextCol(nameof(Submesh.RenderFlags));
+        writer.WriteNextCol(nameof(Material.MaterialColor));
+        writer.WriteNextCol(nameof(Material.AmbientColor));
+        writer.WriteNextCol(nameof(Material.SpecularColor));
+        writer.WriteNextCol(nameof(Material.Unk0x10));
+        writer.WriteNextCol(nameof(Material.Alpha));
+        writer.WriteNextCol(nameof(Material.TevLayerCount));
+        writer.WriteNextCol(nameof(Material.MaterialDestination));
+        writer.WriteNextCol(nameof(Material.UnkAlpha0x14));
+        writer.WriteNextCol(nameof(Material.Unk0x15));
+        writer.WriteNextCol(nameof(Material.TevLayerIndex0));
+        writer.WriteNextCol(nameof(Material.TevLayerIndex1));
+        writer.WriteNextCol(nameof(Material.TevLayerIndex2));
+        writer.WriteNextCol(nameof(Submesh.VertexAttributes));
+        writer.WriteNextCol(nameof(UnkAlphaOptions.Origin));
+        writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
+        writer.WriteNextCol(nameof(UnkAlphaOptions.BlendFactors));
+        writer.WriteNextRow();
 
-            foreach (var gma in gmas)
+        foreach (var gma in gmas)
+        {
+            foreach (var model in gma.Value.Models.Iterate())
             {
-                int modelIndex = 0;
-                foreach (var model in gma.Value.Models)
+                foreach (var submesh in model.Value.Gcmf.Submeshes.Iterate())
                 {
-                    int submeshIndex = 0;
-                    foreach (var submesh in model.Gcmf.Submeshes)
-                    {
-                        writer.WriteNextCol(gma.FileName);
-                        writer.WriteNextCol(submesh.AddressRange.PrintStartAddress());
-                        writer.WriteNextCol(model.Name);
-                        writer.WriteNextCol(modelIndex);
-                        writer.WriteNextCol(model.DebugIndex);
-                        writer.WriteNextCol(submeshIndex++);
-                        writer.WriteNextCol(submesh.RenderFlags);
-                        writer.WriteNextCol(submesh.Material.MaterialColor);
-                        writer.WriteNextCol(submesh.Material.AmbientColor);
-                        writer.WriteNextCol(submesh.Material.SpecularColor);
-                        writer.WriteNextCol(submesh.Material.Unk0x10);
-                        writer.WriteNextCol(submesh.Material.Alpha);
-                        writer.WriteNextCol(submesh.Material.TevLayerCount);
-                        writer.WriteNextCol(submesh.Material.MaterialDestination);
-                        writer.WriteNextCol(submesh.Material.UnkAlpha0x14);
-                        writer.WriteNextCol(submesh.Material.Unk0x15);
-                        writer.WriteNextCol(submesh.Material.TevLayerIndex0);
-                        writer.WriteNextCol(submesh.Material.TevLayerIndex1);
-                        writer.WriteNextCol(submesh.Material.TevLayerIndex2);
-                        writer.WriteNextCol(submesh.VertexAttributes);
-                        writer.WriteNextCol(submesh.UnkAlphaOptions.Origin);
-                        writer.WriteNextCol(submesh.UnkAlphaOptions.Unk0x0C);
-                        writer.WriteNextCol(submesh.UnkAlphaOptions.BlendFactors);
-                        writer.WriteNextRow();
-                    }
-                    modelIndex++;
-                }
-            }
-            writer.Flush();
-        }
+                    writer.WriteNextCol(gma.FileName);
+                    writer.WriteNextCol(submesh.Value.AddressRange.PrintStartAddress());
+                    writer.WriteNextCol(model.Value.Name);
+                    writer.WriteNextCol(model.Index);
+                    writer.WriteNextCol(model.Value.DebugIndex);
+                    writer.WriteNextCol(submesh.Index);
+                    writer.WriteNextCol(submesh.Value.RenderFlags);
+                    writer.WriteNextCol(submesh.Value.Material.MaterialColor);
+                    writer.WriteNextCol(submesh.Value.Material.AmbientColor);
+                    writer.WriteNextCol(submesh.Value.Material.SpecularColor);
+                    writer.WriteNextCol(submesh.Value.Material.Unk0x10);
+                    writer.WriteNextCol(submesh.Value.Material.Alpha);
+                    writer.WriteNextCol(submesh.Value.Material.TevLayerCount);
+                    writer.WriteNextCol(submesh.Value.Material.MaterialDestination);
+                    writer.WriteNextCol(submesh.Value.Material.UnkAlpha0x14);
+                    writer.WriteNextCol(submesh.Value.Material.Unk0x15);
+                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex0);
+                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex1);
+                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex2);
+                    writer.WriteNextCol(submesh.Value.VertexAttributes);
+                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Origin);
+                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Unk0x0C);
+                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.BlendFactors);
+                    writer.WriteNextRow();
+                }//submesh
+            }//model
+        }//gma
+        writer.Close();
     }
 
 }

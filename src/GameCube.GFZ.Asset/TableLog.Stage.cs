@@ -1,9 +1,7 @@
 ﻿using GameCube.Common;
-using GameCube.GFZ.GameData;
 using GameCube.GFZ.Stage;
 using Manifold;
 using Manifold.IO;
-using System.Text.RegularExpressions;
 using static Manifold.IO.TableLogger;
 
 namespace GameCube.GFZ.Asset;
@@ -118,7 +116,7 @@ public static class StageTableLogger
             }
         }
 
-        writer.Flush();
+        writer.Close();
     }
     public static void AnalyzeTrackKeyables(SceneFile[] sceneFiles, string filename, int keyablesSet)
     {
@@ -160,7 +158,7 @@ public static class StageTableLogger
             }
         }
 
-        writer.Flush();
+        writer.Close();
     }
     private static void WriteTrackKeyableAttributeRecursive(StreamWriter writer, SceneFile sceneFile, int nestedDepth, int animationCurveIndex, int trackTransformIndex, TrackSegment trackTransform)
     {
@@ -269,7 +267,7 @@ public static class StageTableLogger
             }
         }
 
-        writer.Flush();
+        writer.Close();
     }
     // Writes self and children
     private static void WriteTrackSegmentRecursive(StreamWriter writer, SceneFile sceneFile, int depth, int index, int total, TrackSegment trackSegment)
@@ -323,7 +321,7 @@ public static class StageTableLogger
         writer.WriteNextCol(trackTransform.RailHeightLeft);
         writer.WriteNextCol(trackTransform.BranchIndex);
         //
-        if (trackTransform.TrackCornerPtr.IsNotNull)
+        if (trackTransform.TrackCorner is not null)
         {
             writer.WriteNextCol();
             writer.WriteNextCol(trackTransform.TrackCorner.Transform.Position);
@@ -395,7 +393,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeGameObjectAnimationClipIndex(SceneFile[] sceneFiles, string filename, int index)
@@ -463,7 +461,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     #endregion
@@ -518,7 +516,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeTextureMetadata(SceneFile[] sceneFiles, string fileName)
@@ -558,7 +556,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeSkeletalAnimator(SceneFile[] sceneFiles, string fileName)
@@ -615,7 +613,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeColliderGeometryTri(SceneFile[] sceneFiles, string fileName)
@@ -697,7 +695,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeColliderGeometryQuad(SceneFile[] sceneFiles, string fileName)
@@ -753,7 +751,7 @@ public static class StageTableLogger
                     continue;
 
                 foreach (var quad in dynamicSceneObject.Value.SceneObject.ColliderMesh.Quads.Iterate())
-                { 
+                {
                     writer.WriteNextCol(sceneFile.FileName);
                     writer.WriteNextCol(dynamicSceneObject.Index);
                     writer.WriteNextCol(dynamicSceneObject.Value.Name);
@@ -793,7 +791,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     #endregion
@@ -931,7 +929,7 @@ public static class StageTableLogger
             writer.WriteNextCol(scene.trackMinHeight.Value);
             writer.WriteNextRow();
         }
-        writer.Flush();
+        writer.Close();
     }
 
 
@@ -970,8 +968,8 @@ public static class StageTableLogger
                 writer.WriteNextCol(arcadeCheckpoint.Option);
                 writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeMiscellaneousTriggers(SceneFile[] sceneFiles, string fileName)
@@ -1007,8 +1005,8 @@ public static class StageTableLogger
                 writer.WriteNextCol(miscellaneousTrigger.MetadataType);
                 writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeStoryObjectTrigger(SceneFile[] sceneFiles, string fileName)
@@ -1052,8 +1050,8 @@ public static class StageTableLogger
                 writer.WriteNextCol(storyObjectTrigger.Value.Position);
                 writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeCullOverrideTrigger(SceneFile[] sceneFiles, string fileName)
@@ -1068,8 +1066,8 @@ public static class StageTableLogger
         writer.WriteNextCol("AX/GX");
         writer.WriteNextCol("Addr Start");
         writer.WriteNextCol("Addr End");
-        writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
-        writer.WriteNextCol(nameof(CullOverrideTrigger.Unk_0x20));
+        writer.WriteNextCol($"{nameof(CullOverrideTrigger.Unk_0x20)}");
+        writer.WriteNextCol($"Hex {nameof(CullOverrideTrigger.Unk_0x20)}");
         writer.WriteNextCol("Order");
         writer.WriteNextCol("Index");
         writer.WriteNextRow();
@@ -1092,7 +1090,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeVisualEffectTriggers(SceneFile[] sceneFiles, string fileName)
@@ -1130,8 +1128,8 @@ public static class StageTableLogger
                 writer.WriteNextCol(visualEffectTrigger.VisualEffect);
                 writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     #endregion
@@ -1183,8 +1181,8 @@ public static class StageTableLogger
                     writer.WriteNextRow();
                 }
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
     public static void AnalyzeFog(SceneFile[] sceneFiles, string fileName)
@@ -1231,7 +1229,7 @@ public static class StageTableLogger
             //
             writer.WriteNextRow();
         }
-        writer.Flush();
+        writer.Close();
     }
 
     #endregion
@@ -1295,7 +1293,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeTrackNodes(SceneFile[] sceneFiles, string fileName)
@@ -1366,7 +1364,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeStaticColliderMeshManagers(SceneFile[] sceneFiles, string fileName)
@@ -1426,7 +1424,7 @@ public static class StageTableLogger
             writer.WriteNextCol(staticColliderMeshes.BoundingSphere.radius);
             writer.WriteNextRow();
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeSceneObjectLODs(SceneFile[] sceneFiles, string fileName)
@@ -1473,7 +1471,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeSceneObjects(SceneFile[] sceneFiles, string fileName)
@@ -1529,7 +1527,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeSceneObjectsAndLODs(SceneFile[] sceneFiles, string fileName)
@@ -1574,7 +1572,7 @@ public static class StageTableLogger
                     writer.WriteNextCol(template.LodsPtr.length);
                     writer.WriteNextCol(template.LodsPtr.PrintAddress);
                     writer.WriteNextCol(template.ColliderMeshPtr);
-                    writer.WriteNextCol($"[{sceneObject.Index+1}/{length}]");
+                    writer.WriteNextCol($"[{sceneObject.Index + 1}/{length}]");
                     //writer.WriteNextCol(sceneObject.zero_0x00);
                     writer.WriteNextCol(sceneObject.Value.LodNamePtr);
                     //writer.WriteNextCol(sceneObject.zero_0x08);
@@ -1584,7 +1582,7 @@ public static class StageTableLogger
                 }
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
 
@@ -1617,7 +1615,7 @@ public static class StageTableLogger
             writer.WriteNextCol(sceneFile.Value.trackLength.Value);
             writer.WriteNextRow();
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeSurfaceAttributeAreas(SceneFile[] sceneFiles, string fileName)
@@ -1649,7 +1647,7 @@ public static class StageTableLogger
                 writer.WriteNextCol(sceneFile.VenueName);
                 writer.WriteNextCol(sceneFile.CourseName);
                 writer.WriteNextCol(sceneFile.FileFormatDescription);
-                writer.WriteNextCol($"[{embeddedPropertyArea.Index+1}/{length}]");
+                writer.WriteNextCol($"[{embeddedPropertyArea.Index + 1}/{length}]");
                 writer.WriteNextCol(embeddedPropertyArea.Value.LengthFrom);
                 writer.WriteNextCol(embeddedPropertyArea.Value.LengthTo);
                 writer.WriteNextCol(embeddedPropertyArea.Value.WidthLeft);
@@ -1660,7 +1658,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
 
@@ -1697,8 +1695,8 @@ public static class StageTableLogger
                 writer.WriteNextCol(unkSols.Transform.UnknownOption);
                 writer.WriteNextRow();
             }
-            writer.Flush();
         }
+        writer.Close();
     }
 
 
@@ -1767,7 +1765,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
     public static void AnalyzeStaticColliderQuads(SceneFile[] sceneFiles, string fileName)
@@ -1846,7 +1844,7 @@ public static class StageTableLogger
                 writer.WriteNextRow();
             }
         }
-        writer.Flush();
+        writer.Close();
     }
 
 }
