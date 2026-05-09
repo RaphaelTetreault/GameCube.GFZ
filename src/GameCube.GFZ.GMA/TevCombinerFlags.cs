@@ -4,12 +4,13 @@ namespace GameCube.GFZ.GMA;
 /// 
 /// </summary>
 [System.Flags]
-public enum TexFlags0x10 : ushort
+public enum TevCombinerFlags : ushort
 {
     /// <summary>
-    ///     Maybe an alpha multiply on self/mesh?
+    ///     Receives alpha from previous TEV stage. This is always called
+    ///     after <see cref="TevTextureFlags.UseGreyscaleAsAlphaMask"/> is set in the previous TEV stage.
     /// </summary>
-    unk0_AlphaScreenSelf = 1 << 0,
+    ReceiveAlphaFromLastTevStage = 1 << 0,
 
     /// <summary>
     /// 

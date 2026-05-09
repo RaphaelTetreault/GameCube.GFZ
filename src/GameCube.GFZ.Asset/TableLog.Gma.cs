@@ -30,7 +30,7 @@ public class GmaTableLogger
         writer.WriteNextCol(nameof(Gcmf.Attributes));
         writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Origin");
         writer.WriteNextCol($"{nameof(Gcmf.BoundingSphere)}.Radius");
-        writer.WriteNextCol(nameof(Gcmf.TextureConfigsCount));
+        writer.WriteNextCol(nameof(Gcmf.TextureCount));
         writer.WriteNextCol(nameof(Gcmf.OpaqueMaterialCount));
         writer.WriteNextCol(nameof(Gcmf.TranslucidMaterialCount));
         writer.WriteNextCol(nameof(Gcmf.BoneCount));
@@ -56,7 +56,7 @@ public class GmaTableLogger
                 writer.WriteNextCol(gcmf.Attributes);
                 writer.WriteNextCol(gcmf.BoundingSphere.origin);
                 writer.WriteNextCol(gcmf.BoundingSphere.radius);
-                writer.WriteNextCol(gcmf.TextureConfigsCount);
+                writer.WriteNextCol(gcmf.TextureCount);
                 writer.WriteNextCol(gcmf.OpaqueMaterialCount);
                 writer.WriteNextCol(gcmf.TranslucidMaterialCount);
                 writer.WriteNextCol(gcmf.BoneCount);
@@ -76,16 +76,18 @@ public class GmaTableLogger
     public static void AnalyzeTextureConfigs(GmaFile[] gmas, string outputFileName)
     {
         using var writer = new StreamWriter(File.Create(outputFileName));
+
         // Write header
         writer.WriteNextCol("FileName");
         writer.WriteNextCol("Address");
         writer.WriteNextCol(nameof(Model.Name));
         writer.WriteNextCol("Model Index");
-        writer.WriteNextCol("Debug Index");
+        writer.WriteNextCol("Model Debug Index");
         writer.WriteNextCol("Tex Index");
-        writer.WriteNextCol(nameof(TevLayer.Unk0x00));
-        writer.WriteNextCol(nameof(TevLayer.MipmapSetting));
-        writer.WriteNextCol(nameof(TevLayer.WrapMode));
+        writer.WriteNextCol("Tex Debug Index");
+        writer.WriteNextCol(nameof(TevLayer.TextureFlags));
+        foreach (var flag in Enum.GetNames<TevTextureFlags>())
+            writer.WriteNextCol(flag);
         writer.WriteNextCol(nameof(TevLayer.TplTextureIndex));
         writer.WriteNextCol(nameof(TevLayer.LodBias));
         writer.WriteNextCol(nameof(TevLayer.AnisotropicFilter));
@@ -99,6 +101,7 @@ public class GmaTableLogger
         {
             foreach (var model in gma.Value.Models.Iterate())
             {
+                int texIndex = 0;
                 foreach (var tevLayer in model.Value.Gcmf.TevLayers.Iterate())
                 {
                     writer.WriteNextCol(gma.FileName);
@@ -107,9 +110,16 @@ public class GmaTableLogger
                     writer.WriteNextCol(model.Index);
                     writer.WriteNextCol(model.Value.DebugIndex);
                     writer.WriteNextCol(tevLayer.Index);
-                    writer.WriteNextCol(tevLayer.Value.Unk0x00);
-                    writer.WriteNextCol(tevLayer.Value.MipmapSetting);
-                    writer.WriteNextCol(tevLayer.Value.WrapMode);
+                    writer.WriteNextCol($"[{++texIndex}/{model.Value.Gcmf.TextureCount}]");
+                    writer.WriteNextCol(tevLayer.Value.TextureFlags);
+                    for (int i = 0; i < 32; i++)
+                    {
+                        TevTextureFlags flag = (TevTextureFlags)(1 << i);
+                        if (tevLayer.Value.TextureFlags.HasFlag(flag))
+                            writer.WriteNextCol(tevLayer.Value.TextureFlags & flag);
+                        else
+                            writer.WriteNextCol();
+                    }
                     writer.WriteNextCol(tevLayer.Value.TplTextureIndex);
                     writer.WriteNextCol(tevLayer.Value.LodBias);
                     writer.WriteNextCol(tevLayer.Value.AnisotropicFilter);

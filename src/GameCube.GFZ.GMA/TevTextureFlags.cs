@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace GameCube.GFZ.GMA;
 
-namespace GameCube.GFZ.GMA;
-
+[System.Flags]
 public enum TevTextureFlags : int
 {
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -16,37 +13,37 @@ public enum TevTextureFlags : int
     ///     Super Monkey Ball decomp: says it's a "view specular" type effect.
     ///     https://github.com/camthesaxman/smb-decomp/blob/5cd6ffccf3f8508231c7cd9cce5b722be4465a2b/src/gma.h#L16
     /// </remarks>
-    unk0 = 1 << 0,
+    unused0 = 1 << 0,
 
     /// <summary>
     ///     Use Normal, Binormal, and Tangent data for texturing.
     /// </summary>
-    UseNBT = 1 << 1,
+    UseNBT1 = 1 << 1,
 
     /// <summary>
     ///      
     /// </summary>
-    TextureRepeatX = 1 << 2,
+    WrapModeRepeatX = 1 << 2,
 
     /// <summary>
     ///     
     /// </summary>
-    TextureMirrorX = 1 << 3,
+    WrapModeMirrorX = 1 << 3,
 
     /// <summary>
     ///     
     /// </summary>
-    TextureRepeatY = 1 << 4,
+    WrapModeRepeatY = 1 << 4,
 
     /// <summary>
     ///     
     /// </summary>
-    TextureMirrorY = 1 << 5,
+    WrapModeMirrorY = 1 << 5,
 
     /// <summary>
     ///     
     /// </summary>
-    unk6 = 1 << 6,
+    unk6 = 1 << 6, // SMB: DO_EDGE_LOD ?
 
     /// <summary>
     ///     
@@ -73,28 +70,36 @@ public enum TevTextureFlags : int
     /// <summary>
     ///     2019/04/03 VERIFIED: Enable Mipmap NEAR
     /// </summary>
-    ENABLE_NEAR = 1 << 11, // magfilter_near
+    FilterNearestNeighbour = 1 << 11,
 
     /// <summary>
+    ///     
+    /// </summary>
+    /// <remarks>
     ///     Height map? Blend? (they are greyscale)
     ///     Low occurences: 188 for tracks and st2 boulders
-    /// </summary>
-    UNK_FLAG_4 = 1 << 12,
+    /// </remarks>
+    UseNBT12 = 1 << 12,
 
     /// <summary>
-    ///     Used as alpha mask? (likely?) Perhaps some mip preservation stuff.
+    ///     Every time this is set, the next TEV layer has <see cref="TevCombinerFlags.ReceiveAlphaFromLastTevStage"/>
+    ///     enabled. TODO: assert in code.
     /// </summary>
-    Unk5_AlphaMultiply = 1 << 13,
+    UseGreyscaleAsAlphaMask = 1 << 13,
 
     /// <summary>
-    ///     Total occurences = 3. Only MCSO, on a single geometry set.
+    ///     
     /// </summary>
-    UNK_FLAG_6 = 1 << 14,
+    /// <remarks>
+    ///     Total occurences = 3. Only MCSO, on a single geometry set C##_ROAD, where
+    ///     C## is C36 (MCSO), C37 (Story 1 MCSO), and C50 (victory lap MCSO).
+    /// </remarks>
+    NicheParam14 = 1 << 14,
 
     /// <summary>
     ///     On many vehicles
     /// </summary>
-    UNK_FLAG_7 = 1 << 15,
+    unk15 = 1 << 15, // SMB: WORLD_SPECULAR
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     /// FORMERLY <see cref="TexFlags0x00"/>
@@ -105,25 +110,29 @@ public enum TevTextureFlags : int
     /// <remarks>
     ///     Unused in GFZ, from SMB.
     /// </remarks>
-    unused0 = 1 << 16,
+    unused16 = 1 << 16,
 
     /// <summary>
+    ///     Lets (indicates?) TEV Layer be scrolled by <see cref="GameCube.GFZ.Stage.TextureScroll"/>.
+    /// </summary>
+    /// <remarks>
+    ///     REAL OLD COMMENT:
     ///     Based on st24 models, uv scroll. Scroll values stored in TextureScroll class
     ///     attached to SceneObjectDynamic. TODO: find how scrolls are indexed.
-    /// </summary>
-    ENABLE_UV_SCROLL = 1 << 17,
+    /// </remarks>
+    ScrollUV = 1 << 17,
 
     /// <summary>
     ///     
     /// </summary>
     /// <remarks>
-    ///     Always comes with <see cref="NICHE_PARAM3"/>, but the inverse is not true.
+    ///     Always comes with <see cref="NicheParam19"/>, but the inverse is not true.
     ///     Only on 2 models inside ./common/operation.gma and /operation_us.gma.
     ///     Models are for F-Zero AX attract screen tutorial animations.
     ///     ARROW is the (colorized) yellow arrow for boost / paddle tutorials.
     ///     MARU is the (colorized) yellow circle for the GC memcard tutorial.
     /// </remarks>
-    NICHE_PARAM2 = 1 << 18,
+    NicheParam18 = 1 << 18,
 
     /// <summary>
     ///     
@@ -133,24 +142,24 @@ public enum TevTextureFlags : int
     ///     of ./common/operation.gma and /operation_us.gma) or for Aeropolis Dragon
     ///     Slopes guide_light* models (blue scrolling markers for long jumps).
     /// </remarks>
-    NICHE_PARAM3 = 1 << 19,
+    NicheParam19 = 1 << 19,
 
     /// <summary>
     ///     Appears to be used whenever tex is for bg reflections
     /// </summary>
-    REFLECTION_MAP1 = 1 << 20,
+    ReflectionMap20 = 1 << 20,
 
     /// <summary>
     ///     Appears exclusively on vehicles, and (to my best guess) on all TEV layers
     ///     EXCEPT (I'm guessing) not on the auto-assigned fields which show vehicle
     ///     number, name, or which are inside cockpit (screen, seatrest).
     /// </summary>
-    VEHICLE_EMBLEM = 1 << 21,
+    VehicleEmblemCanHide = 1 << 21,
 
     /// <summary>
     ///     Appears to be used whenever tex is for bg reflections
     /// </summary>
-    REFLECTION_MAP2 = 1 << 22,
+    RefelctionMap22 = 1 << 22,
 
     // 2026-05-08: Unused! I generated a spreadsheet for all AX/GX games, and these
     // didn't come up anywhere.

@@ -71,7 +71,7 @@ public class Gcmf :
 
     public GcmfAttributes Attributes { get => attributes; set => attributes = value; }
     public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
-    public ushort TextureConfigsCount { get => textureCount; set => textureCount = value; }
+    public ushort TextureCount { get => textureCount; set => textureCount = value; }
     public ushort OpaqueMaterialCount { get => opaqueMaterialCount; set => opaqueMaterialCount = value; }
     public ushort TranslucidMaterialCount { get => translucidMaterialCount; set => translucidMaterialCount = value; }
     public byte BoneCount { get => boneCount; set => boneCount = value; }
