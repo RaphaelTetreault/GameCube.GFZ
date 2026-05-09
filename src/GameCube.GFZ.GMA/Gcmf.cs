@@ -14,7 +14,7 @@ public class Gcmf :
 {
     // CONSTANTS
     /// <summary>
-    /// Equivilent to ASCII/Shift-JIS "GCMF"
+    ///     Equivilent to ASCII/Shift-JIS "GCMF"
     /// </summary>
     public const uint kMagic = 0x47434D46;
 

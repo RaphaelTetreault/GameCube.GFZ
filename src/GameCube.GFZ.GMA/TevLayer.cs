@@ -19,7 +19,7 @@ public class TevLayer :
     private ushort tplTextureIndex;
     private sbyte lodBias;
     private GXAnisotropy anisotropicFilter;
-    private Pointer gxTextureObjectPtr; // Unused in GFZ, used by SMB / Super Monkey Ball
+    private Pointer gxTextureObjectPtr; // Unused in GFZ, used by Super Monkey Ball
     private byte unk0x0C; // 2022/06/23: all possible values 0-256. 0 is most common (~50%).
     private bool isSwappableTexture; // perhaps a "cache texture" flag
     private ushort tevLayerIndex;
