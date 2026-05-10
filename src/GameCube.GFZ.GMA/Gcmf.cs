@@ -149,7 +149,7 @@ public class Gcmf :
             for (int i = 0; i < submeshes.Length; i++)
             {
                 submeshes[i] = new Submesh();
-                submeshes[i].Attributes = attributes;
+                submeshes[i].GCMF = this;
                 submeshes[i].Deserialize(reader);
             }
             //reader.AlignTo(GX.GXUtility.GX_FIFO_ALIGN);

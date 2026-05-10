@@ -19,7 +19,7 @@ public class Submesh :
     public const byte GX_NOP = 0x00;
 
     // METADATA
-    private GcmfAttributes attributes;
+    private Gcmf gcmf = new();
 
     // FIELDS
     private RenderFlags renderFlags;
@@ -39,11 +39,11 @@ public class Submesh :
     /// <summary>
     /// A copy of the GCMF attributes of the parent GCMF class.
     /// </summary>
-    public GcmfAttributes Attributes { get => attributes; set => attributes = value; }
-    public bool Is16bitModel => attributes.HasFlag(GcmfAttributes.is16Bit);
-    public bool IsPhysicsDrivenModel => attributes.HasFlag(GcmfAttributes.isEffectiveModel);
-    public bool IsSkinnedModel => attributes.HasFlag(GcmfAttributes.isSkinModel);
-    public bool IsStitchingModel => attributes.HasFlag(GcmfAttributes.isStitchingModel);
+    public Gcmf GCMF { get => gcmf; set => gcmf = value; }
+    public bool Is16bitModel => gcmf.Attributes.HasFlag(GcmfAttributes.is16Bit);
+    public bool IsPhysicsDrivenModel => gcmf.Attributes.HasFlag(GcmfAttributes.isEffectiveModel);
+    public bool IsSkinnedModel => gcmf.Attributes.HasFlag(GcmfAttributes.isSkinModel);
+    public bool IsStitchingModel => gcmf.Attributes.HasFlag(GcmfAttributes.isStitchingModel);
     //
     public RenderFlags RenderFlags { get => renderFlags; set => renderFlags = value; }
     public Material Material { get => material; set => material = value; }
