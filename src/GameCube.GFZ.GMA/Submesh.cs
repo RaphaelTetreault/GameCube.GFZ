@@ -13,12 +13,6 @@ public class Submesh :
     IBinaryAddressable,
     IBinarySerializable
 {
-    // CONSTANTS
-    /// <summary>
-    /// GameCube GPU No-Operation opcode
-    /// </summary>
-    public const byte GX_NOP = 0x00;
-
     // METADATA
     private Gcmf gcmf = new();
 
@@ -51,13 +45,13 @@ public class Submesh :
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     /// <summary>
-    /// A copy of the GCMF attributes of the parent GCMF class.
+    ///     A copy of the GCMF attributes of the parent GCMF class.
     /// </summary>
     public Gcmf GCMF { get => gcmf; set => gcmf = value; }
-    public bool Is16bitModel => gcmf.Attributes.HasFlag(GcmfAttributes.is16Bit);
-    public bool IsPhysicsDrivenModel => gcmf.Attributes.HasFlag(GcmfAttributes.isEffectiveModel);
-    public bool IsSkinnedModel => gcmf.Attributes.HasFlag(GcmfAttributes.isSkinModel);
-    public bool IsStitchingModel => gcmf.Attributes.HasFlag(GcmfAttributes.isStitchingModel);
+    public bool Is16bitModel => gcmf.Is16bitModel;
+    public bool IsPhysicsDrivenModel => gcmf.IsPhysicsDrivenModel;
+    public bool IsSkinnedModel => gcmf.IsSkinnedModel;
+    public bool IsStitchingModel => gcmf.IsStitchingModel;
     //
     public RenderFlags RenderFlags { get => renderFlags; set => renderFlags = value; }
     public GXColor MaterialColor { get => materialColor; set => materialColor = value; }
@@ -246,7 +240,7 @@ public class Submesh :
         var displayLists = new List<GXDisplayList>();
 
         var gxNOP = reader.ReadByte();
-        Assert.IsTrue(gxNOP == GX_NOP);
+        Assert.IsTrue(gxNOP == GXUtility.GX_NOP);
 
         while (!reader.IsAtEndOfStream())
         {
@@ -265,19 +259,19 @@ public class Submesh :
         return displayLists.ToArray();
     }
 
-    private void WriteDisplayLists(EndianBinaryWriter writer, GXDisplayList[] displayLists, out AddressRange addressRange)
+    private static void WriteDisplayLists(EndianBinaryWriter writer, GXDisplayList[] displayLists, out AddressRange addressRange)
     {
         addressRange = new AddressRange();
         addressRange.RecordStartAddress(writer);
         {
-            writer.Write(GX_NOP);
+            writer.Write(GXUtility.GX_NOP);
             writer.Write(displayLists);
             writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
         }
         addressRange.RecordEndAddress(writer);
     }
 
-    private int DisplayListsSizeOnDisk(GXDisplayList[] displayLists)
+    private static int DisplayListsSizeOnDisk(GXDisplayList[] displayLists)
     {
         int size = 0;
 

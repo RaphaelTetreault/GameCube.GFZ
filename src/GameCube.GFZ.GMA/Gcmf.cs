@@ -45,27 +45,11 @@ public class Gcmf :
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
-    public bool IsSkinnedModel
-    {
-        get => attributes.HasFlag(GcmfAttributes.isSkinModel);
-    }
-    public bool IsPhysicsDrivenModel
-    {
-        get => attributes.HasFlag(GcmfAttributes.isEffectiveModel);
-    }
-    public bool IsStitchingModel
-    {
-        get => attributes.HasFlag(GcmfAttributes.isStitchingModel);
-    }
-    public bool Is16bitModel
-    {
-        get => attributes.HasFlag(GcmfAttributes.is16Bit);
-    }
-
-    public int TotalSubmeshCount
-    {
-        get => opaqueMaterialCount + translucidMaterialCount;
-    }
+    public bool IsSkinnedModel => attributes.HasFlag(GcmfAttributes.isSkinModel);
+    public bool IsPhysicsDrivenModel => attributes.HasFlag(GcmfAttributes.isEffectiveModel);
+    public bool IsStitchingModel => attributes.HasFlag(GcmfAttributes.isStitchingModel);
+    public bool Is16bitModel => attributes.HasFlag(GcmfAttributes.is16Bit);
+    public int TotalSubmeshCount => opaqueMaterialCount + translucidMaterialCount;
     public Pointer SkinnedDataBaseAddress { get; private set; }
     public Pointer SkinBoneBindingBaseAddress { get; private set; }
 
