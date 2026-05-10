@@ -2,6 +2,7 @@
 using Manifold;
 using Manifold.IO;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace GameCube.GFZ.GMA;
 
@@ -37,7 +38,9 @@ public class Submesh :
     private short tevLayerIndex2 = -1; // 0xFFFF
     private GXAttributeFlags vertexAttributes;
     private DisplayListDescriptor primaryDisplayListDescriptor = new();
-    private UnkAlphaOptions unknownAlphaOptions = new();
+    private Vector3 blendDepthSortOrigin; //
+    private float blendUnkFloat; // if GCMF flags at 0x00 are set with bit 9, this value exists. All values: 0f, 1f.
+    private BlendFactors blendFactors; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
     private GXDisplayList[] primaryDisplayListsOpaque = [];
     private GXDisplayList[] primaryDisplayListsTranslucid = [];
     private DisplayListDescriptor secondaryDisplayListDescriptor = new();
@@ -71,6 +74,9 @@ public class Submesh :
     public short TevLayerIndex2 { get => tevLayerIndex2; set => tevLayerIndex2 = value; }
     public GXAttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
     public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
+    public Vector3 BlendDepthSortOrigin { get => blendDepthSortOrigin; set => blendDepthSortOrigin = value; }
+    public float BlendUnkFloat { get => blendUnkFloat; set => blendUnkFloat = value; }
+    public BlendFactors BlendFactors { get => blendFactors; set => blendFactors = value; }
     public GXDisplayList[] PrimaryBackFacing { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
     public GXDisplayList[] PrimaryFrontFacing { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
     public bool RenderPrimaryFrontFaceCull => MaterialDestination.HasFlag(MaterialDestination.PrimaryFrontCull);
@@ -81,7 +87,6 @@ public class Submesh :
     public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
     public GXDisplayList[] SecondaryBackFacing { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
     public GXDisplayList[] SecondaryFrontFacing { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
-    public UnkAlphaOptions UnkAlphaOptions { get => unknownAlphaOptions; set => unknownAlphaOptions = value; }
 
     // METHODS
     public void Deserialize(EndianBinaryReader reader)
@@ -104,7 +109,9 @@ public class Submesh :
             reader.Read(ref tevLayerIndex2);
             reader.Read(ref vertexAttributes);
             reader.Read(ref primaryDisplayListDescriptor);
-            reader.Read(ref unknownAlphaOptions);
+            reader.Read(ref blendDepthSortOrigin);
+            reader.Read(ref blendUnkFloat);
+            reader.Read(ref blendFactors);
             reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
             int endAddress = reader.GetPositionAsPointer().address;
@@ -190,7 +197,9 @@ public class Submesh :
             writer.Write(tevLayerIndex2);
             writer.Write(vertexAttributes);
             writer.Write(primaryDisplayListDescriptor);
-            writer.Write(unknownAlphaOptions);
+            writer.Write(blendDepthSortOrigin);
+            writer.Write(blendUnkFloat);
+            writer.Write(blendFactors);
             writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
             if (RenderPrimaryFrontFaceCull)

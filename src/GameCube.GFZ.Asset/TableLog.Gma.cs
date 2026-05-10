@@ -8,7 +8,7 @@ namespace GameCube.GFZ.Asset;
 public class GmaTableLogger
 {
     public static readonly LogFuncFile<GmaFile> LogGcmf = new(AnalyzeGcmf, $"{nameof(Gma)}-{nameof(Gcmf)}.tsv");
-    public static readonly LogFuncFile<GmaFile> LogTextureConfigs = new(AnalyzeTextureConfigs, $"{nameof(Gma)}-{nameof(TevLayer)}.tsv");
+    public static readonly LogFuncFile<GmaFile> LogTextureConfigs = new(AnalyzeTevLayers, $"{nameof(Gma)}-{nameof(TevLayer)}.tsv");
     public static readonly LogFuncFile<GmaFile> LogSubmesh = new(AnalyzeSubmeshes, $"{nameof(Gma)}-{nameof(Submesh)}.tsv");
 
     public static readonly LogFuncFile<GmaFile>[] AllLogFunctionFiles =
@@ -73,7 +73,7 @@ public class GmaTableLogger
         writer.Close();
     }
 
-    public static void AnalyzeTextureConfigs(GmaFile[] gmas, string outputFileName)
+    public static void AnalyzeTevLayers(GmaFile[] gmas, string outputFileName)
     {
         using var writer = new StreamWriter(File.Create(outputFileName));
 
@@ -140,7 +140,7 @@ public class GmaTableLogger
         // Write header
         writer.WriteNextCol("FileName");
         writer.WriteNextCol("Address");
-        writer.WriteNextCol(nameof(Model.Name));
+        writer.WriteNextCol("Model Name");
         writer.WriteNextCol("Model Index");
         writer.WriteNextCol("Debug Index");
         writer.WriteNextCol("Submesh Index");
@@ -158,9 +158,9 @@ public class GmaTableLogger
         writer.WriteNextCol(nameof(Submesh.TevLayerIndex1));
         writer.WriteNextCol(nameof(Submesh.TevLayerIndex2));
         writer.WriteNextCol(nameof(Submesh.VertexAttributes));
-        writer.WriteNextCol(nameof(UnkAlphaOptions.Origin));
-        writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
-        writer.WriteNextCol(nameof(UnkAlphaOptions.BlendFactors));
+        writer.WriteNextCol(nameof(Submesh.BlendDepthSortOrigin));
+        writer.WriteNextCol(nameof(Submesh.BlendUnkFloat));
+        writer.WriteNextCol(nameof(Submesh.BlendFactors));
         writer.WriteNextRow();
 
         foreach (var gma in gmas)
@@ -189,9 +189,9 @@ public class GmaTableLogger
                     writer.WriteNextCol(submesh.Value.TevLayerIndex1);
                     writer.WriteNextCol(submesh.Value.TevLayerIndex2);
                     writer.WriteNextCol(submesh.Value.VertexAttributes);
-                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Origin);
-                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Unk0x0C);
-                    writer.WriteNextCol(submesh.Value.UnkAlphaOptions.BlendFactors);
+                    writer.WriteNextCol(submesh.Value.BlendDepthSortOrigin);
+                    writer.WriteNextCol(submesh.Value.BlendUnkFloat);
+                    writer.WriteNextCol(submesh.Value.BlendFactors);
                     writer.WriteNextRow();
                 }//submesh
             }//model
