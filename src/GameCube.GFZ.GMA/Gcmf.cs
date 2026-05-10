@@ -220,10 +220,10 @@ public class Gcmf :
         var vertBytes = new List<byte>();
         foreach (var submesh in submeshes)
         {
-            AddBytes(reader, vertBytes, submesh.PrimaryDisplayListDescriptor);
+            //AddBytes(reader, vertBytes, submesh.PrimaryDisplayListDescriptor);
             AddBytes(reader, vertBytes, submesh.PrimaryFrontFacing);
             AddBytes(reader, vertBytes, submesh.PrimaryBackFacing);
-            AddBytes(reader, vertBytes, submesh.SecondaryDisplayListDescriptor);
+            //AddBytes(reader, vertBytes, submesh.SecondaryDisplayListDescriptor);
             AddBytes(reader, vertBytes, submesh.SecondaryFrontFacing);
             AddBytes(reader, vertBytes, submesh.SecondaryBackFacing);
         }

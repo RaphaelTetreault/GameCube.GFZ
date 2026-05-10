@@ -24,22 +24,32 @@ public class Submesh :
     private MatFlags0x10 unk0x10 = 0; // 2022/07/08: maybe tells GPU how to use color? Fails on non-textured objects. (TEV?)
     private byte alpha = 255;
     private byte tevLayerCount = 0;
-    private MaterialDestination materialDestination = 0;
+    private SubmeshDisplayListFlags submeshDisplayListFlags = 0;
     private sbyte unkAlpha0x14 = -1; // 0xFF. Mainly -1 (3/4 of data). Index => previous material's index for same model.
     private MatFlags0x15 unk0x15 = 0;
     private short tevLayerIndex0 = -1; // 0xFFFF
     private short tevLayerIndex1 = -1; // 0xFFFF
     private short tevLayerIndex2 = -1; // 0xFFFF
     private GXAttributeFlags vertexAttributes;
-    private DisplayListDescriptor primaryDisplayListDescriptor = new();
+    private BoneIndexes8 primaryBoneIndices = new();
+    private int primaryFrontFacesDisplayListSize;
+    private int primaryBackFacesDisplayListSize;
     private Vector3 blendDepthSortOrigin; //
     private float blendUnkFloat; // if GCMF flags at 0x00 are set with bit 9, this value exists. All values: 0f, 1f.
     private BlendFactors blendFactors; // 0xF bitmask for src blend factor, 0xF0 for dst blend factor
+    // FIFO ALIGN 32
     private GXDisplayList[] primaryDisplayListsOpaque = [];
+    // FIFO ALIGN 32
     private GXDisplayList[] primaryDisplayListsTranslucid = [];
-    private DisplayListDescriptor secondaryDisplayListDescriptor = new();
+    // FIFO ALIGN 32
+    private BoneIndexes8 secondaryBoneIndices = new();
+    private int secondaryFrontFacesDisplayListSize;
+    private int secondaryBackFacesDisplayListSize;
+    // FIFO ALIGN 32
     private GXDisplayList[] secondaryDisplayListsOpaque = [];
+    // FIFO ALIGN 32
     private GXDisplayList[] secondaryDisplayListsTranslucid = [];
+    // FIFO ALIGN 32
 
 
     // PROPERTIES
@@ -60,25 +70,33 @@ public class Submesh :
     public MatFlags0x10 Unk0x10 { get => unk0x10; set => unk0x10 = value; }
     public byte Alpha { get => alpha; set => alpha = value; }
     public byte TevLayerCount { get => tevLayerCount; set => tevLayerCount = value; }
-    public MaterialDestination MaterialDestination { get => materialDestination; set => materialDestination = value; }
+    public SubmeshDisplayListFlags SubmeshDisplayListFlags { get => submeshDisplayListFlags; set => submeshDisplayListFlags = value; }
     public sbyte UnkAlpha0x14 { get => unkAlpha0x14; set => unkAlpha0x14 = value; }
     public MatFlags0x15 Unk0x15 { get => unk0x15; set => unk0x15 = value; }
     public short TevLayerIndex0 { get => tevLayerIndex0; set => tevLayerIndex0 = value; }
     public short TevLayerIndex1 { get => tevLayerIndex1; set => tevLayerIndex1 = value; }
     public short TevLayerIndex2 { get => tevLayerIndex2; set => tevLayerIndex2 = value; }
     public GXAttributeFlags VertexAttributes { get => vertexAttributes; set => vertexAttributes = value; }
-    public DisplayListDescriptor PrimaryDisplayListDescriptor { get => primaryDisplayListDescriptor; set => primaryDisplayListDescriptor = value; }
+
+    public BoneIndexes8 PrimaryBoneIndices { get => primaryBoneIndices; set => primaryBoneIndices = value; }
+    public int PrimaryBackFacesDisplayListSize { get => primaryBackFacesDisplayListSize; set => primaryBackFacesDisplayListSize = value; }
+    public int PrimaryFrontFacesDisplayListSize { get => primaryFrontFacesDisplayListSize; set => primaryFrontFacesDisplayListSize = value; }
+
     public Vector3 BlendDepthSortOrigin { get => blendDepthSortOrigin; set => blendDepthSortOrigin = value; }
     public float BlendUnkFloat { get => blendUnkFloat; set => blendUnkFloat = value; }
     public BlendFactors BlendFactors { get => blendFactors; set => blendFactors = value; }
     public GXDisplayList[] PrimaryBackFacing { get => primaryDisplayListsOpaque; set => primaryDisplayListsOpaque = value; }
     public GXDisplayList[] PrimaryFrontFacing { get => primaryDisplayListsTranslucid; set => primaryDisplayListsTranslucid = value; }
-    public bool RenderPrimaryFrontFaceCull => MaterialDestination.HasFlag(MaterialDestination.PrimaryFrontCull);
-    public bool RenderPrimaryBackFaceCull => MaterialDestination.HasFlag(MaterialDestination.PrimaryBackCull);
+    public bool RenderPrimaryFrontFaceCull => SubmeshDisplayListFlags.HasFlag(SubmeshDisplayListFlags.PrimaryFrontCull);
+    public bool RenderPrimaryBackFaceCull => SubmeshDisplayListFlags.HasFlag(SubmeshDisplayListFlags.PrimaryBackCull);
     public bool RenderSecondary => RenderSecondaryFrontFaceCull || RenderSecondaryBackFaceCull;
-    public bool RenderSecondaryFrontFaceCull => MaterialDestination.HasFlag(MaterialDestination.SecondaryFrontCull);
-    public bool RenderSecondaryBackFaceCull => MaterialDestination.HasFlag(MaterialDestination.SecondaryBackCull);
-    public DisplayListDescriptor SecondaryDisplayListDescriptor { get => secondaryDisplayListDescriptor; set => secondaryDisplayListDescriptor = value; }
+    public bool RenderSecondaryFrontFaceCull => SubmeshDisplayListFlags.HasFlag(SubmeshDisplayListFlags.SecondaryFrontCull);
+    public bool RenderSecondaryBackFaceCull => SubmeshDisplayListFlags.HasFlag(SubmeshDisplayListFlags.SecondaryBackCull);
+
+    public int FrontFaceCullingDisplayListSize { get => secondaryFrontFacesDisplayListSize; set => secondaryFrontFacesDisplayListSize = value; }
+    public BoneIndexes8 BoneIndices { get => secondaryBoneIndices; set => secondaryBoneIndices = value; }
+    public int BackFaceCullingDisplayListSize { get => secondaryBackFacesDisplayListSize; set => secondaryBackFacesDisplayListSize = value; }
+
     public GXDisplayList[] SecondaryBackFacing { get => secondaryDisplayListsOpaque; set => secondaryDisplayListsOpaque = value; }
     public GXDisplayList[] SecondaryFrontFacing { get => secondaryDisplayListsTranslucid; set => secondaryDisplayListsTranslucid = value; }
 
@@ -95,14 +113,16 @@ public class Submesh :
             reader.Read(ref unk0x10);
             reader.Read(ref alpha);
             reader.Read(ref tevLayerCount);
-            reader.Read(ref materialDestination);
+            reader.Read(ref submeshDisplayListFlags);
             reader.Read(ref unkAlpha0x14);
             reader.Read(ref unk0x15);
             reader.Read(ref tevLayerIndex0);
             reader.Read(ref tevLayerIndex1);
             reader.Read(ref tevLayerIndex2);
             reader.Read(ref vertexAttributes);
-            reader.Read(ref primaryDisplayListDescriptor);
+            reader.Read(ref primaryBoneIndices);
+            reader.Read(ref primaryFrontFacesDisplayListSize);
+            reader.Read(ref primaryBackFacesDisplayListSize);
             reader.Read(ref blendDepthSortOrigin);
             reader.Read(ref blendUnkFloat);
             reader.Read(ref blendFactors);
@@ -123,31 +143,33 @@ public class Submesh :
 
             if (RenderPrimaryFrontFaceCull)
             {
-                endAddress += primaryDisplayListDescriptor.FrontFaceCullingDisplayListSize;
+                endAddress += primaryFrontFacesDisplayListSize;
                 primaryDisplayListsOpaque = ReadDisplayLists(reader, endAddress);
             }
 
             if (RenderPrimaryBackFaceCull)
             {
-                endAddress += primaryDisplayListDescriptor.BackFaceCullingDisplayListSize;
+                endAddress += primaryBackFacesDisplayListSize;
                 primaryDisplayListsTranslucid = ReadDisplayLists(reader, endAddress);
             }
 
             if (RenderSecondary)
             {
-                reader.Read(ref secondaryDisplayListDescriptor);
+                reader.Read(ref secondaryBoneIndices);
+                reader.Read(ref secondaryFrontFacesDisplayListSize);
+                reader.Read(ref secondaryBackFacesDisplayListSize);
                 reader.AlignTo(GXUtility.GX_FIFO_ALIGN);
                 endAddress = new Pointer(reader.BaseStream.Position).address;
 
                 if (RenderSecondaryFrontFaceCull)
                 {
-                    endAddress += secondaryDisplayListDescriptor.FrontFaceCullingDisplayListSize;
+                    endAddress += secondaryFrontFacesDisplayListSize;
                     secondaryDisplayListsOpaque = ReadDisplayLists(reader, endAddress);
                 }
 
                 if (RenderSecondaryBackFaceCull)
                 {
-                    endAddress += secondaryDisplayListDescriptor.BackFaceCullingDisplayListSize;
+                    endAddress += secondaryBackFacesDisplayListSize;
                     secondaryDisplayListsTranslucid = ReadDisplayLists(reader, endAddress);
                 }
             }
@@ -162,11 +184,11 @@ public class Submesh :
         Assert.IsTrue(specularColor.ComponentType == GXComponentType.GX_RGBA8);
 
         // Reset the render flags based on instance data
-        MaterialDestination =
-            (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : MaterialDestination.PrimaryFrontCull) |
-            (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : MaterialDestination.PrimaryBackCull) |
-            (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : MaterialDestination.SecondaryFrontCull) |
-            (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : MaterialDestination.SecondaryBackCull);
+        SubmeshDisplayListFlags =
+            (primaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : SubmeshDisplayListFlags.PrimaryFrontCull) |
+            (primaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : SubmeshDisplayListFlags.PrimaryBackCull) |
+            (secondaryDisplayListsOpaque.IsNullOrEmpty() ? 0 : SubmeshDisplayListFlags.SecondaryFrontCull) |
+            (secondaryDisplayListsTranslucid.IsNullOrEmpty() ? 0 : SubmeshDisplayListFlags.SecondaryBackCull);
 
         // Temp variables to store ranges that display lists are serialized at, used to get size on disk
         var pdloRange = new AddressRange();
@@ -175,63 +197,71 @@ public class Submesh :
         var sdltRange = new AddressRange();
 
         this.RecordStartAddress(writer);
+        writer.Write(renderFlags);
+        writer.Write(materialColor);
+        writer.Write(ambientColor);
+        writer.Write(specularColor);
+        writer.Write(unk0x10);
+        writer.Write(alpha);
+        writer.Write(tevLayerCount);
+        writer.Write(submeshDisplayListFlags);
+        writer.Write(unkAlpha0x14);
+        writer.Write(unk0x15);
+        writer.Write(tevLayerIndex0);
+        writer.Write(tevLayerIndex1);
+        writer.Write(tevLayerIndex2);
+        writer.Write(vertexAttributes);
+        writer.Write(primaryBoneIndices);
+        Pointer primaryDisplayListSizesPtr = writer.GetPositionAsPointer();
+        writer.Write(primaryFrontFacesDisplayListSize);
+        writer.Write(PrimaryBackFacesDisplayListSize);
+        writer.Write(blendDepthSortOrigin);
+        writer.Write(blendUnkFloat);
+        writer.Write(blendFactors);
+        writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
+
+        if (RenderPrimaryFrontFaceCull)
+            WriteDisplayLists(writer, primaryDisplayListsOpaque, out pdloRange);
+
+        if (RenderPrimaryBackFaceCull)
+            WriteDisplayLists(writer, primaryDisplayListsTranslucid, out pdltRange);
+
+        Pointer secondaryDisplayListSizesPtr = Pointer.Null;
+        if (RenderSecondary)
         {
-            writer.Write(renderFlags);
-            writer.Write(materialColor);
-            writer.Write(ambientColor);
-            writer.Write(specularColor);
-            writer.Write(unk0x10);
-            writer.Write(alpha);
-            writer.Write(tevLayerCount);
-            writer.Write(materialDestination);
-            writer.Write(unkAlpha0x14);
-            writer.Write(unk0x15);
-            writer.Write(tevLayerIndex0);
-            writer.Write(tevLayerIndex1);
-            writer.Write(tevLayerIndex2);
-            writer.Write(vertexAttributes);
-            writer.Write(primaryDisplayListDescriptor);
-            writer.Write(blendDepthSortOrigin);
-            writer.Write(blendUnkFloat);
-            writer.Write(blendFactors);
+            writer.Write(secondaryBoneIndices);
+            secondaryDisplayListSizesPtr = writer.GetPositionAsPointer();
+            writer.Write(secondaryFrontFacesDisplayListSize);
+            writer.Write(secondaryBackFacesDisplayListSize);
             writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
 
-            if (RenderPrimaryFrontFaceCull)
-                WriteDisplayLists(writer, primaryDisplayListsOpaque, out pdloRange);
+            if (RenderSecondaryFrontFaceCull)
+                WriteDisplayLists(writer, secondaryDisplayListsOpaque, out sdloRange);
 
-            if (RenderPrimaryBackFaceCull)
-                WriteDisplayLists(writer, primaryDisplayListsTranslucid, out pdltRange);
-
-
-            if (RenderSecondary)
-            {
-                writer.Write(secondaryDisplayListDescriptor);
-                writer.AlignTo(GXUtility.GX_FIFO_ALIGN);
-
-                if (RenderSecondaryFrontFaceCull)
-                    WriteDisplayLists(writer, secondaryDisplayListsOpaque, out sdloRange);
-
-                if (RenderSecondaryBackFaceCull)
-                    WriteDisplayLists(writer, secondaryDisplayListsTranslucid, out sdltRange);
-            }
-
+            if (RenderSecondaryBackFaceCull)
+                WriteDisplayLists(writer, secondaryDisplayListsTranslucid, out sdltRange);
         }
         this.RecordEndAddress(writer);
         {
             // Now that we know the size of the display lists, update values and reserialize
-            primaryDisplayListDescriptor.FrontFaceCullingDisplayListSize = pdloRange.Size;
-            primaryDisplayListDescriptor.BackFaceCullingDisplayListSize = pdltRange.Size;
-            writer.JumpToAddress(primaryDisplayListDescriptor.AddressRange.startAddress);
-            writer.Write(primaryDisplayListDescriptor);
+            primaryFrontFacesDisplayListSize = pdloRange.Size;
+            primaryBackFacesDisplayListSize = pdltRange.Size;
+            writer.JumpToAddress(primaryDisplayListSizesPtr);
+            writer.Write(primaryFrontFacesDisplayListSize);
+            writer.Write(primaryBackFacesDisplayListSize);
 
             if (RenderSecondary)
             {
-                secondaryDisplayListDescriptor.FrontFaceCullingDisplayListSize = sdloRange.Size;
-                secondaryDisplayListDescriptor.BackFaceCullingDisplayListSize = sdltRange.Size;
-                writer.JumpToAddress(secondaryDisplayListDescriptor.AddressRange.startAddress);
-                writer.Write(secondaryDisplayListDescriptor);
+                // If null something went wrong.
+                Assert.IsTrue(secondaryDisplayListSizesPtr.IsNotNull);
+                secondaryFrontFacesDisplayListSize = sdloRange.Size;
+                secondaryBackFacesDisplayListSize = sdltRange.Size;
+                writer.JumpToAddress(secondaryDisplayListSizesPtr);
+                writer.Write(secondaryFrontFacesDisplayListSize);
+                writer.Write(secondaryBackFacesDisplayListSize);
             }
         }
+        // This undoes the manual address patching
         this.SetWriterToEndAddress(writer);
     }
 

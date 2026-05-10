@@ -151,7 +151,7 @@ public class GmaTableLogger
         writer.WriteNextCol(nameof(Submesh.Unk0x10));
         writer.WriteNextCol(nameof(Submesh.Alpha));
         writer.WriteNextCol(nameof(Submesh.TevLayerCount));
-        writer.WriteNextCol(nameof(Submesh.MaterialDestination));
+        writer.WriteNextCol(nameof(Submesh.SubmeshDisplayListFlags));
         writer.WriteNextCol(nameof(Submesh.UnkAlpha0x14));
         writer.WriteNextCol(nameof(Submesh.Unk0x15));
         writer.WriteNextCol(nameof(Submesh.TevLayerIndex0));
@@ -182,7 +182,7 @@ public class GmaTableLogger
                     writer.WriteNextCol(submesh.Value.Unk0x10);
                     writer.WriteNextCol(submesh.Value.Alpha);
                     writer.WriteNextCol(submesh.Value.TevLayerCount);
-                    writer.WriteNextCol(submesh.Value.MaterialDestination);
+                    writer.WriteNextCol(submesh.Value.SubmeshDisplayListFlags);
                     writer.WriteNextCol(submesh.Value.UnkAlpha0x14);
                     writer.WriteNextCol(submesh.Value.Unk0x15);
                     writer.WriteNextCol(submesh.Value.TevLayerIndex0);
