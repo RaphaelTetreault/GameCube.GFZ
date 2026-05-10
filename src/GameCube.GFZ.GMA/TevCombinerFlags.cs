@@ -7,6 +7,11 @@ namespace GameCube.GFZ.GMA;
 public enum TevCombinerFlags : ushort
 {
     /// <summary>
+    ///     
+    /// </summary>
+    None = 0,
+
+    /// <summary>
     ///     Receives alpha from previous TEV stage. This is always called
     ///     after <see cref="TevTextureFlags.UseGreyscaleAsAlphaMask"/> is set in the previous TEV stage.
     /// </summary>
@@ -15,75 +20,75 @@ public enum TevCombinerFlags : ushort
     /// <summary>
     /// 
     /// </summary>
-    unk1 = 1 << 1,
+    unused1 = 1 << 1,
 
     /// <summary>
     /// 
     /// </summary>
-    unk2 = 1 << 2,
+    unused2 = 1 << 2,
 
     /// <summary>
     /// 
     /// </summary>
-    unk3 = 1 << 3,
+    unused3 = 1 << 3,
 
     /// <summary>
-    /// 
+    ///     Use last color?
     /// </summary>
     unk4 = 1 << 4,
 
     /// <summary>
-    /// 
+    ///     Use last color?
     /// </summary>
     unk5 = 1 << 5,
 
     /// <summary>
     /// 
     /// </summary>
-    unk6 = 1 << 6,
+    unused6 = 1 << 6,
 
     /// <summary>
     /// 
     /// </summary>
-    unk7 = 1 << 7,
+    unused7 = 1 << 7,
 
     /// <summary>
-    /// 
+    ///     2026-05-09: Appears related to alpha or multiply textures.
     /// </summary>
     unk8 = 1 << 8,
 
     /// <summary>
-    /// 
+    ///     2026-05-09: Appears related to alpha or multiply textures.
     /// </summary>
     unk9 = 1 << 9,
 
     /// <summary>
     /// 
     /// </summary>
-    unk10 = 1 << 10,
+    unused10 = 1 << 10,
 
     /// <summary>
     /// 
     /// </summary>
-    unk11 = 1 << 11,
+    unused11 = 1 << 11,
 
     /// <summary>
     /// 
     /// </summary>
-    unk12 = 1 << 12,
+    unused12 = 1 << 12,
 
     /// <summary>
     /// 
     /// </summary>
-    unk13 = 1 << 13,
+    unused13 = 1 << 13,
 
     /// <summary>
     /// 
     /// </summary>
-    unk14 = 1 << 14,
+    unused14 = 1 << 14,
 
     /// <summary>
     /// 
     /// </summary>
-    unk15 = 1 << 15,
+    unused15 = 1 << 15,
 }
