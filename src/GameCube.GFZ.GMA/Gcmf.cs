@@ -273,8 +273,8 @@ public class Gcmf :
 
                 // Seems to be actually really close!
                 var isTranslucid =
-                    submesh.Material.UnkAlpha0x14 != -1 ||
-                    submesh.Material.Alpha < 255;
+                    submesh.UnkAlpha0x14 != -1 ||
+                    submesh.Alpha < 255;
 
                 if (isTranslucid)
                     translucidMaterialCount++;

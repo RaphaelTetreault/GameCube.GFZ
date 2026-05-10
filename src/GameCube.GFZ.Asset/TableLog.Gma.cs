@@ -9,13 +9,13 @@ public class GmaTableLogger
 {
     public static readonly LogFuncFile<GmaFile> LogGcmf = new(AnalyzeGcmf, $"{nameof(Gma)}-{nameof(Gcmf)}.tsv");
     public static readonly LogFuncFile<GmaFile> LogTextureConfigs = new(AnalyzeTextureConfigs, $"{nameof(Gma)}-{nameof(TevLayer)}.tsv");
-    public static readonly LogFuncFile<GmaFile> LogMaterials = new(AnalyzeMaterials, $"{nameof(Gma)}-{nameof(Material)}.tsv");
+    public static readonly LogFuncFile<GmaFile> LogSubmesh = new(AnalyzeSubmeshes, $"{nameof(Gma)}-{nameof(Submesh)}.tsv");
 
     public static readonly LogFuncFile<GmaFile>[] AllLogFunctionFiles =
     [
         LogGcmf,
         LogTextureConfigs,
-        LogMaterials,
+        LogSubmesh,
     ];
 
     public static void AnalyzeGcmf(GmaFile[] gmas, string outputFileName)
@@ -134,7 +134,7 @@ public class GmaTableLogger
         writer.Close();
     }
 
-    public static void AnalyzeMaterials(GmaFile[] gmas, string outputFileName)
+    public static void AnalyzeSubmeshes(GmaFile[] gmas, string outputFileName)
     {
         using var writer = new StreamWriter(File.Create(outputFileName));
         // Write header
@@ -143,20 +143,20 @@ public class GmaTableLogger
         writer.WriteNextCol(nameof(Model.Name));
         writer.WriteNextCol("Model Index");
         writer.WriteNextCol("Debug Index");
-        writer.WriteNextCol("Material Index");
+        writer.WriteNextCol("Submesh Index");
         writer.WriteNextCol(nameof(Submesh.RenderFlags));
-        writer.WriteNextCol(nameof(Material.MaterialColor));
-        writer.WriteNextCol(nameof(Material.AmbientColor));
-        writer.WriteNextCol(nameof(Material.SpecularColor));
-        writer.WriteNextCol(nameof(Material.Unk0x10));
-        writer.WriteNextCol(nameof(Material.Alpha));
-        writer.WriteNextCol(nameof(Material.TevLayerCount));
-        writer.WriteNextCol(nameof(Material.MaterialDestination));
-        writer.WriteNextCol(nameof(Material.UnkAlpha0x14));
-        writer.WriteNextCol(nameof(Material.Unk0x15));
-        writer.WriteNextCol(nameof(Material.TevLayerIndex0));
-        writer.WriteNextCol(nameof(Material.TevLayerIndex1));
-        writer.WriteNextCol(nameof(Material.TevLayerIndex2));
+        writer.WriteNextCol(nameof(Submesh.MaterialColor));
+        writer.WriteNextCol(nameof(Submesh.AmbientColor));
+        writer.WriteNextCol(nameof(Submesh.SpecularColor));
+        writer.WriteNextCol(nameof(Submesh.Unk0x10));
+        writer.WriteNextCol(nameof(Submesh.Alpha));
+        writer.WriteNextCol(nameof(Submesh.TevLayerCount));
+        writer.WriteNextCol(nameof(Submesh.MaterialDestination));
+        writer.WriteNextCol(nameof(Submesh.UnkAlpha0x14));
+        writer.WriteNextCol(nameof(Submesh.Unk0x15));
+        writer.WriteNextCol(nameof(Submesh.TevLayerIndex0));
+        writer.WriteNextCol(nameof(Submesh.TevLayerIndex1));
+        writer.WriteNextCol(nameof(Submesh.TevLayerIndex2));
         writer.WriteNextCol(nameof(Submesh.VertexAttributes));
         writer.WriteNextCol(nameof(UnkAlphaOptions.Origin));
         writer.WriteNextCol(nameof(UnkAlphaOptions.Unk0x0C));
@@ -176,18 +176,18 @@ public class GmaTableLogger
                     writer.WriteNextCol(model.Value.DebugIndex);
                     writer.WriteNextCol(submesh.Index);
                     writer.WriteNextCol(submesh.Value.RenderFlags);
-                    writer.WriteNextCol(submesh.Value.Material.MaterialColor);
-                    writer.WriteNextCol(submesh.Value.Material.AmbientColor);
-                    writer.WriteNextCol(submesh.Value.Material.SpecularColor);
-                    writer.WriteNextCol(submesh.Value.Material.Unk0x10);
-                    writer.WriteNextCol(submesh.Value.Material.Alpha);
-                    writer.WriteNextCol(submesh.Value.Material.TevLayerCount);
-                    writer.WriteNextCol(submesh.Value.Material.MaterialDestination);
-                    writer.WriteNextCol(submesh.Value.Material.UnkAlpha0x14);
-                    writer.WriteNextCol(submesh.Value.Material.Unk0x15);
-                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex0);
-                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex1);
-                    writer.WriteNextCol(submesh.Value.Material.TevLayerIndex2);
+                    writer.WriteNextCol(submesh.Value.MaterialColor);
+                    writer.WriteNextCol(submesh.Value.AmbientColor);
+                    writer.WriteNextCol(submesh.Value.SpecularColor);
+                    writer.WriteNextCol(submesh.Value.Unk0x10);
+                    writer.WriteNextCol(submesh.Value.Alpha);
+                    writer.WriteNextCol(submesh.Value.TevLayerCount);
+                    writer.WriteNextCol(submesh.Value.MaterialDestination);
+                    writer.WriteNextCol(submesh.Value.UnkAlpha0x14);
+                    writer.WriteNextCol(submesh.Value.Unk0x15);
+                    writer.WriteNextCol(submesh.Value.TevLayerIndex0);
+                    writer.WriteNextCol(submesh.Value.TevLayerIndex1);
+                    writer.WriteNextCol(submesh.Value.TevLayerIndex2);
                     writer.WriteNextCol(submesh.Value.VertexAttributes);
                     writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Origin);
                     writer.WriteNextCol(submesh.Value.UnkAlphaOptions.Unk0x0C);
