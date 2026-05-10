@@ -3,17 +3,15 @@
 [System.Flags]
 public enum TevTextureFlags : int
 {
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    /// FORMERLY <see cref="TextureWrapMode"/>
-
     /// <summary>
-    ///     Unused in F-Zero Ax and GX.
+    ///     
     /// </summary>
     /// <remarks>
     ///     Super Monkey Ball decomp: says it's a "view specular" type effect.
     ///     https://github.com/camthesaxman/smb-decomp/blob/5cd6ffccf3f8508231c7cd9cce5b722be4465a2b/src/gma.h#L16
+    ///     It does tend to come up with
     /// </remarks>
-    unused0 = 1 << 0,
+    ViewSpecular = 1 << 0,
 
     /// <summary>
     ///     Use Normal, Binormal, and Tangent data for texturing.
@@ -41,36 +39,50 @@ public enum TevTextureFlags : int
     WrapModeMirrorY = 1 << 5,
 
     /// <summary>
-    ///     
+    ///     Level of detail (LOD) at triangle edge boundaries?
     /// </summary>
-    unk6 = 1 << 6, // SMB: DO_EDGE_LOD ?
+    /// <remarks>
+    ///     Very close relationship with this on and Aniso being Aniso4.
+    /// </remarks>
+    EnableEdgeLOD = 1 << 6, // SMB: DO_EDGE_LOD ?
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    // NOTES
+    //     When any of next 4 mipmap bits set, texture debug shows [XXXXX & MIPMAP LINEAR, XXXXX].
+    //     When any of next 4 mipmap bits unset, texture debug shows [XXXXX & MIPMAP NEAR, XXXXX].
 
     /// <summary>
     ///     
     /// </summary>
-    unk7 = 1 << 7,
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    /// FORMERLY <see cref="MipmapSetting"/>
-
-    /// <summary>
-    ///     2019/04/03 VERIFIED: Enable (large preview) mipmaps
-    /// </summary>
-    ENABLE_MIPMAP = 1 << 8,
+    /// <remarks>
+    ///     
+    /// </remarks>
+    Mipmap7 = 1 << 7,
 
     /// <summary>
-    ///     2019/04/03 THEORY: when only flag, "use custom mip-map"
-    ///     See: bg_san_s [39/41] tex [3/8] - RIVER01
-    ///     See: bg_big [118/120] tex [1/1] - OCE_OCEAN_C14_B_ltmp2
-    ///     See: any recovery pad
+    ///     
     /// </summary>
-    UNK_FLAG_1 = 1 << 9, // Working together?
-    UNK_FLAG_2 = 1 << 10, // Working together?
+    Mipmap8 = 1 << 8,
 
     /// <summary>
-    ///     2019/04/03 VERIFIED: Enable Mipmap NEAR
+    ///     
     /// </summary>
-    FilterNearestNeighbour = 1 << 11,
+    Mipmap9 = 1 << 9,
+
+    /// <summary>
+    ///     
+    /// </summary>
+    Mipmap10 = 1 << 10,
+
+    /// <summary>
+    ///     Uses Nearest Neighbour to sample the texture.
+    /// </summary>
+    /// <remarks>
+    ///     Shows up as [NEAR & MIPMAP XXXXX, NEAR] in debug menu.
+    ///     When set, XXXXX = NEAR, nearest neighbour, not filtering.
+    ///     When unset, XXXXX = LINEAR, linear filtering.
+    /// </remarks>
+    SampleNearestNeighbour = 1 << 11,
 
     /// <summary>
     ///     
@@ -97,12 +109,13 @@ public enum TevTextureFlags : int
     NicheParam14 = 1 << 14,
 
     /// <summary>
-    ///     On many vehicles
+    ///     Reflection map type thing, but with black-is-transparent images (all that I checked).
     /// </summary>
-    unk15 = 1 << 15, // SMB: WORLD_SPECULAR
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    /// FORMERLY <see cref="TexFlags0x00"/>
+    /// <remarks>
+    ///     Used more than <see cref="SpecularReflection20"/>
+    ///     but less than <see cref="SpecularReflection22"/>.
+    /// </remarks>
+    SpecularReflectionAdditive = 1 << 15,
 
     /// <summary>
     /// 
@@ -145,9 +158,12 @@ public enum TevTextureFlags : int
     NicheParam19 = 1 << 19,
 
     /// <summary>
-    ///     Appears to be used whenever tex is for bg reflections
+    ///     Appears to be used whenever tex is for bg reflections.
     /// </summary>
-    ReflectionMap20 = 1 << 20,
+    /// <remarks>
+    ///     Most common specular reflection, less harsh compared to <see cref="SpecularReflection22"/>?
+    /// </remarks>
+    SpecularReflection20 = 1 << 20,
 
     /// <summary>
     ///     Appears exclusively on vehicles, and (to my best guess) on all TEV layers
@@ -159,7 +175,10 @@ public enum TevTextureFlags : int
     /// <summary>
     ///     Appears to be used whenever tex is for bg reflections
     /// </summary>
-    RefelctionMap22 = 1 << 22,
+    /// <remarks>
+    ///     Least common specular reflection, more harsh compared to <see cref="SpecularReflection20"/>?
+    /// </remarks>
+    SpecularReflection22 = 1 << 22,
 
     // 2026-05-08: Unused! I generated a spreadsheet for all AX/GX games, and these
     // didn't come up anywhere.
