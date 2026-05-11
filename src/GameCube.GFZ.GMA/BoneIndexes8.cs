@@ -1,51 +1,24 @@
 ﻿using Manifold.IO;
+using System.Runtime.CompilerServices;
 
 namespace GameCube.GFZ.GMA;
 
 /// <summary>
 ///     A set of 8 matrix indexes. Root indexes read as -1/0xFF, indicating no parent bone/matrix.
 /// </summary>
-/// <remarks>
-///     Consider making the backing a uint64, contruct array on demand.
-/// </remarks>
-public class BoneIndexes8 :
-    IBinaryAddressable,
+[InlineArray(8)]
+public struct BoneIndexes8 :
     IBinarySerializable
 {
-    // CONSTANTS
-    private const int kIndexCount = 8;
-
     // FIELDS
-    private sbyte[] indexes = [ -1, -1, -1, -1, -1, -1, -1, -1, ];
+    public sbyte boneIndex = -1;
 
-
-    // INDEXERS
-    public sbyte this[int index] { get => indexes[index]; set => indexes[index] = value; }
-
-    // PROPERTIES
-    public AddressRange AddressRange { get; set; }
-
+    // CONSTRUCTOR
+    // Ensures default value is always -1.
+    public BoneIndexes8() { }
 
     // METHODS
-    public void Deserialize(EndianBinaryReader reader)
-    {
-        this.RecordStartAddress(reader);
-        {
-            reader.Read(ref indexes, kIndexCount);
-        }
-        this.RecordEndAddress(reader);
-    }
-
-    public void Serialize(EndianBinaryWriter writer)
-    {
-        {
-            Assert.IsTrue(indexes.Length == kIndexCount);
-        }
-        this.RecordStartAddress(writer);
-        {
-            writer.Write(indexes);
-        }
-        this.RecordEndAddress(writer);
-    }
+    public void Deserialize(EndianBinaryReader reader) => reader.Read(ref boneIndex);
+    public readonly void Serialize(EndianBinaryWriter writer) => writer.Write(boneIndex);
 
 }

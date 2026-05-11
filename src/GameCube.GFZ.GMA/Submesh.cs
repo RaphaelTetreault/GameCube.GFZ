@@ -31,7 +31,7 @@ public class Submesh :
     private short tevLayerIndex1 = -1; // 0xFFFF
     private short tevLayerIndex2 = -1; // 0xFFFF
     private GXAttributeFlags vertexAttributes;
-    private BoneIndexes8 primaryBoneIndices = new();
+    private BoneIndexes8 primaryBoneIndices;
     private int primaryFrontFacesDisplayListSize;
     private int primaryBackFacesDisplayListSize;
     private Vector3 blendDepthSortOrigin; //
