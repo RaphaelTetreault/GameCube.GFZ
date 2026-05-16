@@ -33,7 +33,7 @@ public class TextureSequence
     /// </summary>
     /// <param name="elements"></param>
     /// <param name="textureFormat"></param>
-    public TextureSequence(TextureSequenceElement[] elements, TextureFormat textureFormat)
+    public TextureSequence(TextureSequenceElement[] elements, DirectTextureFormat textureFormat)
     {
         // Assign elements
         Elements = elements;

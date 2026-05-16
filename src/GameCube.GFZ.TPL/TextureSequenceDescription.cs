@@ -18,7 +18,7 @@ public class TextureSequenceDescription :
 
     private ushort const_zero;
     private bool isNull = true;
-    private TextureFormat textureFormat; // 1 byte
+    private DirectTextureFormat textureFormat; // 1 byte
     private Pointer texturePtr;
     private ushort width;
     private ushort height;
@@ -27,7 +27,7 @@ public class TextureSequenceDescription :
 
     public bool IsGarbageEntry => const_zero != 0;
     public bool IsNull { get => isNull; set => isNull = value; }
-    public TextureFormat TextureFormat { get => textureFormat; set => textureFormat = value; }
+    public DirectTextureFormat TextureFormat { get => textureFormat; set => textureFormat = value; }
     public Pointer TextureSequencePtr { get => texturePtr; set => texturePtr = value; }
     public ushort Width { get => width; set => width = value; }
     public ushort Height { get => height; set => height = value; }

@@ -17,9 +17,9 @@ public class Emblem :
     // Consts
     public const int Width = 64;
     public const int Height = 64;
-    public const TextureFormat Format = TextureFormat.RGB5A3;
+    public const DirectTextureFormat Format = DirectTextureFormat.RGB5A3;
     public static readonly int Size = 64 * 64 * sizeof(ushort);
-    public static readonly DirectEncoding DirectEncoding = DirectEncoding.GetEncoding(Format);
+    public static readonly DirectEncoding DirectEncoding = DirectEncoding.MapFormatToEncoding[Format];
 
     // Properties
     public Texture Texture { get; set; } = new Texture();
@@ -29,7 +29,7 @@ public class Emblem :
     // Constructors
     public Emblem()
     {
-        Texture = new Texture(Width, Height, Format);
+        Texture = new Texture(Width, Height);
         ThrowErrorIfInvalid();
     }
     public Emblem(Texture texture)
@@ -52,9 +52,8 @@ public class Emblem :
     {
         ThrowErrorIfInvalid();
 
-        var blocks = Texture.CreateDirectColorBlocksFromTexture(Texture, DirectEncoding);
         this.RecordStartAddress(writer);
-        DirectEncoding.WriteBlocks(writer, blocks);
+        Texture.WriteDirectColorTexture(writer, Texture, Format);
         this.RecordEndAddress(writer);
 
         Assert.IsTrue(AddressRange.Size == Size);

@@ -49,9 +49,9 @@ public class Tpl :
             Assert.IsFalse(textureSequenceDescription.IsGarbageEntry, msg1);
 
             // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
-            var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
-            var msg2 = "Encoding is not direct. GFZ does not use (handle?) indirect modes.";
-            Assert.IsTrue(encoding.IsDirect, msg2);
+            DirectTextureFormat format = textureSequenceDescription.TextureFormat;
+            format.Validate();
+            var encoding = DirectEncoding.MapFormatToEncoding[format];
 
             // Assert game uses all power-of-two textures.
             int isWidthPowerOfTwo = textureSequenceDescription.Width % encoding.BlockWidth;
@@ -95,13 +95,10 @@ public class Tpl :
             if (textureSequence is null)
                 continue;
 
-            var directEncoding = DirectEncoding.GetEncoding(textureSequence.Description.TextureFormat);
+            DirectTextureFormat format = textureSequence.Description.TextureFormat;
+            var directEncoding = DirectEncoding.MapFormatToEncoding[format];
             foreach (var entry in textureSequence.Elements)
-            {
-                var texture = entry.Texture;
-                var blocks = Texture.CreateDirectColorBlocksFromTexture(texture, directEncoding);
-                directEncoding.WriteBlocks(writer, blocks);
-            }
+                Texture.WriteDirectColorTexture(writer, entry.Texture, format);
         }
     }
 
@@ -114,7 +111,8 @@ public class Tpl :
     /// <returns></returns>
     public static TextureSequence ReadDirectTextureSequence(EndianBinaryReader reader, TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        DirectTextureFormat format = textureSequenceDescription.TextureFormat;
+        var directEncoding = DirectEncoding.MapFormatToEncoding[format];
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         var textureSequence = new TextureSequence(textureSequenceDescription);
@@ -128,7 +126,7 @@ public class Tpl :
             bool isInvalidTextureSize = pixelWidth == 0 || pixelHeight == 0;
             if (isInvalidTextureSize)
             {
-                textureSequence.Elements[i].Texture = new Texture(0, 0, textureSequenceDescription.TextureFormat);
+                textureSequence.Elements[i].Texture = new Texture(0, 0);
                 pixelWidth >>= 1;
                 pixelHeight >>= 1;
                 continue;
@@ -138,12 +136,9 @@ public class Tpl :
             AddressRange textureRange = new();
             textureRange.startAddress = reader.BaseStream.Position;
 
-            // Get how many blocks to read (width and height separated)
-            int widthBlocks = (int)Math.Ceiling((double)pixelWidth / encoding.BlockWidth);
-            int heightBlocks = (int)Math.Ceiling((double)pixelHeight / encoding.BlockHeight);
-
             // Make sure we can read that many blocks. Exceptions will occur on some CMPR textures.
-            int blocksRequired = encoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight);
+            BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, directEncoding);
+            int blocksRequired = blocksInfo.BlockCount;
             bool canReadRequiredBlocks = (totalBlocksRead + blocksRequired) <= totalBlocksEncoded;
             if (!canReadRequiredBlocks)
             {
@@ -153,16 +148,17 @@ public class Tpl :
                 if (canReadMoreBlocks)
                 {
                     // Read the remaining blocks
-                    var invalidDirectBlocks = encoding.ReadBlocks<DirectBlock>(reader, encoding, blocksInStream);
+                    var invalidDirectBlocks = directEncoding.ReadBlocks(reader, blocksInStream);
                     totalBlocksRead += blocksRequired;
                     // Create an invalid texture. Unset pixels will be magenta.
-                    var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, widthBlocks, heightBlocks, Magenta);
+                    // TODO: consider just making blank texture and discard the read blocks...
+                    var invalidTexture = GfzFromPartialDirectBlocks(invalidDirectBlocks, blocksInfo, Magenta);
                     textureSequence.Elements[i].Texture = Texture.Crop(invalidTexture, pixelWidth, pixelHeight);
                 }
                 else
                 {
                     // If no more blocks to read, make fully magenta texture.
-                    textureSequence.Elements[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta, textureSequenceDescription.TextureFormat);
+                    textureSequence.Elements[i].Texture = new Texture(pixelWidth, pixelHeight, Magenta);
                 }
                 pixelWidth >>= 1;
                 pixelHeight >>= 1;
@@ -170,15 +166,14 @@ public class Tpl :
             }
 
             // If we succeed, proceed to deserialize blocks for texture.
-            var directBlocks = encoding.ReadBlocks<DirectBlock>(reader, encoding, blocksRequired);
+            var directBlocks = directEncoding.ReadBlocks(reader, blocksRequired);
             Assert.IsTrue(blocksRequired != 0);
             Assert.IsTrue(directBlocks.Length == blocksRequired);
-            Assert.IsTrue(widthBlocks * heightBlocks == blocksRequired);
             totalBlocksRead += blocksRequired;
 
             // Make new texture. Crop it to width/height on occasions where pixel width or height
             // is lesser than the block size.
-            var texture = Texture.FromDirectBlocks(directBlocks, widthBlocks, heightBlocks);
+            var texture = Texture.FromDirectBlocks(directBlocks, blocksInfo);
             textureSequence.Elements[i].Texture = Texture.Crop(texture, pixelWidth, pixelHeight);
             textureSequence.Elements[i].IsValid = true;
 
@@ -286,7 +281,8 @@ public class Tpl :
         // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
         // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
         // quadrant size (4, 4) instead.
-        int nBlocks4x4 = TextureEncoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight, 4, 4);
+        BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, DirectEncoding.CMPR);
+        int nBlocks4x4 = blocksInfo.BlockCount / 4;
         // The number of blocks we get out is now 4 times the size since we specify a block
         // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
         // terms with other blocks, we divide by 4.
@@ -364,27 +360,20 @@ public class Tpl :
     /// <returns>
     ///     A texture whose unset pixels are <paramref name="defaultColor"/>.
     /// </returns>
-    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, int blocksWidth, int blocksHeight, TextureColor defaultColor)
+    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, BlocksInfo blocksInfo, TextureColor defaultColor)
     {
-        int subBlockWidth = directBlocks[0].Width;
-        int subBlockHeight = directBlocks[0].Height;
-        var format = directBlocks[0].Format;
-
-        int pixelsWidth = blocksWidth * subBlockWidth;
-        int pixelsHeight = blocksHeight * subBlockHeight;
-        var texture = new Texture(pixelsWidth, pixelsHeight, defaultColor, format);
-
+        var texture = new Texture(blocksInfo.TexturePixelWidth, blocksInfo.TexturePixelHeight, defaultColor);
         int pixelIndex = 0;
         // Linearize texture pixels
-        for (int h = 0; h < blocksHeight; h++)
+        for (int h = 0; h < blocksInfo.BlockCountY; h++)
         {
-            for (int y = 0; y < subBlockHeight; y++)
+            for (int y = 0; y < blocksInfo.BlockPixelWidth; y++)
             {
-                for (int w = 0; w < blocksWidth; w++)
+                for (int w = 0; w < blocksInfo.BlockCountX; w++)
                 {
                     // Which block we are sampling
-                    int blockIndex = w + h * blocksWidth;
-                    for (int x = 0; x < subBlockWidth; x++)
+                    int blockIndex = w + h * blocksInfo.BlockCountX;
+                    for (int x = 0; x < blocksInfo.BlockPixelWidth; x++)
                     {
                         // If we don't have this block, skip.
                         // This is kinda hacky, but useful for GFZ
@@ -395,7 +384,7 @@ public class Tpl :
                         }
 
                         // Which sub-block we are sampling
-                        int colorIndex = x + y * subBlockWidth;
+                        int colorIndex = x + y * blocksInfo.BlockPixelWidth;
                         var block = directBlocks[blockIndex];
                         var color = block.Colors[colorIndex];
                         texture.Pixels[pixelIndex++] = color;

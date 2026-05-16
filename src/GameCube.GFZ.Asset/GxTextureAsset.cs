@@ -21,7 +21,7 @@ public class GxTextureAsset :
     private ushort width;
     private ushort height;
     private byte textureCount;
-    private TextureFormat format;
+    private DirectTextureFormat format;
     private int dataLength;
     private byte[] data = [];
 
@@ -29,7 +29,7 @@ public class GxTextureAsset :
     public byte TextureCount { get => textureCount; set => textureCount = value; }
     public byte[] Data { get => data; set => data = value; }
     public int DataLength { get => dataLength; set => dataLength = value; }
-    public TextureFormat Format { get => format; set => format = value; }
+    public DirectTextureFormat Format { get => format; set => format = value; }
     public ushort Height { get => height; set => height = value; }
     public ushort Width { get => width; set => width = value; }
 
