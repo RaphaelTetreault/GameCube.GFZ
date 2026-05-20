@@ -281,14 +281,25 @@ public class Tpl :
         // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
         // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
         // quadrant size (4, 4) instead.
-        BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, DirectEncoding.CMPR);
-        int nBlocks4x4 = blocksInfo.BlockCount / 4;
+        BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, BadCmprEncoding);
+        int nBlocks4x4 = blocksInfo.BlockCount;
         // The number of blocks we get out is now 4 times the size since we specify a block
         // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
         // terms with other blocks, we divide by 4.
         int nBlocks8x8 = (int)Math.Ceiling(nBlocks4x4 / 4f);
         return nBlocks8x8;
     }
+
+    private static readonly DirectEncoding BadCmprEncoding = new()
+    {
+        DirectFormat = DirectTextureFormat.CMPR,
+        BlockWidth = 4, // not 8!
+        BlockHeight = 4, // not 8!
+        BitsPerPixel = 4,
+        BytesPerBlock = 8, // 4 * 4 * 0.5(4bpp)
+        ReadBlock = null!, // We won't use this for actually reading anything
+        WriteBlock = null!, // We won't use this for actually writing anything
+    };
 
     /// <summary>
     ///     Provides the amount of blocks the game thinks it needs to encode a <paramref name="pixelWidth"/> by
@@ -301,14 +312,14 @@ public class Tpl :
     ///     The number of blocks encoded by GFZ for a texture of <paramref name="pixelWidth"/> by
     ///     <paramref name="pixelHeight"/> size using its own <paramref name="encoding"/> format.
     /// </returns>
-    public static int GetGfzBlocksEncodedCount(int pixelWidth, int pixelHeight, TextureEncoding encoding)
+    public static int GetGfzBlocksEncodedCount(int pixelWidth, int pixelHeight, DirectEncoding encoding)
     {
         bool isCmprTexture = encoding.Format == TextureFormat.CMPR;
 
         // Calculate the amount of blocks required to store image in encoding/format
         int blocksRequiredForTexture = isCmprTexture
             ? GfzCmprBlocksEncodedCount(pixelWidth, pixelHeight)
-            : encoding.GetTotalBlocksToEncode(pixelWidth, pixelHeight);
+            : BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, encoding).BlockCount;
 
         return blocksRequiredForTexture;
     }
@@ -323,7 +334,7 @@ public class Tpl :
     /// </returns>
     public static int GetTotalBlocksEncodedCount(TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = TextureEncoding.GetEncoding(textureSequenceDescription.TextureFormat);
+        var encoding = DirectEncoding.MapFormatToEncoding[textureSequenceDescription.TextureFormat];
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         int numTextures = textureSequenceDescription.NumberOfTextures;
