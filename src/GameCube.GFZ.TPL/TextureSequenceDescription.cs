@@ -1,7 +1,5 @@
 ﻿using GameCube.GX.Texture;
-using Manifold;
 using Manifold.IO;
-using System;
 
 namespace GameCube.GFZ.TPL;
 
@@ -14,7 +12,7 @@ public class TextureSequenceDescription :
 {
     public const ushort k0x0000 = 0x0000;
     public const ushort k0x1234 = 0x1234;
-    public const int Size = 0x14; // 20 bytes
+    public const int Size = 0x10; // 16 bytes
 
     private ushort const_zero;
     private bool isNull = true;
@@ -34,57 +32,49 @@ public class TextureSequenceDescription :
     public ushort MipmapLevels { get => mipmapCount; set => mipmapCount = value; }
 
     /// <summary>
-    /// Number of textures supposed to be stored given mipmap levels
+    ///     Number of textures supposed to be stored given mipmap levels
     /// </summary>
     public int NumberOfTextures => MipmapLevels != 0 ? MipmapLevels : 1;
 
 
     public AddressRange AddressRange { get; set; }
 
-    public int ComputeSize()
-    {
-        throw new NotImplementedException();
-    }
 
     public void Deserialize(EndianBinaryReader reader)
     {
         this.RecordStartAddress(reader);
-        {
-            reader.Read(ref const_zero);
-            reader.Read(ref isNull);
-            reader.Read(ref textureFormat);
-            reader.Read(ref texturePtr);
-            reader.Read(ref width);
-            reader.Read(ref height);
-            reader.Read(ref mipmapCount);
-            reader.Read(ref const_0x1234);
-        }
+        reader.Read(ref const_zero);
+        reader.Read(ref isNull);
+        reader.Read(ref textureFormat);
+        reader.Read(ref texturePtr);
+        reader.Read(ref width);
+        reader.Read(ref height);
+        reader.Read(ref mipmapCount);
+        reader.Read(ref const_0x1234);
         this.RecordEndAddress(reader);
-        {
-            //Assert.IsTrue(const_zero == 0);
-            Assert.IsTrue(const_0x1234 == k0x1234, AddressRange.startAddress.ToString());
-        }
+
+        Assert.IsTrue(AddressRange.Size == Size);
+        Assert.IsTrue(const_0x1234 == k0x1234);
+        if (!IsGarbageEntry) Assert.IsTrue(const_zero == 0);
     }
 
     public void Serialize(EndianBinaryWriter writer)
     {
-        {
-            if (!IsGarbageEntry)
-                Assert.IsTrue(const_zero == 0);
-            //Assert.IsTrue(const_0x1234 == k0x1234);
-        }
+        if (!IsGarbageEntry)
+            Assert.IsTrue(const_zero == 0);
+        //Assert.IsTrue(const_0x1234 == k0x1234);
+
         this.RecordStartAddress(writer);
-        {
-            //writer.Write(const_zero); // write out garbage?
-            writer.Write(k0x0000);
-            writer.Write(isNull);
-            writer.Write(textureFormat);
-            writer.Write(texturePtr);
-            writer.Write(width);
-            writer.Write(height);
-            writer.Write(mipmapCount);
-            writer.Write(k0x1234);
-        }
+        writer.Write(k0x0000);
+        writer.Write(isNull);
+        writer.Write(textureFormat);
+        writer.Write(texturePtr);
+        writer.Write(width);
+        writer.Write(height);
+        writer.Write(mipmapCount);
+        writer.Write(k0x1234);
         this.RecordEndAddress(writer);
+
+        Assert.IsTrue(AddressRange.Size == Size);
     }
 }
