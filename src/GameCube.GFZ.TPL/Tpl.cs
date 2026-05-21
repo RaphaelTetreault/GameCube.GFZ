@@ -373,7 +373,10 @@ public class Tpl :
     /// </returns>
     public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, BlocksInfo blocksInfo, TextureColor defaultColor)
     {
-        var texture = new Texture(blocksInfo.TexturePixelWidth, blocksInfo.TexturePixelHeight, defaultColor);
+        // Compute pixel sizes needed for texture constrained to block pixel size
+        int width = Math.Max(blocksInfo.TexturePixelWidth, blocksInfo.BlockPixelWidth);
+        int height = Math.Max(blocksInfo.TexturePixelHeight, blocksInfo.BlockPixelHeight);
+        var texture = new Texture(width, height, defaultColor);
         int pixelIndex = 0;
         // Linearize texture pixels
         for (int h = 0; h < blocksInfo.BlockCountY; h++)
