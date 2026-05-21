@@ -3,11 +3,8 @@
 namespace GameCube.GFZ.GMA;
 
 /// <summary>
-///     Layer for Texture Environment Unit (TEV). Configures how a texcture is meant to be processed by the GameCube GX.
+///     Layer for Texture Environment Unit (TEV). Configures how a texture is meant to be processed by the GameCube GX.
 /// </summary>
-/// <remarks>
-///     SMB decomp: GMATevLayer
-/// </remarks>
 public class TevLayer :
     IBinaryAddressable,
     IBinarySerializable
@@ -22,7 +19,7 @@ public class TevLayer :
     private bool isSwappableTexture; // perhaps a "cache texture" flag
     private ushort tevLayerIndex;
     private ushort zero0x10;
-    private TevCombinerFlags unk0x12;
+    private TevCombinerFlags tevCombinerFlags;
 
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
@@ -35,7 +32,7 @@ public class TevLayer :
     public bool IsSwappableTexture { get => isSwappableTexture; set => isSwappableTexture = value; }
     public ushort TevLayerIndex { get => tevLayerIndex; set => tevLayerIndex = value; }
     public ushort Zero0x10 { get => zero0x10; set => zero0x10 = value; }
-    public TevCombinerFlags Unk0x12 { get => unk0x12; set => unk0x12 = value; }
+    public TevCombinerFlags TevCombinerFlags { get => tevCombinerFlags; set => tevCombinerFlags = value; }
 
 
     // METHODS
@@ -52,7 +49,7 @@ public class TevLayer :
             reader.Read(ref isSwappableTexture);
             reader.Read(ref tevLayerIndex);
             reader.Read(ref zero0x10);
-            reader.Read(ref unk0x12);
+            reader.Read(ref tevCombinerFlags);
         }
         this.RecordEndAddress(reader);
         {
@@ -78,7 +75,7 @@ public class TevLayer :
             writer.Write(isSwappableTexture);
             writer.Write(tevLayerIndex);
             writer.Write(zero0x10);
-            writer.Write(unk0x12);
+            writer.Write(tevCombinerFlags);
         }
         this.RecordEndAddress(writer);
     }

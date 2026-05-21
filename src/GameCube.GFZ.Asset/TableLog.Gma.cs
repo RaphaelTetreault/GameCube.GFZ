@@ -94,7 +94,7 @@ public class GmaTableLogger
         writer.WriteNextCol(nameof(TevLayer.Unk0x0C));
         writer.WriteNextCol(nameof(TevLayer.IsSwappableTexture));
         writer.WriteNextCol(nameof(TevLayer.TevLayerIndex));
-        writer.WriteNextCol(nameof(TevLayer.Unk0x12));
+        writer.WriteNextCol(nameof(TevLayer.TevCombinerFlags));
         writer.WriteNextRow();
 
         foreach (var gma in gmas)
@@ -126,7 +126,7 @@ public class GmaTableLogger
                     writer.WriteNextCol(tevLayer.Value.Unk0x0C);
                     writer.WriteNextCol(tevLayer.Value.IsSwappableTexture);
                     writer.WriteNextCol(tevLayer.Value.TevLayerIndex);
-                    writer.WriteNextCol(tevLayer.Value.Unk0x12);
+                    writer.WriteNextCol(tevLayer.Value.TevCombinerFlags);
                     writer.WriteNextRow();
                 }
             }
