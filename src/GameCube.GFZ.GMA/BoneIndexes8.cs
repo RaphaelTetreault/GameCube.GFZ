@@ -1,5 +1,4 @@
 ﻿using Manifold.IO;
-using System.Runtime.CompilerServices;
 
 namespace GameCube.GFZ.GMA;
 
@@ -13,18 +12,24 @@ public class BoneIndexes8 :
     const int Size = 8;
 
     // FIELDS
-    //public sbyte boneIndex = -1;
-    public sbyte[] boneIndex = [-1, -1, -1, -1, -1, -1, -1, -1];
+    private sbyte[] boneIndexes = [-1, -1, -1, -1, -1, -1, -1, -1];
 
-    // CONSTRUCTOR
-    // Ensures default value is always -1.
-    public BoneIndexes8() { }
+    //
+    public sbyte[] BoneIndexes
+    {
+        get => boneIndexes;
+        set => boneIndexes = value;
+    }
 
     // METHODS
-    //public void Deserialize(EndianBinaryReader reader) => reader.Read(ref boneIndex);
-    //public readonly void Serialize(EndianBinaryWriter writer) => writer.Write(boneIndex);
+    public void Deserialize(EndianBinaryReader reader)
+    {
+        reader.Read(ref boneIndexes, Size);
+    }
 
-    public void Deserialize(EndianBinaryReader reader) => reader.Read(ref boneIndex, Size);
-    public void Serialize(EndianBinaryWriter writer) => writer.Write(boneIndex);
+    public void Serialize(EndianBinaryWriter writer)
+    {
+        writer.Write(boneIndexes);
+    }
 
 }
