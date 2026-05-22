@@ -137,7 +137,7 @@ public class Tpl :
             textureRange.startAddress = reader.BaseStream.Position;
 
             // Make sure we can read that many blocks. Exceptions will occur on some CMPR textures.
-            BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, directEncoding);
+            TextureBlocksInfo blocksInfo = TextureBlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, directEncoding);
             int blocksRequired = blocksInfo.BlockCount;
             bool canReadRequiredBlocks = (totalBlocksRead + blocksRequired) <= totalBlocksEncoded;
             if (!canReadRequiredBlocks)
@@ -281,7 +281,7 @@ public class Tpl :
         // CMPR has a block size of 8x8, split into quadrants (2x2), in each we have
         // a 4x4 grid of pixels. CMPR /should/ use params (8, 8), but instead uses the
         // quadrant size (4, 4) instead.
-        BlocksInfo blocksInfo = BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, BadCmprEncoding);
+        TextureBlocksInfo blocksInfo = TextureBlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, BadCmprEncoding);
         int nBlocks4x4 = blocksInfo.BlockCount;
         // The number of blocks we get out is now 4 times the size since we specify a block
         // as only one quarter (1/4) the resolution. To compensate and convert to comparitive
@@ -319,7 +319,7 @@ public class Tpl :
         // Calculate the amount of blocks required to store image in encoding/format
         int blocksRequiredForTexture = isCmprTexture
             ? GfzCmprBlocksEncodedCount(pixelWidth, pixelHeight)
-            : BlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, encoding).BlockCount;
+            : TextureBlocksInfo.FromPixelDimensions(pixelWidth, pixelHeight, encoding).BlockCount;
 
         return blocksRequiredForTexture;
     }
@@ -371,7 +371,7 @@ public class Tpl :
     /// <returns>
     ///     A texture whose unset pixels are <paramref name="defaultColor"/>.
     /// </returns>
-    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, BlocksInfo blocksInfo, TextureColor defaultColor)
+    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, TextureBlocksInfo blocksInfo, TextureColor defaultColor)
     {
         // Compute pixel sizes needed for texture constrained to block pixel size
         int width = Math.Max(blocksInfo.TexturePixelWidth, blocksInfo.BlockPixelWidth);
