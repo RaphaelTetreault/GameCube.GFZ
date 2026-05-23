@@ -19,7 +19,7 @@ public class Emblem :
     public const int Height = 64;
     public const DirectTextureFormat Format = DirectTextureFormat.RGB5A3;
     public static readonly int Size = 64 * 64 * sizeof(ushort);
-    public static readonly DirectEncoding DirectEncoding = DirectEncoding.MapFormatToEncoding[Format];
+    public static readonly DirectEncoding DirectEncoding = DirectEncoding.MapDirectFormatToEncoding[Format];
 
     // Properties
     public Texture Texture { get; set; } = new Texture();

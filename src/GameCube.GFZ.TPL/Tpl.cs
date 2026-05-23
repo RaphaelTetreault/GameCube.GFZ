@@ -12,7 +12,7 @@ public class Tpl :
     IBinarySerializable
 {
     // CONSTS
-    private static readonly TextureColor Magenta = new(255, 0, 255);
+    private static readonly TexturePixel Magenta = new(255, 0, 255);
 
     // MEMBERS
     private int textureDescriptionsCount;
@@ -51,11 +51,11 @@ public class Tpl :
             // Get encoding and ensure it comforms to expectations. No indirect textures are used (only GFZJ tested).
             DirectTextureFormat format = textureSequenceDescription.TextureFormat;
             format.Validate();
-            var encoding = DirectEncoding.MapFormatToEncoding[format];
+            var encoding = DirectEncoding.MapDirectFormatToEncoding[format];
 
             // Assert game uses all power-of-two textures.
-            int isWidthPowerOfTwo = textureSequenceDescription.Width % encoding.BlockWidth;
-            int isHeightPowerOfTwo = textureSequenceDescription.Height % encoding.BlockHeight;
+            int isWidthPowerOfTwo = textureSequenceDescription.Width % encoding.BlockPixelWidth;
+            int isHeightPowerOfTwo = textureSequenceDescription.Height % encoding.BlockPixelHeight;
             if (isWidthPowerOfTwo != 0 || isHeightPowerOfTwo != 0)
             {
                 string msg3 =
@@ -96,7 +96,7 @@ public class Tpl :
                 continue;
 
             DirectTextureFormat format = textureSequence.Description.TextureFormat;
-            var directEncoding = DirectEncoding.MapFormatToEncoding[format];
+            var directEncoding = DirectEncoding.MapDirectFormatToEncoding[format];
             foreach (var entry in textureSequence.Elements)
                 Texture.WriteDirectColorTexture(writer, entry.Texture, format);
         }
@@ -112,7 +112,7 @@ public class Tpl :
     public static TextureSequence ReadDirectTextureSequence(EndianBinaryReader reader, TextureSequenceDescription textureSequenceDescription)
     {
         DirectTextureFormat format = textureSequenceDescription.TextureFormat;
-        var directEncoding = DirectEncoding.MapFormatToEncoding[format];
+        var directEncoding = DirectEncoding.MapDirectFormatToEncoding[format];
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         var textureSequence = new TextureSequence(textureSequenceDescription);
@@ -293,12 +293,12 @@ public class Tpl :
     private static readonly DirectEncoding BadCmprEncoding = new()
     {
         DirectFormat = DirectTextureFormat.CMPR,
-        BlockWidth = 4, // not 8!
-        BlockHeight = 4, // not 8!
+        BlockPixelWidth = 4, // not 8!
+        BlockPixelHeight = 4, // not 8!
         BitsPerPixel = 4,
         BytesPerBlock = 8, // 4 * 4 * 0.5(4bpp)
-        ReadBlock = null!, // We won't use this for actually reading anything
-        WriteBlock = null!, // We won't use this for actually writing anything
+        ReadDirectBlock = null!, // We won't use this for actually reading anything
+        WriteDirectBlock = null!, // We won't use this for actually writing anything
     };
 
     /// <summary>
@@ -334,7 +334,7 @@ public class Tpl :
     /// </returns>
     public static int GetTotalBlocksEncodedCount(TextureSequenceDescription textureSequenceDescription)
     {
-        var encoding = DirectEncoding.MapFormatToEncoding[textureSequenceDescription.TextureFormat];
+        var encoding = DirectEncoding.MapDirectFormatToEncoding[textureSequenceDescription.TextureFormat];
         int pixelWidth = textureSequenceDescription.Width;
         int pixelHeight = textureSequenceDescription.Height;
         int numTextures = textureSequenceDescription.NumberOfTextures;
@@ -371,7 +371,7 @@ public class Tpl :
     /// <returns>
     ///     A texture whose unset pixels are <paramref name="defaultColor"/>.
     /// </returns>
-    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, TextureBlocksInfo blocksInfo, TextureColor defaultColor)
+    public static Texture GfzFromPartialDirectBlocks(DirectBlock[] directBlocks, TextureBlocksInfo blocksInfo, TexturePixel defaultColor)
     {
         // Compute pixel sizes needed for texture constrained to block pixel size
         int width = Math.Max(blocksInfo.TexturePixelWidth, blocksInfo.BlockPixelWidth);
