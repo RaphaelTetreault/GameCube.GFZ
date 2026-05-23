@@ -400,7 +400,7 @@ public class Tpl :
                         // Which sub-block we are sampling
                         int colorIndex = x + y * blocksInfo.BlockPixelWidth;
                         var block = directBlocks[blockIndex];
-                        var color = block.Colors[colorIndex];
+                        var color = block.Pixels[colorIndex];
                         texture.Pixels[pixelIndex++] = color;
                     }
                 }
