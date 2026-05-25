@@ -5,7 +5,10 @@ namespace GameCube.GFZ.GMA;
 /// </summary>
 /// <remarks>
 ///     2019/04/23 - All GFZ values 0, 17, 18, 20, 36, 48
-///     From SMB decomp: 0xF bitmask for src blend factor, 0xF0 for dst blend factor
+///     
+///     From SMB decomp: 0xF bitmask for src blend factor, 0xF0 for dst blend factor.
+///     Implication: lowest 4 bits refer to source, upper 4 bits refer to destination.
+///     So while it is u32, it is effectively u8.
 /// </remarks>
 [System.Flags]
 public enum BlendFactors : uint
