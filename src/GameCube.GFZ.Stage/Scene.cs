@@ -86,9 +86,9 @@ public sealed class Scene :
     public AddressRange AddressRange { get; set; }
 
     /// <summary>
-    ///     The serialization format (Ax or GX) to use on Serialize().
+    ///     The serialization format (AX or GX) to use on Serialize().
     /// </summary>
-    public SerializeFormat Format { get; set; }
+    public GameFileFormat Format { get; set; }
 
     /// <summary>
     ///     Returns true if this <see cref="Scene"/> is in F-Zero AX format.
@@ -1078,7 +1078,7 @@ public sealed class Scene :
                 Assert.IsTrue(zeroes0xD8[i] == 0);
 
             // Record some metadata
-            Format = IsFormatAX ? SerializeFormat.AX : SerializeFormat.GX;
+            Format = IsFormatAX ? GameFileFormat.AX : GameFileFormat.GX;
         }
     }
 
@@ -1086,9 +1086,9 @@ public sealed class Scene :
     {
         {
             // Refresh metadata
-            IsFormatAX = Format == SerializeFormat.AX;
-            IsFormatGX = Format == SerializeFormat.GX;
-            Assert.IsTrue(Format == SerializeFormat.AX || Format == SerializeFormat.GX);
+            IsFormatAX = Format == GameFileFormat.AX;
+            IsFormatGX = Format == GameFileFormat.GX;
+            Assert.IsTrue(Format == GameFileFormat.AX || Format == GameFileFormat.GX);
 
             // UPDATE POINTERS AND COUNTS
             // Track and stage data
@@ -1131,7 +1131,7 @@ public sealed class Scene :
             writer.Write(new byte[kSizeOfZeroes0x28]); // write const zeros
             writer.Write(dynamicSceneObjectCount);
             writer.Write(unk_sceneObjectCount1);
-            if (Format == SerializeFormat.GX)
+            if (Format == GameFileFormat.GX)
                 writer.Write(unk_sceneObjectCount2);
             writer.Write(dynamicSceneObjectsPtr);
             writer.Write(unkBool32_0x58);
@@ -1262,7 +1262,7 @@ public sealed class Scene :
 
         builder.AppendLineIndented(indent, indentLevel, nameof(Scene));
         indentLevel++;
-        builder.AppendLineIndented(indent, indentLevel, $"{nameof(SerializeFormat)}: {Format}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(GameFileFormat)}: {Format}");
         builder.AppendLineIndented(indent, indentLevel, $"{nameof(IsValidFormat)}: {IsValidFormat}");
         builder.AppendLine();
         indentLevel--;

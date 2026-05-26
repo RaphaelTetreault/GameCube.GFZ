@@ -76,9 +76,9 @@ public sealed class StaticColliderMeshManager :
 
 
     // CONSTRUCTORS
-    public StaticColliderMeshManager(SerializeFormat serializeFormat)
+    public StaticColliderMeshManager(GameFileFormat gameFileFormat)
     {
-        SerializeFormat = serializeFormat;
+        GameFileFormat = gameFileFormat;
         int count = SurfaceCount;
         TriMeshGrids = new StaticColliderMeshGrid[count];
         QuadMeshGrids = new StaticColliderMeshGrid[count];
@@ -95,16 +95,16 @@ public sealed class StaticColliderMeshManager :
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     public BoundingSphere BoundingSphere { get => boundingSphere; set => boundingSphere = value; }
-    public SerializeFormat SerializeFormat { get; set; } = 0;
+    public GameFileFormat GameFileFormat { get; set; } = 0;
     public int SurfaceCount
     {
         get
         {
-            return SerializeFormat switch
+            return GameFileFormat switch
             {
-                SerializeFormat.AX => kCountAxSurfaceTypes,
-                SerializeFormat.GX => kCountGxSurfaceTypes,
-                _ => throw new ArgumentException($"Invalid serialization format '{SerializeFormat}'."),
+                GameFileFormat.AX => kCountAxSurfaceTypes,
+                GameFileFormat.GX => kCountGxSurfaceTypes,
+                _ => throw new ArgumentException($"Invalid serialization format '{GameFileFormat}'."),
             };
         }
     }
@@ -348,7 +348,7 @@ public sealed class StaticColliderMeshManager :
     {
         builder.AppendLineIndented(indent, indentLevel, nameof(StaticColliderMeshManager));
         indentLevel++;
-        builder.AppendLineIndented(indent, indentLevel, $"{nameof(SerializeFormat)}: {SerializeFormat}");
+        builder.AppendLineIndented(indent, indentLevel, $"{nameof(GameFileFormat)}: {GameFileFormat}");
         builder.AppendLineIndented(indent, indentLevel, $"{nameof(SurfaceCount)}: {SurfaceCount}");
         builder.AppendLineIndented(indent, indentLevel, $"{nameof(unk_float)}: {unk_float}");
         builder.AppendLineIndented(indent, indentLevel, $"{nameof(ColliderTris)}[{ColliderTris.Length}]");
