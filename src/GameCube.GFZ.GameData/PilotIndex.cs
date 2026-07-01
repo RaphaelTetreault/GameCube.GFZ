@@ -53,3 +53,11 @@ public enum PilotIndex : byte
     Gen          = 43, // Pilot Number = 33 Pilot #3
     MrZero       = 44, // THANK YOU FOR THE INTERVIEW!
 }
+
+public static class PilotIndexExtensions
+{
+    extension(PilotIndex pilotIndex)
+    {
+        public byte Byte => (byte)pilotIndex;
+    }
+}

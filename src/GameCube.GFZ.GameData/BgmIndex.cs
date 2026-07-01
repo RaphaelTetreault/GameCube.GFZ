@@ -515,3 +515,11 @@ public enum BgmIndex : byte
     /// </summary>
     metadata_no_final_lap_bgm = 0xFF,
 }
+
+public static class BgmIndexExtensions
+{
+    extension(BgmIndex bgmIndex)
+    {
+        public byte Byte => (byte)bgmIndex;
+    }
+}
