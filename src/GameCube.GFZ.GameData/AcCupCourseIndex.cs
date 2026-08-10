@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace GameCube.GFZ.GameData;
+﻿namespace GameCube.GFZ.GameData;
 
 /// <summary>
 ///     Arcade Cup (AX Cup) stages.

@@ -9,23 +9,27 @@ namespace GameCube.GFZ.GameData;
 public struct MinimapProjection :
     IBinarySerializable
 {
-    public const int Size = 7 * 4;
+    public const int StructSize = 7 * 4;
 
     private float fov;
     private Vector3 cameraPosition;
     private Vector3 lookatPosition;
 
-    public float FOV { get => fov; set => fov = value; }
-    public Vector3 CameraPosition { get => cameraPosition; set => cameraPosition = value; }
-    public Vector3 LookatPosition { get => lookatPosition; set => lookatPosition = value; }
+    public float FOV { readonly get => fov; set => fov = value; }
+    public Vector3 CameraPosition { readonly get => cameraPosition; set => cameraPosition = value; }
+    public Vector3 LookatPosition { readonly get => lookatPosition; set => lookatPosition = value; }
 
     public void Deserialize(EndianBinaryReader reader)
     {
-        throw new System.NotImplementedException();
+        reader.Read(ref fov);
+        reader.Read(ref cameraPosition);
+        reader.Read(ref lookatPosition);
     }
 
-    public void Serialize(EndianBinaryWriter writer)
+    public readonly void Serialize(EndianBinaryWriter writer)
     {
-        throw new System.NotImplementedException();
+        writer.Write(fov);
+        writer.Write(cameraPosition);
+        writer.Write(lookatPosition);
     }
 }

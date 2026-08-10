@@ -63,7 +63,7 @@ public sealed class StaticColliderMeshManager :
     private byte[] zeroes_group3 = [];
     private Pointer boundingSpherePtr;
     private byte[] zeroes_group4 = [];
-    private float unk_float;
+    private float unk_float; // copy of header / 0x0000 ViewRange (?) starting 4 bytes earlier (0x00000000, 0x_VALUE)
     private byte[] zeroes_group5 = [];
     // REFERENCE FIELDS
     private ColliderTriangle[] colliderTris = [];

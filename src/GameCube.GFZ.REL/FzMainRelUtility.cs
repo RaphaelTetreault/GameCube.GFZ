@@ -28,7 +28,7 @@ public class FzMainRelUtility
         ValidateStageIndex(index, GameDataConsts.MaxMinimapIndex);
 
         int baseAddress = lookup.CourseMinimapParameterStructs.Address;
-        int offset = MinimapProjection.Size * index;
+        int offset = MinimapProjection.StructSize * index;
         int address = baseAddress + offset;
 
         writer.JumpToAddress(address);

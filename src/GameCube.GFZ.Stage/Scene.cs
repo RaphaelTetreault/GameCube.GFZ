@@ -449,8 +449,11 @@ public sealed class Scene :
                     // Sequential order in ROM is required for array pointer deserialization.
                     var typeTemp = new Checkpoint[0]; // TODO: remove need for this
                     writer.InlineDesc(SerializeVerbose, trackNodesPtr, typeTemp);
-                    foreach (var trackNode in trackNodes)
-                        writer.Write(trackNode.Checkpoints);
+                    foreach (var trackNode in trackNodes.Iterate())
+                    {
+                        //writer.InlineComment(SerializeVerbose, trackNode.Index.ToString());
+                        writer.Write(trackNode.Value.Checkpoints);
+                    }
                 }
 
                 // TRACK SEGMENTS

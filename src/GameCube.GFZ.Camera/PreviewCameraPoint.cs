@@ -6,7 +6,7 @@ namespace GameCube.GFZ.Camera;
 /// <summary>
 ///     Represents initial position of camera and target to pan towards.
 /// </summary>
-public sealed class CameraPanTarget :
+public sealed class PreviewCameraPoint :
     IBinaryAddressable,
     IBinarySerializable
 {
@@ -16,7 +16,7 @@ public sealed class CameraPanTarget :
     private float fieldOfView;
     private Int16Rotation rotationRoll;
     private ushort zero_0x1E;
-    private CameraPanInterpolation interpolation;
+    private PreviewCameraMode mode;
     private ushort zero_0x22;
 
 
@@ -48,10 +48,10 @@ public sealed class CameraPanTarget :
         get => zero_0x1E;
         set => zero_0x1E = value;
     }
-    public CameraPanInterpolation Interpolation
+    public PreviewCameraMode Mode
     {
-        get => interpolation;
-        set => interpolation = value;
+        get => mode;
+        set => mode = value;
     }
     public ushort Zero_0x22
     {
@@ -70,18 +70,20 @@ public sealed class CameraPanTarget :
             reader.Read(ref fieldOfView);
             reader.Read(ref rotationRoll);
             reader.Read(ref zero_0x1E);
-            reader.Read(ref interpolation);
+            reader.Read(ref mode);
             reader.Read(ref zero_0x22);
         }
         this.RecordEndAddress(reader);
 
-        // Assertions
         Assert.IsTrue(Zero_0x1E == 0);
         Assert.IsTrue(Zero_0x22 == 0);
     }
 
     public void Serialize(EndianBinaryWriter writer)
     {
+        Assert.IsTrue(Zero_0x1E == 0);
+        Assert.IsTrue(Zero_0x22 == 0);
+
         this.RecordStartAddress(writer);
         {
             writer.Write(cameraPosition);
@@ -89,7 +91,7 @@ public sealed class CameraPanTarget :
             writer.Write(fieldOfView);
             writer.Write(rotationRoll);
             writer.Write(zero_0x1E);
-            writer.Write(interpolation);
+            writer.Write(mode);
             writer.Write(zero_0x22);
         }
         this.RecordEndAddress(writer);

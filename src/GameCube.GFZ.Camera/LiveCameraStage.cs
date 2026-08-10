@@ -9,19 +9,23 @@ namespace GameCube.GFZ.Camera;
 /// <summary>
 ///     Represents a series of camera pans for a stage (e.g. stage intro demo, attract mode exit).
 /// </summary>
+/// <remarks>
+///     livecam_stage_#,##,###
+///     livecam_stage_demo_#,##,###,50_end
+/// </remarks>
 public sealed class LiveCameraStage :
     IBinarySerializable,
     ITsvSerializable
 {
     // FIELDS
-    private CameraPan[] pans = [];
+    private PreviewCameraShot[] shots = [];
 
 
     // PROPERTIES
-    public CameraPan[] Pans
+    public PreviewCameraShot[] Shots
     {
-        get => pans;
-        set => pans = value;
+        get => shots;
+        set => shots = value;
     }
 
 
@@ -29,10 +33,10 @@ public sealed class LiveCameraStage :
     public void Deserialize(EndianBinaryReader reader)
     {
         // Figure out how many camera pans are in this file
-        var nPans = (int)(reader.BaseStream.Length / CameraPan.kStructureSize);
+        var nShots = (int)(reader.BaseStream.Length / PreviewCameraShot.kStructureSize);
         
         // Read that many structures out of the file
-        reader.Read(ref pans, nPans);
+        reader.Read(ref shots, nShots);
 
         // Sanity check. We should be at the end of the stream
         Assert.IsTrue(reader.BaseStream.IsAtEndOfStream());
@@ -44,90 +48,90 @@ public sealed class LiveCameraStage :
         // READ FLOAT3 where each element is read rfom base index
 
         string[] lines = reader.ReadToEnd().Split('\n');
-        int panCount = lines.Length - 2;
-        pans = new CameraPan[panCount];
-        for (int i = 0; i < panCount; i++)
+        int shotCount = lines.Length - 2;
+        shots = new PreviewCameraShot[shotCount];
+        for (int i = 0; i < shotCount; i++)
         {
-            pans[i] = new CameraPan();
-            var pan = pans[i];
+            shots[i] = new PreviewCameraShot();
+            var shot = shots[i];
 
             int lineIndex = i + 1;
             int dataIndex = 0;
             var data = lines[lineIndex].Split('\t');
 
-            pan.FrameCount = int.Parse(data[dataIndex++]);
-            pan.LerpSpeed = float.Parse(data[dataIndex++]);
+            shot.FrameCount = int.Parse(data[dataIndex++]);
+            shot.LerpSpeed = float.Parse(data[dataIndex++]);
 
-            pan.From.Interpolation = Enum.Parse<CameraPanInterpolation>(data[dataIndex++]);
-            pan.To.Interpolation = Enum.Parse<CameraPanInterpolation>(data[dataIndex++]);
-            pan.From.FieldOfView = float.Parse(data[dataIndex++]);
-            pan.To.FieldOfView = float.Parse(data[dataIndex++]);
-            pan.From.RotationRoll = float.Parse(data[dataIndex++]);
-            pan.To.RotationRoll= float.Parse(data[dataIndex++]);
+            shot.From.Mode = Enum.Parse<PreviewCameraMode>(data[dataIndex++]);
+            shot.To.Mode = Enum.Parse<PreviewCameraMode>(data[dataIndex++]);
+            shot.From.FieldOfView = float.Parse(data[dataIndex++]);
+            shot.To.FieldOfView = float.Parse(data[dataIndex++]);
+            shot.From.RotationRoll = float.Parse(data[dataIndex++]);
+            shot.To.RotationRoll= float.Parse(data[dataIndex++]);
 
             Vector3 fromPos = new();
             fromPos.X = float.Parse(data[dataIndex++]);
             fromPos.Y = float.Parse(data[dataIndex++]);
             fromPos.Z = float.Parse(data[dataIndex++]);
-            pan.From.CameraPosition = fromPos;
+            shot.From.CameraPosition = fromPos;
             Vector3 toPos = new();
             toPos.X = float.Parse(data[dataIndex++]);
             toPos.Y = float.Parse(data[dataIndex++]);
             toPos.Z = float.Parse(data[dataIndex++]);
-            pan.To.CameraPosition = toPos;
+            shot.To.CameraPosition = toPos;
 
             Vector3 fromLookat = new();
             fromLookat.X = float.Parse(data[dataIndex++]);
             fromLookat.Y = float.Parse(data[dataIndex++]);
             fromLookat.Z = float.Parse(data[dataIndex++]);
-            pan.From.LookAtPosition = fromLookat;
+            shot.From.LookAtPosition = fromLookat;
             Vector3 toLookat = new();
             toLookat.X = float.Parse(data[dataIndex++]);
             toLookat.Y = float.Parse(data[dataIndex++]);
             toLookat.Z = float.Parse(data[dataIndex++]);
-            pan.To.LookAtPosition = toLookat;
+            shot.To.LookAtPosition = toLookat;
         }
     }
 
     public void Serialize(EndianBinaryWriter writer)
     {
-        writer.Write(pans);
+        writer.Write(shots);
     }
 
     public void Serialize(StreamWriter writer)
     {
-        writer.WriteNextCol(nameof(CameraPan.FrameCount));
-        writer.WriteNextCol(nameof(CameraPan.LerpSpeed));
+        writer.WriteNextCol(nameof(PreviewCameraShot.FrameCount));
+        writer.WriteNextCol(nameof(PreviewCameraShot.LerpSpeed));
 
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.Interpolation));
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.Interpolation));
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.FieldOfView));
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.FieldOfView));
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.RotationRoll));
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.RotationRoll));
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.Mode));
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.Mode));
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.FieldOfView));
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.FieldOfView));
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.RotationRoll));
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.RotationRoll));
 
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".X");
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".Y");
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.CameraPosition) + ".Z");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".X");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".Y");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.CameraPosition) + ".Z");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".X");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".Y");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".Z");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".X");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".Y");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.CameraPosition) + ".Z");
 
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".X");
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Y");
-        writer.WriteNextCol(nameof(CameraPan.From) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Z");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".X");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Y");
-        writer.WriteNextCol(nameof(CameraPan.To) + "." + nameof(CameraPanTarget.LookAtPosition) + ".Z");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".X");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".Y");
+        writer.WriteNextCol(nameof(PreviewCameraShot.From) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".Z");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".X");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".Y");
+        writer.WriteNextCol(nameof(PreviewCameraShot.To) + "." + nameof(PreviewCameraPoint.LookAtPosition) + ".Z");
         writer.WriteNextRow();
 
-        foreach (var pan in pans)
+        foreach (var pan in shots)
         {
             writer.WriteNextCol(pan.FrameCount);
             writer.WriteNextCol(pan.LerpSpeed);
 
-            writer.WriteNextCol(pan.From.Interpolation);
-            writer.WriteNextCol(pan.To.Interpolation);
+            writer.WriteNextCol(pan.From.Mode);
+            writer.WriteNextCol(pan.To.Mode);
             writer.WriteNextCol(pan.From.FieldOfView);
             writer.WriteNextCol(pan.To.FieldOfView);
             writer.WriteNextCol(pan.From.RotationRoll);

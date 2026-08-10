@@ -13,10 +13,10 @@ public sealed class SceneObjectLOD :
     ITextPrintable
 {
     // FIELDS
-    private uint zero_0x00;
+    private uint flags_0x00; // some runtime flag, visibility of object?
     private Pointer lodNamePtr;
-    private uint zero_0x08;
-    private float lodDistance;
+    private Pointer ptr_0x08; // some runtime pointer
+    private float inverseLodDistance; // Frustum range 250,000m / inverse LOD distance
     // REFERENCE FIELDS
     private ShiftJisCString name;
 
@@ -24,7 +24,7 @@ public sealed class SceneObjectLOD :
     // PROPERTIES
     public AddressRange AddressRange { get; set; }
     public Pointer LodNamePtr { get => lodNamePtr; set => lodNamePtr = value; }
-    public float LodDistance { get => lodDistance; set => lodDistance = value; }
+    public float LodDistance { get => inverseLodDistance; set => inverseLodDistance = value; }
     public ShiftJisCString Name { get => name; set => name = value; }
 
 
@@ -33,15 +33,15 @@ public sealed class SceneObjectLOD :
     {
         this.RecordStartAddress(reader);
         {
-            reader.Read(ref zero_0x00);
+            reader.Read(ref flags_0x00);
             reader.Read(ref lodNamePtr);
-            reader.Read(ref zero_0x08);
-            reader.Read(ref lodDistance);
+            reader.Read(ref ptr_0x08);
+            reader.Read(ref inverseLodDistance);
         }
         this.RecordEndAddress(reader);
         {
-            Assert.IsTrue(zero_0x00 == 0);
-            Assert.IsTrue(zero_0x08 == 0);
+            Assert.IsTrue(flags_0x00 == 0);
+            Assert.IsTrue(ptr_0x08 == 0);
 
             reader.JumpToAddress(lodNamePtr);
             reader.Read(ref name);
@@ -52,17 +52,17 @@ public sealed class SceneObjectLOD :
     public void Serialize(EndianBinaryWriter writer)
     {
         {
-            Assert.IsTrue(zero_0x00 == 0);
-            Assert.IsTrue(zero_0x08 == 0);
+            Assert.IsTrue(flags_0x00 == 0);
+            Assert.IsTrue(ptr_0x08 == 0);
 
             lodNamePtr = name.GetPointer();
         }
         this.RecordStartAddress(writer);
         {
-            writer.Write(zero_0x00);
+            writer.Write(flags_0x00);
             writer.Write(lodNamePtr);
-            writer.Write(zero_0x08);
-            writer.Write(lodDistance);
+            writer.Write(ptr_0x08);
+            writer.Write(inverseLodDistance);
         }
         this.RecordEndAddress(writer);
     }
@@ -75,8 +75,8 @@ public sealed class SceneObjectLOD :
         Assert.ReferencePointer(name, lodNamePtr); // 2022/01/25: must always have instance pointer!
 
         // Constants
-        Assert.IsTrue(zero_0x00 == 0);
-        Assert.IsTrue(zero_0x08 == 0);
+        Assert.IsTrue(flags_0x00 == 0);
+        Assert.IsTrue(ptr_0x08 == 0);
     }
 
     public void PrintMultiLine(System.Text.StringBuilder builder, int indentLevel = 0, string indent = "\t")

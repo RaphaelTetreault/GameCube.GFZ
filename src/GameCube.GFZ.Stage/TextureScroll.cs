@@ -1,10 +1,12 @@
 ﻿// NOTES:
-// Indexes 0-3 ARE USED
+// Indexes 0-3
 //  idx0: uv.Xy scrolling (or, at least, on some models)
 //  idx1: ?
 //  idx2: ?
 //  idx3: ?
-// Indexes 4-11 unused, always (0f, 0f)
+// Indexes 4-11
+// ...are assigned dynamically at runtime for race.gma models (start line)
+// ...and perhaps some other things
 
 using Manifold;
 using Manifold.IO;
@@ -22,8 +24,6 @@ public sealed class TextureScroll :
 {
     // CONSTANTS
     public const int kCount = 12;
-    public const int kUsedCount = 4;
-
 
     // FIELDS
     private Pointer[] fieldPtrs = new Pointer[kCount];

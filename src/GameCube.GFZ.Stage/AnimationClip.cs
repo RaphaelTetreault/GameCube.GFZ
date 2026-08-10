@@ -27,10 +27,10 @@ public sealed class AnimationClip :
 
 
     // FIELDS
-    private float unk_0x00;
-    private float unk_0x04;
+    private float startTimeInFrames; // start time (???) based on below
+    private float endTimeInFrames; // end time in frames (but as float). //NOTE: start and end of 0 (both) means only play anim once!
     private byte[] zeroes_0x08 = new byte[kZeroes0x08];
-    private EnumFlags32 unk_layer_0x18;
+    private AnimationClipFlags flags;
     private AnimationClipCurve[] curves = new AnimationClipCurve[kAnimationCurvesCount]; // field, NOT reference field
 
 
@@ -48,9 +48,9 @@ public sealed class AnimationClip :
     public AnimationClipCurve ScaleY { get => curves[1]; set => curves[1] = value; }
     public AnimationClipCurve ScaleZ { get => curves[2]; set => curves[2] = value; }
     public AnimationClipCurve Unused { get => curves[9]; set => curves[9] = value; }
-    public float Unk_0x04 { get => unk_0x04; set => unk_0x04 = value; }
-    public float Unk_0x00 { get => unk_0x00; set => unk_0x00 = value; }
-    public EnumFlags32 Unk_layer_0x18 { get => unk_layer_0x18; set => unk_layer_0x18 = value; }
+    public float EndTimeInFrames { get => endTimeInFrames; set => endTimeInFrames = value; }
+    public float StartTimeInFrames { get => startTimeInFrames; set => startTimeInFrames = value; }
+    public AnimationClipFlags Flags { get => flags; set => flags = value; }
 
 
 
@@ -59,10 +59,10 @@ public sealed class AnimationClip :
     {
         this.RecordStartAddress(reader);
         {
-            reader.Read(ref unk_0x00);
-            reader.Read(ref unk_0x04);
+            reader.Read(ref startTimeInFrames);
+            reader.Read(ref endTimeInFrames);
             reader.Read(ref zeroes_0x08, kZeroes0x08);
-            reader.Read(ref unk_layer_0x18);
+            reader.Read(ref flags);
             reader.Read(ref curves, kAnimationCurvesCount);
         }
         this.RecordEndAddress(reader);
@@ -80,10 +80,10 @@ public sealed class AnimationClip :
         }
         this.RecordStartAddress(writer);
         {
-            writer.Write(unk_0x00);
-            writer.Write(unk_0x04);
+            writer.Write(startTimeInFrames);
+            writer.Write(endTimeInFrames);
             writer.Write(new byte[kZeroes0x08]);
-            writer.Write(unk_layer_0x18);
+            writer.Write(flags);
             writer.Write(curves);
         }
         this.RecordEndAddress(writer);
@@ -112,9 +112,9 @@ public sealed class AnimationClip :
     {
         return
             $"{nameof(AnimationClip)}(" +
-            $"{nameof(Unk_0x00)}: {Unk_0x00}, " +
-            $"{nameof(Unk_0x04)}: {Unk_0x04}, " +
-            $"{nameof(Unk_layer_0x18)}: {Unk_layer_0x18}" +
+            $"{nameof(StartTimeInFrames)}: {StartTimeInFrames}, " +
+            $"{nameof(EndTimeInFrames)}: {EndTimeInFrames}, " +
+            $"{nameof(Flags)}: {Flags}" +
             $")";
     }
 

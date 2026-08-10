@@ -2,11 +2,10 @@
 
 namespace GameCube.GFZ.Camera;
 
-
 /// <summary>
 ///     Represents a camera pan (from point A to point B).
 /// </summary>
-public sealed class CameraPan :
+public sealed class PreviewCameraShot :
     IBinaryAddressable,
     IBinarySerializable
 {
@@ -21,8 +20,8 @@ public sealed class CameraPan :
     private int frameCount;
     private float lerpSpeed;
     private byte[] zeroes0x08 = [];
-    private CameraPanTarget from = new();
-    private CameraPanTarget to = new();
+    private PreviewCameraPoint from = new();
+    private PreviewCameraPoint to = new();
 
 
     // PROPERTIES
@@ -42,12 +41,12 @@ public sealed class CameraPan :
         get => lerpSpeed;
         set => lerpSpeed = value;
     }
-    public CameraPanTarget From
+    public PreviewCameraPoint From
     {
         get => from;
         set => from = value;
     }
-    public CameraPanTarget To
+    public PreviewCameraPoint To
     {
         get => to;
         set => to = value;
