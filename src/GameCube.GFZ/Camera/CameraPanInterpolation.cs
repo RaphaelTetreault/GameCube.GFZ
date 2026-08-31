@@ -3,18 +3,23 @@
     public enum CameraPanInterpolation : short
     {
         /// <summary>
-        /// Used for shots where there is no lerping of any kind.
+        ///     
         /// </summary>
-        Linear = 0,
+        FixedLinear = 0,
 
         /// <summary>
         /// 
         /// </summary>
-        EaseOut = 2,
+        //EaseIn = 1,
 
         /// <summary>
         /// 
         /// </summary>
-        EaseInOut = 3,
+        RecursiveLerp = 2,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        FixedEaseInOut = 3,
     }
 }

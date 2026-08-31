@@ -1,3 +1,4 @@
+using Manifold.IO;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
@@ -138,6 +139,61 @@ namespace GameCube.GFZ.Stage
                 IndexLists[i] = IndexList.CreateIndexList(list);
         }
 
+        public void GenerateCheckpointIndexes(GridXZ matrixBoundsXZ, Checkpoint[] checkpoints)
+        {
+            int count = matrixBoundsXZ.NumSubdivisionsX * matrixBoundsXZ.NumSubdivisionsZ;
+            Assert.IsTrue(count == 64);
+            var checkpointIndexList = new List<ushort>[count];
+            for (int i = 0; i < checkpointIndexList.Length; i++)
+                checkpointIndexList[i] = new List<ushort>();
+
+            // Make a circle that covers the rectangle
+            float radiusOfGridCell = math.max(matrixBoundsXZ.SubdivisionWidth, matrixBoundsXZ.SubdivisionLength) / 2 * math.SQRT2;
+            float3 cellCentreOffset = new float3(matrixBoundsXZ.SubdivisionWidth, 0, matrixBoundsXZ.SubdivisionLength) / 2;
+
+            // for each checkpoint
+            for (ushort checkpointIndex = 0; checkpointIndex < checkpoints.Length; checkpointIndex++)
+            {
+                var checkpoint = checkpoints[checkpointIndex];
+                // Get centre of checkpoint as 2D XZ position, ignore Y
+                float2 checkpointCentre = (checkpoint.PlaneStart.origin + checkpoint.PlaneEnd.origin).xz;
+                // Get radius of circle around centre
+                float checkpointRadius = math.distance(checkpoint.PlaneStart.origin, checkpoint.PlaneEnd.origin) + checkpoint.TrackWidth * 3; //* 3 for padding
+
+                // Check checkpoint against each cell in grid, add to cell if needed
+                for (int row = 0; row < matrixBoundsXZ.NumSubdivisionsZ; row++)
+                {
+                    for (int col = 0; col < matrixBoundsXZ.NumSubdivisionsX; col++)
+                    {
+                        float2 cellCentre = new float2(
+                            matrixBoundsXZ.Left + cellCentreOffset.x + matrixBoundsXZ.SubdivisionWidth * col,
+                            matrixBoundsXZ.Top + cellCentreOffset.z + matrixBoundsXZ.SubdivisionLength * row);
+
+                        // Do circle-circle intersection
+                        float sumRadii = checkpointRadius + radiusOfGridCell + math.max(matrixBoundsXZ.SubdivisionWidth, matrixBoundsXZ.SubdivisionLength) * 2;
+                        float distanceTriFromCell = math.distance(cellCentre, checkpointCentre);
+                        if (distanceTriFromCell <= sumRadii)
+                        {
+                            int cellIndex = row * matrixBoundsXZ.NumSubdivisionsX + col;
+                            checkpointIndexList[cellIndex].Add(checkpointIndex);
+                        }
+                    }
+                }
+            }
+
+            var indexLists = new IndexList[count];
+            for (int i = 0; i < checkpointIndexList.Length; i++)
+            {
+                // Add terminator if required
+                if (checkpointIndexList[i].Count > 0)
+                    checkpointIndexList[i].Add(0xFFFF);
+                // Then convert to appropriate type
+                indexLists[i] = new IndexList();
+                indexLists[i].Indexes = checkpointIndexList[i].ToArray();
+            }
+            // assign to self (instance)
+            IndexLists = indexLists;
+        }
 
         public void GenerateIndexesBetter(GridXZ matrixBoundsXZ, Checkpoint[] checkpoints)
         {
@@ -200,7 +256,7 @@ namespace GameCube.GFZ.Stage
             float tt = (maxZ - startZ) / (endZ - startZ);
             float tb = (minZ - startZ) / (endZ - startZ);
 
-            bool intersects = 
+            bool intersects =
                 math.max(0, math.max(math.min(tl, tr), math.min(tt, tb))) <
                 math.min(1, math.min(math.max(tl, tr), math.max(tt, tb)));
             return intersects;

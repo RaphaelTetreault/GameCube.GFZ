@@ -21,7 +21,7 @@ namespace GameCube.GFZ.Stage
         /// <summary>
         /// Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a wall / undriveable surface.
         /// </summary>
-        wall,
+        driveaableNoCamera,
 
         /// <summary>
         /// Indicate the <cref>StaticColliderMeshGrid</cref> mesh is a dash plate.

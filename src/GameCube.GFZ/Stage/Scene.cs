@@ -451,8 +451,17 @@ namespace GameCube.GFZ.Stage
             }
         }
 
-
         public void Serialize(EndianBinaryWriter writer)
+        {
+            // Serialize to get all the correct pointers - mutates this structure 
+            var writerRAM = new EndianBinaryWriter(new MemoryStream(), endianness);
+            SerializeX(writerRAM);
+
+            // Serialize to disk
+            SerializeX(writer);
+        }
+
+        public void SerializeX(EndianBinaryWriter writer)
         {
             // Write header. At first, pointers will be null or broken.
             SerializeHeader(writer);
