@@ -1,5 +1,17 @@
 ﻿namespace GameCube.GFZ.Camera;
 
+/// <summary>
+///     
+/// </summary>
+/// <remarks>
+///     8016e278 j line__.data3
+///     normal
+///     out
+///     in out
+///     cam b
+///     static
+///     static fix
+/// </remarks>
 public enum LiveCameraType : System.UInt32
 {
     /// <summary>
